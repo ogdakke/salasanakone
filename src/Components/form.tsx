@@ -122,7 +122,6 @@ const validate = (sliderValue: string): string => {
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => Slider(e.currentTarget.value)}
         id="slider" min={formValues.words ? "1" : "3"} 
         max={formValues.words ? maxLengthForWords : maxLengthForChars} 
-        defaultValue={sliderValue > maxLengthForWords && formValues.words ? maxLengthForWords : sliderValue}
         value={sliderValue >= maxLengthForWords && formValues.words ? maxLengthForWords : sliderValue}
         type="range" name="length" 
          />

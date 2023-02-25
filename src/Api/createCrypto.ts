@@ -9,7 +9,6 @@ interface checkboxes {
 const specialCharacters = "!@$%&/()=?_-*><"
 const file = "src/assets/sanat.json" //get words from here
 
-
 const objektiSanat = await getFromFile(file)
 
 export default async function createCryptoKey(sliderValue: string, data: checkboxes) {
