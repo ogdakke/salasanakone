@@ -140,7 +140,7 @@ const validate = (sliderValue: string): string => {
 
   <div className="resultWrapper">
       <p className="result">
-          Tulos:         
+          Kopioi Salasana klikkaamalla:         
       </p>
         {finalPassword
         ? <a
