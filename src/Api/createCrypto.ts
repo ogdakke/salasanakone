@@ -1,5 +1,5 @@
 import { fileRead } from "./getFile";
-
+import sanat from "../../public/sanat.json"
 interface checkboxes {
   uppercase?: boolean;
   specialChars?: boolean;
@@ -7,12 +7,13 @@ interface checkboxes {
 }
 
 const specialCharacters = "!@$%&/()=?_-*><"
-const file = "src/assets/sanat.json" //get words from here
+// const file = sanat //get words from here
 
-const objektiSanat = await getFromFile(file)
-
+// const objektiSanat = await getFromFile(file)
 export default async function createCryptoKey(sliderValue: string, data: checkboxes) {
-  const arrayOfWords = objektiSanat as string[]
+  
+  // const arrayOfWords = objektiSanat as string[]
+  const arrayOfWords = sanat as string[]
   
   let length = parseInt(sliderValue)
   
@@ -124,7 +125,7 @@ function generateRandomArray(length: number): number[] {
  */
 export const getWordsWithMap = async (length: number): Promise<string> => {
   
-  const sanat = await getFromFile(file);
+  // const sanat = await getFromFile(file);
   const mappi = new Map(Object.entries(sanat)) // tehdään mappi
 
   const then = performance.now() //start performance
