@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   width: 100vw;
@@ -403,10 +403,15 @@
     /* justify-content: left; */
 
     padding-top: 1.5rem;
-
-    padding-bottom: 8rem;
+    padding-left: 0rem;
+    padding-right: 0rem;
+    
   }
   
+  .form {
+
+  }
+
   .header {
     flex-direction: column;
     gap: 3rem;
