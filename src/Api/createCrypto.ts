@@ -1,9 +1,9 @@
 import { fileRead } from "./getFile";
 
 interface checkboxes {
-  uppercase: boolean;
+  uppercase?: boolean;
   specialChars?: boolean;
-  words: boolean;
+  words?: boolean;
 }
 
 const specialCharacters = "!@$%&/()=?_-*><"

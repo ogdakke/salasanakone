@@ -1,6 +1,6 @@
 import * as Slider from '@radix-ui/react-slider';
 
-export default function SliderComponent (props) {
+export default function SliderComponent (props: any) {
   return (
   <Slider.Root className="sliderRoot"
     onValueChange={(val: number[]) => {console.log(val);

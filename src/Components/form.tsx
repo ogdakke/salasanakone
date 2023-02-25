@@ -2,11 +2,9 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 import createCryptoKey from "../Api/createCrypto"
 import { stickyState, useStickyState } from "./stickyState"
-import  "../styles/Home.css"
+import "../styles/Home.css"
 import * as Label from '@radix-ui/react-label';
-import * as Slider from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import SliderComponent from "./slider"
 import CheckIcon from "../assets/icons/checkedIcon"
 
 
@@ -15,8 +13,8 @@ type FormType = {
 }
 
 const initialFormValues: FormType = {
-  "uppercase": false,
-  "words": false,
+  uppercase: false,
+  words: false,
 }
 
 const initialKeys: string[] = Object.keys(initialFormValues)
