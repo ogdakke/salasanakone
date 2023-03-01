@@ -1,4 +1,4 @@
-[
+export const sanat = [
   "aakkonen",
   "aakkosellinen",
   "aakkosellisesti",

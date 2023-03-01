@@ -11,10 +11,6 @@ function App() {
       <div className="wrapper">
           <FormComponent />
           <Description />
-          <div className="description">
-            <p></p>
-            <a href="https"></a>
-          </div>
       </div>
     </main>
   )

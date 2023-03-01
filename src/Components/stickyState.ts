@@ -24,7 +24,7 @@ interface objectType {
  
 
 
-export function stickyState(defaultObject: objectType, key: string) {
+export function stickyState(defaultObject: object, key: string) {
 
   const [value, setValue] = useState(() => {
     const stickyValue = window.localStorage.getItem(key);      

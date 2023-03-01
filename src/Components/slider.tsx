@@ -1,16 +1,21 @@
-import * as Slider from '@radix-ui/react-slider';
+import React from 'react';
+import * as SliderPrimitive from '@radix-ui/react-slider';
 
-export default function SliderComponent (props: any) {
-  return (
-  <Slider.Root className="sliderRoot"
-    onValueChange={(val: number[]) => {console.log(val);
-    }}
-    defaultValue={props.defaultValue} 
-    max={props.maxValue} min={props.minValue}
-    aria-label={props.Arialabel}>
-    <Slider.Track className="sliderTrack">
-      <Slider.Range className="sliderRange"/>
-    </Slider.Track>
-    <Slider.Thumb className="sliderThumb"/>
-  </Slider.Root>
-);}
+const Slider = React.forwardRef<
+  React.ElementRef<typeof SliderPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
+>(({ className, ...props }, ref) => (
+  <SliderPrimitive.Root
+    ref={ref}
+    className="sliderRoot"
+    {...props}
+  >
+    <SliderPrimitive.Track className="sliderTrack">
+      <SliderPrimitive.Range className="sliderRange" />
+    </SliderPrimitive.Track>
+    <SliderPrimitive.Thumb className="sliderThumb" />
+  </SliderPrimitive.Root>
+))
+Slider.displayName = SliderPrimitive.Root.displayName
+ 
+export { Slider }

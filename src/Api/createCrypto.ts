@@ -1,4 +1,5 @@
-import sanat from "../sanat.json"
+import { sanat } from "../sanat"
+
 interface checkboxes {
   uppercase?: boolean;
   randomChars?: boolean;
@@ -6,8 +7,8 @@ interface checkboxes {
 }
 
 export default async function createCryptoKey(sliderValue: string, data: checkboxes): Promise<string> {
-  
   const arrayOfWords = sanat as string[]
+  
   
   let length = parseInt(sliderValue)
   
