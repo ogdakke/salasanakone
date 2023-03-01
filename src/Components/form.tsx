@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import copyToClipboard from "../Api/copyToClipboard"
 import createCryptoKey from "../Api/createCrypto"
 import { stickyState, useStickyState } from "./stickyState"
 import "../styles/Home.css"
@@ -133,7 +132,7 @@ const validate = (sliderValue: string): string => {
           Luo Uusi Salasana
         </button>
       </div>
-      
+
       <Result 
         finalPassword={finalPassword}
         copyText={copyText}

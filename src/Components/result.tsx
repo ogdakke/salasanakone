@@ -2,7 +2,7 @@ import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 
 
-export default function Result(props) {
+export default function Result(props: any) {
   const {finalPassword, copyText} = props
   const copy = () => {
     setCopied(true)

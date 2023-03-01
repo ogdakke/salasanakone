@@ -1,11 +1,11 @@
-import sanat from "/src/sanat.json"
+import sanat from "../sanat.json"
 interface checkboxes {
   uppercase?: boolean;
   randomChars?: boolean;
   words?: boolean;
 }
 
-export default async function createCryptoKey(sliderValue: string, data: checkboxes) {
+export default async function createCryptoKey(sliderValue: string, data: checkboxes): Promise<string> {
   
   const arrayOfWords = sanat as string[]
   
@@ -23,7 +23,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
         randomCharsForJoins(
           await getWordsWithObject(length, arrayOfWords)
         ).join("")
-      )
+      ).toString()
     }
     return createPassWordFromRandomChars()
   } else if (data.words) {
