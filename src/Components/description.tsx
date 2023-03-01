@@ -8,16 +8,17 @@ const Description: React.FC = () => {
           Luo muistettavia salasanoja!
         </h2>
         <p>
-        Tällä sivulla voit luoda Salasanan Suomen kielen sanoista. Tunnetusti suomi on hankala kieli, ja se osaltaan tekee salasanoista vahvempia murtaa. Toisaalta, tämän tuottamat salasanat ovat helpompia muistaa!
+        Tällä sivulla voit luoda vahvan salasanan käyttämällä suomen kielen sanoja. Suomen kieli on monimutkainen, ja sen vuoksi otollinen tapa luoda vahva ja muistettava salasana.
         </p>
         <p>
-          Tsekkaa sivustoni:
+          Tehnyt:
         </p>
           <div className="imageWrapper">
           <img className="svgImage" src="favicon.png" alt="Logo" width={20} height={20} 
           />
-          <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
-            deweloper.fi</a> 
+            <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
+            deweloper.fi
+            </a> 
           </div>
       </div>
     </>

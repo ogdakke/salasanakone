@@ -6,6 +6,7 @@ import "../styles/Home.css"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import CheckIcon from "../assets/icons/checkedIcon"
+import Result from "./result"
 
 
 type FormType = {
@@ -14,18 +15,19 @@ type FormType = {
 
 const initialFormValues: FormType = {
   uppercase: false,
-  words: false,
+  randomChars: true,
+  words: true
 }
 
 const initialKeys: string[] = Object.keys(initialFormValues)
+
 
 export default function FormComponent () {
 
   const [sliderValue, setSliderValue] = useStickyState("20", "sliderValue")
   // const [uppercase, setUppercase] = useStickyState(false, "useUppercase")
   const [finalPassword, setFinalPassword] = useState("") 
-  const [isCopied, setCopied] = useState(false)
-  
+   
   const [formValuesTyped, setFormValuesTyped] = stickyState(initialFormValues, "formValues")
   const formValues = formValuesTyped as FormType // explicitly type formValues as FormType
   const setFormValues = setFormValuesTyped as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
@@ -53,7 +55,7 @@ const validate = (sliderValue: string): string => {
     createCryptoKey(validate(sliderValue), formValues)
     .then((response) =>
       setFinalPassword(response)) 
-    setCopied(false)
+    // setCopied(false)
   }
   
   const setValuesToForm = (option: string, event: Checkbox.CheckedState) => {
@@ -64,10 +66,6 @@ const validate = (sliderValue: string): string => {
   }
 
 
-  const copy = () => {
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1200)
-  }
 
   const Slider = (value: string) => {
     setSliderValue(value)
@@ -97,9 +95,7 @@ const validate = (sliderValue: string): string => {
           <Label.Root
             className="LabelRoot"
             htmlFor={option}>
-            {option === "uppercase"
-              ? `Isot Kirjaimet`
-              : `Käytä Suomen kielen sanoja`}
+            {option}
 
           </Label.Root>
         </div>
@@ -137,41 +133,12 @@ const validate = (sliderValue: string): string => {
           Luo Uusi Salasana
         </button>
       </div>
-
-  <div className="resultWrapper">
-      <p className="result">
-          Kopioi Salasana klikkaamalla:         
-      </p>
-        {finalPassword
-        ? <a
-          title={copyText}
-          className="card"
-           type='button' onClick={async () => { 
-              await copyToClipboard(finalPassword) 
-              copy()  
-              }
-            }>
-              <span className={
-                isCopied 
-                ? "copied"
-                : "notCopied"
-              }>
-                {
-                  isCopied
-                ? <p>Copied To Clipboard</p>
-                :<span>
-                  {finalPassword.length
-                ? finalPassword
-                : "something went wrong..."}
-                </span>
-                }
-              </span>
-          </a> 
-        : <div className="card">
-          Jotain meni vikaan... Salasanaa ei luotu.
-        </div> 
-        }
-  </div>
+      
+      <Result 
+        finalPassword={finalPassword}
+        copyText={copyText}
+      />
+  
   </form>
   </>
   )

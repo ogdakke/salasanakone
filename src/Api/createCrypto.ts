@@ -1,18 +1,12 @@
-import { fileRead } from "./getFile";
-import sanat from "../../public/sanat.json"
+import sanat from "/src/sanat.json"
 interface checkboxes {
   uppercase?: boolean;
-  specialChars?: boolean;
+  randomChars?: boolean;
   words?: boolean;
 }
 
-const specialCharacters = "!@$%&/()=?_-*><"
-// const file = sanat //get words from here
-
-// const objektiSanat = await getFromFile(file)
 export default async function createCryptoKey(sliderValue: string, data: checkboxes) {
   
-  // const arrayOfWords = objektiSanat as string[]
   const arrayOfWords = sanat as string[]
   
   let length = parseInt(sliderValue)
@@ -21,17 +15,25 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
     return createPassWordFromRandomChars()
     
   }
-
-  
   
   // return in uppercase if uppercase is true
   if (data.uppercase) {
-    return data.words
-    ? useUppercase(await getWordsWithObject(length, arrayOfWords))
-    : createPassWordFromRandomChars()
-    
+    if (data.randomChars) {
+      return useUppercase(
+        randomCharsForJoins(
+          await getWordsWithObject(length, arrayOfWords)
+        ).join("")
+      )
+    }
+    return createPassWordFromRandomChars()
   } else if (data.words) {
-    return getWordsWithObject(length, arrayOfWords)
+    if (data.randomChars) {
+      return randomCharsForJoins(
+        await getWordsWithObject(length, arrayOfWords)
+      ).join("")
+    }
+    return (await getWordsWithObject(length, arrayOfWords)).join("")
+
   } 
   return createPassWordFromRandomChars()
   
@@ -65,27 +67,41 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
     // and snip off the excess digit if we want an odd number
     // here, if length % 2 returns a value !0 we slice last digit
     length % 2 && length !== 2 ? password = password.slice(1) : password;
-    return data.uppercase ? useUppercase(password) : password;
+    return data.uppercase ? useUppercase(password).toString() : password;
   }
 }
 
-const useUppercase = (stringToUpper: string) => {
-  return stringToUpper.toUpperCase()
+/**
+ * converts strings to uppercase
+ * @param stringToUpper either a string or string[]
+ * @returns uppercased string or string[]
+ */
+const useUppercase = (stringToUpper: string[]|string) => {
+  if (typeof(stringToUpper) === "string") {
+    return stringToUpper.toUpperCase()
+  }
+  const strArr: string[] = []
+  stringToUpper.map((str) => {
+    strArr.push(
+      str.toUpperCase()
+    )
+  })
+  return strArr
 }
 
 
 // Generate a random integer  with equal chance in  min <= r < max.     https://stackoverflow.com/questions/41437492/how-to-use-window-crypto-getrandomvalues-to-get-random-values-in-a-specific-rang
-function generateRandomNumberInRange(): number {  
-  const range = 94111; //length of items in sanat.json = number of words in the data
-  if (range <= 0) {
+function generateRandomNumberInRange(min: number, max: number): number {  
+  const range = max-min; 
+  if (max <= 0) {
     throw ('max must be larger than min');
   }
-  let requestBytes = Math.ceil(Math.log2(range) / 8);
+  const requestBytes = Math.ceil(Math.log2(range) / 8);
   if (!requestBytes) { // No randomness required
     return 0;
   }
-  let maxNum = Math.pow(256, requestBytes);
-  let ar = new Uint8Array(requestBytes);
+  const maxNum = Math.pow(256, requestBytes);
+  const ar = new Uint8Array(requestBytes);
   
   while (true) {
       window.crypto.getRandomValues(ar);
@@ -102,6 +118,8 @@ function generateRandomNumberInRange(): number {
     }
 }
 
+const min = 0
+const max = 94111 //the max word count in sanat.json
 /**
  * generates a array of random number
  * @param length how many numbers are in the array
@@ -110,7 +128,7 @@ function generateRandomNumberInRange(): number {
 function generateRandomArray(length: number): number[] {
   const arr = [];
   for (let i = 0; i < length; i++) {
-    const randomNumber = generateRandomNumberInRange();
+    const randomNumber = generateRandomNumberInRange(min, max);
     arr.push(
       ...[randomNumber]
     );
@@ -118,34 +136,7 @@ function generateRandomArray(length: number): number[] {
   return arr
 }
 
-/**
- * @notInUse this program uses getWordsWithObject
- * @param length how 
- * @returns Promise as a string
- */
-export const getWordsWithMap = async (length: number): Promise<string> => {
-  
-  // const sanat = await getFromFile(file);
-  const mappi = new Map(Object.entries(sanat)) // tehdään mappi
 
-  const then = performance.now() //start performance
-  const randomNumsArray = generateRandomArray(length);  
-  
-  const sanaArray = []
-  
-  for (const num of randomNumsArray) {
-    sanaArray.push(
-      mappi.get(num.toString())
-      )
-    }
-  const sanaJono = sanaArray.join("")
-    
-    
-  const after = performance.now()
-  console.log("🚀 ~ file: getList.ts:24 ~ getWithMap ~ time to do:", `${length} items in ${after-then} ms`)
-  
-  return sanaJono
-}
 
 /**
  * capitalize any strings first letter
@@ -160,7 +151,12 @@ function capitalizeFirstLetter(string: string): string {
 
 
 
-
+/**
+ * 
+ * @param length length of the random number array that is passed in
+ * @param objektiSanat the words as a array that are used to create phrases
+ * @returns array of strings
+ */
 async function getWordsWithObject(length: number, objektiSanat: string[]) {
   
   // const then = performance.now()
@@ -168,33 +164,85 @@ async function getWordsWithObject(length: number, objektiSanat: string[]) {
 
   const sanaArray: string[] = []
   
-  for (const num of randomNumsArray) {
-    
+  for (const num of randomNumsArray) { 
     sanaArray.push(
       capitalizeFirstLetter(objektiSanat[num])
       )
-    }
+  }
     
-  const sanaJono = sanaArray.join("")
-    
-    
-  // const after = performance.now()
-  // console.log("🚀 ~ file: getList.ts:24 ~ getWordsWithObject ~ time to do:", `${length} items in ${after-then} ms`)
-    
-  return sanaJono
+  return sanaArray
 }
-
 
 /**
- * 
- * @param file the url to file 
- * @returns sanat which is from JSON.parce, hence the type "unknown"
+ * adds a random char at the end of an array of strings
+ * @param stringArr array of strings
+ * @returns array of strings with random char
  */
-async function getFromFile(file: string) {
-  const data = await JSON.parse(await fileRead(file))
+const randomCharsForJoins = (stringArr: string []) => {
+  const lastChar = (specials.length - 1)
+  
+  const arr: string[] = []
+  specials.map(() => {
+    const num = generateRandomNumberInRange(0, lastChar)
+    
+    arr.push(specials[num])
+  }) 
 
-  const sanat = {
-    ...data
-  };
-  return sanat 
+  const arrWithChars: string[] = []
+
+  for (let i = 0; i < stringArr.length; i++) {
+    const muted = stringArr[i].concat(arr[i])
+    arrWithChars.push(muted)
+    
+  }
+  return arrWithChars
 }
+
+
+// /**
+//  * @notInUse this program uses getWordsWithObject
+//  * @param length how 
+//  * @returns Promise as a string
+//  */
+// export const getWordsWithMap = async (length: number): Promise<string> => {
+  
+//   // const sanat = await getFromFile(file);
+//   const mappi = new Map(Object.entries(sanat)) // tehdään mappi
+
+//   const then = performance.now() //start performance
+//   const randomNumsArray = generateRandomArray(length);  
+  
+//   const sanaArray = []
+  
+//   for (const num of randomNumsArray) {
+//     sanaArray.push(
+//       mappi.get(num.toString())
+//       )
+//     }
+//   const sanaJono = sanaArray.join("")
+    
+    
+//   const after = performance.now()
+//   console.log("🚀 ~ file: getList.ts:24 ~ getWithMap ~ time to do:", `${length} items in ${after-then} ms`)
+  
+//   return sanaJono
+// }
+
+const specials = [
+  ",",
+  "-",
+  "_",
+  "*",
+  "?",
+  "+",
+  "=",
+  "(",
+  ")",
+  "/",
+  "!",
+  "@",
+  "%",
+  "&",
+  ">",
+  "<",
+]
