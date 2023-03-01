@@ -297,18 +297,20 @@
 }
 
 .sliderThumb {
+  cursor: pointer;
   display: block;
   width: 25px;
   height: 25px;
-  background-color: rgba(var(--callout-rgb));
-  box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.5);
+  background-color: rgba(var(--foreground-rgb));
+  box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4);
   border-radius: 9999px;
-  border: 2px solid rgba(var(--foreground-rgb), 0.7);
+  transition: border 200ms ease-in;
 }
 
 .sliderThumb:focus {
   outline: none;
-  box-shadow: 0 0 0 4px rgba(var(--foreground-rgb));
+  border: 3px solid rgba(var(--callout-rgb));
+  /* box-shadow: 0 0 0 4px rgba(var(--callout-rgb)); */
 }
 
 
@@ -368,7 +370,7 @@
     color: rgba(var(--foreground-rgb), 0.9);
   
   }
-  
+
   .inputButton:hover {
     background-color: rgba(var(--callout-rgb), 1);
   }
@@ -382,7 +384,10 @@
   }
 
   .sliderThumb:hover {
-    background-color: rgb(var(--foreground-rgb));
+    /* height: 27px;
+    width: 27px; */
+    border: 2px solid rgba(var(--callout-rgb));
+    transition: border 150ms ease-out;
   }
   
   .imageWrapper:hover .svgImage {
