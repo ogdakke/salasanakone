@@ -12,8 +12,8 @@ function App() {
     <main className="main">
       <div className="wrapper">
         <Suspense fallback={<Loading />}>
-          <FormComponent />
-          {/* <Loading /> */}
+          {/* <FormComponent /> */}
+          <Loading />
         </Suspense>
           <Description />
       </div>
