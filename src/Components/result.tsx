@@ -14,9 +14,6 @@ export default function Result(props: { finalPassword: string; copyText: string 
   
   return (
     <>
-      <p className="result">
-          Kopioi Salasana klikkaamalla:         
-      </p>
         {finalPassword
         ? <a
           title={copyText}

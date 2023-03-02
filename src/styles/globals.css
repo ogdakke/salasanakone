@@ -58,7 +58,7 @@
       rgba(134, 143, 138, 0.02)
     );
 
-    --tile-start-rgb: 2, 13, 46;
+    --tile-start-rgb: 40, 45, 45;
     --tile-end-rgb: 2, 5, 19;
     --tile-border: conic-gradient(
       #ffffff80,

@@ -4,15 +4,11 @@ import "../styles/Home.css"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import CheckIcon from "../assets/icons/checkedIcon"
-// import Result from "./result"
-// import createCryptoKey from "../Api/createCrypto";
 import { Slider } from "./slider"
-import { getSanat } from "../Api/getSanat"
-
+import { Loading } from "./loading"
 const Result = React.lazy(() => import("./result"))
 
 const createCrypto = import("../Api/createCrypto").then((res) => res.default)
-const resource = getSanat()
 type FormType = {
   [option: string]: boolean
 }
@@ -149,18 +145,14 @@ const validate = (sliderValue: string): string => {
         </button>
       </div>
     <div className="resultWrapper">
+      <p className="result">
+          Kopioi Salasana napauttamalla:         
+      </p>
       <Suspense fallback={<div className="card">Loading...</div>}>
         <Result 
           finalPassword={finalPassword}
           copyText={copyText}
-          />
-        {/* <Result 
-          finalPassword={
-            resource.read()?.toString() as string
-          }
-          copyText={copyText}
-        /> */}
-
+          />          
       </Suspense>
     </div>
 
