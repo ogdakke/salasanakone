@@ -310,6 +310,7 @@
 .sliderThumb:focus {
   outline: none;
   border: 3px solid rgba(var(--callout-rgb));
+  transition: border 200ms ease-in;
   /* box-shadow: 0 0 0 4px rgba(var(--callout-rgb)); */
 }
 

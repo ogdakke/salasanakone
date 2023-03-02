@@ -1,19 +1,23 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react"
 import { stickyState, useStickyState } from "./stickyState"
 import "../styles/Home.css"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import CheckIcon from "../assets/icons/checkedIcon"
-import Result from "./result"
-import createCryptoKey from "../Api/createCrypto";
+// import Result from "./result"
+// import createCryptoKey from "../Api/createCrypto";
 import { Slider } from "./slider"
+import { getSanat } from "../Api/getSanat"
 
+const Result = React.lazy(() => import("./result"))
 
+const createCrypto = import("../Api/createCrypto").then((res) => res.default)
+const resource = getSanat()
 type FormType = {
   [option: string]: boolean
 }
 
-
+const createCryptoKey = await createCrypto
 const initialFormValues: FormType = {
   uppercase: false,
   randomChars: true,
@@ -21,6 +25,8 @@ const initialFormValues: FormType = {
 }
 
 const initialKeys: string[] = Object.keys(initialFormValues)
+
+
 
 export default function FormComponent () {
 
@@ -45,17 +51,23 @@ const validate = (sliderValue: string): string => {
 }
 
 
-  useEffect(() => {
+  useEffect(() => {    
     generate()
   }, [formValues, sliderValue])    
 
-  function generate() {
-    createCryptoKey(validate(sliderValue), formValues)
-    .then((response) =>
-      setFinalPassword(response)) 
-    // setCopied(false)
-    
+  const generate = async () => {
+    await createCryptoKey(sliderValue, formValues).then((res) => {
+      setFinalPassword(res)
+    })
   }
+
+  // function generate() {
+  //   await createCryptoKey(validate(sliderValue), formValues)
+  //   .then((response) =>
+  //     setFinalPassword(response)) 
+  //   // setCopied(false)
+    
+  // }
   
   const setValuesToForm = (option: string, event: Checkbox.CheckedState) => {
     setFormValues({ 
@@ -136,11 +148,22 @@ const validate = (sliderValue: string): string => {
           Luo Uusi Salasana
         </button>
       </div>
+    <div className="resultWrapper">
+      <Suspense fallback={<div className="card">Loading...</div>}>
+        <Result 
+          finalPassword={finalPassword}
+          copyText={copyText}
+          />
+        {/* <Result 
+          finalPassword={
+            resource.read()?.toString() as string
+          }
+          copyText={copyText}
+        /> */}
 
-      <Result 
-        finalPassword={finalPassword}
-        copyText={copyText}
-      />
+      </Suspense>
+    </div>
+
   
   </form>
   </>

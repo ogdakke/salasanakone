@@ -1,8 +1,8 @@
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 
 
-export default function Result(props: any) {
+export default function Result(props: { finalPassword: string; copyText: string }) {
   const {finalPassword, copyText} = props
   const copy = () => {
     setCopied(true)
@@ -13,7 +13,7 @@ export default function Result(props: any) {
   
   
   return (
-    <div className="resultWrapper">
+    <>
       <p className="result">
           Kopioi Salasana klikkaamalla:         
       </p>
@@ -46,6 +46,6 @@ export default function Result(props: any) {
           Jotain meni vikaan... Salasanaa ei luotu.
         </div> 
         }
-  </div>
+  </>
   )
 }
