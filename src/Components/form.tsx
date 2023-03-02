@@ -5,7 +5,6 @@ import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import CheckIcon from "../assets/icons/checkedIcon"
 import { Slider } from "./slider"
-import { Loading } from "./loading"
 const Result = React.lazy(() => import("./result"))
 
 const createCrypto = import("../Api/createCrypto").then((res) => res.default)
