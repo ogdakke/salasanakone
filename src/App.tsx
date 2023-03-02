@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react'
-import Description from './components/description'
+import Description from './Components/description'
 
 import './styles/globals.css'
 import './styles/Home.css'
 
-import { Loading } from './components/loading'
-const FormComponent = React.lazy(() => import("./components/form"))
+import { Loading } from './Components/loading'
+const FormComponent = React.lazy(() => import("./Components/form"))
 
 function App() {
   return (
