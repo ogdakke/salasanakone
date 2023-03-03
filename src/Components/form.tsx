@@ -135,6 +135,7 @@ const validate = (sliderValue: string): string => {
       <div className="buttonWrapper">
         <button 
           className="inputButton"
+          aria-label="Luo Uusi Salasana"
           type='submit'
           onClick={(e) => {
             e.preventDefault()
@@ -154,8 +155,6 @@ const validate = (sliderValue: string): string => {
           />          
       </Suspense>
     </div>
-
-  
   </form>
   </>
   )

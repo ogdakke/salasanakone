@@ -175,7 +175,9 @@
 }
 
 .card {
-  padding: 1.5rem 1.2rem;
+  /* this is because the scrollbar height is 9px */
+  /* top right bottom left */
+  padding: 1.5rem 1.2rem calc(1.5rem - 9px) 1.5rem;
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
   border: 1px dashed rgba(var(--card-border-rgb), 0.2);
@@ -185,14 +187,12 @@
   
   overflow-x: scroll;
   
-  text-overflow: ellipsis;
 }
 
 
 
 .card span {
   padding-right: .6rem;
-  text-overflow: ellipsis;
   transition: all 200ms, border 200ms;
   display: inline-block;
   color: rgba(var(--foreground-rgb), .7);
@@ -293,8 +293,8 @@
 
 .copied {
   pointer-events: none;
-  -webkit-user-select: none;
   transition: all 650ms;
+  -webkit-user-select: none;
   user-select:none;
 }
 
@@ -334,6 +334,7 @@
   position: relative;
   display: flex;
   align-items: center;
+  -webkit-user-select: none;
   user-select: none;
   touch-action: none;
   width: 50%;
@@ -403,16 +404,73 @@
   /* color: rgb(var(--foreground-rgb)); */
 }
 
-
-
-
-
-
-
-
 .submitted span {
   animation: alternate;
 }
+
+
+/* scrollbar */
+.scrollAreaRoot {
+  position: relative;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.scrollAreaViewport {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  text-overflow: clip;
+}
+
+.scrollAreaScrollbar {
+  display: flex;
+  /* ensures no selection */
+  -webkit-user-select: none;
+  user-select: none;
+  /* disable browser handling of all panning and zooming gestures on touch devices */
+  touch-action: none;
+  padding: 20px;
+  background: rgb(var(--foreground-rgb));
+  transition: background 160ms ease-out;
+}
+.scrollAreaScrollbar:hover {
+  background: var(--blackA8);
+}
+.scrollAreaScrollbar[data-orientation='vertical'] {
+  width: var(--scrollbar-size);
+}
+.scrollAreaScrollbar[data-orientation='horizontal'] {
+  flex-direction: column;
+  height: var(--scrollbar-size);
+}
+
+.scrollAreaThumb {
+  flex: 1;
+  background: rgb(var(--foreground-rgb));
+  border-radius: var(--scrollbar-size);
+  position: relative;
+}
+/* increase target size for touch devices https://www.w3.org/WAI/WCAG21/Understanding/target-size.html */
+.scrollAreaThumb::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.scrollAreaCorner {
+  background: rgb(var(--foreground-rgb));
+}
+
+
+
+
 
 
 /* Enable hover only on non-touch devices */
@@ -455,6 +513,25 @@
     filter: blur(0);
   }
 
+  /* use these only on pointer devices */
+  /* scrollbar  on firefox*/
+  html,
+  .card {
+    scrollbar-width: thin;
+    /* scrollbar-gutter: stable; */
+    scrollbar-color: rgba(var(--foreground-rgb), 0.3) transparent;
+  }
+  /* edge, chrome, safari */
+  .card::-webkit-scrollbar {
+    height: 9px;  
+  }
+  .card::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--foreground-rgb), 0.3);
+    border-radius: 9px;
+  }
+
+  /*  */
+
 }
 
 @media (prefers-reduced-motion) {
@@ -479,7 +556,7 @@
   }
 
   .loading {
-    height: 512px;
+    height: 495px;
   }
   
   .resultWrapper {

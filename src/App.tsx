@@ -13,8 +13,7 @@ function App() {
       <div className="wrapper">
         <Suspense fallback={<Loading />}>
           <FormComponent />
-          {/* <Loading /> */}
-        </Suspense>
+          </Suspense>
           <Description />
       </div>
     </main>

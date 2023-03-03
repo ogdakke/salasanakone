@@ -1,3 +1,4 @@
+import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
 import { Suspense, useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 
@@ -13,8 +14,8 @@ export default function Result(props: { finalPassword: string; copyText: string 
   
   
   return (
-    <>
-        {finalPassword
+  <>
+    {finalPassword
         ? <a
           title={copyText}
           className="card"
@@ -42,7 +43,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
         : <div className="card">
           Jotain meni vikaan... Salasanaa ei luotu.
         </div> 
-        }
+      }
   </>
   )
 }
