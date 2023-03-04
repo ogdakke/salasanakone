@@ -6,6 +6,7 @@ import replace from '@rollup/plugin-replace'
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: 'production',
   base: '/',
+  registerType: 'prompt',
   manifest: {
     name: "Luo Salasana",
     short_name: "Luo Salasana",
@@ -31,7 +32,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
 
   },
   devOptions: {
-    enabled: process.env.VERCEL_DEV === 'true',
+    enabled: true,
     /* when using generateSW the PWA plugin will switch to classic */
     type: 'module',
     navigateFallback: 'index.html',
