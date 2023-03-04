@@ -175,9 +175,8 @@
 }
 
 .card {
-  /* this is because the scrollbar height is 9px */
   /* top right bottom left */
-  padding: 1.5rem 1.2rem calc(1.5rem - 9px) 1.5rem;
+  padding: 1.5rem 1.2rem 1.5rem 1.2rem;
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
   border: 1px dashed rgba(var(--card-border-rgb), 0.2);
@@ -514,13 +513,22 @@
   }
 
   /* use these only on pointer devices */
+  
+  
   /* scrollbar  on firefox*/
   html,
   .card {
+    
     scrollbar-width: thin;
     /* scrollbar-gutter: stable; */
     scrollbar-color: rgba(var(--foreground-rgb), 0.3) transparent;
   }
+
+  /* this is because the scrollbar height is 9px */
+  .card {
+    padding: 1.5rem 1.2rem calc(1.5rem - 9px) 1.2rem;
+  }
+  
   /* edge, chrome, safari */
   .card::-webkit-scrollbar {
     height: 9px;  
