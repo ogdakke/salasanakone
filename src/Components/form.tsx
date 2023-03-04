@@ -1,8 +1,12 @@
+// modules
 import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react"
-import { stickyState, useStickyState } from "./stickyState"
-import "../styles/Home.css"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
+// hooks
+import { stickyState, useStickyState } from "../hooks/stickyState"
+// styles
+import "../styles/Home.css"
+// components 
 import CheckIcon from "../assets/icons/checkedIcon"
 import { Slider } from "./slider"
 import { createCrypto } from "../main";
@@ -88,20 +92,19 @@ const validate = (sliderValue: string): string => {
 
   return (
     <>
-    <form className='form' action="submit">
+    <form className='form' action="submit" aria-busy="false">
     {initialKeys.map((option) => {
       return (
         <div className="inputWrapper" key={option}>
-
           <Checkbox.Root
+            aria-label={labelForCheckbox(option)}
             className="checkboxRoot"
             checked={formValues[option] === true}
             onCheckedChange={(event) => {
               setValuesToForm(option, event)
-            } }
+            }}
             id={option}
-            value={option}
-          >
+            value={option}>
             <Checkbox.Indicator>
               <CheckIcon />
             </Checkbox.Indicator>
@@ -110,7 +113,6 @@ const validate = (sliderValue: string): string => {
             className="LabelRoot"
             htmlFor={option}>
             {labelForCheckbox(option)}
-
           </Label.Root>
         </div>
       )
@@ -122,8 +124,10 @@ const validate = (sliderValue: string): string => {
         ? `Pituus: ${validate(sliderValue)} Sanaa`
         : `Pituus: ${validate(sliderValue)} Merkkiä`}
       </Label.Root>
-
-      <Slider 
+      <Slider
+        id="slider"
+        name="slider"
+        aria-label="Salasanan pituus"
         value={[parseInt(validate(sliderValue))]}
         onValueChange={(val) => sliderVal(val)}
         max={formValues.words ? maxLengthForWords : maxLengthForChars}    
@@ -145,15 +149,21 @@ const validate = (sliderValue: string): string => {
         </button>
       </div>
     <div className="resultWrapper">
-      <p className="result">
+      <p className="resultHelperText">
           Kopioi Salasana napauttamalla:         
       </p>
-      <Suspense fallback={<div className="card">Loading...</div>}>
+      {/* <Suspense fallback={
+      <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div>
+      }> */}
+      {/* <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div> */}
+
         <Result 
+          aria-busy="false"
+          aria-label="Salasana, jonka voi kopioida napauttamalla"
           finalPassword={finalPassword}
           copyText={copyText}
           />          
-      </Suspense>
+      {/* </Suspense> */}
     </div>
   </form>
   </>

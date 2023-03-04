@@ -1,5 +1,7 @@
 import React from 'react';
 import * as SliderPrimitive from '@radix-ui/react-slider';
+import "../styles/Slider.css"
+
 
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
@@ -13,7 +15,7 @@ const Slider = React.forwardRef<
     <SliderPrimitive.Track className="sliderTrack">
       <SliderPrimitive.Range className="sliderRange" />
     </SliderPrimitive.Track>
-    <SliderPrimitive.Thumb className="sliderThumb" />
+    <SliderPrimitive.Thumb className="sliderThumb" aria-label='Slider Thumb' />
   </SliderPrimitive.Root>
 ))
 Slider.displayName = SliderPrimitive.Root.displayName

@@ -1,9 +1,9 @@
 import React, { Suspense } from 'react'
-import Description from './Components/description'
-
+// styles
 import './styles/globals.css'
-import './styles/Home.css'
-
+import './styles/App.css'
+// components
+import Description from './Components/description'
 import { Loading } from './Components/loading'
 const FormComponent = React.lazy(() => import("./Components/form"))
 

@@ -1,0 +1,59 @@
+
+/* scrollbar */
+.scrollAreaRoot {
+  position: relative;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.scrollAreaViewport {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  text-overflow: clip;
+}
+
+.scrollAreaScrollbar {
+  display: flex;
+  /* ensures no selection */
+  -webkit-user-select: none;
+  user-select: none;
+  /* disable browser handling of all panning and zooming gestures on touch devices */
+  touch-action: none;
+  padding: 20px;
+  background: rgb(var(--foreground-rgb));
+  transition: background 160ms ease-out;
+}
+.scrollAreaScrollbar:hover {
+  background: var(--blackA8);
+}
+.scrollAreaScrollbar[data-orientation='vertical'] {
+  width: var(--scrollbar-size);
+}
+.scrollAreaScrollbar[data-orientation='horizontal'] {
+  flex-direction: column;
+  height: var(--scrollbar-size);
+}
+
+.scrollAreaThumb {
+  flex: 1;
+  background: rgb(var(--foreground-rgb));
+  border-radius: var(--scrollbar-size);
+  position: relative;
+}
+/* increase target size for touch devices https://www.w3.org/WAI/WCAG21/Understanding/target-size.html */
+.scrollAreaThumb::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.scrollAreaCorner {
+  background: rgb(var(--foreground-rgb));
+}

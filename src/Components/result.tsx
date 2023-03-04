@@ -1,13 +1,13 @@
-import { ScrollArea, Scrollbar } from "@radix-ui/react-scroll-area";
-import { Suspense, useState } from "react"
+import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
+import "../styles/Result.css"
 
 
 export default function Result(props: { finalPassword: string; copyText: string }) {
   const {finalPassword, copyText} = props
   const copy = () => {
     setCopied(true)
-    setTimeout(() => setCopied(false), 1200)
+    setTimeout(() => setCopied(false), 1100)
   }
 
   const [isCopied, setCopied] = useState(false)
@@ -17,9 +17,10 @@ export default function Result(props: { finalPassword: string; copyText: string 
   <>
     {finalPassword
         ? <a
-          title={copyText}
-          className="card"
-           type='button' onClick={async () => { 
+            title={copyText}
+            className="card"
+            type='button' 
+            onClick={async () => { 
               await copyToClipboard(finalPassword) 
               copy()  
               }
@@ -31,11 +32,11 @@ export default function Result(props: { finalPassword: string; copyText: string 
               }>
                 {
                   isCopied
-                ? <p>Copied To Clipboard</p>
-                :<span>
+                ? <span className="copiedSpanText">Copied To Clipboard</span>
+                :<span className="notCopiedSpan">
                   {finalPassword.length
                 ? finalPassword
-                : "something went wrong..."}
+                : "Jotain meni vikaan... Salasanaa ei luotu."}
                 </span>
                 }
               </span>

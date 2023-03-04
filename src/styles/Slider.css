@@ -1,0 +1,73 @@
+.sliderWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  /* justify-content: space-between; */
+}
+
+
+.sliderRoot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: none;
+  width: 50%;
+  height: 40px;
+}
+
+.sliderTrack {
+  background-color: rgba(var(--foreground-rgb), 0.3);
+  position: relative;
+  flex-grow: 1;
+  border-radius: 9999px;
+  height: 4px;
+}
+
+.sliderRange {
+  position: absolute;
+  background-color: rgba(var(--foreground-rgb), 0.7);
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.sliderThumb {
+  cursor: pointer;
+  display: block;
+  width: 35px;
+  height: 35px;
+  background-color: rgba(var(--foreground-rgb));
+  box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4);
+  border-radius: 9999px;
+  transition: border 100ms ease-out;
+}
+
+.sliderThumb:focus {
+  outline: none;
+  outline: 3px solid rgba(var(--foreground-rgb));
+  background-color: rgba(var(--callout-rgb));
+}
+
+/* Enable hover only on non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  .sliderThumb {
+    width: 25px;
+    height: 25px;
+  }
+  
+  .sliderThumb:hover {
+    /* height: 27px;
+    width: 27px; */
+    border: 2px solid rgba(var(--callout-rgb));
+    transition: border 100ms ease-out;
+  }
+}
+
+@media (max-width: 700px) {
+  .sliderRoot {
+    width: 80%;
+    height: 35px;
+    margin: 0.5rem 0rem;
+  }
+}

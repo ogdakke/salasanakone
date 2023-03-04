@@ -1,0 +1,57 @@
+
+.description {
+  font-size: 1rem;
+  max-width: var(--max-width);
+  width: 100%;
+}
+
+.description h2 {
+  margin-bottom: 0.5rem;
+}
+
+.description a {
+  
+  align-items: center;
+  color: rgba(var(--foreground-rgb),0.7);
+  text-decoration: underline dotted;
+  padding: 0.5rem 0rem;
+  padding-right: 1rem;
+}
+
+
+
+.description p {
+  margin: 0;  
+}
+
+.imageWrapper {
+  display: flex;
+  width: min-content;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0rem;
+
+  
+}
+
+
+.svgImage{
+  transition: filter 250ms;
+  -webkit-filter: blur(3px);
+  filter: blur(3px);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .description a:hover {
+    color: rgba(var(--foreground-rgb), 0.9);
+  
+  }
+    
+  .imageWrapper:hover .svgImage {
+    transition: filter 250ms;
+    filter: blur(0);
+  }
+}

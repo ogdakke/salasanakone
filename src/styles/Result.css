@@ -1,0 +1,72 @@
+
+.resultHelperText {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.copied {
+  pointer-events: none;
+  transition: filter 650ms;
+  
+  -webkit-user-select: none;
+  user-select:none;
+}
+
+.notCopied {
+  transition: filter 400ms;
+  /* transform: translateX(-100%); */
+}
+
+.copied span {
+  filter: blur(2px);
+  transition: filter 2500ms ease-out;
+  /* opacity: 0; */
+}
+
+.copiedSpanText {
+  /* transform: translateX(-100%); */
+  
+  animation: move-reverse 300ms 900ms ease-out 1;
+}
+
+.notCopiedSpan {
+  
+  animation: move 150ms ease-out 1;
+}
+.notCopied span {
+  filter: blur(0px);
+  transition: filter 400ms ease-in;
+  opacity: 100%;
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
+
+@keyframes move {
+  0% {
+    transform: translate(-250%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+@keyframes move-reverse {
+  0% {
+    transform: translate(0);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+@media (prefers-reduced-motion) {
+  .copiedSpanText {
+    animation: none;
+  }
+  .notCopiedSpan {
+    animation: none;
+  }
+}
