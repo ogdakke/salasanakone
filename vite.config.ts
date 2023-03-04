@@ -1,6 +1,6 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import { VitePWA, VitePWAOptions } from 'vite-plugin-pwa'
 import replace from '@rollup/plugin-replace'
 
 const pwaOptions: Partial<VitePWAOptions> = {
@@ -23,6 +23,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
     }
   ],
   orientation: "portrait",
+  
   theme_color: "#ffffff",
   background_color: "#ffffff",
   display: "standalone",
