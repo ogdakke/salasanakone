@@ -5,9 +5,9 @@ import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 import CheckIcon from "../assets/icons/checkedIcon"
 import { Slider } from "./slider"
+import { createCrypto } from "../main";
 const Result = React.lazy(() => import("./result"))
 
-const createCrypto = import("../Api/createCrypto").then((res) => res.default)
 type FormType = {
   [option: string]: boolean
 }
