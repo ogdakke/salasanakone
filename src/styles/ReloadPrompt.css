@@ -1,0 +1,50 @@
+@import url(globals.css);
+.ReloadPrompt-container {
+  padding: 0;
+  margin: 0;
+  width: 0;
+  height: 0;
+}
+.ReloadPrompt-toast {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+
+  max-width: 360px;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin: 1.5rem 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(var(--card-border-rgb), 0.3);
+  border-radius: var(--border-radius);
+  z-index: 1;
+  text-align: left;
+  box-shadow: 3px 4px 18px 0 rgba(var(--foreground-rgb), 0.1);
+  background-color: rgba(var(--callout-rgb));
+
+  transition: all 200ms ease-in;
+}
+.ReloadPrompt-toast-message {
+  /* margin-bottom: 8px; */
+}
+.ToastButton {
+  margin: 0 !important;
+  padding: 0.5rem 1rem !important;
+}
+
+
+.true {
+  /* animation: move-reverse 200ms ease-in; */
+}
+
+@keyframes move-reverse {
+  0% {
+    right: 0;
+    /* transform: translate(0); */
+  }
+  100% {
+    right: 500px;
+    /* transform: translateX(100%); */
+  }
+}

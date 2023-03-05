@@ -1,5 +1,5 @@
 // modules
-import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 // hooks
@@ -17,6 +17,7 @@ type FormType = {
 }
 
 const createCryptoKey = await createCrypto
+
 const initialFormValues: FormType = {
   uppercase: false,
   randomChars: true,
@@ -27,7 +28,7 @@ const initialKeys: string[] = Object.keys(initialFormValues)
 
 
 
-export default function FormComponent () {
+export default function FormComponent (): JSX.Element {
 
   const [sliderValue, setSliderValue] = useStickyState("5", "sliderValue")
   const [finalPassword, setFinalPassword] = useState("") 
@@ -69,7 +70,7 @@ const validate = (sliderValue: string): string => {
   // }
   
   const setValuesToForm = (option: string, event: Checkbox.CheckedState) => {
-    setFormValues({ 
+    return setFormValues({ 
       ...formValues, 
       [option]: event as boolean
     })
@@ -177,4 +178,4 @@ const lang = {
 }
 
 
-const copyText = lang.Finnish ? "Kopioi Klikkaamalla." : "Click to Copy"
+const copyText = lang.Finnish ? "Kopioi Salasana Klikkaamalla" : "Click to Copy"

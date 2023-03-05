@@ -11,11 +11,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
   
   
   let length = parseInt(sliderValue)
-  
-  if (!data.words) {
-    return createPassWordFromRandomChars()
-    
-  }
+
   
   // return in uppercase if uppercase is true
   if (data.uppercase) {
