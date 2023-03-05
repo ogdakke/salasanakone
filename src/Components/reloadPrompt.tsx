@@ -24,7 +24,6 @@ function ReloadPrompt() {
     setOfflineReady(false)
     setNeedRefresh(false)
   }
-  console.log("🚀 ~ file: reloadPrompt.tsx:29 ~ ReloadPrompt ~ test:", isTrue)
   return (
     <div className="ReloadPrompt-container">
       { (offlineReady || needRefresh)
