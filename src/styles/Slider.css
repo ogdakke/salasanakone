@@ -35,8 +35,8 @@
 .sliderThumb {
   cursor: pointer;
   display: block;
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   background-color: rgba(var(--foreground-rgb));
   box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4);
   border-radius: 9999px;
@@ -45,7 +45,10 @@
 
 .sliderThumb:focus {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(var(--foreground-rgb), 0.8);
+  /* box-shadow: 0 0 0 3px rgba(var(--foreground-rgb), 0.8); */
+  
+  border:3px solid rgba(var(--foreground-rgb), 0.8);
+  
   background-color: rgba(var(--callout-rgb));
 }
 
