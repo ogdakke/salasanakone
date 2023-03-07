@@ -1,5 +1,8 @@
 import { sanat } from "../sanat"
 
+
+
+
 interface checkboxes {
   uppercase?: boolean;
   randomChars?: boolean;
@@ -9,31 +12,34 @@ interface checkboxes {
 export default async function createCryptoKey(sliderValue: string, data: checkboxes): Promise<string> {
   const arrayOfWords = sanat as string[]
   
-  
   let length = parseInt(sliderValue)
-
   
-  // return in uppercase if uppercase is true
-  if (data.uppercase) {
-    if (data.randomChars) {
-      return useUppercase(
-        randomCharsForJoins(
-          await getWordsWithObject(length, arrayOfWords)
-        ).join("")
-      ).toString()
-    }
-    return createPassWordFromRandomChars()
-  } else if (data.words) {
-    if (data.randomChars) {
-      return randomCharsForJoins(
-        await getWordsWithObject(length, arrayOfWords)
-      ).join("")
-    }
-    return (await getWordsWithObject(length, arrayOfWords)).join("")
-
-  } 
-  return createPassWordFromRandomChars()
   
+  const handleReturns = async (values: checkboxes, length: number): Promise<string> => {
+    async function handle(values: checkboxes, length: number) {
+      if (data.words) {
+        /*this is the string[] that is generated when data.words is true*/
+        const wordString = (await getWordsWithObject(length, arrayOfWords))
+        if (data.uppercase) {
+          if (data.randomChars) {
+          return useUppercase(randomCharsForJoins(wordString).join(""))
+          }
+          return useUppercase(wordString.join("")).toString()
+        }
+        if (data.randomChars) {
+          return randomCharsForJoins(wordString).join("")
+        }
+        return wordString.join("")
+      } else if (data.uppercase) {
+        const passFromRndmChars = createPassWordFromRandomChars()
+        return useUppercase(passFromRndmChars).toString()
+      } else if (!data.uppercase) {
+        return createPassWordFromRandomChars()
+      }
+    }
+    return await handle(values, length) as string
+  }
+
 
   /**
    * Creates a password from random chars and numbers
@@ -66,6 +72,8 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
     length % 2 && length !== 2 ? password = password.slice(1) : password;
     return data.uppercase ? useUppercase(password).toString() : password;
   }
+
+  return handleReturns(data, length)
 }
 
 /**
