@@ -37,7 +37,7 @@ function ReloadPrompt() {
             { needRefresh 
             ? <button type='button' className="ToastButton inputButton" onClick={() => updateServiceWorker(true)}>Päivitä</button>
             : null }
-            { offlineReady 
+            { offlineReady  && ! needRefresh
             ? <button type='button' 
               className={`ToastButton inputButton`} 
               onClick={() => {

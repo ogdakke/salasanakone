@@ -15,14 +15,26 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
   
   // return in uppercase if uppercase is true
   if (data.uppercase) {
+    
     if (data.randomChars) {
+      if (data.words) {
+        return useUppercase(
+          randomCharsForJoins(
+            await getWordsWithObject(length, arrayOfWords)
+          ).join("")
+        ).toString()
+      } else {
+        return useUppercase(createPassWordFromRandomChars()).toString()
+      }
+    }
+
+    if (data.words) {
       return useUppercase(
-        randomCharsForJoins(
-          await getWordsWithObject(length, arrayOfWords)
-        ).join("")
+        (await getWordsWithObject(length, arrayOfWords)).join("")
       ).toString()
     }
-    return createPassWordFromRandomChars()
+
+    return useUppercase(createPassWordFromRandomChars()).toString()
   } else if (data.words) {
     if (data.randomChars) {
       return randomCharsForJoins(

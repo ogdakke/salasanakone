@@ -32,7 +32,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
               }>
                 {
                   isCopied
-                ? <span className="copiedSpanText">Copied To Clipboard</span>
+                ? <span className="copiedSpanText">Kopioitu Leikepöydälle</span>
                 :<span className="notCopiedSpan">
                   {finalPassword.length
                 ? finalPassword
@@ -42,7 +42,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
               </span>
           </a> 
         : <div className="card">
-          Jotain meni vikaan... Salasanaa ei luotu.
+          Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.
         </div> 
       }
   </>

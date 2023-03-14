@@ -37,21 +37,26 @@ export default function FormComponent (): JSX.Element {
   const formValues = formValuesTyped as FormType // explicitly type formValues as FormType
   const setFormValues = setFormValuesTyped as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
 
+  const minLengthForChars = 8
+  const minLengthForWords = 1
   const maxLengthForChars = 64
   const maxLengthForWords = 12
-
 
   
 const validate = (sliderValue: string): string => {
   if (formValues.words && parseInt(sliderValue) > maxLengthForWords) {
     setSliderValue(maxLengthForWords)
     return maxLengthForWords.toString()
+  } else if (!formValues.words && parseInt(sliderValue) < minLengthForChars) {
+    setSliderValue(minLengthForChars)
+    return minLengthForChars.toString()
   }
   return sliderValue
 }
 
 
-  useEffect(() => {    
+  useEffect(() => {
+    validate(sliderValue)
     generate()
   }, [formValues, sliderValue])    
 
@@ -132,7 +137,7 @@ const validate = (sliderValue: string): string => {
         value={[parseInt(validate(sliderValue))]}
         onValueChange={(val) => sliderVal(val)}
         max={formValues.words ? maxLengthForWords : maxLengthForChars}    
-        min={formValues.words ? 1 : 3} 
+        min={formValues.words ? minLengthForWords : minLengthForChars} 
         step={1}
       />
 

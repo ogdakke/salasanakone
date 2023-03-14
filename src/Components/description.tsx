@@ -1,5 +1,6 @@
 import React from "react"
 import "../styles/Description.css"
+
 const Description: React.FC = () => {
   return (
     <>
@@ -9,9 +10,11 @@ const Description: React.FC = () => {
         </h2>
         <p>
         Tällä sivulla voit luoda vahvan salasanan käyttämällä suomen kielen sanoja. Suomen kieli on monimutkainen, ja sen vuoksi otollinen tapa luoda vahva ja muistettava salasana.
+        <br /> 
+        Sivusto ei lähetä <u>mitään</u> tietoja selaimesi ulkopuolelle, ja luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään muutakaan.
         </p>
         <p>
-          Tehnyt:
+          <br />
         </p>
           <div className="imageWrapper">
           <img loading="lazy" className="svgImage" src="/favicon.svg" alt="Logo" width={20} height={20} 
