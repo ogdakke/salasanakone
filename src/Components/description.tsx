@@ -9,10 +9,16 @@ const Description: React.FC = () => {
           Luo muistettavia salasanoja!
         </h2>
         <p>
-        Tällä sivulla voit luoda vahvan salasanan käyttämällä suomen kielen sanoja. Suomen kieli on monimutkainen, ja sen vuoksi otollinen tapa luoda vahva ja muistettava salasana.
-        <br /> 
-        Sivusto ei lähetä <u>mitään</u> tietoja selaimesi ulkopuolelle, ja luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään muutakaan.
+        Tällä sivulla voit luoda vahvan salasanan käyttämällä suomen kielen sanoja. Suomen kieli on monimutkainen, ja sen vuoksi meille otollinen tapa luoda vahva ja muistettava salasana.
         </p>
+        <br />
+        <h2>Miten toimii?</h2>
+        Sivusto luo satunnaisesti valituista sanoista tai merkeistä salasanan.
+        Sivusto ei lähetä <u>mitään</u> tietoja selaimesi ulkopuolelle, ja luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään muutakaan. 
+        <br />
+        Sivu toimii myös ilman verkkoyhteyttä "tallentamalla" itsensä selaimeen.
+        <br />
+        Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta saat kaiken irti ominaisuuksista!
         <p>
           <br />
         </p>
