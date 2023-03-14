@@ -20,11 +20,19 @@ export default function Result(props: { finalPassword: string; copyText: string 
             title={copyText}
             className="card"
             itemType="button"
+            tabIndex={0}
             onClick={async () => { 
               await copyToClipboard(finalPassword) 
               copy()  
               }
-            }>
+            }
+            onKeyDown={async (e) => {
+              if (e.key === "Enter") {
+                await copyToClipboard(finalPassword)
+                copy()
+              } return;
+            }}
+            >
               <span className={
                 isCopied 
                 ? "copied"
