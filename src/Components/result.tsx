@@ -16,15 +16,23 @@ export default function Result(props: { finalPassword: string; copyText: string 
   return (
   <>
     {finalPassword
-        ? <a
+        ? <div
             title={copyText}
             className="card"
-            type='button' 
+            itemType="button"
+            tabIndex={0}
             onClick={async () => { 
               await copyToClipboard(finalPassword) 
               copy()  
               }
-            }>
+            }
+            onKeyDown={async (e) => {
+              if (e.key === "Enter") {
+                await copyToClipboard(finalPassword)
+                copy()
+              } return;
+            }}
+            >
               <span className={
                 isCopied 
                 ? "copied"
@@ -32,7 +40,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
               }>
                 {
                   isCopied
-                ? <span className="copiedSpanText">Copied To Clipboard</span>
+                ? <span className="copiedSpanText">Kopioitu Leikepöydälle</span>
                 :<span className="notCopiedSpan">
                   {finalPassword.length
                 ? finalPassword
@@ -40,9 +48,9 @@ export default function Result(props: { finalPassword: string; copyText: string 
                 </span>
                 }
               </span>
-          </a> 
+          </div> 
         : <div className="card">
-          Jotain meni vikaan... Salasanaa ei luotu.
+          Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.
         </div> 
       }
   </>

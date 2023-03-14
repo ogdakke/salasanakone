@@ -80,7 +80,11 @@
   
 }
 
+.card:focus {
+  background: rgba(var(--card-rgb), 0.1);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
 
+}
 .card span {
   padding-right: .6rem;
   transition: all 200ms, border 200ms;

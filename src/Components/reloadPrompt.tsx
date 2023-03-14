@@ -34,13 +34,17 @@ function ReloadPrompt() {
                 : <span className='Toast-span-persist'>Uusi versio saatavilla. Päivitä sivu napauttamalla.</span>
               }
             </div>
-            { needRefresh && 
-            <button type='button' className="ToastButton inputButton" onClick={() => updateServiceWorker(true)}>Päivitä</button> }
-            <button type='button' className={`ToastButton inputButton`} 
-            onClick={() => {
-              setIsTrue(true)
-              close()
+            { needRefresh 
+            ? <button type='button' className="ToastButton inputButton" onClick={() => updateServiceWorker(true)}>Päivitä</button>
+            : null }
+            { offlineReady  && ! needRefresh
+            ? <button type='button' 
+              className={`ToastButton inputButton`} 
+              onClick={() => {
+                setIsTrue(true)
+                close()
               }}>Ok</button>
+            : null}
         </div>
       }
     </div>
