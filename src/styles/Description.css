@@ -36,7 +36,6 @@
 
 
 .svgImage{
-  transition: filter 250ms;
   -webkit-filter: blur(3px);
   filter: blur(3px);
   -webkit-backface-visibility: hidden;
