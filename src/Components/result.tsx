@@ -16,10 +16,10 @@ export default function Result(props: { finalPassword: string; copyText: string 
   return (
   <>
     {finalPassword
-        ? <a
+        ? <div
             title={copyText}
             className="card"
-            type='button' 
+            itemType="button"
             onClick={async () => { 
               await copyToClipboard(finalPassword) 
               copy()  
@@ -40,7 +40,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
                 </span>
                 }
               </span>
-          </a> 
+          </div> 
         : <div className="card">
           Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.
         </div> 
