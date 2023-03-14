@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "bp": "npm run build && npm run preview"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.2",
