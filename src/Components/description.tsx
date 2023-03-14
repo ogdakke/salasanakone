@@ -14,7 +14,7 @@ const Description: React.FC = () => {
           Tehnyt:
         </p>
           <div className="imageWrapper">
-          <img className="svgImage" src="favicon.svg" alt="Logo" width={20} height={20} 
+          <img loading="lazy" className="svgImage" src="/favicon.svg" alt="Logo" width={20} height={20} 
           />
             <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
             deweloper.fi
