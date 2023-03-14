@@ -5,6 +5,10 @@
   width: 100%;
 }
 
+.description h1 {
+  margin-bottom: 0.5rem;
+}
+
 .description h2 {
   margin-bottom: 0.5rem;
 }
@@ -22,6 +26,9 @@
 
 .description p {
   margin: 0;  
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  white-space: normal;
 }
 
 .imageWrapper {
