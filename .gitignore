@@ -13,8 +13,6 @@ dist-ssr
 dev-dist
 *.local
 
-#sanat
-src/sanat.js
 
 # Editor directories and files
 .vscode/*
