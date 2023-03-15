@@ -1,8 +1,5 @@
 import { sanat } from "../sanat"
 
-
-
-
 export interface checkboxes {
   uppercase?: boolean;
   randomChars?: boolean;
@@ -22,12 +19,6 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
         /*this is the string[] that is generated when data.words is true*/
         const wordString = (await getWordsWithObject(length, arrayOfWords))
 
-        // if (data.uppercase) {
-        //   if (data.randomChars) {
-        //   return useUppercase(randomCharsForJoins(wordString).join(""))
-        //   }
-        //   else return useUppercase(wordString.join("")).toString()
-        // }
         if (data.randomChars) {
           if (data.numbers) {
             return randomCharsForJoins(
@@ -53,8 +44,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
     }
     const finalString = await handle(values, length).then((r) => {
       if (r === undefined) {
-        console.log("undefined value for string");
-        throw r
+        throw ("undefined value for string")
       }
       return r.toString()
     })
@@ -251,7 +241,7 @@ const insertRandomNumber = (stringArr: string[], sliderValue: number) => {
   }
   
   const now = performance.now()
-  console.log("🚀 ~ file: createCrypto.ts:248 ~ insertRandomNumber ~ now:", now - then, "ms")
+  // console.log("🚀 ~ file: createCrypto.ts:248 ~ insertRandomNumber ~ now:", now - then, "ms")
   return finalArr
 }
 
@@ -280,6 +270,4 @@ const specials = [
   "<",
 ]
 
-const characters = "abcdefghijklmnopqrstuvwxyzäö"
-const numbers = "0123456789"
 

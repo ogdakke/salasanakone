@@ -10,7 +10,6 @@ import "../styles/Home.css"
 import CheckIcon from "../assets/icons/checkedIcon"
 import { Slider } from "./slider"
 import { createCrypto } from "../main";
-import { checkboxes } from "../Api/createCrypto";
 const Result = React.lazy(() => import("./result"))
 
 type FormType = {
