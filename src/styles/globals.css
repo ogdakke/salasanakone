@@ -1,4 +1,5 @@
 :root {
+  --formContainerHeight: 487px;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --max-width: 800px;
   --scrollbar-size: 20px;
@@ -44,6 +45,8 @@
 
   
 }
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -103,5 +106,11 @@ a {
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+  --formContainerHeight: 538px;
   }
 }

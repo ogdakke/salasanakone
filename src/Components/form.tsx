@@ -1,5 +1,5 @@
 // modules
-import React, { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 // hooks
@@ -10,6 +10,7 @@ import "../styles/Home.css"
 import CheckIcon from "../assets/icons/checkedIcon"
 import { Slider } from "./slider"
 import { createCrypto } from "../main";
+import { checkboxes } from "../Api/createCrypto";
 const Result = React.lazy(() => import("./result"))
 
 type FormType = {
@@ -21,6 +22,7 @@ const createCryptoKey = await createCrypto
 const initialFormValues: FormType = {
   uppercase: false,
   randomChars: true,
+  numbers: false,
   words: true
 }
 
@@ -87,6 +89,8 @@ const validate = (sliderValue: string): string => {
       return "Isot Kirjaimet"
     } else if (option === "randomChars") {
       return "Erikoismerkit"
+    } else if (option === "numbers") {
+      return `Numerot`
     }
     return "Käytä kokonaisia sanoja"
   }
@@ -99,7 +103,7 @@ const validate = (sliderValue: string): string => {
   return (
     <>
     <form className='form' action="submit" aria-busy="false">
-    {initialKeys.map((option) => {
+    {initialKeys.map((option, i) => {
       return (
         <div className="inputWrapper" key={option}>
           <Checkbox.Root
@@ -158,18 +162,17 @@ const validate = (sliderValue: string): string => {
       <p className="resultHelperText">
           Kopioi Salasana napauttamalla:         
       </p>
-      {/* <Suspense fallback={
-      <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div>
-      }> */}
+      <Suspense fallback={
+      <div aria-busy="true" className="card"><span className="notCopied loader"></span></div>
+      }>
       {/* <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div> */}
-
         <Result 
           aria-busy="false"
           aria-label="Salasana, jonka voi kopioida napauttamalla"
           finalPassword={finalPassword}
           copyText={copyText}
           />          
-      {/* </Suspense> */}
+      </Suspense>
     </div>
   </form>
   </>

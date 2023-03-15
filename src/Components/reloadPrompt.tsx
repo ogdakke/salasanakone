@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import "../styles/ReloadPrompt.css"
 import "../styles/Home.css"
 
@@ -12,11 +12,10 @@ function ReloadPrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
-      // eslint-disable-next-line prefer-template
-      console.log('SW Registered: ' + r)
+      return r      
     },
     onRegisterError(error) {
-      console.log('SW registration error', error)
+      throw error
     },
   })
 
@@ -37,7 +36,7 @@ function ReloadPrompt() {
             { needRefresh 
             ? <button type='button' className="ToastButton inputButton" onClick={() => updateServiceWorker(true)}>Päivitä</button>
             : null }
-            { offlineReady  && ! needRefresh
+            { offlineReady  && !needRefresh
             ? <button type='button' 
               className={`ToastButton inputButton`} 
               onClick={() => {

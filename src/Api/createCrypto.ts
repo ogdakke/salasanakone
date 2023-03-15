@@ -3,9 +3,10 @@ import { sanat } from "../sanat"
 
 
 
-interface checkboxes {
+export interface checkboxes {
   uppercase?: boolean;
   randomChars?: boolean;
+  numbers?: boolean;
   words?: boolean;
 }
 
@@ -20,24 +21,47 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
       if (data.words) {
         /*this is the string[] that is generated when data.words is true*/
         const wordString = (await getWordsWithObject(length, arrayOfWords))
-        if (data.uppercase) {
-          if (data.randomChars) {
-          return useUppercase(randomCharsForJoins(wordString).join(""))
-          }
-          return useUppercase(wordString.join("")).toString()
-        }
+
+        // if (data.uppercase) {
+        //   if (data.randomChars) {
+        //   return useUppercase(randomCharsForJoins(wordString).join(""))
+        //   }
+        //   else return useUppercase(wordString.join("")).toString()
+        // }
         if (data.randomChars) {
+          if (data.numbers) {
+            return randomCharsForJoins(
+              insertRandomNumber(wordString, length)
+            ).join("")
+          }
           return randomCharsForJoins(wordString).join("")
         }
+        if (data.numbers) {
+          const numberedArr = insertRandomNumber(wordString, length)
+          
+          return numberedArr.join("").toString()
+        }
         return wordString.join("")
-      } else if (data.uppercase) {
+      } 
+        else if (data.uppercase) {
         const passFromRndmChars = createPassWordFromRandomChars()
         return useUppercase(passFromRndmChars).toString()
-      } else if (!data.uppercase) {
+      } 
+      else if (!data.uppercase) {
         return createPassWordFromRandomChars()
-      }
+      } 
     }
-    return await handle(values, length) as string
+    const finalString = await handle(values, length).then((r) => {
+      if (r === undefined) {
+        console.log("undefined value for string");
+        throw r
+      }
+      return r.toString()
+    })
+    if (values.uppercase) {
+      return useUppercase(finalString).toString()
+    }
+    return finalString
   }
 
 
@@ -98,7 +122,7 @@ const useUppercase = (stringToUpper: string[]|string) => {
 // Generate a random integer  with equal chance in  min <= r < max.     https://stackoverflow.com/questions/41437492/how-to-use-window-crypto-getrandomvalues-to-get-random-values-in-a-specific-rang
 function generateRandomNumberInRange(min: number, max: number): number {  
   const range = max-min; 
-  if (max <= 0) {
+  if (max <= min) {
     throw ('max must be larger than min');
   }
   const requestBytes = Math.ceil(Math.log2(range) / 8);
@@ -109,6 +133,7 @@ function generateRandomNumberInRange(min: number, max: number): number {
   const ar = new Uint8Array(requestBytes);
   
   while (true) {
+    // I dont understand this shit
       window.crypto.getRandomValues(ar);
 
       let val = 0;
@@ -142,7 +167,6 @@ function generateRandomArray(length: number): number[] {
 }
 
 
-
 /**
  * capitalize any strings first letter
  * @param string string to capitalize
@@ -154,15 +178,13 @@ function capitalizeFirstLetter(string: string): string {
 
 
 
-
-
 /**
  * 
  * @param length length of the random number array that is passed in
  * @param objektiSanat the words as a array that are used to create phrases
  * @returns array of strings
  */
-async function getWordsWithObject(length: number, objektiSanat: string[]) {
+async function getWordsWithObject(length: number, objektiSanat: string[]): Promise<string[]> {
   
   // const then = performance.now()
   const randomNumsArray = generateRandomArray(length);
@@ -170,11 +192,16 @@ async function getWordsWithObject(length: number, objektiSanat: string[]) {
   const sanaArray: string[] = []
   
   for (const num of randomNumsArray) { 
-    sanaArray.push(
-      capitalizeFirstLetter(objektiSanat[num])
-      )
+    try {
+      sanaArray.push(
+        capitalizeFirstLetter(objektiSanat[num])
+        )
+    } catch (error) {
+      // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
+      console.error(error);
+      return [" "]
+    }
   }
-    
   return sanaArray
 }
 
@@ -198,40 +225,41 @@ const randomCharsForJoins = (stringArr: string []) => {
   for (let i = 0; i < stringArr.length; i++) {
     const muted = stringArr[i].concat(arr[i])
     arrWithChars.push(muted)
-    
   }
   return arrWithChars
 }
 
 
-// /**
-//  * @notInUse this program uses getWordsWithObject
-//  * @param length how 
-//  * @returns Promise as a string
-//  */
-// export const getWordsWithMap = async (length: number): Promise<string> => {
-  
-//   // const sanat = await getFromFile(file);
-//   const mappi = new Map(Object.entries(sanat)) // tehdään mappi
+const insertRandomNumber = (stringArr: string[], sliderValue: number) => {
+  const then = performance.now()
 
-//   const then = performance.now() //start performance
-//   const randomNumsArray = generateRandomArray(length);  
+  const finalArr = []
+  let mutated: string[] = []
+  let mutatedArr = ""
   
-//   const sanaArray = []
-  
-//   for (const num of randomNumsArray) {
-//     sanaArray.push(
-//       mappi.get(num.toString())
-//       )
-//     }
-//   const sanaJono = sanaArray.join("")
+  for (let i = 0; i < sliderValue; i++) {
+    const maxValue = stringArr[i].toString().length
+    const randomIndex = generateRandomNumberInRange(0, maxValue)
+    const intToInsert = generateRandomNumberInRange(0, 9).toString()
     
+    mutated = stringArr[i].split("")
     
-//   const after = performance.now()
-//   console.log("🚀 ~ file: getList.ts:24 ~ getWithMap ~ time to do:", `${length} items in ${after-then} ms`)
+    mutated = insertAtIndex(mutated, randomIndex, intToInsert)
+    
+    mutatedArr = mutated.join("")
+    finalArr.push(mutatedArr)
+  }
   
-//   return sanaJono
-// }
+  const now = performance.now()
+  console.log("🚀 ~ file: createCrypto.ts:248 ~ insertRandomNumber ~ now:", now - then, "ms")
+  return finalArr
+}
+
+function insertAtIndex(arr: string[], index: number, element: string) {
+  arr.splice(index, 0, element);
+  return arr;
+}
+
 
 const specials = [
   ",",
@@ -251,3 +279,7 @@ const specials = [
   ">",
   "<",
 ]
+
+const characters = "abcdefghijklmnopqrstuvwxyzäö"
+const numbers = "0123456789"
+
