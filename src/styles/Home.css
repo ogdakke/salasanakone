@@ -236,6 +236,10 @@
   background-color: rgba(var(--green-go-rgb), 1);
 }
 
+.case5 {
+  transition: all var(--delay) ease-out;
+  background-color: rgba(var(--foreground-rgb), 1);
+}
 
 
 

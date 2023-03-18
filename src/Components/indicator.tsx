@@ -21,12 +21,22 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
   const [time, setTime] = useState("")
 
   useEffect(() => {
+    async () => {
+      await checker(password).then(r => {
+        console.log("🚀 ~ file: indicator.tsx:25 ~ checker ~ password:", password)
+        console.log("hello");
+        setScore(r.score)
+        setOutput(numberToString(r.score))
+      })
+    }
+    return
+  }, [])
+
+  useEffect(() => {
     // kikkailua, jotta ei tarvis laskea aina scorea, koska se on kallista.
     if (validateString() === false) {
-
       setScore(4)
       setOutput(numberToString(4))
-
       return;
     } else {
       checker(password).then(r => {
@@ -34,25 +44,24 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
         
         setScore(r.score)
         setTime(rtime)
-        setOutput(numberToString(r.score))
+        setOutput(numberToString(score))
         return;
-      })
+      }) 
     }
-  }, [password])
+  }, [score, password])
   
 
   return (
   <div className="strengthWrapper">
-    <Suspense fallback={
-      <div className="strengthIndicator"><span>Arvio</span></div>
-    }>
-      <div className={`strengthIndicator case${score.toString()}`}
-        >
+    {/* <Suspense fallback={<div className="strengthIndicator case5"><span>Arvio</span></div>}> */}
+      <div className={`strengthIndicator case${score.toString()}`}>
         <span>
         {output}  
         </span>
       </div>
-    </Suspense>
+      {/* <div className="strengthIndicator case5"><span>Arvio</span></div> */}
+
+    {/* </Suspense> */}
   </div>
   )
 }
