@@ -3,6 +3,8 @@ import copyToClipboard from "../Api/copyToClipboard"
 import "../styles/Result.css"
 
 
+
+
 export default function Result(props: { finalPassword: string; copyText: string }) {
   const {finalPassword, copyText} = props
   const copy = () => {
@@ -11,7 +13,6 @@ export default function Result(props: { finalPassword: string; copyText: string 
   }
 
   const [isCopied, setCopied] = useState(false)
-  
   
   return (
   <>
@@ -33,21 +34,23 @@ export default function Result(props: { finalPassword: string; copyText: string 
               } return;
             }}
             >
-              <span className={
-                isCopied 
-                ? "copied"
-                : "notCopied"
-              }>
-                {
-                  isCopied
-                ? <span className="copiedSpanText">Kopioitu Leikepöydälle</span>
-                :<span className="notCopiedSpan">
-                  {finalPassword.length
-                ? finalPassword
-                : "Jotain meni vikaan... Salasanaa ei luotu."}
+              <div className="cardMask">
+                <span className={
+                  isCopied 
+                  ? "copied"
+                  : "notCopied"
+                }>
+                  {
+                    isCopied
+                    ? <span className="copiedSpanText">Kopioitu Leikepöydälle</span>
+                    :<span className="notCopiedSpan">
+                    {finalPassword.length
+                  ? finalPassword
+                  : "Jotain meni vikaan... Salasanaa ei luotu."}
+                  </span>
+                  }
                 </span>
-                }
-              </span>
+              </div>
           </div> 
         : <div className="card">
           Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.

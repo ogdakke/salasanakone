@@ -46,7 +46,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
   ],
   orientation: "portrait",
   
-  // theme_color: "#ffffff",
   background_color: "#ffffff",
   display: "standalone",
   description: "Luo Suomalainen Salasana - Vahvat ja muistettavissa olevat salasanat helposti!"

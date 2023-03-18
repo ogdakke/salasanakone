@@ -159,11 +159,14 @@ function generateRandomArray(length: number): number[] {
 
 /**
  * capitalize any strings first letter
- * @param string string to capitalize
+ * @param stringToConvert string to capitalize
  * @returns capitalised string
  */
-function capitalizeFirstLetter(string: string): string {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+function capitalizeFirstLetter(stringToConvert: string): string {
+  if (stringToConvert === undefined) {
+    throw "Virhe"
+  }
+  return stringToConvert.charAt(0).toUpperCase() + stringToConvert.slice(1);
 }
 
 
@@ -189,7 +192,7 @@ async function getWordsWithObject(length: number, objektiSanat: string[]): Promi
     } catch (error) {
       // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
       console.error(error);
-      return [" "]
+      return ["Virhe Luomisessa... Yritä uudelleen."]
     }
   }
   return sanaArray

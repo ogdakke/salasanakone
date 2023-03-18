@@ -78,16 +78,17 @@
 
 .card {
   /* top right bottom left */
+  position: relative;
   padding: 1.5rem 1.2rem 1.5rem 1.2rem;
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
   border: 1px dashed rgba(var(--card-border-rgb), 0.2);
   transition: all 200ms, border 200ms;
-  
+  width: 100%;
   cursor: pointer;
   
   overflow-x: scroll;
-  
+  overflow-y: hidden;
 }
 
 .card:focus {
@@ -96,7 +97,7 @@
 
 }
 .card span {
-  padding-right: .6rem;
+  padding-right: 3.25rem;
   transition: all 200ms, border 200ms;
   display: inline-block;
   color: rgba(var(--foreground-rgb), .7);
@@ -120,9 +121,17 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  cursor: pointer;  
 }
 
+.resultCard {
+  position: relative;
+  /* display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 80% auto;
+  justify-items: end;
+  gap: 0.5rem;
+  width: 100%; */
+}
 
 
 .inputWrapper {
@@ -160,6 +169,70 @@
   /* color: rgb(var(--foreground-rgb)); */
 }
 
+.strengthWrapper {
+  position: absolute;
+  background-image: linear-gradient(to right, rgba(var(--background-end-rgb), 0),rgba(var(--form-bg-rgb), 0.2), rgba(var(--form-bg-rgb), 0.6), rgba(var(--form-bg-rgb), 1));
+  height: calc(100% - 2px);
+  
+  margin: 1px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  padding: 0;
+  right: 0;
+  top: 0;
+
+}
+
+.strengthIndicator {
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  margin: 1rem 0.75rem 1rem 1.5rem;
+  border-radius: calc(var(--border-radius) - 2px);
+  color: rgba(var(--black-text-rgb), .95);
+  font-weight: 600;
+  /* min-width: clamp(15%, 4rem, 100%); */
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4); */
+
+  box-shadow: 1px 1px 15px rgba(var(--card-rgb), .4);
+  -webkit-user-select: none;
+  user-select: none;
+  --delay: 200ms;
+}
+
+.strengthIndicator span {
+  padding-bottom: 0.2rem;
+}
+/* surkea */
+.case0 {
+  transition: all var(--delay) ease-out;
+  background-color: rgba(var(--red-worst-rgb), 1);
+}
+/* Huono */
+.case1 {
+  transition: all var(--delay) ease-out;
+  background-color: rgba(var(--orange-bad-rgb), 1);
+}
+/* OK */
+.case2 {
+  transition: all var(--delay) ease-out;
+  background-color: rgba(var(--yellow-ok-rgb), 1);
+}
+/* hyvä */
+.case3 {
+  transition: all var(--delay) ease-out;
+  background-color: rgba(var(--yellow-better-rgb), 1);
+}
+/* loistava */
+.case4 {
+  transition: all var(--delay) ease-out;
+  /* background-image: var(--success-gradient); */
+  background-color: rgba(var(--green-go-rgb), 1);
+}
 
 
 

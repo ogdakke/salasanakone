@@ -43,7 +43,18 @@
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
 
+
+  --form-bg-rgb: 252, 252, 252;
   
+  
+  --black-text-rgb: 10, 10, 10;
+  --green-go-rgb: 108, 241, 109; /*loistva*/
+  --yellow-better-rgb: 157, 184, 153; /* Hyvä*/
+  --yellow-ok-rgb: 225, 205, 170; /* OK */
+  --orange-bad-rgb: 220, 60, 60; /* Huono */
+  --red-worst-rgb: 180, 0, 10; /* surkea */
+  
+  --success-gradient: linear-gradient(to right, #0ba360, #12b45b, #1ad659, #10be6a);
 }
 
 
@@ -53,6 +64,10 @@
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 10, 10, 10;
+    
+    --form-bg-rgb: 12, 12, 12;
+
+    --black-text-rgb: 10, 10, 10;
 
     --primary-glow: radial-gradient(rgba(50, 196, 86, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
@@ -73,6 +88,8 @@
       #ffffff10,
       #ffffff80
     );
+
+
 
     --callout-rgb: 20, 20, 20;
     --callout-border-rgb: 108, 108, 108;
