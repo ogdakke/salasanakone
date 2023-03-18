@@ -167,7 +167,8 @@ const validate = (sliderValue: number): number => {
             copyText={copyText}/>          
           
         </Suspense>
-          <StrengthIndicator password={finalPassword} sliderValue={formValues.words && (sliderValue < 4) ? sliderValue : null}/> 
+          <StrengthIndicator 
+            password={finalPassword} sliderValue={sliderValue} formValues={formValues}/> 
       </div>
     </div>
   </form>

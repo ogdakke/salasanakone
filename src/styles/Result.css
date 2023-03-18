@@ -18,6 +18,8 @@
 }
 
 .copied span {
+  word-break: keep-all;
+  white-space: nowrap;
   filter: blur(2px);
   transition: filter 2500ms ease-out;
   /* opacity: 0; */
@@ -30,7 +32,9 @@
 }
 
 .notCopiedSpan {
-  display: block;
+  /* display: block; */
+  word-break: keep-all;
+  white-space: nowrap;
   animation: move 150ms ease-out 1;
 }
 .notCopied span {

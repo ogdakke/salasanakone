@@ -1,23 +1,35 @@
 import React, { Suspense, useEffect, useState } from "react";
+import { FormType } from "./form";
 
 const checker = async (password: string) => {
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
   return (await check(password.toString()))
 }
 
-export function StrengthIndicator(props: { password: string; sliderValue: number | null; }): JSX.Element {  
+export function StrengthIndicator(props: { formValues: FormType; password: string; sliderValue: number; }): JSX.Element {  
+  const {formValues, password, sliderValue} = props;
+  function validateString(): boolean {
+    if (!formValues.words && sliderValue > 15) {
+      // a rndm string needs not be checked if its longer than 15
+      return false
+    }
+    return true
+  }
 
   const [score, setScore] = useState(Number)
   const [output, setOutput] = useState("")
   const [time, setTime] = useState("")
 
   useEffect(() => {
-    // kikkailua, jotta ei tarvis laskea aina scorea.
-    if (props.sliderValue === null) {
+    // kikkailua, jotta ei tarvis laskea aina scorea, koska se on kallista.
+    if (validateString() === false) {
+
       setScore(4)
       setOutput(numberToString(4))
+
+      return;
     } else {
-      checker(props.password).then(r => {
+      checker(password).then(r => {
         const rtime = r.crack_times_display.offline_slow_hashing_1e4_per_second.toString()
         
         setScore(r.score)
@@ -26,7 +38,7 @@ export function StrengthIndicator(props: { password: string; sliderValue: number
         return;
       })
     }
-  }, [props.password])
+  }, [password])
   
 
   return (
