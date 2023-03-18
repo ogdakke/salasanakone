@@ -22,7 +22,7 @@ const createCryptoKey = await createCrypto
 const initialFormValues: FormType = {
   uppercase: false,
   randomChars: true,
-  numbers: false,
+  numbers: true,
   words: true
 }
 
@@ -32,7 +32,7 @@ const initialKeys: string[] = Object.keys(initialFormValues)
 
 export default function FormComponent (): JSX.Element {
 
-  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 5)
+  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 3)
   const [finalPassword, setFinalPassword] = useState("") 
    
   const [formValuesTyped, setFormValuesTyped] = usePersistedState("formValues", initialFormValues)
