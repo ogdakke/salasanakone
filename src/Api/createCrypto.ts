@@ -58,7 +58,6 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
 
   const createFromAllChars = () => {
     const arr = generateRandomArray(length, 0, withSpecials.length)
-    console.log("🚀 ~ file: createCrypto.ts:61 ~ createFromAllChars ~ arr:", arr)
   }
   createFromAllChars()
   /**
