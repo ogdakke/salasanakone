@@ -1,16 +1,23 @@
-import React, { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FormType } from "./form";
 
 const checker = async (password: string) => {
+  // const then = performance.now()
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
+  // const now = performance.now()
+  // console.log("🚀 ~ file: indicator.tsx:8 ~ checker ~ now:", now-then, "ms")
+  
   return (await check(password.toString()))
 }
 
 export function StrengthIndicator(props: { formValues: FormType; password: string; sliderValue: number; }): JSX.Element {  
   const {formValues, password, sliderValue} = props;
+  
   function validateString(): boolean {
     if (!formValues.words && sliderValue > 15) {
       // a rndm string needs not be checked if its longer than 15
+      return false
+    } else if (formValues.words && sliderValue > 3) {
       return false
     }
     return true
@@ -18,18 +25,14 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
 
   const [score, setScore] = useState(Number)
   const [output, setOutput] = useState("")
-  const [time, setTime] = useState("")
 
   useEffect(() => {
-    async () => {
-      await checker(password).then(r => {
-        console.log("🚀 ~ file: indicator.tsx:25 ~ checker ~ password:", password)
-        console.log("hello");
+      checker(password).then(r => {
+        // console.log("🚀 ~ file: indicator.tsx:25 ~ checker ~ password:", password)
         setScore(r.score)
         setOutput(numberToString(r.score))
       })
-    }
-    return
+    return ;
   }, [])
 
   useEffect(() => {
@@ -40,10 +43,8 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
       return;
     } else {
       checker(password).then(r => {
-        const rtime = r.crack_times_display.offline_slow_hashing_1e4_per_second.toString()
-        
+            
         setScore(r.score)
-        setTime(rtime)
         setOutput(numberToString(score))
         return;
       }) 

@@ -16,7 +16,6 @@ const Result = React.lazy(() => import("./result"))
 export type FormType = {
   [option: string]: boolean
 }
-
 const createCryptoKey = await createCrypto
 
 const initialFormValues: FormType = {
@@ -29,6 +28,15 @@ const initialFormValues: FormType = {
 const initialKeys: string[] = Object.keys(initialFormValues)
 
 
+const correctType = (arg: unknown, desiredType: unknown): boolean => {
+  const isType = typeof(arg)
+  if (isType === desiredType) {
+    return true
+  } else {
+    console.error("Type does not match", isType, " is not ", desiredType);
+    return false
+  }
+}
 
 export default function FormComponent (): JSX.Element {
 
@@ -46,7 +54,12 @@ export default function FormComponent (): JSX.Element {
 
   
 const validate = (sliderValue: number): number => {
-  if (formValues.words && sliderValue > maxLengthForWords) {
+  if (
+    formValues.words 
+    && sliderValue > maxLengthForWords
+    || sliderValue < 1
+    || !correctType(sliderValue, "number") //should return false
+    ) {
     setSliderValue(maxLengthForWords)
     return maxLengthForWords
   } else if (!formValues.words && sliderValue < minLengthForChars) {
@@ -63,11 +76,18 @@ const validate = (sliderValue: number): number => {
   }, [formValues, sliderValue])    
 
   const generate = async () => {
-    await createCryptoKey(sliderValue.toString(), formValues).then((res) => {
-      setFinalPassword(res)
-    }).catch((error) => {
-      throw console.error(error);
-    })
+    try {
+      await createCryptoKey(sliderValue.toString(), formValues).then((res) => {
+        if (res === undefined) {
+          throw console.error("undefined");
+        }
+        setFinalPassword(res)
+      }).catch((error) => {
+        throw console.error(error);
+      })
+    } catch (err) {
+      throw console.error(err);
+    }
   }
   
   const setValuesToForm = (option: string, event: Checkbox.CheckedState) => {
@@ -133,7 +153,7 @@ const validate = (sliderValue: number): number => {
         name="slider"
         aria-label="Salasanan pituus"
         value={[validate(sliderValue)]}
-        onValueChange={(val) => sliderVal(val[0])}
+        onValueChange={(val) => sliderVal(val[0])} //makes sure val is not a "number[]"
         max={formValues.words ? maxLengthForWords : maxLengthForChars}    
         min={formValues.words ? minLengthForWords : minLengthForChars} 
         step={1}

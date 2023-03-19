@@ -36,7 +36,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
       } 
         else if (data.uppercase) {
         const passFromRndmChars = createPassWordFromRandomChars()
-        return useUppercase(passFromRndmChars).toString()
+        return toUppercase(passFromRndmChars).toString()
       } 
       else if (!data.uppercase) {
         return createPassWordFromRandomChars()
@@ -49,12 +49,18 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
       return r.toString()
     })
     if (values.uppercase) {
-      return useUppercase(finalString).toString()
+      return toUppercase(finalString).toString()
     }
     return finalString
   }
 
 
+
+  const createFromAllChars = () => {
+    const arr = generateRandomArray(length, 0, withSpecials.length)
+    console.log("🚀 ~ file: createCrypto.ts:61 ~ createFromAllChars ~ arr:", arr)
+  }
+  createFromAllChars()
   /**
    * Creates a password from random chars and numbers
    * @returns string password
@@ -74,6 +80,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
     const toStringArray = (password: string) => {
       return '00'.slice(password.length) + password;
     };
+
     const a = Array.prototype.map.call(typdArray, (index: number) => {
       // 26 is the radix, which dictates to what base the numbers are converted as strings.   
       const str = index.toString(26);
@@ -84,7 +91,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
     // and snip off the excess digit if we want an odd number
     // here, if length % 2 returns a value !0 we slice last digit
     length % 2 && length !== 2 ? password = password.slice(1) : password;
-    return data.uppercase ? useUppercase(password).toString() : password;
+    return data.uppercase ? toUppercase(password).toString() : password;
   }
 
   return handleReturns(data, length)
@@ -95,7 +102,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
  * @param stringToUpper either a string or string[]
  * @returns uppercased string or string[]
  */
-const useUppercase = (stringToUpper: string[]|string) => {
+const toUppercase = (stringToUpper: string[]|string) => {
   if (typeof(stringToUpper) === "string") {
     return stringToUpper.toUpperCase()
   }
@@ -138,14 +145,12 @@ function generateRandomNumberInRange(min: number, max: number): number {
     }
 }
 
-const min = 0
-const max = 94111 //the max word count in sanat.json
 /**
  * generates a array of random number
  * @param length how many numbers are in the array
  * @returns array of numbers
  */
-function generateRandomArray(length: number): number[] {
+function generateRandomArray(length: number, min: number, max: number): number[] {
   const arr = [];
   for (let i = 0; i < length; i++) {
     const randomNumber = generateRandomNumberInRange(min, max);
@@ -178,9 +183,10 @@ function capitalizeFirstLetter(stringToConvert: string): string {
  * @returns array of strings
  */
 async function getWordsWithObject(length: number, objektiSanat: string[]): Promise<string[]> {
+  const maxCount = 94111 //the max word count in sanat.json
   
   // const then = performance.now()
-  const randomNumsArray = generateRandomArray(length);
+  const randomNumsArray = generateRandomArray(length, 0, maxCount);
 
   const sanaArray: string[] = []
   
@@ -191,8 +197,7 @@ async function getWordsWithObject(length: number, objektiSanat: string[]): Promi
         )
     } catch (error) {
       // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
-      console.error(error);
-      return ["Virhe Luomisessa... Yritä uudelleen."]
+      throw console.error(error);
     }
   }
   return sanaArray
@@ -223,24 +228,29 @@ const randomCharsForJoins = (stringArr: string []) => {
 }
 
 
-const insertRandomNumber = (stringArr: string[], sliderValue: number) => {
+const insertRandomNumber = (stringArr: string[], sliderValue: number): string[] => {
   const then = performance.now()
 
+  
   const finalArr = []
   let mutated: string[] = []
   let mutatedArr = ""
   
-  for (let i = 0; i < sliderValue; i++) {
-    const maxValue = stringArr[i].toString().length
-    const randomIndex = generateRandomNumberInRange(0, maxValue)
-    const intToInsert = generateRandomNumberInRange(0, 9).toString()
-    
-    mutated = stringArr[i].split("")
-    
-    mutated = insertAtIndex(mutated, randomIndex, intToInsert)
-    
-    mutatedArr = mutated.join("")
-    finalArr.push(mutatedArr)
+  try {
+    for (let i = 0; i < sliderValue; i++) {
+      const maxValue = stringArr[i].toString().length
+      const randomIndex = generateRandomNumberInRange(0, maxValue)
+      const intToInsert = generateRandomNumberInRange(0, 9).toString()
+      
+      mutated = stringArr[i].split("")
+      
+      mutated = insertAtIndex(mutated, randomIndex, intToInsert)
+      
+      mutatedArr = mutated.join("")
+      finalArr.push(mutatedArr)
+    }
+  } catch (err) {
+    throw console.error(err);
   }
   
   const now = performance.now()
@@ -273,4 +283,4 @@ const specials = [
   "<",
 ]
 
-
+const withSpecials = "abcdefghjiklmopqrstuyäözx1234567890><,.-_*?+/()@%&!"

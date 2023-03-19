@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react"
 import { Suspense } from "react"
-import { FormType } from "./form"
 
 const checker = async (password: string) => {
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
