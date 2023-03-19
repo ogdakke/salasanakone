@@ -49,8 +49,8 @@
   
   --black-text-rgb: 10, 10, 10;
   --green-go-rgb: 108, 241, 109; /*loistva*/
-  --yellow-better-rgb: 157, 184, 153; /* Hyvä*/
-  --yellow-ok-rgb: 225, 205, 170; /* OK */
+  --yellow-better-rgb: 137, 224, 133; /* Hyvä*/
+  --yellow-ok-rgb: 240, 173, 78; /* OK */
   --orange-bad-rgb: 220, 60, 60; /* Huono */
   --red-worst-rgb: 180, 0, 10; /* surkea */
   
@@ -66,8 +66,6 @@
     --background-end-rgb: 10, 10, 10;
     
     --form-bg-rgb: 12, 12, 12;
-
-    --black-text-rgb: 10, 10, 10;
 
     --primary-glow: radial-gradient(rgba(50, 196, 86, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(

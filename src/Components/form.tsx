@@ -39,20 +39,19 @@ const correctType = (arg: unknown, desiredType: unknown): boolean => {
 }
 
 export default function FormComponent (): JSX.Element {
-
+  
   const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 3)
   const [finalPassword, setFinalPassword] = useState("") 
-   
+  
   const [formValuesTyped, setFormValuesTyped] = usePersistedState("formValues", initialFormValues)
   const formValues = formValuesTyped as FormType // explicitly type formValues as FormType
   const setFormValues = setFormValuesTyped as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
-
+  
   const minLengthForChars = 4
   const minLengthForWords = 1
   const maxLengthForChars = 64
   const maxLengthForWords = 12
-
-  
+    
 const validate = (sliderValue: number): number => {
   if (
     formValues.words 

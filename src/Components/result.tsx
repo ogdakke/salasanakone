@@ -2,9 +2,6 @@ import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 import "../styles/Result.css"
 
-
-
-
 export default function Result(props: { finalPassword: string; copyText: string }) {
   const {finalPassword, copyText} = props
   const copy = () => {
