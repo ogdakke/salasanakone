@@ -1,6 +1,8 @@
 import React from "react"
 import "../styles/Description.css"
 
+import { LogoIcon } from "../assets/icons/logoIcon"
+
 const Description: React.FC = () => {
   return (
     <>
@@ -29,8 +31,7 @@ const Description: React.FC = () => {
           <br />
         </p>
           <div className="imageWrapper">
-          <img loading="lazy" className="svgImage" src="/favicon.svg" alt="Logo" width={20} height={20} 
-          />
+          <LogoIcon loading="lazy" width={20} height={20} className="svgImage" /> 
             <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
             deweloper.fi
             </a> 

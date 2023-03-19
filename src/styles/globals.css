@@ -1,5 +1,5 @@
 :root {
-  --formContainerHeight: 487px;
+  --formContainerHeight: 490px;
   --max-width: 800px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
@@ -110,7 +110,11 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-end-rgb))
+  background: rgb(var(--background-end-rgb));
+}
+
+p {
+  line-height: 1.5;
 }
 
 a {
@@ -126,6 +130,6 @@ a {
 
 @media (max-width: 700px) {
   :root {
-  --formContainerHeight: 538px;
+  --formContainerHeight: 541px;
   }
 }
