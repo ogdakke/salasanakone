@@ -1,0 +1,4 @@
+.divider {
+  border-color: rgba(var(--callout-border-rgb), 1);
+  margin: 2rem 0rem;
+}

@@ -28,13 +28,10 @@
 .copiedSpanText {
   padding-right: 3.25rem;
   transition: all 200ms, border 200ms;
-  /* display: inline-block; */
   color: rgba(var(--foreground-rgb), .7);
   display: flex;
   gap: 0.275rem;
   align-items: center;
-  /* transform: translateX(-100%); */
-                    /*  duration | delay */
   animation: move-reverse 300ms   900ms ease-out 1;
 }
 

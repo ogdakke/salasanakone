@@ -2,7 +2,6 @@
 import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
-import { Iconoir, Refresh } from 'iconoir-react';
 // hooks
 import { usePersistedState } from "../hooks/usePersistedState"
 // styles
@@ -13,6 +12,9 @@ import { Slider } from "./slider"
 import { createCrypto } from "../main";
 import { StrengthIndicator } from "./indicator";
 const Result = React.lazy(() => import("./result"))
+// Icons
+import { Refresh } from 'iconoir-react';
+
 
 export type FormType = {
   [option: string]: boolean
@@ -114,9 +116,10 @@ const validate = (sliderValue: number): number => {
     return value
   }
 
+
   return (
     <>
-    <form className='form' action="submit" aria-busy="false">
+    <form className='form' action="submit" aria-busy="false" style={{"opacity": "1"}}>
     {initialKeys.map((option) => {
       return (
         <div className="inputWrapper" key={option}>

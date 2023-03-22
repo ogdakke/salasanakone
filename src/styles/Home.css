@@ -12,6 +12,8 @@
 }
 
 .form {
+  opacity: 0;
+  animation: fadeIn 0.2s ease-in;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -23,6 +25,9 @@
   margin-bottom: 2rem;
   box-shadow: 0px 2px 8px -1px #0000001a;
 }
+
+
+
 
 .withIcon {
   display: flex;
@@ -47,7 +52,7 @@
   padding: 1rem 1.5rem;
   margin-top: 1rem;
   background-color: rgba(var(--foreground-rgb), 0.9);
-  color: rgba(var(--background-end-rgb));
+  color: rgba(var(--background-rgb));
   cursor: pointer;
   -webkit-user-select: none;
   user-select: none;
@@ -58,7 +63,7 @@
 }
 
 .inputButton:focus{
-  outline: 2px solid rgb(var(--background-end-rgb));
+  outline: 2px solid rgb(var(--background-rgb));
   filter: invert(1);
 }
 
@@ -114,9 +119,7 @@
   background: rgba(var(--card-rgb), 0.1);
   border: 1px solid rgba(var(--card-border-rgb), 0.15);
 }
-.card span {
-  
-}
+
 
 .card h2 {
   color: rgba(var(--foreground-rgb), 0.6);
@@ -189,7 +192,7 @@
 
 .strengthWrapper {
   position: absolute;
-  background-image: linear-gradient(to right, rgba(var(--background-end-rgb), 0),rgba(var(--form-bg-rgb), 0.2), rgba(var(--form-bg-rgb), 0.6), rgba(var(--form-bg-rgb), 1));
+  background-image: linear-gradient(to right, rgba(var(--background-rgb), 0),rgba(var(--form-bg-rgb), 0.2), rgba(var(--form-bg-rgb), 0.6), rgba(var(--form-bg-rgb), 1));
   height: calc(100% - 2px);
   
   margin: 1px;
@@ -202,6 +205,7 @@
 }
 
 .strengthIndicator {
+  animation: fadeIn 0.2s ease-in;
   position: relative;
   padding: 0.5rem 0.75rem;
   margin: 1rem 0.75rem 1rem 0rem;
@@ -228,27 +232,27 @@
 }
 /* surkea */
 .case0 {
-  transition: all var(--delay) ease-out;
+  transition: background-color var(--delay) ease-out;
   background-color: rgba(var(--red-worst-rgb), 1);
 }
 /* Huono */
 .case1 {
-  transition: all var(--delay) ease-out;
+  transition: background-color var(--delay) ease-out;
   background-color: rgba(var(--orange-bad-rgb), 1);
 }
 /* OK */
 .case2 {
-  transition: all var(--delay) ease-out;
+  transition: background-color var(--delay) ease-out;
   background-color: rgba(var(--yellow-ok-rgb), 1);
 }
 /* hyvä */
 .case3 {
-  transition: all var(--delay) ease-out;
+  transition: background-color var(--delay) ease-out;
   background-color: rgba(var(--yellow-better-rgb), 1);
 }
 /* loistava */
 .case4 {
-  transition: all var(--delay) ease-out;
+  transition: background-color var(--delay) ease-out;
   /* background-image: var(--success-gradient); */
   background-color: rgba(var(--green-go-rgb), 1);
 }
@@ -260,6 +264,15 @@
 
 
 
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 
 
@@ -337,14 +350,24 @@
 
 }
 
-/* Because firefox does something weird with scrollbars */
+/* || firefox specific rules  */
 @supports (-moz-appearance:none) {
+  /* Because firefox does something weird with  */
   .card {
     padding: 1.5rem 1.2rem 1.5rem 1.2rem;
+  }
+  /* firefox does not support :has()  -- so need to override those */
+  .inputButton {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
   }
 }
 
 @media (prefers-reduced-motion) {
+  .inputButton:hover .spin {
+    animation: none;
+  }
   .loading::before {
     animation: none;
   }
@@ -374,13 +397,6 @@
 
 
 @media (prefers-color-scheme: dark) {
-  .vercelLogo {
-    filter: invert(1);
-  }
 
-  .logo,
-  .loading img {
-    filter: invert(1) drop-shadow(0 0 0.3rem #ffffff70);
-  }
 }
 

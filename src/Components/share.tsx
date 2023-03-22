@@ -1,5 +1,5 @@
 import { CheckCircle, ShareAndroid, ShareIos } from "iconoir-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 import { meta } from "../assets/constants/meta"
 
@@ -7,7 +7,7 @@ export const ShareComponent = () => {
   const [isCopied, setCopied] = useState(false)
 
 
-  const shareAction = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const shareAction = async () => {
     if (navigator.share) {
       navigator.share({
         title: meta.title,
@@ -25,7 +25,8 @@ export const ShareComponent = () => {
     }
   }
 
-  const android = navigator.userAgent.match(/Android/i)
+  
+  const isAndroid = navigator.userAgent.match(/Android/i)
   const size = 28
   return (
     <>
@@ -36,12 +37,12 @@ export const ShareComponent = () => {
             <CheckCircle width={20} height={20}/>
           </div>
         : null}
-      <button onClick={async (e) => await shareAction(e)} type="button" className="shareButton">
-        {android
+      <button onClick={async () => await shareAction()} type="button" className="shareButton">
+        {isAndroid
         ? <ShareAndroid className="shareButtonSvg" width={size} height={size}/> 
         : <ShareIos className="shareButtonSvg" width={size} height={size}/> }
       </button>
     </div>
     </>
   )
-}
+} 

@@ -3,9 +3,6 @@
 .loading {
   /* the formcomponent height on desktop */
   height: var(--formContainerHeight);
-
-
-
   margin-bottom: 2rem;
   border-radius: calc(var(--border-radius) + 1rem);
   position: relative;
@@ -30,19 +27,22 @@
 
 /* Conic Gradient Animation */
 .loading::before {
-  animation: 4s rotate linear infinite;
+  animation: 8s rotate linear infinite;
   width: 200%;
   height: 200%;
   background: var(--tile-border);
 }
 
-/* Inner Square */
+/* Inner Square which "covers" the box */
 .loading::after {
   inset: 0;
   padding: 1px;
   border-radius: inherit;
+  background-image: linear-gradient(270deg, rgba(var(--form-bg-rgb), 1), rgb(var(--skeleton-glow)), rgb(var(--skeleton-glow)), rgba(var(--form-bg-rgb), 1));
+  background-size: 400% 100%;
+  animation: skeleton_loading 10s ease-in-out infinite;
   
-  background: rgba(var(--form-bg-rgb));
+  /* background: rgba(var(--form-bg-rgb)); */
   -webkit-background-clip: content-box;
   background-clip: content-box;
 
@@ -61,6 +61,15 @@
   }
 
 
+  @keyframes skeleton_loading {
+    0% {
+      background-position-x: 0%;
+    }
+
+    100% {
+      background-position-x: -400%;
+    }
+  }
   @keyframes rotate {
     from {
       transform: rotate(-360deg);

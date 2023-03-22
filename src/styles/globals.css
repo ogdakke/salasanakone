@@ -12,7 +12,7 @@
     
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-rgb: 255, 255, 255;
   --error: 255, 0, 0
   
   --primary-glow: conic-gradient(
@@ -47,6 +47,7 @@
       
   --form-bg-rgb: 252, 252, 252;
     
+  --skeleton-glow: 240, 240, 240;
   --black-text-rgb: 10, 10, 10;
   --green-go-rgb: 108, 241, 109; /*loistva*/
   --yellow-better-rgb: 137, 224, 133; /* Hyvä*/
@@ -63,9 +64,11 @@
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 10, 10, 10;
+    --background-rgb: 10, 10, 10;
     
     --form-bg-rgb: 12, 12, 12;
+    --skeleton-glow: 22, 22, 22;
+
 
     --primary-glow: radial-gradient(rgba(50, 196, 86, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
@@ -110,11 +113,18 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-end-rgb));
+  background: rgb(var(--background-rgb));
 }
 
 p {
   line-height: 1.5;
+}
+
+/* divider is __crisp__ 👌*/
+hr {
+  height: 0;
+  color: inherit;
+  border-width: 1px 0 0 0;
 }
 
 a {
@@ -133,3 +143,4 @@ a {
   --formContainerHeight: 541px;
   }
 }
+

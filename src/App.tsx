@@ -14,7 +14,7 @@ function App() {
     <main className="main">
       <div className="wrapper">
         <Suspense fallback={<Loading />}>
-          <FormComponent />
+          <FormComponent/>
         </Suspense>
           <Description />
           <ReloadPrompt />

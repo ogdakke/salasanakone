@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { FormType } from "./form";
 
 const checker = async (password: string) => {
@@ -54,15 +54,14 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
 
   return (
   <div className="strengthWrapper">
-    {/* <Suspense fallback={<div className="strengthIndicator case5"><span>Arvio</span></div>}> */}
+    <Suspense fallback={<div className="strengthIndicator case5"><span>Arvio</span></div>}>
       <div className={`strengthIndicator case${score.toString()}`}>
         <span>
         {output}  
         </span>
       </div>
       {/* <div className="strengthIndicator case5"><span>Arvio</span></div> */}
-
-    {/* </Suspense> */}
+    </Suspense>
   </div>
   )
 }

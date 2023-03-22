@@ -1,5 +1,6 @@
 import React from "react"
 import "../styles/Description.css"
+import { Divider } from "./divider"
 import { ShareComponent } from "./share"
 import { LogoIcon } from "../assets/icons/logoIcon"
 
@@ -27,9 +28,7 @@ const Description: React.FC = () => {
           Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta saat kaiken irti ominaisuuksista!
         </p>
         
-        <p>
-          <br />
-        </p>
+        <Divider />
           <div className="imageWrapper">
             <div className="credits">
               <LogoIcon loading="lazy" width={20} height={20} className="svgImage" /> 
