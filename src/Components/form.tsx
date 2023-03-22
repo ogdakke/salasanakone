@@ -2,6 +2,7 @@
 import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
+import { Iconoir, Refresh } from 'iconoir-react';
 // hooks
 import { usePersistedState } from "../hooks/usePersistedState"
 // styles
@@ -169,6 +170,7 @@ const validate = (sliderValue: number): number => {
             generate()
           }}>
           Luo Uusi Salasana
+          <Refresh className="refresh icon spin" width={20} height={20} />
         </button>
       </div>
     <div className="resultWrapper">

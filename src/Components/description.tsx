@@ -1,6 +1,6 @@
 import React from "react"
 import "../styles/Description.css"
-
+import { ShareComponent } from "./share"
 import { LogoIcon } from "../assets/icons/logoIcon"
 
 const Description: React.FC = () => {
@@ -31,10 +31,13 @@ const Description: React.FC = () => {
           <br />
         </p>
           <div className="imageWrapper">
-          <LogoIcon loading="lazy" width={20} height={20} className="svgImage" /> 
-            <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
-            deweloper.fi
-            </a> 
+            <div className="credits">
+              <LogoIcon loading="lazy" width={20} height={20} className="svgImage" /> 
+              <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
+              deweloper.fi
+              </a> 
+            </div>
+            <ShareComponent />
           </div>
       </div>
     </>

@@ -12,6 +12,7 @@
           "scrollbar-color"
         ]
       }
-    ]
+    ],
+    "detect-css-reflows/layout": "off"
   }
 }

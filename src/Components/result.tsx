@@ -1,3 +1,4 @@
+import { PasteClipboard } from "iconoir-react";
 import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 import "../styles/Result.css"
@@ -39,7 +40,9 @@ export default function Result(props: { finalPassword: string; copyText: string 
                 }>
                   {
                     isCopied
-                    ? <span className="copiedSpanText">Kopioitu Leikepöydälle</span>
+                    ? <span className="copiedSpanText">
+                      <PasteClipboard className="clipboard icon" width={20} height={20}/> 
+                      Kopioitu Leikepöydälle</span>
                     :<span className="notCopiedSpan">
                     {finalPassword.length
                   ? finalPassword

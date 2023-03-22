@@ -1,8 +1,9 @@
 import { useState } from 'react'
+import { useRegisterSW } from 'virtual:pwa-register/react'
+
 import "../styles/ReloadPrompt.css"
 import "../styles/Home.css"
 
-import { useRegisterSW } from 'virtual:pwa-register/react'
 
 function ReloadPrompt() {
   const [isTrue, setIsTrue] = useState(false)

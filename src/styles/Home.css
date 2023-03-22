@@ -21,9 +21,14 @@
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   border-radius: calc(var(--border-radius) + 1rem);
   margin-bottom: 2rem;
+  box-shadow: 0px 2px 8px -1px #0000001a;
 }
 
-
+.withIcon {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
 
 .buttonWrapper {
   display: flex;
@@ -32,12 +37,14 @@
 
 .inputButton {
   /* font: var(--font-mono); */
+
+
   font-family: inherit;
   font-size: 1rem;
   font-weight: 600;
   max-width: -moz-fit-content;
   max-width: fit-content;
-  padding: 1rem 1.75rem;
+  padding: 1rem 1.5rem;
   margin-top: 1rem;
   background-color: rgba(var(--foreground-rgb), 0.9);
   color: rgba(var(--background-end-rgb));
@@ -55,9 +62,21 @@
   filter: invert(1);
 }
 
+/* button that has svg or .icon class */
+.inputButton:has(svg, .icon) {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding-right: 1.25rem;
+}
+
+
+
 .buttonWrapper button[type=button] {
   background-color: rgba(180, 0,10, 1);
 }
+
+
 
 
 
@@ -78,8 +97,8 @@
 
 .card {
   /* top right bottom left */
-  position: relative;
   padding: 1.5rem 1.2rem 1.5rem 1.2rem;
+  position: relative;
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
   border: 1px dashed rgba(var(--card-border-rgb), 0.2);
@@ -94,13 +113,9 @@
 .card:focus {
   background: rgba(var(--card-rgb), 0.1);
   border: 1px solid rgba(var(--card-border-rgb), 0.15);
-
 }
 .card span {
-  padding-right: 3.25rem;
-  transition: all 200ms, border 200ms;
-  display: inline-block;
-  color: rgba(var(--foreground-rgb), .7);
+  
 }
 
 .card h2 {
@@ -127,6 +142,7 @@
   position: relative;
   -webkit-user-select: none;
   user-select: none;
+  cursor: pointer;
   /* display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 80% auto;
@@ -250,7 +266,7 @@
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
-  .card:hover {
+  .resultCard:hover .card {
     background: rgba(var(--card-rgb), 0.1);
     border: 1px solid rgba(var(--card-border-rgb), 0.15);
 
@@ -263,6 +279,28 @@
     transition: all 200ms ease-in;
     /* background-color: rgba(var(--foreground-rgb), .7); */
     filter: invert(1);
+  }
+
+  
+  .inputButton:hover .spin {
+    animation: spinAnimation 700ms ease-out;
+
+  }
+
+  @keyframes spinAnimation {
+    0% {
+      transform: rotate(0);
+    }
+    40% {
+      transform: rotate(340deg);
+    }
+    
+    60% {
+      transform: rotate(380deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 
   .buttonWrapper button[type=button]:hover {
