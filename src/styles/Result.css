@@ -12,7 +12,7 @@
 }
 
 .notCopied {
-
+  padding-right: 6rem;
   transition: filter 400ms;
   /* transform: translateX(-100%); */
 }
