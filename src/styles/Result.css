@@ -38,7 +38,7 @@
 .notCopiedSpan {
   word-break: keep-all;
   white-space: nowrap;
-  animation: move 150ms ease-out 1;
+  animation: move 650ms ease-out 1;
 }
 .notCopied span {
   filter: blur(0px);
@@ -51,7 +51,7 @@
 
 @keyframes move {
   0% {
-    transform: translate(-250%);
+    transform: translate(-100%);
   }
   100% {
     transform: translateX(0%);
@@ -63,7 +63,7 @@
     transform: translate(0);
   }
   100% {
-    transform: translateX(-200%);
+    transform: translateX(-80%);
   }
 }
 
