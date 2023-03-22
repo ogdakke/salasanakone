@@ -43,7 +43,6 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
       return;
     } else {
       checker(password).then(r => {
-            
         setScore(r.score)
         setOutput(numberToString(score))
         return;

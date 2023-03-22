@@ -3,6 +3,13 @@ import "../styles/Description.css"
 import { Divider } from "./divider"
 import { ShareComponent } from "./share"
 import { LogoIcon } from "../assets/icons/logoIcon"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./tooltip"
+
 
 const Description: React.FC = () => {
   return (
@@ -30,13 +37,33 @@ const Description: React.FC = () => {
         
         <Divider />
           <div className="imageWrapper">
-            <div className="credits">
-              <LogoIcon loading="lazy" width={20} height={20} className="svgImage" /> 
-              <a title="Opens in a new tab" href="https://deweloper.fi" target="_blank" rel="noreferrer">
-              deweloper.fi
-              </a> 
-            </div>
-            <ShareComponent />
+          <TooltipProvider delayDuration={250}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <div className="credits">
+                    <LogoIcon loading="lazy" width={20} height={20} className="svgImage" /> 
+                    <a href="https://deweloper.fi" target="_blank" rel="noreferrer">
+                    deweloper.fi
+                    </a> 
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Vieraile sivuillani</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <TooltipProvider delayDuration={250}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <ShareComponent />    
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Jaa</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
           </div>
       </div>
     </>

@@ -43,7 +43,7 @@ const correctType = (arg: unknown, desiredType: unknown): boolean => {
 
 export default function FormComponent (): JSX.Element {
   
-  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 3)
+  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
   const [finalPassword, setFinalPassword] = useState("") 
   
   const [formValuesTyped, setFormValuesTyped] = usePersistedState("formValues", initialFormValues)

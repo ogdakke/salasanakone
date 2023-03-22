@@ -37,11 +37,11 @@ export const ShareComponent = () => {
             <CheckCircle width={20} height={20}/>
           </div>
         : null}
-      <button onClick={async () => await shareAction()} type="button" className="shareButton">
+      <div onClick={async () => await shareAction()} className="shareButton">
         {isAndroid
         ? <ShareAndroid className="shareButtonSvg" width={size} height={size}/> 
         : <ShareIos className="shareButtonSvg" width={size} height={size}/> }
-      </button>
+      </div>
     </div>
     </>
   )
