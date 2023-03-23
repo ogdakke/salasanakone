@@ -1,5 +1,5 @@
 // modules
-import React, { Dispatch, SetStateAction, Suspense, useEffect, useState } from "react"
+import React, { Dispatch, SetStateAction, Suspense, useCallback, useEffect, useState } from "react"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 // hooks
@@ -7,13 +7,12 @@ import { usePersistedState } from "../hooks/usePersistedState"
 // styles
 import "../styles/Home.css"
 // components 
-import CheckIcon from "../assets/icons/checkedIcon"
 import { Slider } from "./slider"
 import { createCrypto } from "../main";
 import { StrengthIndicator } from "./indicator";
 const Result = React.lazy(() => import("./result"))
 // Icons
-import { Refresh } from 'iconoir-react';
+import { Check, Refresh } from 'iconoir-react';
 
 
 export type FormType = {
@@ -41,12 +40,12 @@ const correctType = (arg: unknown, desiredType: unknown): boolean => {
   }
 }
 
-export default function FormComponent (): JSX.Element {
+export default function FormComponent() {
   
-  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
   const [finalPassword, setFinalPassword] = useState("") 
   
   const [formValuesTyped, setFormValuesTyped] = usePersistedState("formValues", initialFormValues)
+  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
   const formValues = formValuesTyped as FormType // explicitly type formValues as FormType
   const setFormValues = setFormValuesTyped as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
   
@@ -55,7 +54,7 @@ export default function FormComponent (): JSX.Element {
   const maxLengthForChars = 64
   const maxLengthForWords = 12
     
-const validate = (sliderValue: number): number => {
+const validate = useCallback((sliderValue: number): number => {
   if (
     formValues.words 
     && sliderValue > maxLengthForWords
@@ -69,17 +68,11 @@ const validate = (sliderValue: number): number => {
     return minLengthForChars
   }
   return sliderValue
-}
+}, [formValues, setSliderValue])
 
-
-  useEffect(() => {
-    validate(sliderValue)
-    generate()
-  }, [formValues, sliderValue])    
-
-  const generate = async () => {
+  const generate = useCallback(() => {
     try {
-      await createCryptoKey(sliderValue.toString(), formValues).then((res) => {
+      createCryptoKey(sliderValue.toString(), formValues).then((res) => {
         if (res === undefined) {
           throw console.error("undefined");
         }
@@ -90,9 +83,14 @@ const validate = (sliderValue: number): number => {
     } catch (err) {
       throw console.error(err);
     }
-  }
+  }, [formValues, sliderValue])
+
+  useEffect(() => {
+    validate(sliderValue)
+    generate()
+  }, [generate, sliderValue, validate])
   
-  const setValuesToForm = (option: string, event: Checkbox.CheckedState) => {
+  const valuesToForm = (option: string, event: Checkbox.CheckedState) => {
     return setFormValues({ 
       ...formValues, 
       [option]: event as boolean
@@ -128,12 +126,12 @@ const validate = (sliderValue: number): number => {
             className="checkboxRoot"
             checked={formValues[option] === true}
             onCheckedChange={(event) => {
-              setValuesToForm(option, event)
+              valuesToForm(option, event)
             }}
             id={option}
             value={option}>
             <Checkbox.Indicator>
-              <CheckIcon />
+              <Check />
             </Checkbox.Indicator>
           </Checkbox.Root>
           <Label.Root

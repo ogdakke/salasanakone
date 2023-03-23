@@ -37,7 +37,7 @@ const Description: React.FC = () => {
         
         <Divider />
           <div className="imageWrapper">
-          <TooltipProvider delayDuration={250}>
+          <TooltipProvider delayDuration={200}>
               <Tooltip>
                 <TooltipTrigger>
                   <div className="credits">
@@ -47,18 +47,18 @@ const Description: React.FC = () => {
                     </a> 
                   </div>
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent sideOffset={0}>
                   <p>Vieraile sivuillani</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
 
-            <TooltipProvider delayDuration={250}>
+            <TooltipProvider delayDuration={200} > 
               <Tooltip>
                 <TooltipTrigger>
                   <ShareComponent />    
                 </TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent sideOffset={0}>
                   <p>Jaa</p>
                 </TooltipContent>
               </Tooltip>

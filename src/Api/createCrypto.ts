@@ -15,6 +15,7 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
   
   const handleReturns = async (values: checkboxes, length: number): Promise<string> => {
     async function handle(values: checkboxes, length: number) {
+      // if words is true --->
       if (data.words) {
         /*this is the string[] that is generated when data.words is true*/
         const wordString = (await getWordsWithObject(length, arrayOfWords))
@@ -34,14 +35,23 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
         }
         return wordString.join("")
       } 
-        else if (data.uppercase) {
-        const passFromRndmChars = createPassWordFromRandomChars()
-        return toUppercase(passFromRndmChars).toString()
-      } 
-      else if (!data.uppercase) {
-        return createPassWordFromRandomChars()
-      } 
-    }
+       // if words is false -------->
+        else if (data.randomChars && data.numbers) {
+          return data.uppercase ? toUppercase(createFromString(specialsAndNums)) : createFromString(specialsAndNums)
+        }
+        else if (!data.numbers && !data.randomChars) {
+          return data.uppercase ? toUppercase(createFromString(chars)) : createFromString(chars)
+        }
+        else if (data.numbers) {
+          return data.uppercase ? toUppercase(createFromString(charsWithNumbers)) : createFromString(charsWithNumbers)
+        }
+        else if (data.randomChars) {
+          return data.uppercase ? toUppercase(createFromString(charsAndSpecials)) : createFromString(charsAndSpecials)
+        }
+        
+    } 
+
+    // handle the handle :D
     const finalString = await handle(values, length).then((r) => {
       if (r === undefined) {
         throw ("undefined value for string")
@@ -55,42 +65,21 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
   }
 
 
-
-  const createFromAllChars = () => {
-    const arr = generateRandomArray(length, 0, withSpecials.length)
-  }
-  createFromAllChars()
   /**
-   * Creates a password from random chars and numbers
-   * @returns string password
+   * Creates a randomised string of chars from a input string
+   * @param stringToUse string that contains all the chars to generate the random string from
+   * @returns randomized string
    */
-  function createPassWordFromRandomChars() {    
+  const createFromString = (stringToUse: string) => {
+    const numArr = generateRandomArray(length, 0, stringToUse.length - 1)
     
-    // convert number of characters to number of bytes
-    const numOfBytes = Math.ceil(length = (+length || 8) / 2);
-    
-    // create a typed array of that many bytes
-    const typdArray = new Uint8Array(numOfBytes);
-    
-    // populate it with crypto-random values
-    window.crypto.getRandomValues(typdArray);
-    
-    // convert it to an Array of Strings (e.g. "01", "AF", ..)
-    const toStringArray = (password: string) => {
-      return '00'.slice(password.length) + password;
-    };
+    const charArr = stringToUse.split("")
 
-    const a = Array.prototype.map.call(typdArray, (index: number) => {
-      // 26 is the radix, which dictates to what base the numbers are converted as strings.   
-      const str = index.toString(26);
-      return toStringArray(str);
-    });
-    let password = a.join('');
-
-    // and snip off the excess digit if we want an odd number
-    // here, if length % 2 returns a value !0 we slice last digit
-    length % 2 && length !== 2 ? password = password.slice(1) : password;
-    return data.uppercase ? toUppercase(password).toString() : password;
+    const str: string[] = []
+    numArr.map((num, i) => {
+      str.push(charArr[numArr[i]])
+    })
+    return str.join("")
   }
 
   return handleReturns(data, length)
@@ -102,13 +91,31 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
  * @returns uppercased string or string[]
  */
 const toUppercase = (stringToUpper: string[]|string) => {
+  
+  const someCharToUpper = (someStr: string) => {
+    const len = someStr.length
+    const arr = generateRandomArray(len, 0, len)
+
+    const mutatedStrArr = []
+    const strArr = someStr.split("")
+    arr.forEach(i => {
+      if (i < len) {
+        strArr[i] = strArr[i].toUpperCase()
+      }
+    })
+    console.log("🚀 ~ file: createCrypto.ts:97 ~ someCharToUpper ~ arr:", arr)
+    return strArr.join("")
+  }
+  
+  
   if (typeof(stringToUpper) === "string") {
-    return stringToUpper.toUpperCase()
+    return someCharToUpper(stringToUpper)
+    // return stringToUpper.toUpperCase()
   }
   const strArr: string[] = []
   stringToUpper.map((str) => {
     strArr.push(
-      str.toUpperCase()
+      someCharToUpper(str)
     )
   })
   return strArr
@@ -146,7 +153,7 @@ function generateRandomNumberInRange(min: number, max: number): number {
 
 /**
  * generates a array of random number
- * @param length how many numbers are in the array
+ * @param {number} length how many numbers are in the array
  * @returns array of numbers
  */
 function generateRandomArray(length: number, min: number, max: number): number[] {
@@ -182,11 +189,12 @@ function capitalizeFirstLetter(stringToConvert: string): string {
  * @returns array of strings
  */
 async function getWordsWithObject(length: number, objektiSanat: string[]): Promise<string[]> {
-  const maxCount = 94111 //the max word count in sanat.json
+  console.time("length")
+  const maxCount = sanat.length - 1 //the max word count in sanat.json
   
   // const then = performance.now()
   const randomNumsArray = generateRandomArray(length, 0, maxCount);
-
+  
   const sanaArray: string[] = []
   
   for (const num of randomNumsArray) { 
@@ -194,11 +202,12 @@ async function getWordsWithObject(length: number, objektiSanat: string[]): Promi
       sanaArray.push(
         capitalizeFirstLetter(objektiSanat[num])
         )
-    } catch (error) {
-      // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
-      throw console.error(error);
-    }
+      } catch (error) {
+        // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
+        throw console.error(error);
+      }
   }
+  console.timeEnd("length")
   return sanaArray
 }
 
@@ -211,7 +220,7 @@ const randomCharsForJoins = (stringArr: string []) => {
   const lastChar = (specials.length - 1)
   
   const arr: string[] = []
-  specials.map(() => {
+  specials.split("").map(() => {
     const num = generateRandomNumberInRange(0, lastChar)
     
     arr.push(specials[num])
@@ -228,7 +237,6 @@ const randomCharsForJoins = (stringArr: string []) => {
 
 
 const insertRandomNumber = (stringArr: string[], sliderValue: number): string[] => {
-  const then = performance.now()
 
   
   const finalArr = []
@@ -252,8 +260,6 @@ const insertRandomNumber = (stringArr: string[], sliderValue: number): string[] 
     throw console.error(err);
   }
   
-  const now = performance.now()
-  // console.log("🚀 ~ file: createCrypto.ts:248 ~ insertRandomNumber ~ now:", now - then, "ms")
   return finalArr
 }
 
@@ -263,23 +269,28 @@ function insertAtIndex(arr: string[], index: number, element: string) {
 }
 
 
-const specials = [
-  ",",
-  "-",
-  "_",
-  "*",
-  "?",
-  "+",
-  "=",
-  "(",
-  ")",
-  "/",
-  "!",
-  "@",
-  "%",
-  "&",
-  ">",
-  "<",
-]
+// const specials = [
+//   ",",
+//   "-",
+//   "_",
+//   "*",
+//   "?",
+//   "+",
+//   "=",
+//   "(",
+//   ")",
+//   "/",
+//   "!",
+//   "@",
+//   "%",
+//   "&",
+//   ">",
+//   "<",
+// ]
 
-const withSpecials = "abcdefghjiklmopqrstuyäözx1234567890><,.-_*?+/()@%&!"
+
+const specialsAndNums = "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#"
+const charsAndSpecials = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#"
+const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
+const chars = "abcdefghijklmnopqrstuyäöxz"
+const specials = "><,.-_*?+/()@%&!€=#"

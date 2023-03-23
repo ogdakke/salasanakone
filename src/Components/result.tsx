@@ -32,7 +32,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
               } return;
             }}
             >
-              <div className="cardMask">
+              <div className="cardMask code">
                 <span className={
                   isCopied 
                   ? "copied"

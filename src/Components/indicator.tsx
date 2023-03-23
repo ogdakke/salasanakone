@@ -10,6 +10,8 @@ const checker = async (password: string) => {
   return (await check(password.toString()))
 }
 
+let didInit = false
+
 export function StrengthIndicator(props: { formValues: FormType; password: string; sliderValue: number; }): JSX.Element {  
   const {formValues, password, sliderValue} = props;
   
@@ -23,17 +25,29 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
     return true
   }
 
-  const [score, setScore] = useState(Number)
-  const [output, setOutput] = useState("")
+  const [score, setScore] = useState(4)
+  const [output, setOutput] = useState("Loistava")
 
+  // runs excactly once when mounting/initializing, so on page load.
   useEffect(() => {
-      checker(password).then(r => {
-        // console.log("🚀 ~ file: indicator.tsx:25 ~ checker ~ password:", password)
-        setScore(r.score)
-        setOutput(numberToString(r.score))
-      })
-    return ;
-  }, [])
+    if (!didInit) {
+        didInit = true
+        console.log("🚀 ~ file: indicator.tsx:34 ~ useEffect ~ didInit:", didInit)
+        checker(password).then(r => {
+          setScore(r.score)
+          setOutput(numberToString(r.score))
+        })
+      }
+      return;
+  }, [password])
+
+  // if (typeof window !== "undefined") {
+  //   checker(password).then(r => {
+  //     setScore(r.score)
+  //     setOutput(numberToString(r.score))
+  //   })
+  // }
+
 
   useEffect(() => {
     // kikkailua, jotta ei tarvis laskea aina scorea, koska se on kallista.
