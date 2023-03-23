@@ -10,7 +10,7 @@ export interface checkboxes {
 export default async function createCryptoKey(sliderValue: string, data: checkboxes): Promise<string> {
   const arrayOfWords = sanat as string[]
   
-  let length = parseInt(sliderValue)
+  const length = parseInt(sliderValue)
   
   
   const handleReturns = async (values: checkboxes, length: number): Promise<string> => {
@@ -37,16 +37,16 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
       } 
        // if words is false -------->
         else if (data.randomChars && data.numbers) {
-          return data.uppercase ? toUppercase(createFromString(specialsAndNums)) : createFromString(specialsAndNums)
+          return createFromString(specialsAndNums)
         }
         else if (!data.numbers && !data.randomChars) {
-          return data.uppercase ? toUppercase(createFromString(chars)) : createFromString(chars)
+          return createFromString(chars)
         }
         else if (data.numbers) {
-          return data.uppercase ? toUppercase(createFromString(charsWithNumbers)) : createFromString(charsWithNumbers)
+          return createFromString(charsWithNumbers)
         }
         else if (data.randomChars) {
-          return data.uppercase ? toUppercase(createFromString(charsAndSpecials)) : createFromString(charsAndSpecials)
+          return createFromString(charsAndSpecials)
         }
         
     } 
@@ -94,16 +94,15 @@ const toUppercase = (stringToUpper: string[]|string) => {
   
   const someCharToUpper = (someStr: string) => {
     const len = someStr.length
-    const arr = generateRandomArray(len, 0, len)
+    // so that there is always at least ONE char left lowercase (of course not possible if contains nums or specials...) we do "len - 1" for the arrays length
+    const arr = generateRandomArray(len - 1, 0, len)
 
-    const mutatedStrArr = []
     const strArr = someStr.split("")
     arr.forEach(i => {
       if (i < len) {
         strArr[i] = strArr[i].toUpperCase()
       }
     })
-    console.log("🚀 ~ file: createCrypto.ts:97 ~ someCharToUpper ~ arr:", arr)
     return strArr.join("")
   }
   
@@ -189,7 +188,7 @@ function capitalizeFirstLetter(stringToConvert: string): string {
  * @returns array of strings
  */
 async function getWordsWithObject(length: number, objektiSanat: string[]): Promise<string[]> {
-  console.time("length")
+  // console.time("length")
   const maxCount = sanat.length - 1 //the max word count in sanat.json
   
   // const then = performance.now()
@@ -207,7 +206,7 @@ async function getWordsWithObject(length: number, objektiSanat: string[]): Promi
         throw console.error(error);
       }
   }
-  console.timeEnd("length")
+  // console.timeEnd("length")
   return sanaArray
 }
 
@@ -267,27 +266,6 @@ function insertAtIndex(arr: string[], index: number, element: string) {
   arr.splice(index, 0, element);
   return arr;
 }
-
-
-// const specials = [
-//   ",",
-//   "-",
-//   "_",
-//   "*",
-//   "?",
-//   "+",
-//   "=",
-//   "(",
-//   ")",
-//   "/",
-//   "!",
-//   "@",
-//   "%",
-//   "&",
-//   ">",
-//   "<",
-// ]
-
 
 const specialsAndNums = "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#"
 const charsAndSpecials = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#"

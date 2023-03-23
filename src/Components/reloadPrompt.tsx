@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
 import "../styles/ReloadPrompt.css"
-import "../styles/Home.css"
 
+import { Refresh } from 'iconoir-react'
 
 function ReloadPrompt() {
   const [isTrue, setIsTrue] = useState(false)
@@ -35,7 +35,9 @@ function ReloadPrompt() {
               }
             </div>
             { needRefresh 
-            ? <button type='button' className="ToastButton inputButton" onClick={() => updateServiceWorker(true)}>Päivitä</button>
+            ? <button type='button' className="ToastButton inputButton" onClick={() => updateServiceWorker(true)}>
+              <Refresh width={20} height={20}/>
+              Päivitä</button>
             : null }
             { offlineReady  && !needRefresh
             ? <button type='button' 

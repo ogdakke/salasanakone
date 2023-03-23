@@ -87,7 +87,7 @@
   
   }
     
-  .imageWrapper:hover .svgImage {
+  .credits:hover .svgImage {
     transition: filter 250ms;
     filter: blur(0);
   }
