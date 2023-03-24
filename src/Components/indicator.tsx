@@ -6,7 +6,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../components/ui/popover"
+} from "./ui/popover"
 import { OpenSelectHandGesture } from "iconoir-react";
 import { Divider } from "./ui/divider";
 
