@@ -63,13 +63,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
+    --foreground-rgb: 230, 230, 230;
     --background-start-rgb: 0, 0, 0;
     --background-rgb: 10, 10, 10;
     
     --form-bg-rgb: 12, 12, 12;
     --skeleton-glow: 22, 22, 22;
-
 
     --primary-glow: radial-gradient(rgba(50, 196, 86, 0.4), rgba(1, 65, 255, 0));
     --secondary-glow: linear-gradient(
@@ -113,7 +112,7 @@ body {
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
+  color: rgba(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
 }
 

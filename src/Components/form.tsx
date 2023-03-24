@@ -7,7 +7,7 @@ import { usePersistedState } from "../hooks/usePersistedState"
 // styles
 import "../styles/Home.css"
 // components 
-import { Slider } from "./slider"
+import { Slider } from "./ui/slider"
 import { createCrypto } from "../main";
 import { StrengthIndicator } from "./indicator";
 const Result = React.lazy(() => import("./result"))

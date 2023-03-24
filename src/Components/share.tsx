@@ -16,9 +16,7 @@ export const ShareComponent = () => {
       })
       .then((val) => {return val})
       .catch((err) => console.log("error sharing", err))
-    } else {
-      console.log("hei");
-      
+    } else {      
       setCopied(true)
       copyToClipboard(meta.url)
       setTimeout(() => setCopied(false), 1100)      

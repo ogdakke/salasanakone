@@ -1,6 +1,6 @@
 import React from "react"
 import "../styles/Description.css"
-import { Divider } from "./divider"
+import { Divider } from "./ui/divider"
 import { ShareComponent } from "./share"
 import { LogoIcon } from "../assets/icons/logoIcon"
 import {
@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./tooltip"
+} from "./ui/tooltip"
 
 
 const Description: React.FC = () => {
@@ -30,12 +30,12 @@ const Description: React.FC = () => {
           Sivusto luo satunnaisesti valituista sanoista tai merkeistä salasanan.
           Sivusto ei lähetä <u>mitään</u> tietoja selaimesi ulkopuolelle, ja luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään muutakaan. 
           <br />
-          Sivu toimii myös ilman verkkoyhteyttä "tallentamalla" itsensä selaimeen.
+          Sivu toimii myös ilman verkkoyhteyttä selaimen välimuistista.
           <br />
           Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta saat kaiken irti ominaisuuksista!
         </p>
         
-        <Divider />
+        <Divider margin="2rem 0" />
           <div className="imageWrapper">
           <TooltipProvider delayDuration={200}>
               <Tooltip>
@@ -63,7 +63,6 @@ const Description: React.FC = () => {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-
           </div>
       </div>
     </>

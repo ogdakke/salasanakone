@@ -1,0 +1,88 @@
+.strengthWrapper {
+  position: absolute;
+  background-image: linear-gradient(to right, rgba(var(--background-rgb), 0),rgba(var(--form-bg-rgb), 0.2), rgba(var(--form-bg-rgb), 0.6), rgba(var(--form-bg-rgb), 1));
+  height: calc(100% - 2px);
+  
+  margin: 1px;
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  padding: 0;
+  right: 0;
+  top: 0;
+
+}
+
+.strengthIndicator {
+  animation: fadeIn 0.2s ease-in;
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  margin: 1rem 0.75rem 1rem 0rem;
+  border-radius: calc(var(--border-radius) - 2px);
+  color: rgba(var(--black-text-rgb), .95);
+  font-size: 0.8rem;
+  font-weight: 600;
+  /* min-width: clamp(15%, 4rem, 100%); */
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4); */
+  border: 1px solid rgba(var(--background-rgb), 0);
+
+  box-shadow: 1px 1px 15px rgba(var(--card-rgb), .4);
+  -webkit-user-select: none;
+  user-select: none;
+  --delay: 200ms;
+}
+
+.strengthIndicator::before {
+  transition: border, box-shadow, 200ms ease-in;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .strengthIndicator:hover {
+    border: 1px solid rgba(var(--card-rgb), 0.3);
+    box-shadow: 1px 1px 10px rgba(var(--card-rgb), 1);
+    transition: border, box-shadow, 200ms ease-out;
+  }
+}
+
+.strengthIndicator span {
+  padding-bottom: 0.2rem;
+}
+/* surkea */
+.case0 {
+  transition: background-color var(--delay) ease-out;
+  background-color: rgba(var(--red-worst-rgb), 1);
+}
+/* Huono */
+.case1 {
+  transition: background-color var(--delay) ease-out;
+  background-color: rgba(var(--orange-bad-rgb), 1);
+}
+/* OK */
+.case2 {
+  transition: background-color var(--delay) ease-out;
+  background-color: rgba(var(--yellow-ok-rgb), 1);
+}
+/* hyvä */
+.case3 {
+  transition: background-color var(--delay) ease-out;
+  background-color: rgba(var(--yellow-better-rgb), 1);
+}
+/* loistava */
+.case4 {
+  transition: background-color var(--delay) ease-out;
+  /* background-image: var(--success-gradient); */
+  background-color: rgba(var(--green-go-rgb), 1);
+}
+
+.case5 {
+  transition: all var(--delay) ease-out;
+  background-color: rgba(var(--foreground-rgb), 1);
+}
+
+.score {
+  background-color: rgba(var(--background-rgb), 1);
+}
