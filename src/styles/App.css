@@ -14,13 +14,10 @@
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  width: clamp(300px, 96%, var(--max-width));
+  width: clamp(300px, 95%, var(--max-width));
   max-width: var(--max-width);
 }
 
-button {
-  all: unset;
-}
 
 @media (max-width: 700px) {
   .main {
