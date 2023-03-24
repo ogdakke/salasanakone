@@ -136,6 +136,8 @@
 
 
 .resultWrapper {
+  -webkit-user-select: none;
+  user-select: none;
   margin-top: 1rem;
   display: flex;
   flex-direction: column;

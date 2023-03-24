@@ -135,7 +135,9 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
               </TooltipProvider>
             </div>
           </PopoverTrigger>
-          <PopoverContent align="center" side="top" className="PopoverContent">
+          <PopoverContent align="center" side="top" className="PopoverContent"
+            onOpenAutoFocus={e => e.preventDefault()}
+            >
             <div className="popCard">
               <p className="resultHelperText">Murtamiseen vaadittu aika</p>
               <div className="">
