@@ -147,13 +147,13 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
                   <TooltipProvider delayDuration={600}>
                         <Tooltip>
                             <TooltipTrigger>
-                              <a aria-label="Info" href="#miten-vahvuus-arvioidaan">
+                              <a className="withIcon"aria-label="Info" href="#miten-vahvuus-arvioidaan">
                               <InfoEmpty className="hover interact" width={20} height={20} strokeWidth={1.75} opacity={0.75}/>
                               </a>
                             </TooltipTrigger>
                             <TooltipContent sideOffset={6} className="TooltipContent">
                                 <div className="withIcon">
-                                  <OpenSelectHandGesture width={20} height={20} />
+                                  <OpenSelectHandGesture  width={20} height={20} />
                                   Miten vahvuus arvioidaan?
                                 </div>
                             </TooltipContent>
