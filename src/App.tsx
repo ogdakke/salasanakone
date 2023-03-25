@@ -13,6 +13,7 @@ function App() {
   return (
     <main className="main">
       <div className="wrapper">
+        <h1>Luo Salasana</h1>
         <Suspense fallback={<Loading />}>
           <FormComponent/>
         </Suspense>

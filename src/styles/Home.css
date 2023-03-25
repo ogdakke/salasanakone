@@ -29,13 +29,29 @@
 
 
 
-
+/* || global reusable styles */
 .withIcon {
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
+.space-between {
+  justify-content: space-between;
+}
+
+.interact {
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .hover:hover {
+    opacity: 1;
+  }
+}
+
+
+
+/*  */
 .buttonWrapper {
   display: flex;
   justify-content: space-between;

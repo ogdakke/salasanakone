@@ -3,7 +3,7 @@
   --max-width: 800px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
-
+  scroll-behavior: smooth;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: auto;
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
@@ -131,6 +131,7 @@ a {
   color: inherit;
   /* text-decoration: none; */
 }
+
 
 button {
   all: unset;

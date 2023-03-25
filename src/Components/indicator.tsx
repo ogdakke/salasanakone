@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "./ui/popover"
-import { OpenSelectHandGesture } from "iconoir-react";
+import { InfoEmpty, OpenSelectHandGesture } from "iconoir-react";
 import { Divider } from "./ui/divider";
 
 const checker = async (password: string) => {
@@ -142,8 +142,24 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
               <p className="resultHelperText">Murtamiseen vaadittu aika</p>
               <div className="">
                 <Divider margin="0.25rem 0rem" />
-                <p className="fadeIn">{time[0]}</p>
-                {/* <p className="fadeIn">{time[1]}</p> */}
+                <div className="withIcon space-between">
+                  <p className="fadeIn">{time[0]}</p>
+                  <TooltipProvider delayDuration={600}>
+                        <Tooltip>
+                            <TooltipTrigger>
+                              <a aria-label="Info" href="#miten-vahvuus-arvioidaan">
+                              <InfoEmpty className="hover interact" width={20} height={20} strokeWidth={1.75} opacity={0.75}/>
+                              </a>
+                            </TooltipTrigger>
+                            <TooltipContent sideOffset={6} className="TooltipContent">
+                                <div className="withIcon">
+                                  <OpenSelectHandGesture width={20} height={20} />
+                                  Miten vahvuus arvioidaan?
+                                </div>
+                            </TooltipContent>
+                        </Tooltip>
+                    </TooltipProvider>
+                </div>                
               </div>
             </div>
           </PopoverContent>
@@ -184,7 +200,7 @@ const changeToFi = (value: string) => {
   // Singural values: "päivä", "vuosi" etc.
   else if (value.includes("day")) return value.replace("day", "päivä")
   else if (value.includes("year")) return value.replace("year", "vuosi")
-  else if (value.includes("centuries")) return value.replace("centuries", "Useita vuosikymmeniä")
+  else if (value.includes("centuries")) return value.replace("centuries", "Vuosisatoja")
   
   else return value
 }

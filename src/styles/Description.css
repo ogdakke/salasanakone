@@ -12,18 +12,47 @@
 .description h2 {
   margin-bottom: 0.5rem;
 }
-
 .description a {
-  
-  align-items: center;
   color: rgba(var(--foreground-rgb),0.7);
+}
+
+
+.inline {
+  display: inline-flex !important;
+  cursor: pointer;
+}
+
+.credits a {
+  align-items: center;
   text-decoration: none;
   padding: 0.5rem 0rem;
   padding-right: 1rem;
 }
 
+.details {
+  transition: all 200ms ease-in;
+}
 
+.details[open] {
+  
+}
 
+.summary {
+  padding: 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  /* margin-bottom: 0.125rem; */
+}
+
+summary::marker {
+  display: none;
+  opacity: 0;
+}
+
+.summaryDetails {
+  margin: 0.25rem 0.5rem;
+}
 .description p {
   margin: 0;  
   -webkit-hyphens: auto;
@@ -78,6 +107,10 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+
+  .summary:hover {
+    opacity: .9;
+  }
 
   /* || shareButton hover */
   .description a:hover,

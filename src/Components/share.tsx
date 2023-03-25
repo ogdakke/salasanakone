@@ -3,6 +3,8 @@ import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 import { meta } from "../assets/constants/meta"
 
+export const isAndroid = navigator.userAgent.match(/Android/i)
+
 export const ShareComponent = () => {
   const [isCopied, setCopied] = useState(false)
 
@@ -24,7 +26,6 @@ export const ShareComponent = () => {
   }
 
   
-  const isAndroid = navigator.userAgent.match(/Android/i)
   const size = 28
   return (
     <>
