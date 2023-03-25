@@ -81,11 +81,17 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
     if (!didInit) {      
         didInit = true
         checker(password).then(r => {
+          console.log("Mounted and checking...");
           setScore(r.score)
           setOutput(numberToString(r.score))
         })
+        .catch((err) => console.error("Error in checking", ...err)
+        )
+        .finally(
+          () => console.log("Mounted and checked successfully.")
+        )
       }
-      return;
+      
   }, [password])
 
 
