@@ -2,8 +2,6 @@ import React from "react";
 
 import "../styles/Description.css";
 
-import { ShareAndroid, ShareIos } from "iconoir-react";
-
 import { LogoIcon } from "../assets/icons/logoIcon";
 import { ShareComponent } from "./share";
 import { Divider } from "./ui/divider";
