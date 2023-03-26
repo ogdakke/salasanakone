@@ -6,14 +6,19 @@ import './styles/App.css'
 import Description from './Components/description'
 import { Loading } from './Components/ui/loading'
 import ReloadPrompt from "./Components/reloadPrompt"
+import { DataFunc } from './Api/data'
+import { LogoIcon } from './assets/icons/logoIcon'
 
 const FormComponent = React.lazy(() => import("./Components/form"))
 
 function App() {
   return (
-    <main className="main">
+    <main className="main" onLoad={e => DataFunc(e)}>
       <div className="wrapper">
-        <h1>Luo Salasana</h1>
+        <div className="withIcon" style={{"gap": "1rem"}}>
+          <LogoIcon width={40} height={40} />
+          <h1>Luo Salasana</h1>
+        </div>
         <Suspense fallback={<Loading />}>
           <FormComponent/>
         </Suspense>

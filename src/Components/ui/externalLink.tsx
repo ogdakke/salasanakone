@@ -8,9 +8,16 @@ type Props = {
   className?: string
 }
 
+
 export const ExternalLink = ({link, size=16, children, className=""}: PropsWithChildren<Props>, {...props}) => {
+
+  const key = new Date().getTime().toString()
+  const clicked = () => {
+    console.log(key, new Date().getTime());
+  }
+
   return (
-      <a className={`withIcon inline ${className}`} href={link} {...props}>
+      <a key={key} onClick={clicked} className={`withIcon inline ${className}`} target="_blank" href={link} {...props}>
         {children} 
         <OpenNewWindow width={size} height={size}/>
       </a>

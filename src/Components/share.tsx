@@ -16,12 +16,15 @@ export const ShareComponent = () => {
         text: meta.description,
         url: meta.url
       })
-      .then((val) => {return val})
+      .then((val) => {
+        console.log("WebShare worked successfully", new Date().getTime());
+        return val
+      })
       .catch((err) => console.log("error sharing", err))
     } else {      
+      await copyToClipboard(meta.url)
       setCopied(true)
-      copyToClipboard(meta.url)
-      setTimeout(() => setCopied(false), 1100)      
+      setTimeout(() => setCopied(false), 1500)      
     }
   }
 

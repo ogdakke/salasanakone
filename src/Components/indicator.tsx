@@ -106,6 +106,7 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
       checker(password).then(r => {
         setScore(r.score)
         setOutput(numberToString(score))
+        console.log("Checked strength succesfully");
       }) 
     }
   }, [score, password, validateString])

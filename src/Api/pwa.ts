@@ -1,5 +1,4 @@
 declare module 'virtual:pwa-register/react' {
-  // @ts-expect-error ignore when react is not installed
   import type { Dispatch, SetStateAction } from 'react'
 
   export interface RegisterSWOptions {
@@ -20,7 +19,7 @@ declare module 'virtual:pwa-register/react' {
      * @param registration The service worker registration if available.
      */
     onRegisteredSW?: (swScriptUrl: string, registration: ServiceWorkerRegistration | undefined) => void
-    onRegisterError?: (error: any) => void
+    onRegisterError?: (error: unknown) => void
   }
 
   export function useRegisterSW(options?: RegisterSWOptions): {

@@ -13,9 +13,11 @@ function ReloadPrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
+      console.log("Registered worker successfully.");
       return r      
     },
     onRegisterError(error) {
+      console.error(error, "Failed to register worker.");
       throw error
     },
   })

@@ -20,15 +20,15 @@ const pwaOptions: Partial<VitePWAOptions> = {
       "type": "image/svg"
     },
     {
-      "src": "/favicon-512.svg",
+      "src": "/favicon@512.png",
       "sizes": "512x512",
-      "type": "image/svg",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/favicon-192.svg",
+      "src": "/favicon@192.png",
       "sizes": "192x192",
-      "type": "image/svg",
+      "type": "image/png",
       "purpose": "any"
     },
     {
@@ -36,16 +36,9 @@ const pwaOptions: Partial<VitePWAOptions> = {
       "sizes": "180x180",
       "type": "image/png",
       "purpose": "maskable"
-    },
-    {
-      "src": "/apple-touch-icon.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
     }
   ],
   orientation: "portrait",
-  
   background_color: "#ffffff",
   display: "standalone",
   description: "Luo Suomalainen Salasana - Vahvat ja muistettavissa olevat salasanat helposti!"
