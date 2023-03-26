@@ -37,7 +37,11 @@ function ReloadPrompt() {
               }
             </div>
             { needRefresh 
-            ? <button type='button' className="ToastButton inputButton" onClick={() => updateServiceWorker(true)}>
+            ? <button type='button' className="ToastButton inputButton" 
+            onClick={() => {
+              console.log("Click: => updateServiceWorker()");
+              updateServiceWorker(true)
+              }}>
               <Refresh width={20} height={20}/>
               Päivitä</button>
             : null }
@@ -45,6 +49,7 @@ function ReloadPrompt() {
             ? <button type='button' 
               className={`ToastButton inputButton`} 
               onClick={() => {
+                console.log("Click: => close()");
                 setIsTrue(true)
                 close()
               }}>Ok</button>

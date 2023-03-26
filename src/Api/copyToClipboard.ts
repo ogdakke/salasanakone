@@ -10,11 +10,11 @@ const writeToClipboard = async (value: string) => {
 
   try {
     await clipBoard.writeText(value)
-        
+    console.log("Copied value successfully");
     return value 
 
   } catch (err) {
     console.error(err)
-    return null
+    throw err
   }
 }
