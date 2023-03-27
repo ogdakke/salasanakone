@@ -1,0 +1,7 @@
+.TextInput {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: 4px;
+  padding: 0.325rem 0.5rem;
+}

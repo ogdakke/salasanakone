@@ -19,20 +19,33 @@ const checker = async (password: string) => {
   return (await check(password.toString()))
 }
 
-const validateLength = (str: string) => {
+/**
+ * returns a substring of desired length {length} if str is longer than {length}
+ * @param length desired length
+ * @param str string to check
+ * @returns string, mutated or not
+ */
+const validateLength = (str: string, length: number) => {
   let final = str  
-  if (str.length > 100) {
-    final = str.substring(0, 100)
+  console.log(`Checked string of length ${str.length}`);
+  if (str.length > length) {
+    final = str.substring(0, length)
   }
   return final
 }
 
-const parseValue = (value: number): number => {
+
+
+const parseValue = (value: number) => {
   let mutatedValue = value
+  if (value.toString().length > 10) {
+    return "Miljardeja vuosia"
+  }
   if (value.toString().length > 7) {
     mutatedValue = Math.floor(value / 1000000)
+    return `${mutatedValue} milj. vuotta`
   }
-  return mutatedValue
+  return mutatedValue + " vuotta"
 }
 
 let didInit = false
@@ -61,17 +74,21 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
   const timeToCheck = async () => {
     // didCheckTime prevents unneccessary computation. eg. user clicks again, even if password has not changed
     if (!didCheckTime) {
-      // console.time("timeToCheck")
+      console.time("timeToCheck")
       didCheckTime = true
-      await checker(validateLength(password)).then((r) => {
-        // const timeInSecs = r.crack_times_seconds.offline_slow_hashing_1e4_per_second.toLocaleString("en").replace(RegExp(/,/g), "")
-        // const timeInt = parseInt(timeInSecs.toString())
-        // const years = Math.floor(timeInt / 31556952)
-        // const finalTime = parseValue(years)
-        const timeToDo = r.crack_times_display.offline_slow_hashing_1e4_per_second.toString()
-        setTime([changeToFi(timeToDo)])
+      await checker(validateLength(password, 70)).then((r) => {
+        let timeToDo = r.crackTimesDisplay.offlineSlowHashing1e4PerSecond.toString()
+        
+        const timeInSecs = r.crackTimesSeconds.offlineSlowHashing1e4PerSecond
+        const years = Math.floor(timeInSecs / 31556952)
+        
+        if (timeToDo.includes("vuotta") || timeToDo.includes("vuosikymmeniä")) {
+          timeToDo = parseValue(years)
+        }
+
+        setTime([timeToDo])
       })
-      // console.timeEnd("timeToCheck")
+      console.timeEnd("timeToCheck")
     }
   }
 
@@ -150,7 +167,9 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
               <div className="">
                 <Divider margin="0.25rem 0rem" />
                 <div className="withIcon space-between">
-                  <p className="fadeIn">{time[0]}</p>
+                  <p className="fadeIn">
+                    {time[0]}
+                  </p>
                   <TooltipProvider delayDuration={600}>
                         <Tooltip>
                             <TooltipTrigger>
