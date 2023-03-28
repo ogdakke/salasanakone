@@ -1,9 +1,9 @@
 .strengthWrapper {
-  position: absolute;
-  background-image: linear-gradient(to right, rgba(var(--background-rgb), 0),rgba(var(--form-bg-rgb), 0.2), rgba(var(--form-bg-rgb), 0.6), rgba(var(--form-bg-rgb), 1));
-  height: calc(100% - 2px);
+  /* position: absolute; */
+  /* background-image: linear-gradient(to right, rgba(var(--background-rgb), 0),rgba(var(--form-bg-rgb), 0.2), rgba(var(--form-bg-rgb), 0.6), rgba(var(--form-bg-rgb), 1)); */
+  /* height: calc(100% - 2px); */
   
-  margin: 1px;
+  /* margin: 1px; */
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
   padding: 0;
@@ -16,11 +16,11 @@
   animation: fadeIn 0.2s ease-in;
   position: relative;
   padding: 0.5rem 0.75rem;
-  margin: 1rem 0.75rem 1rem 0rem;
+  /* margin: 1rem 0.75rem 1rem 0rem; */
   border-radius: calc(var(--border-radius) - 2px);
   color: rgba(var(--black-text-rgb), .95);
-  font-size: 0.8rem;
-  font-weight: 600;
+  /* font-size: 0.8rem; */
+  /* font-weight: 600; */
   /* min-width: clamp(15%, 4rem, 100%); */
   max-width: -moz-fit-content;
   max-width: fit-content;

@@ -131,7 +131,6 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
   // const [op, setOp] = useState(false)
 
   return (
-    <div className="strengthWrapper">
       <Suspense fallback={<div className="strengthIndicator case5"><span>Arvio</span></div>}>
         <Popover modal={true}>
           <PopoverTrigger onClick={async () => {
@@ -143,7 +142,7 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
                 <Tooltip
                 >
                   <TooltipTrigger type="button" >
-                    <div className={`strengthIndicator case${score.toString()}`}>
+                    <div className={`interact strengthIndicator case${score.toString()}`}>
                       <span>
                         {output}
                       </span>
@@ -173,7 +172,7 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
                   <TooltipProvider delayDuration={600}>
                         <Tooltip>
                             <TooltipTrigger>
-                              <a aria-label="Info" href="#miten-vahvuus-arvioidaan">
+                              <a className="flex-center" aria-label="Info" href="#miten-vahvuus-arvioidaan">
                               <InfoEmpty className="hover interact" width={20} height={20} strokeWidth={1.75} opacity={0.75}/>
                               </a>
                             </TooltipTrigger>
@@ -192,8 +191,7 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
         </Popover>
 
       </Suspense>
-    </div>
-  )
+        )
 }
 
 function numberToString(value: number) {

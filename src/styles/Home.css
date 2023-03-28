@@ -27,6 +27,11 @@
   box-shadow: 0px 2px 8px -1px #0000001a;
 }
 
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
 
 
 /* || global reusable styles */
@@ -54,6 +59,7 @@
 /*  */
 .buttonWrapper {
   display: flex;
+  align-content: center;
   justify-content: space-between;
 }
 
@@ -67,7 +73,6 @@
   max-width: -moz-fit-content;
   max-width: fit-content;
   padding: 1rem 1.5rem;
-  margin-top: 1rem;
   background-color: rgba(var(--foreground-rgb), 0.9);
   color: rgba(var(--background-rgb));
   cursor: pointer;
@@ -93,10 +98,10 @@
 }
 
 
-
+/* 
 .buttonWrapper button[type=button] {
   background-color: rgba(180, 0,10, 1);
-}
+} */
 
 
 
@@ -154,7 +159,7 @@
 .resultWrapper {
   -webkit-user-select: none;
   user-select: none;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -220,7 +225,16 @@
 }
 
 
+.inputButton:hover {
+  transition: all 200ms ease-in;
+  /* background-color: rgba(var(--foreground-rgb), .7); */
+  filter: invert(1);
+}
 
+
+.inputButton:hover .spin {
+  animation: spinAnimation 700ms ease-out;
+}
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
@@ -233,17 +247,7 @@
     color: rgba(var(--foreground-rgb), 0.9);
   }
 
-  .inputButton:hover {
-    transition: all 200ms ease-in;
-    /* background-color: rgba(var(--foreground-rgb), .7); */
-    filter: invert(1);
-  }
 
-  
-  .inputButton:hover .spin {
-    animation: spinAnimation 700ms ease-out;
-
-  }
 
   @keyframes spinAnimation {
     0% {
@@ -261,9 +265,9 @@
     }
   }
 
-  .buttonWrapper button[type=button]:hover {
+  /* .buttonWrapper button[type=button]:hover {
     background-color: rgba(205, 0,1, 0.8);
-  }
+  } */
 
   .checkboxRoot:hover {
     background-color: rgbA(var(--callout-border-rgb), 0.3);

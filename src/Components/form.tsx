@@ -118,6 +118,24 @@ const validate = useCallback((sliderValue: number): number => {
   return (
     <>
     <form className='form' action="submit" aria-busy="false" style={{"opacity": "1"}}>
+    <div className="resultWrapper">
+      <p className="resultHelperText">
+          Kopioi Salasana napauttamalla:         
+      </p>
+      <div className="resultCard">
+        <Suspense fallback={
+          <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div>}>
+        {/* <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div> */}
+          <Result     
+            aria-busy="false"
+            aria-label="Salasana, jonka voi kopioida napauttamalla"
+            finalPassword={finalPassword}
+            copyText={copyText}/>          
+        </Suspense>
+      </div>
+    </div>
+    <div className="inputGrid">
+
     {initialKeys.map((option) => {
       return (
         <div className="inputWrapper" key={option}>
@@ -142,6 +160,7 @@ const validate = useCallback((sliderValue: number): number => {
         </div>
       )
     })}
+    </div>
     
     <div className="sliderWrapper">
       <Label.Root className="LabelRoot" htmlFor="slider">
@@ -162,6 +181,9 @@ const validate = useCallback((sliderValue: number): number => {
 
       </div>
       <div className="buttonWrapper">
+        <StrengthIndicator 
+          password={finalPassword} sliderValue={sliderValue} formValues={formValues}
+          /> 
         <button 
           className="inputButton"
           aria-label="Luo Uusi Salasana"
@@ -170,29 +192,11 @@ const validate = useCallback((sliderValue: number): number => {
             e.preventDefault()
             generate()
           }}>
-          Luo Uusi Salasana
+          Uusi Salasana
           <Refresh className="refresh icon spin" width={20} height={20} />
         </button>
       </div>
-    <div className="resultWrapper">
-      <p className="resultHelperText">
-          Kopioi Salasana napauttamalla:         
-      </p>
-      <div className="resultCard">
-        <Suspense fallback={
-          <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div>}>
-        {/* <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div> */}
-          <Result     
-            aria-busy="false"
-            aria-label="Salasana, jonka voi kopioida napauttamalla"
-            finalPassword={finalPassword}
-            copyText={copyText}/>          
-          
-          <StrengthIndicator 
-            password={finalPassword} sliderValue={sliderValue} formValues={formValues}/> 
-        </Suspense>
-      </div>
-    </div>
+    
   </form>
   </>
   )
