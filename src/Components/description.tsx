@@ -70,10 +70,7 @@ const Description: React.FC = () => {
                     <br />
                     Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta
                     saat kaiken irti ominaisuuksista!
-                </p>
-
-                <Divider margin="2rem 0" />
-                
+                </p>                
             </div>
         </>
     );

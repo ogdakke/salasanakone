@@ -9,7 +9,7 @@ type Props = {
 }
 
 
-export const ExternalLink = ({link, size=16, children, className=""}: PropsWithChildren<Props>, {...props}) => {
+export const ExternalLink = ({link, size=20, children, className=""}: PropsWithChildren<Props>, {...props}) => {
 
   const key = new Date().getTime().toString()
   const clicked = () => {

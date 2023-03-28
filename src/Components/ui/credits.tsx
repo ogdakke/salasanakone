@@ -2,6 +2,7 @@ import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix
 import { LogoIcon } from "../../assets/icons/logoIcon"
 import { ShareComponent } from "../share"
 import { ExternalLink } from "./externalLink"
+import "../../styles/ui/Tooltip.css"
 
 export const Credits = () => {
   return (
@@ -22,7 +23,7 @@ export const Credits = () => {
 
                                 </div>
                             </TooltipTrigger>
-                            <TooltipContent sideOffset={0}>
+                            <TooltipContent className="TooltipContent" sideOffset={0}>
                                 <p>Vieraile sivuillani</p>
                             </TooltipContent>
                         </Tooltip>
@@ -33,7 +34,7 @@ export const Credits = () => {
                             <TooltipTrigger>
                                 <ShareComponent />
                             </TooltipTrigger>
-                            <TooltipContent sideOffset={0}>
+                            <TooltipContent className="TooltipContent" sideOffset={0}>
                                 <p>Jaa</p>
                             </TooltipContent>
                         </Tooltip>
