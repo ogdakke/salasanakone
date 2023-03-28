@@ -3,7 +3,7 @@ import "../../styles/ui/Input.css"
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className="", ...props }, ref) => {
     return (
       <input
@@ -14,6 +14,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     )
   }
 )
-Input.displayName = "Input"
+InputComponent.displayName = "Input"
 
-export { Input }
+export { InputComponent }

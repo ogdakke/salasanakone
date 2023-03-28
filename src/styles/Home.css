@@ -30,7 +30,7 @@
 
 
 /* || global reusable styles */
-.withIcon {
+.flex-center {
   display: flex;
   align-items: center;
   gap: 0.25rem;

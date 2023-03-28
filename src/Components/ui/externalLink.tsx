@@ -17,7 +17,7 @@ export const ExternalLink = ({link, size=16, children, className=""}: PropsWithC
   }
 
   return (
-      <a key={key} onClick={clicked} className={`withIcon inline ${className}`} target="_blank" href={link} {...props}>
+      <a key={key} onClick={clicked} className={`flex-center inline ${className}`} target="_blank" href={link} {...props}>
         {children} 
         <OpenNewWindow width={size} height={size}/>
       </a>

@@ -150,7 +150,7 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={-5} className="TooltipContent">
-                    <div className="withIcon">
+                    <div className="flex-center">
                       <OpenSelectHandGesture width={20} height={20} />
                       Lisätietoja
                     </div>
@@ -166,7 +166,7 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
               <p className="resultHelperText">Murtamiseen vaadittu aika</p>
               <div className="">
                 <Divider margin="0.25rem 0rem" />
-                <div className="withIcon space-between">
+                <div className="flex-center space-between">
                   <p className="fadeIn">
                     {time[0]}
                   </p>
@@ -178,7 +178,7 @@ export function StrengthIndicator(props: { formValues: FormType; password: strin
                               </a>
                             </TooltipTrigger>
                             <TooltipContent sideOffset={6} className="TooltipContent">
-                                <div className="withIcon">
+                                <div className="flex-center">
                                   <OpenSelectHandGesture width={20} height={20} />
                                   Miten vahvuus arvioidaan?
                                 </div>

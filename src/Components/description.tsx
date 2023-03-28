@@ -2,16 +2,8 @@ import React from "react";
 
 import "../styles/Description.css";
 
-import { LogoIcon } from "../assets/icons/logoIcon";
-import { ShareComponent } from "./share";
 import { Divider } from "./ui/divider";
 import { ExternalLink } from "./ui/externalLink"
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-} from "./ui/tooltip";
 
 const Description: React.FC = () => {
     return (
@@ -81,40 +73,7 @@ const Description: React.FC = () => {
                 </p>
 
                 <Divider margin="2rem 0" />
-                <div className="imageWrapper">
-                    <TooltipProvider delayDuration={300}>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <div className="credits">
-                                    <LogoIcon
-                                        loading="lazy"
-                                        width={20}
-                                        height={20}
-                                        className="svgImage interact"
-                                    />
-                                    <ExternalLink link="https://www.deweloper.fi" size={18}>
-                                      deweloper.fi
-                                    </ExternalLink>
-
-                                </div>
-                            </TooltipTrigger>
-                            <TooltipContent sideOffset={0}>
-                                <p>Vieraile sivuillani</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-
-                    <TooltipProvider delayDuration={300}>
-                        <Tooltip>
-                            <TooltipTrigger>
-                                <ShareComponent />
-                            </TooltipTrigger>
-                            <TooltipContent sideOffset={0}>
-                                <p>Jaa</p>
-                            </TooltipContent>
-                        </Tooltip>
-                    </TooltipProvider>
-                </div>
+                
             </div>
         </>
     );

@@ -34,7 +34,7 @@ export const ShareComponent = () => {
     <>
     <div className="shareWrapper">
         {isCopied
-        ? <div className="withIcon success">
+        ? <div className="flex-center success">
             Kopioitu
             <CheckCircle width={20} height={20}/>
           </div>

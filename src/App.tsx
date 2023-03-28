@@ -6,6 +6,8 @@ import './styles/App.css'
 import Description from './Components/description'
 import { Loading } from './Components/ui/loading'
 import ReloadPrompt from "./Components/reloadPrompt"
+import { Feedback } from "./Components/feedback"
+import { Credits } from "./Components/ui/credits"
 import { DataFunc } from './Api/data'
 import { LogoIcon } from './assets/icons/logoIcon'
 
@@ -15,7 +17,7 @@ function App() {
   return (
     <main className="main" onLoad={e => DataFunc(e)}>
       <div className="wrapper">
-        <div className="withIcon" style={{"gap": "1rem"}}>
+        <div className="flex-center" style={{"gap": "1rem"}}>
           <LogoIcon width={40} height={40} />
           <h1>Luo Salasana</h1>
         </div>
@@ -23,6 +25,8 @@ function App() {
           <FormComponent/>
         </Suspense>
           <Description />
+          <Feedback />
+          <Credits />
           <ReloadPrompt />
       </div>
     </main>
