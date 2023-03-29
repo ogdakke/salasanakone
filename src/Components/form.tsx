@@ -150,7 +150,7 @@ const validate = useCallback((sliderValue: number): number => {
     generate()
   }, [generate, sliderValue, validate])
   
-  const valuesToForm = (option: string, event, value: string) => {
+  const valuesToForm = (option: string, event: any, value: string) => {
     console.log("🚀 ~ file: form.tsx:117 ~ valuesToForm ~ event:", event)
     console.log("🚀 ~ file: form.tsx:117 ~ valuesToForm ~ option:", option)
     

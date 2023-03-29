@@ -1,6 +1,6 @@
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip";
 import { Suspense, useCallback, useEffect, useState } from "react";
-import { FormType } from "./form";
+// import { FormType } from "./form";
 import "../styles/Indicator.css"
 import {
   Popover,
@@ -51,7 +51,7 @@ const parseValue = (value: number) => {
 let didInit = false
 let didCheckTime = false
 
-export function StrengthIndicator(props: { formValues: FormType; password: string; sliderValue: number; }): JSX.Element {  
+export function StrengthIndicator(props: { formValues: any; password: string; sliderValue: number; }): JSX.Element {  
   const {formValues, password, sliderValue} = props;
   
   
