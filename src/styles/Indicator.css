@@ -36,13 +36,18 @@
   --delay: 200ms;
 }
 
+.strengthIndicator:focus {
+  border: 2px solid rgba(var(--foreground-rgb), 1);
+
+}
+
 .strengthIndicator::before {
   transition: border, box-shadow, 200ms ease-in;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .strengthIndicator:hover {
-    border: 1px solid rgba(var(--card-rgb), 0.3);
+    border: 1px solid rgba(var(--foreground-rgb), 1);
     box-shadow: 1px 1px 10px rgba(var(--card-rgb), 1);
     transition: border, box-shadow, 200ms ease-out;
   }

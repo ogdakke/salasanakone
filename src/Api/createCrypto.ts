@@ -1,34 +1,37 @@
+import { InputValue, InputValues } from "../Components/form";
 import { sanat } from "../sanat"
 
 export interface checkboxes {
+  passphrase?: boolean;
   uppercase?: boolean;
   randomChars?: boolean;
   numbers?: boolean;
   words?: boolean;
 }
 
-export default async function createCryptoKey(sliderValue: string, data: checkboxes): Promise<string> {
+export default async function createCryptoKey(sliderValue: string, data: InputValues): Promise<string> {
+  console.log("🚀 ~ file: createCrypto.ts:12 ~ createCryptoKey ~ data:", data)
   const arrayOfWords = sanat as string[]
   
+  const USER_SPECIALS = data.randomChars.value
+
+
   const length = parseInt(sliderValue)
-  
-  
-  const handleReturns = async (values: checkboxes, length: number): Promise<string> => {
-    async function handle(values: checkboxes, length: number) {
+
+  const handleReturns = async (values: InputValues, length: number): Promise<string> => {
+    async function handle(length: number) {
       // if words is true --->
-      if (data.words) {
+      if (data.words.selected) {
         /*this is the string[] that is generated when data.words is true*/
         const wordString = (await getWordsWithObject(length, arrayOfWords))
 
-        if (data.randomChars) {
-          if (data.numbers) {
-            return randomCharsForJoins(
-              insertRandomNumber(wordString, length)
-            ).join("")
+        if (data.randomChars.value) {
+          if (data.numbers.selected) {
+            return insertRandomNumber(wordString, length).join(USER_SPECIALS)
           }
-          return randomCharsForJoins(wordString).join("")
+          return wordString.join(USER_SPECIALS)
         }
-        if (data.numbers) {
+        if (data.numbers.selected) {
           const numberedArr = insertRandomNumber(wordString, length)
           
           return numberedArr.join("").toString()
@@ -36,29 +39,29 @@ export default async function createCryptoKey(sliderValue: string, data: checkbo
         return wordString.join("")
       } 
        // if words is false -------->
-        else if (data.randomChars && data.numbers) {
+        else if (data.randomChars.selected && data.numbers.selected) {
           return createFromString(specialsAndNums)
         }
-        else if (!data.numbers && !data.randomChars) {
+        else if (!data.numbers.selected && !data.randomChars.selected) {
           return createFromString(chars)
         }
-        else if (data.numbers) {
+        else if (data.numbers.selected) {
           return createFromString(charsWithNumbers)
         }
-        else if (data.randomChars) {
+        else if (data.randomChars.selected) {
           return createFromString(charsAndSpecials)
         }
         
     } 
 
     // handle the handle :D
-    const finalString = await handle(values, length).then((r) => {
+    const finalString = await handle(length).then((r) => {
       if (r === undefined) {
         throw ("undefined value for string")
       }
       return r.toString()
     })
-    if (values.uppercase) {
+    if (values.uppercase.selected) {
       return toUppercase(finalString).toString()
     }
     return finalString
@@ -199,7 +202,7 @@ async function getWordsWithObject(length: number, objektiSanat: string[]): Promi
   for (const num of randomNumsArray) { 
     try {
       sanaArray.push(
-        capitalizeFirstLetter(objektiSanat[num])
+        objektiSanat[num]
         )
       } catch (error) {
         // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
