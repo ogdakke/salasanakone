@@ -5,7 +5,6 @@ import App from './App'
 
 export const createCrypto = import("./Api/createCrypto")
 .then((res) => {
-  console.log("Imported createCrypto successfully")
   return res.default
 })
 .catch((err) => {

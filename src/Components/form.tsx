@@ -1,5 +1,5 @@
 // modules
-import React, { Dispatch, SetStateAction, Suspense, useCallback, useEffect, useState } from "react"
+import React, { Suspense, useCallback, useEffect, useState } from "react"
 import * as Label from '@radix-ui/react-label';
 import * as Checkbox from '@radix-ui/react-checkbox';
 // hooks
@@ -21,12 +21,12 @@ import { Check, Refresh } from 'iconoir-react';
 // }
 const createCryptoKey = await createCrypto
 
-// const initialFormValues: FormType = {
-//   uppercase: false,
-//   randomChars: true,
-//   numbers: true,
-//   words: true
-// }
+const initialFormValues = {
+  uppercase: false,
+  randomChars: true,
+  numbers: true,
+  words: true
+}
 
 type InputType = "checkbox" | "input" | "radio";
 // type optionType = "passphrase" | "uppercase" | "numbers" | "words" | "randomChars" | string
@@ -84,19 +84,20 @@ const lang = {
 
 // const initialKeys: string[] = Object.keys(initialFormValues)
 const initialInputKeys = Object.entries(inputValues)
-console.log("🚀 ~ file: form.tsx:51 ~ inputValues:", inputValues)
-console.log("🚀 ~ file: form.tsx:51 ~ initialInputKeys:", initialInputKeys)
 
 
 const correctType = (arg: unknown, desiredType: unknown): boolean => {
   const isType = typeof(arg)
   if (isType === desiredType) {
+    // console.log("Type does match", isType, " is ", desiredType);
     return true
   } else {
     console.error("Type does not match", isType, " is not ", desiredType);
     return false
   }
 }
+
+
 
 export default function FormComponent() {
   
@@ -150,11 +151,7 @@ const validate = useCallback((sliderValue: number): number => {
     generate()
   }, [generate, sliderValue, validate])
   
-  const valuesToForm = (option: string, event: any, value: string) => {
-    console.log("🚀 ~ file: form.tsx:117 ~ valuesToForm ~ event:", event)
-    console.log("🚀 ~ file: form.tsx:117 ~ valuesToForm ~ option:", option)
-    
-    console.log("🚀 ~ file: form.tsx:124 ~ valuesToForm ~ formValues:", formValues)
+  const valuesToForm = (option: string, event: any, value: string) => {    
     return setFormValues((formValues) => { 
       const updatedFormValues = {...formValues};
       if (value === "selected") {
@@ -207,54 +204,56 @@ const validate = useCallback((sliderValue: number): number => {
         </Suspense>
       </div>
     </div>
-  <div className="inputGrid">
 
+  <div className="inputGrid">
     {initialInputKeys.map((item) => {
       const option = item[0]
       const values = item[1]
-      
-      return (
-        <div className="inputWrapper" key={option}>
-        {values.inputType === "checkbox" || values.inputType === "radio"
-        ? <>
-          <Checkbox.Root
-              aria-label={labelForCheckbox(option)}
-              className="checkboxRoot"
-              checked={formValues[option].selected}
-              onCheckedChange={(event) => {
-                values.selected = !values.selected
-                valuesToForm(option, event, "selected");
-              } }
-              id={option}
-              value={values.selected.toString()}
-              >
-              <Checkbox.Indicator>
-                <Check />
-              </Checkbox.Indicator>
-            </Checkbox.Root><Label.Root
-              className="LabelRoot"
-              htmlFor={option}>
+        // formValues[option].selected
+        return (
+          <div className="inputWrapper" key={option}>
+          {values.inputType === "checkbox" || values.inputType === "radio"
+          ? <>
+            <Checkbox.Root
+                aria-label={labelForCheckbox(option)}
+                className="checkboxRoot"
+                checked={formValues[option].selected === true}
+                onCheckedChange={(event) => {
+                  values.selected = !values.selected
+                  valuesToForm(option, event, "selected");
+                } }
+                id={option}
+                value={values.selected.toString()}
+                >
+                <Checkbox.Indicator>
+                  <Check />
+                </Checkbox.Indicator>
+              </Checkbox.Root><Label.Root
+                className="LabelRoot"
+                htmlFor={option}>
+                  {labelForCheckbox(option)}
+                </Label.Root>
+              </>  
+          : 
+          <div>
+            <Label.Root
+                htmlFor={option}
+                className="LabelRoot">
                 {labelForCheckbox(option)}
               </Label.Root>
-            </>  
-        : 
-        <div>
-          <Label.Root
-              htmlFor={option}
-              className="LabelRoot">
-              {labelForCheckbox(option)}
-            </Label.Root>
-          <InputComponent
-                defaultValue={formValues[option].value}
-                placeholder={inputPlaceholder}
-                onChange={(event) => {
-                  valuesToForm(option, event.target.value, "value");
-                } } />
-          </div> 
-        }
-        </div>
-      )
-    })}
+            <InputComponent
+              maxLength={maxLengthForChars}
+              defaultValue={formValues[option].value}
+              placeholder={inputPlaceholder}
+              onChange={(event) => {
+                valuesToForm(option, event.target.value, "value");
+              }}/>
+            </div> 
+          }
+          </div>
+        )
+      }
+    )}
     <div className="sliderWrapper">
       <Label.Root className="LabelRoot" htmlFor="slider">
         {formValues.words.selected

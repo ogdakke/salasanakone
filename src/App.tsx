@@ -10,6 +10,8 @@ import { Feedback } from "./Components/feedback"
 import { Credits } from "./Components/ui/credits"
 import { DataFunc } from './Api/data'
 import { LogoIcon } from './assets/icons/logoIcon'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorComponent } from './Components/errorComponent'
 
 const FormComponent = React.lazy(() => import("./Components/form"))
 
@@ -22,12 +24,22 @@ function App() {
           <h1>Luo Salasana</h1>
         </div>
         <Suspense fallback={<Loading />}>
+          <ErrorBoundary fallbackRender={({error, resetErrorBoundary}) => {
+            return (
+              <>
+                <ErrorComponent error={error} resetErrorBoundary={resetErrorBoundary}/>
+                <button type='button' className="inputButton" onClick={resetErrorBoundary}>Yritä uudelleen</button>
+              </>
+            )
+          }}>
           <FormComponent/>
+          </ErrorBoundary>
+
         </Suspense>
-          <Description />
-          <Feedback />
-          <Credits />
-          <ReloadPrompt />
+        <Description />
+        <Feedback />
+        <Credits />
+        <ReloadPrompt />
       </div>
     </main>
   )

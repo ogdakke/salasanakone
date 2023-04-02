@@ -1,6 +1,7 @@
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip";
 import { Suspense, useCallback, useEffect, useState } from "react";
 // import { FormType } from "./form";
+import { useEffectOnce } from "../hooks/useEffectOnce"
 import "../styles/Indicator.css"
 import {
   Popover,
@@ -94,22 +95,21 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
 
 
   // runs excactly once when mounting/initializing. -- so runs on page load.
-  useEffect(() => {
+  useEffectOnce(() => {
     if (!didInit) {      
-        didInit = true
-        checker(password).then(r => {
-          console.log("Mounted and checking...");
-          setScore(r.score)
-          setOutput(numberToString(r.score))
-        })
-        .catch((err) => console.error("Error in checking", ...err)
-        )
-        .finally(
-          () => console.log("Mounted and checked successfully.")
-        )
-      }
-      
-  }, [password])
+      didInit = true
+      checker(password).then(r => {
+        console.log("Mounted and checking...");
+        setScore(r.score)
+        setOutput(numberToString(r.score))
+      })
+      .catch((err) => console.error("Error in checking", ...err)
+      )
+      .finally(
+        () => console.log("Mounted and checked successfully.")
+      )
+    }
+  })
 
 
   useEffect(() => {

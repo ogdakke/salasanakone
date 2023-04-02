@@ -13,14 +13,25 @@ function ReloadPrompt() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegistered(r) {
+      needRefresh ? () => {
+        console.log(`${needRefresh} Needs refresh, clearing localstorage...`);
+        window.localStorage.clear()
+        console.log(`localStorage cleared successfully.`);
+        return r
+       } : () => {
+        console.log(`No refresh needed.`);
+        return r      
+       }
       console.log("Registered worker successfully.");
-      return r      
     },
     onRegisterError(error) {
       console.error(error, "Failed to register worker.");
       throw error
     },
   })
+
+  
+  
 
   const close = () => {
     setOfflineReady(false)

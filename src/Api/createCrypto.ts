@@ -1,4 +1,4 @@
-import { InputValue, InputValues } from "../Components/form";
+import { InputValues } from "../Components/form";
 import { sanat } from "../sanat"
 
 export interface checkboxes {
@@ -10,7 +10,6 @@ export interface checkboxes {
 }
 
 export default async function createCryptoKey(sliderValue: string, data: InputValues): Promise<string> {
-  console.log("🚀 ~ file: createCrypto.ts:12 ~ createCryptoKey ~ data:", data)
   const arrayOfWords = sanat as string[]
   
   const USER_SPECIALS = data.randomChars.value
@@ -61,7 +60,9 @@ export default async function createCryptoKey(sliderValue: string, data: InputVa
       }
       return r.toString()
     })
-    if (values.uppercase.selected) {
+    if (values.uppercase.selected && data.passphrase.selected) {
+      return capitalizeFirstLetter(finalString).toString()
+    } else if (values.uppercase.selected) {
       return toUppercase(finalString).toString()
     }
     return finalString
