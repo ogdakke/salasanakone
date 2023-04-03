@@ -27,3 +27,34 @@
     padding-right: 0rem;
   }
 }
+
+/* || global reusable styles */
+.flex-center {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.flex-bottom {
+  display: flex;
+  gap: 0.25rem;
+  align-items: baseline;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.interact {
+  cursor: pointer;
+}
+
+.fadeIn {
+  animation: fadeIn 200ms ease-out;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hover:hover {
+    opacity: 1;
+  }
+}

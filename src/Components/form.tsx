@@ -1,35 +1,27 @@
 // modules
 import React, { Suspense, useCallback, useEffect, useState } from "react"
-import * as Label from '@radix-ui/react-label';
-import * as Checkbox from '@radix-ui/react-checkbox';
 // hooks
 import { usePersistedState } from "../hooks/usePersistedState"
 // styles
-import "../styles/Home.css"
-// components 
+import "../styles/Form.css"
+import "../styles/ui/Checkbox.css"
+// ui
+import { Label } from "./ui/label";
+import { Checkbox } from './ui/checkbox';
 import { Slider } from "./ui/slider"
+import  {InputComponent } from "./ui/input"
+import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
+// components 
 import { createCrypto } from "../main";
 import { StrengthIndicator } from "./indicator";
-import  {InputComponent } from "./ui/input"
 const Result = React.lazy(() => import("./result"))
 // Icons
-import { Check, Refresh } from 'iconoir-react';
-
-
-// export type FormType = {
-//   [option: string]: boolean
-// }
+import { Refresh } from 'iconoir-react';
+// passgen module
 const createCryptoKey = await createCrypto
 
-const initialFormValues = {
-  uppercase: false,
-  randomChars: true,
-  numbers: true,
-  words: true
-}
 
 type InputType = "checkbox" | "input" | "radio";
-// type optionType = "passphrase" | "uppercase" | "numbers" | "words" | "randomChars" | string
 
 export interface InputValue {
   [key: string]: unknown; // index signature
@@ -44,36 +36,30 @@ export interface InputValues {
 }
 
 const inputValues: InputValues = {
-  passphrase: {
-    inputType: "checkbox",
+  words: {
+    inputType: "radio",
     value: "",
     selected: true,
-    info: "Salalause on välimerkillä erotettu sanajono."
+    info: "Luodaanko salasana sanoista?"
   },
   uppercase: {
     inputType: "checkbox",
     value: "",
-    selected:false,
+    selected: true,
     info: `Sisältääkö Salasana isoja kirjaimia.` 
   },
   numbers:{
     inputType: "checkbox",
     value: "",
-    selected: true,
-    info: "Sisältääkö Salasana numeroita"
-  },
-  words: {
-    inputType: "checkbox",
-    value: "",
-    selected: true,
-    info: "Luodaanko salasana sanoista?"
+    selected: false,
+    info: "Sisältääkö Salasana numeroita satunnaisissa paikoissa."
   },
   randomChars:{
     inputType: "input",
-    value: "",
-    selected: true,
+    value: "-1-",
+    selected: false,
     info: "Välimerkki, joka yhdistää sanat."
-  },
+  }
 } 
 
 const lang = {
@@ -108,6 +94,7 @@ export default function FormComponent() {
   // as FormType // explicitly type formValues as FormType
   const setFormValues = setFormValuesTyped
   // as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
+  const [isDisabled, setDisabled] = useState(false)
   
   const minLengthForChars = 4
   const minLengthForWords = 1
@@ -132,6 +119,7 @@ const validate = useCallback((sliderValue: number): number => {
 }, [formValues, setSliderValue])
 
   const generate = useCallback(() => {
+    formValues.words.selected && sliderValue < 2 ? setDisabled(true) : setDisabled(false)
     try {
       createCryptoKey(sliderValue.toString(), formValues).then((res) => {
         if (res === undefined) {
@@ -147,11 +135,18 @@ const validate = useCallback((sliderValue: number): number => {
   }, [formValues, sliderValue])
 
   useEffect(() => {
-    validate(sliderValue)
-    generate()
+    let didCheck = false
+    if (!didCheck) {
+      didCheck = true
+      validate(sliderValue)
+      generate()
+    }
+    return () => {
+      didCheck = false
+    }
   }, [generate, sliderValue, validate])
   
-  const valuesToForm = (option: string, event: any, value: string) => {    
+  const valuesToForm = (option: string, event: any, value: string) => {  
     return setFormValues((formValues) => { 
       const updatedFormValues = {...formValues};
       if (value === "selected") {
@@ -195,7 +190,6 @@ const validate = useCallback((sliderValue: number): number => {
       <div className="resultCard">
         <Suspense fallback={
           <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div>}>
-        {/* <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div> */}
           <Result     
             aria-busy="false"
             aria-label="Salasana, jonka voi kopioida napauttamalla"
@@ -210,56 +204,107 @@ const validate = useCallback((sliderValue: number): number => {
       const option = item[0]
       const values = item[1]
         // formValues[option].selected
-        return (
-          <div className="inputWrapper" key={option}>
-          {values.inputType === "checkbox" || values.inputType === "radio"
-          ? <>
-            <Checkbox.Root
-                aria-label={labelForCheckbox(option)}
-                className="checkboxRoot"
-                checked={formValues[option].selected === true}
-                onCheckedChange={(event) => {
-                  values.selected = !values.selected
-                  valuesToForm(option, event, "selected");
-                } }
-                id={option}
-                value={values.selected.toString()}
-                >
-                <Checkbox.Indicator>
-                  <Check />
-                </Checkbox.Indicator>
-              </Checkbox.Root><Label.Root
-                className="LabelRoot"
-                htmlFor={option}>
-                  {labelForCheckbox(option)}
-                </Label.Root>
-              </>  
-          : 
-          <div>
-            <Label.Root
-                htmlFor={option}
-                className="LabelRoot">
+        if (values.inputType === "checkbox") {
+          return (
+          <div style={{gridArea: `${option}`}} key={option} className="flex-center">
+            <Checkbox
+              aria-label={labelForCheckbox(option)}
+              className="checkboxRoot"
+              checked={formValues[option].selected === true}
+              onCheckedChange={(event) => {
+                values.selected = !values.selected
+                valuesToForm(option, event, "selected");
+              } }
+              id={option}
+              value={values.selected.toString()}
+              >
+            </Checkbox>
+            <Label
+              title={values.info}
+              htmlFor={option}>
                 {labelForCheckbox(option)}
-              </Label.Root>
-            <InputComponent
-              maxLength={maxLengthForChars}
-              defaultValue={formValues[option].value}
-              placeholder={inputPlaceholder}
-              onChange={(event) => {
-                valuesToForm(option, event.target.value, "value");
-              }}/>
-            </div> 
-          }
-          </div>
-        )
+              </Label>
+            </div>
+          )
+        } else if (values.inputType === "radio") {
+          return (
+          <div key={option} className="flex-center radio">
+            <RadioGroup 
+            defaultValue={formValues[option].selected.toString()} 
+            onValueChange={(event) => {
+              const asBool = JSON.parse(event.toLowerCase()) //JSON.parse is a handy way to get boolean value, since we know it is either given "true" of "false"
+
+              values.selected = !values.selected
+              valuesToForm(option, asBool, "selected")              
+            }}>
+              <div key="r1" className="flex-center">
+                <RadioGroupItem value="true" id="r1" key="r1"/>
+                <Label htmlFor="r1" >Käytä sanoja</Label>
+              </div>
+              <div key="r2" className="flex-center">
+              <RadioGroupItem value="false" id="r2" key="r2"/>
+                <Label htmlFor="r2" >Käytä merkkejä</Label>
+              </div>
+            </RadioGroup>
+            </div>
+          )
+        } else { //if values.inputType === "input"
+          return (
+            <div className="textInputBox">
+              {formValues.words.selected
+              ? <div className="fadeIn labelOnTop">
+                  <Label 
+                  className="flex-bottom"
+                  title={values.info}
+                  htmlFor={option}>
+                  {labelForCheckbox(option)}
+                  {isDisabled
+                    ? <span className="resultHelperText">Lisää sanoja</span>
+                    : <span></span>}
+                  </Label>
+                  <InputComponent
+                    disabled={isDisabled}
+                    maxLength={32}
+                    defaultValue={formValues[option].value}
+                    placeholder={inputPlaceholder}
+                    onChange={(event) => {
+                      valuesToForm(option, event.target.value, "value");
+                    } } />
+                   
+                </div>
+              : <div className="flex-center fadeIn">
+                  <Checkbox
+                    aria-label={labelForCheckbox(option)}
+                    className="checkboxRoot"
+                    checked={formValues[option].selected === true}
+                    onCheckedChange={(event) => {
+                      values.selected = !values.selected
+                      valuesToForm(option, event, "selected");
+                    } }
+                    id={option}
+                    value={values.selected.toString()}
+                    >
+                  </Checkbox>
+                  <Label
+                    
+                    htmlFor={option}>
+                      Erikoismerkit
+                    </Label>
+                  </div>
+              
+              }
+            </div>
+          )
+        }   
       }
-    )}
+    )
+  }
     <div className="sliderWrapper">
-      <Label.Root className="LabelRoot" htmlFor="slider">
+      <Label  htmlFor="slider">
         {formValues.words.selected
         ? `Pituus: ${validate(sliderValue)} Sanaa`
         : `Pituus: ${validate(sliderValue)} Merkkiä`}
-      </Label.Root>
+      </Label>
       <Slider
         id="slider"
         name="slider"

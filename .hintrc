@@ -27,6 +27,9 @@
       {
         "link-name": "off"
       }
-    ]
+    ],
+    "detect-css-reflows/paint": "off",
+    "detect-css-reflows/composite": "off",
+    "no-inline-styles": "off"
   }
 }

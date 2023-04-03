@@ -27,33 +27,28 @@
   box-shadow: 0px 2px 8px -1px #0000001a;
 }
 
+/* || Grid ---------------------------------------------- */
 .inputGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto;
-  gap: 1.25rem;
+  /* grid-template-columns: 1fr 1fr 1fr; */
+  /* grid-template-rows: 1fr slider slider; */
+
+  grid-template-areas: 
+  "radio uppercase"
+  "radio numbers"
+  "slider input"
+  "slider input"
+  ;
+  gap: 1rem;
+}
+.textInputBox {
+  grid-area: input;
+}
+.radio {
+  grid-area: radio
 }
 
-
-/* || global reusable styles */
-.flex-center {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.space-between {
-  justify-content: space-between;
-}
-
-.interact {
-  cursor: pointer;
-}
-@media (hover: hover) and (pointer: fine) {
-  .hover:hover {
-    opacity: 1;
-  }
-}
+/* ----------------------------------Grid */
 
 
 
@@ -65,9 +60,6 @@
 }
 
 .inputButton {
-  /* font: var(--font-mono); */
-
-
   font-family: inherit;
   font-size: 1rem;
   font-weight: 600;
@@ -85,7 +77,7 @@
   transition: all 200ms ease-out;
 }
 
-.inputButton:focus{
+.inputButton:focus-visible{
   outline: 2px solid rgb(var(--background-rgb));
   filter: invert(1);
 }
@@ -99,16 +91,8 @@
 }
 
 
-/* 
-.buttonWrapper button[type=button] {
-  background-color: rgba(180, 0,10, 1);
-} */
-
-
-
-
-
 .LabelRoot {
+  cursor: pointer;
   padding-left: 0.3rem;
 }
 
@@ -137,7 +121,7 @@
   scroll-margin-right: 1rem;
 }
 
-.card:focus {
+.card:focus-visible {
   background: rgba(var(--card-rgb), 0.1);
   border: 1px solid rgba(var(--card-border-rgb), 0.15);
 }
@@ -186,34 +170,6 @@
   align-items: center;
 }
 
-.checkboxRoot span {
-  fill: rgba(var(--foreground-rgb), 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.checkboxRoot {
-  all: unset;
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-
-  background-color: rgb(var(--callout-rgb));
-  width: 25px;
-  height: 25px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* box-shadow: 0 2px 10px rgba(var(--card-rgb), 0.3); */
-}
-
-.checkboxRoot:focus {
-  box-shadow: 0px 0px 0px 2px rgba(var(--foreground-rgb), 0.8);
-}
-
-.checkboxIndicator {
-  fill: rgb(var(--foreground-rgb));
-  /* color: rgb(var(--foreground-rgb)); */
-}
 
 
 @keyframes fadeIn {
@@ -237,7 +193,7 @@
   animation: spinAnimation 700ms ease-out;
 }
 
-/* Enable hover only on non-touch devices */
+/* || Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .resultCard:hover .card {
     background: rgba(var(--card-rgb), 0.1);
@@ -270,10 +226,7 @@
     background-color: rgba(205, 0,1, 0.8);
   } */
 
-  .checkboxRoot:hover {
-    background-color: rgbA(var(--callout-border-rgb), 0.3);
-  }
-  
+
   /* scrollbar  on firefox*/
   html,
   .card {
@@ -327,13 +280,19 @@
   }
 }
 
-/* Mobile */
+
+
+/* || Mobile */
 @media (max-width: 700px) {
-  .resultWrapper {
-    padding-top: 2rem;
-    gap: 0.75rem;
+  .inputGrid {
+    grid-template-areas: 
+    "radio  uppercase uppercase"
+    "radio numbers numbers"
+    "input input input"
+    "slider slider slider";
   }
 
+  
   .header {
     flex-direction: column;
     gap: 3rem;
@@ -341,6 +300,6 @@
   }
 
   .inputWrapper input {
-    font-size: 1.15rem;
+    font-size: 1rem;
   }
 }

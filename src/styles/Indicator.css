@@ -15,7 +15,7 @@
 .strengthIndicator {
   animation: fadeIn 0.2s ease-in;
   position: relative;
-  padding: 0.5rem 0.75rem;
+  padding: 1rem 1rem;
   /* margin: 1rem 0.75rem 1rem 0rem; */
   border-radius: calc(var(--border-radius) - 2px);
   color: rgba(var(--black-text-rgb), .95);
@@ -30,13 +30,13 @@
   /* box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4); */
   border: 1px solid rgba(var(--background-rgb), 0);
 
-  box-shadow: 1px 1px 15px rgba(var(--card-rgb), .4);
+  box-shadow: 1px 1px 8px rgba(var(--card-rgb), .2);
   -webkit-user-select: none;
   user-select: none;
   --delay: 200ms;
 }
 
-.strengthIndicator:focus {
+.strengthIndicator:focus-visible {
   border: 2px solid rgba(var(--foreground-rgb), 1);
 
 }

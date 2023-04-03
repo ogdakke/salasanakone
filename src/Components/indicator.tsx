@@ -1,7 +1,6 @@
 import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip";
 import { Suspense, useCallback, useEffect, useState } from "react";
 // import { FormType } from "./form";
-import { useEffectOnce } from "../hooks/useEffectOnce"
 import "../styles/Indicator.css"
 import {
   Popover,
@@ -10,15 +9,16 @@ import {
 } from "./ui/popover"
 import { InfoEmpty, OpenSelectHandGesture } from "iconoir-react";
 import { Divider } from "./ui/divider";
-
+import {useTimeout} from "../hooks/useTimeout"
+// console.time("checkingTime")
 const checker = async (password: string) => {
-  // const then = performance.now()
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
   // const now = performance.now()
   // console.log("🚀 ~ file: indicator.tsx:8 ~ checker ~ now:", now-then, "ms")
   
   return (await check(password.toString()))
 }
+// console.timeEnd("checkingTime")
 
 /**
  * returns a substring of desired length {length} if str is longer than {length}
@@ -49,7 +49,7 @@ const parseValue = (value: number) => {
   return mutatedValue + " vuotta"
 }
 
-let didInit = false
+let didInit = true
 let didCheckTime = false
 
 export function StrengthIndicator(props: { formValues: any; password: string; sliderValue: number; }): JSX.Element {  
@@ -57,10 +57,10 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
   
   
   const validateString = useCallback(() => {
-    if (!formValues.words && sliderValue > 15) {
+    if (!formValues.words.selected && sliderValue > 15) {
       // a rndm string needs not be checked if its longer than 15
       return false
-    } else if (formValues.words && sliderValue > 3) {
+    } else if (formValues.words.selected && sliderValue > 3) {
       return false
     }
     return true
@@ -94,22 +94,28 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
   }
 
 
+    // useTimeout(
+    // () => {
+    //   didInit = false
+    //   console.log("🚀 ~ file: indicator.tsx:101 ~ StrengthIndicator ~ didInit:", didInit)
+    // }, 1000)
+    
   // runs excactly once when mounting/initializing. -- so runs on page load.
-  useEffectOnce(() => {
+  useEffect(() => {
     if (!didInit) {      
       didInit = true
       checker(password).then(r => {
+        console.log("🚀 ~ file: indicator.tsx:106 ~ checker ~ password:", password)
         console.log("Mounted and checking...");
         setScore(r.score)
         setOutput(numberToString(r.score))
       })
-      .catch((err) => console.error("Error in checking", ...err)
-      )
+      .catch((err) => console.error("Error in checking", ...err))
       .finally(
-        () => console.log("Mounted and checked successfully.")
-      )
-    }
-  })
+        () => console.log("Mounted and checked successfully."))
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
 
   useEffect(() => {
@@ -122,11 +128,18 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
     } else {
       checker(password).then(r => {
         setScore(r.score)
-        setOutput(numberToString(score))
+        setOutput(numberToString(r.score))
         console.log("Checked strength succesfully");
-      }) 
+      
+      })
+      .catch((err) => {
+        console.error(err);
+      })
     }
-  }, [score, password, validateString])
+    return () => {
+      didCheckTime = true
+    }
+  }, [password])
     
   // const [op, setOp] = useState(false)
 
@@ -134,7 +147,6 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
       <Suspense fallback={<div className="strengthIndicator case5"><span>Arvio</span></div>}>
         <Popover modal={true}>
           <PopoverTrigger onClick={async () => {
-              // didCheckTime = false
               await timeToCheck()
             }}>
             <div>
@@ -148,7 +160,7 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
                       </span>
                     </div>
                   </TooltipTrigger>
-                  <TooltipContent sideOffset={-5} className="TooltipContent">
+                  <TooltipContent sideOffset={4} className="TooltipContent">
                     <div className="flex-center">
                       <OpenSelectHandGesture width={20} height={20} />
                       Lisätietoja
@@ -209,22 +221,4 @@ function numberToString(value: number) {
     default:
       return "Arvio";
   }
-}
-
-const changeToFi = (value: string) => {
-  if (value === "1 second") return "1 sekunti";
-  else if (value.includes("under a second")) return value.replace("under a second", "Alle sekunti") 
-  else if (value.includes("seconds")) return value.replace("seconds", "sekuntia") 
-  else if (value.includes("minutes")) return value.replace("minutes", "minuuttia")
-  else if (value.includes("hours")) return value.replace("hours", "tuntia")
-  else if (value.includes("days")) return value.replace("days", "päivää")
-  else if (value.includes("months")) return value.replace("months", "kuukautta")
-  else if (value.includes("years")) return value.replace("years", "vuotta")
-  
-  // Singural values: "päivä", "vuosi" etc.
-  else if (value.includes("day")) return value.replace("day", "päivä")
-  else if (value.includes("year")) return value.replace("year", "vuosi")
-  else if (value.includes("centuries")) return value.replace("centuries", "Vuosisatoja")
-  
-  else return value
 }

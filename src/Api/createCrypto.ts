@@ -2,7 +2,6 @@ import { InputValues } from "../Components/form";
 import { sanat } from "../sanat"
 
 export interface checkboxes {
-  passphrase?: boolean;
   uppercase?: boolean;
   randomChars?: boolean;
   numbers?: boolean;
@@ -10,6 +9,7 @@ export interface checkboxes {
 }
 
 export default async function createCryptoKey(sliderValue: string, data: InputValues): Promise<string> {
+  // console.log("🚀 ~ file: createCrypto.ts:13 ~ createCryptoKey ~ data:", data)
   const arrayOfWords = sanat as string[]
   
   const USER_SPECIALS = data.randomChars.value
@@ -26,7 +26,15 @@ export default async function createCryptoKey(sliderValue: string, data: InputVa
 
         if (data.randomChars.value) {
           if (data.numbers.selected) {
+            if (data.uppercase.selected) {
+              return insertRandomNumber(
+                capitalizeFirstLetter(wordString), length
+              ).join(USER_SPECIALS)
+            }
             return insertRandomNumber(wordString, length).join(USER_SPECIALS)
+          }
+          if (data.uppercase.selected) {
+            return capitalizeFirstLetter(wordString).join(USER_SPECIALS)
           }
           return wordString.join(USER_SPECIALS)
         }
@@ -34,6 +42,9 @@ export default async function createCryptoKey(sliderValue: string, data: InputVa
           const numberedArr = insertRandomNumber(wordString, length)
           
           return numberedArr.join("").toString()
+        }
+        if (data.uppercase.selected) {
+          return capitalizeFirstLetter(wordString).join("")
         }
         return wordString.join("")
       } 
@@ -60,9 +71,7 @@ export default async function createCryptoKey(sliderValue: string, data: InputVa
       }
       return r.toString()
     })
-    if (values.uppercase.selected && data.passphrase.selected) {
-      return capitalizeFirstLetter(finalString).toString()
-    } else if (values.uppercase.selected) {
+    if (data.uppercase.selected && !data.words.selected) {
       return toUppercase(finalString).toString()
     }
     return finalString
@@ -173,14 +182,17 @@ function generateRandomArray(length: number, min: number, max: number): number[]
 
 /**
  * capitalize any strings first letter
- * @param stringToConvert string to capitalize
- * @returns capitalised string
+ * @param stringArrToConvert string[] to capitalize
+ * @returns capitalised strings
  */
-function capitalizeFirstLetter(stringToConvert: string): string {
-  if (stringToConvert === undefined) {
+function capitalizeFirstLetter(stringArrToConvert: string[]): string[] {
+  if (stringArrToConvert === undefined) {
     throw "Virhe"
   }
-  return stringToConvert.charAt(0).toUpperCase() + stringToConvert.slice(1);
+  const convertedArr = stringArrToConvert.map((sana) => {
+    return sana.charAt(0).toUpperCase() + sana.slice(1);
+  })
+  return convertedArr
 }
 
 

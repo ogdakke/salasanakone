@@ -18,7 +18,7 @@ const Description: React.FC = () => {
                     <div className="summaryDetails">
                         <p>
                             Suomen kieli on monimutkainen, ja sen vuoksi meille
-                            otollinen tapa luoda vahva ja muistettava salasana.{" "}
+                            otollinen tapa luoda vahva ja muistettava salasana.
                             <br />
                             Hyvä salasana on riittävän pitkä ja sisältää
                             numeroita, erikoismerkkejä sekä isoja ja pieniä kirjaimia. Tällä
@@ -39,8 +39,7 @@ const Description: React.FC = () => {
                     <div className="summaryDetails">
                         <p>
                             Salasanakone valitsee sanat lähes 100 000:sta suomen
-                            kielen sanan joukosta satunnaisesti. Lisäksi Kone
-                            arpoo satunnaiset erikoismerkit ja numerot sekaan.
+                            kielen sanan joukosta satunnaisesti. Lisäksi kone lisää haluamasi välimerkit sanojen väliin.
                         </p>
                     </div>
                 </details>
@@ -59,7 +58,7 @@ const Description: React.FC = () => {
                     </div>
                 </details>
                 <Divider margin={"0.5rem 0"} />
-
+                <h2>Turvallinen ja luotettava</h2>
                 <p>
                     Sivusto ei lähetä <u>mitään</u> tietoja selaimesi
                     ulkopuolelle, ja luo salasanat täysin paikallisesti - ei

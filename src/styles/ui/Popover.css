@@ -1,9 +1,5 @@
 
-/* reset */
-fieldset,
-input {
-  all: unset;
-}
+
 
 .PopoverContent {
   border-radius: 8px;
@@ -38,13 +34,7 @@ input {
   display: flex;
   flex-direction: column;
   gap: 0.15rem;
-  padding-right: 1rem;
 }
-
-.fadeIn {
-  animation: fadeIn 200ms ease-out;
-}
-
 
 
 
