@@ -32,13 +32,13 @@
   display: flex;
   gap: 0.275rem;
   align-items: center;
-  animation: move-reverse 300ms   900ms ease-out 1;
+  /* animation: move-reverse 300ms   900ms ease-out 1; */
 }
 
 .notCopiedSpan {
   word-break: keep-all;
   white-space: nowrap;
-  animation: move 650ms ease-out 1;
+  /* animation: move 650ms ease-out 1; */
 }
 .notCopied span {
   filter: blur(0px);
