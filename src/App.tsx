@@ -8,7 +8,6 @@ import { Loading } from './Components/ui/loading'
 import ReloadPrompt from "./Components/reloadPrompt"
 import { Feedback } from "./Components/feedback"
 import { Credits } from "./Components/ui/credits"
-import { DataFunc } from './Api/data'
 import { LogoIcon } from './assets/icons/logoIcon'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorComponent } from './Components/errorComponent'
@@ -17,7 +16,7 @@ const FormComponent = React.lazy(() => import("./Components/form"))
 
 function App() {
   return (
-    <main className="main" onLoad={e => DataFunc(e)}>
+    <main className="main">
       <div className="wrapper">
         <div className="flex-center" style={{"gap": "1rem"}}>
           <LogoIcon width={40} height={40} />

@@ -24,9 +24,3 @@ console.timeEnd("setOptions")
 export const checkStrength = async (password: string) => {
     return zxcvbn(password)
   }
-
-// const check = (await import("zxcvbn")).default
-
-// export const checkStrength = async (password: string) => {
-//   return check(password, sanat)
-// }

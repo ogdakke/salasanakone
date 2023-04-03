@@ -9,7 +9,6 @@ import {
 } from "./ui/popover"
 import { InfoEmpty, OpenSelectHandGesture } from "iconoir-react";
 import { Divider } from "./ui/divider";
-import {useTimeout} from "../hooks/useTimeout"
 // console.time("checkingTime")
 const checker = async (password: string) => {
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
