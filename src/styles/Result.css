@@ -16,6 +16,7 @@
 .copied span {
   word-break: keep-all;
   white-space: nowrap;
+  -webkit-filter: blur(2px);
   filter: blur(2px);
   transition: filter 2500ms ease-out;
   /* opacity: 0; */
@@ -37,6 +38,7 @@
   /* animation: move 650ms ease-out 1; */
 }
 .notCopied span {
+  -webkit-filter: blur(2px);
   filter: blur(0px);
   transition: filter 400ms ease-in;
   opacity: 100%;
