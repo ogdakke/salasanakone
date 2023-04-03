@@ -187,7 +187,6 @@ const validate = useCallback((sliderValue: number): number => {
       <p className="resultHelperText">
           Kopioi Salasana napauttamalla:         
       </p>
-      <div className="resultCard">
         <Suspense fallback={
           <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div>}>
           <Result     
@@ -196,7 +195,6 @@ const validate = useCallback((sliderValue: number): number => {
             finalPassword={finalPassword}
             copyText={copyText}/>          
         </Suspense>
-      </div>
     </div>
 
   <div className="inputGrid">

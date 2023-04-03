@@ -17,7 +17,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
     {finalPassword
         ? <div
             title={copyText}
-            className="card"
+            className="card interact resultCard"
             itemType="button"
             tabIndex={0}
             onClick={async () => { 
@@ -32,7 +32,6 @@ export default function Result(props: { finalPassword: string; copyText: string 
               } return;
             }}
             >
-              <div className="cardMask">
                 <span className={
                   isCopied 
                   ? "copied"
@@ -51,7 +50,6 @@ export default function Result(props: { finalPassword: string; copyText: string 
                   }
                 </span>
               </div>
-          </div> 
         : <div className="card">
           Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.
         </div> 

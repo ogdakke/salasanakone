@@ -1,8 +1,3 @@
-
-
-
-
-
 .copied {
   pointer-events: none;
   transition: filter 650ms;
@@ -12,7 +7,8 @@
 }
 
 .notCopied {
-  padding-right: 6rem;
+  padding-right: 1rem;
+
   transition: filter 400ms;
   /* transform: translateX(-100%); */
 }
@@ -26,7 +22,7 @@
 }
 
 .copiedSpanText {
-  padding-right: 3.25rem;
+  /* padding-right: 3.25rem; */
   transition: all 200ms, border 200ms;
   color: rgba(var(--foreground-rgb), .7);
   display: flex;
