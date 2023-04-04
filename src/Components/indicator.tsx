@@ -1,4 +1,4 @@
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip";
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip";
 import { Suspense, useCallback, useEffect, useState } from "react";
 // import { FormType } from "./form";
 import "../styles/Indicator.css"
@@ -9,6 +9,8 @@ import {
 } from "./ui/popover"
 import { InfoEmpty, OpenSelectHandGesture } from "iconoir-react";
 import { Divider } from "./ui/divider";
+import { ErrorBoundary} from "react-error-boundary";
+import { ErrorComponent } from "./errorComponent";
 // console.time("checkingTime")
 const checker = async (password: string) => {
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
@@ -48,9 +50,13 @@ const parseValue = (value: number) => {
   return mutatedValue + " vuotta"
 }
 
-let didInit = true
+let didInit = false
 let didCheckTime = false
-
+/**
+ * Calculates the strength of a given password and returns a element
+ * @param props {object} {formValues: object, password: string, sliderValue: number}
+ * @returns JSX element
+ */
 export function StrengthIndicator(props: { formValues: any; password: string; sliderValue: number; }): JSX.Element {  
   const {formValues, password, sliderValue} = props;
   
@@ -92,27 +98,26 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
     }
   }
 
-
-    // useTimeout(
-    // () => {
-    //   didInit = false
-    //   console.log("🚀 ~ file: indicator.tsx:101 ~ StrengthIndicator ~ didInit:", didInit)
-    // }, 1000)
-    
   // runs excactly once when mounting/initializing. -- so runs on page load.
+  /**
+   * 4.4.2023
+   * Not sure how this actually works, it does not seem to get used, since I've tried to make it wait for a non null password
+   */
   useEffect(() => {
     if (!didInit) {      
-      didInit = true
-      checker(password).then(r => {
-        console.log("🚀 ~ file: indicator.tsx:106 ~ checker ~ password:", password)
-        console.log("Mounted and checking...");
-        setScore(r.score)
-        setOutput(numberToString(r.score))
-      })
-      .catch((err) => console.error("Error in checking", ...err))
-      .finally(
-        () => console.log("Mounted and checked successfully."))
-      }
+        if (password.length > 0) {
+          didInit = true
+          checker(password).then(r => {
+            // console.log("🚀 ~ file: indicator.tsx:106 ~ checker ~ password:", password)
+            console.log("Mounted and checking...");
+            setScore(r.score)
+            setOutput(numberToString(r.score))
+        })
+        .catch((err) => console.error("Error in checking", ...err))
+        .finally(
+          () => console.log("Mounted and checked successfully."))
+        }
+      } 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -125,15 +130,16 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
       setScore(4)
       setOutput(numberToString(4))
     } else {
-      checker(password).then(r => {
-        setScore(r.score)
-        setOutput(numberToString(r.score))
-        console.log("Checked strength succesfully");
-      
-      })
-      .catch((err) => {
-        console.error(err);
-      })
+      if (password.length > 0) {
+        checker(password).then(r => {          
+          setScore(r.score)
+          setOutput(numberToString(r.score))
+          console.log("Checked strength succesfully");
+        })
+        .catch((err) => {
+          console.error(err);
+        })
+      }
     }
     return () => {
       didCheckTime = true
@@ -143,10 +149,13 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
   // const [op, setOp] = useState(false)
 
   return (
+    <ErrorBoundary fallbackRender={({error, resetErrorBoundary}) => {
+      return (<ErrorComponent error={error} resetErrorBoundary={resetErrorBoundary}/>)
+    }}>
       <Suspense fallback={<div className="strengthIndicator case5"><span>Arvio</span></div>}>
         <Popover modal={true}>
           <PopoverTrigger onClick={async () => {
-              await timeToCheck()
+              await timeToCheck()               
             }}>
             <div>
               <TooltipProvider delayDuration={600} >
@@ -202,6 +211,8 @@ export function StrengthIndicator(props: { formValues: any; password: string; sl
         </Popover>
 
       </Suspense>
+    </ErrorBoundary>
+
         )
 }
 

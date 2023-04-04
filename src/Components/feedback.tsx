@@ -2,7 +2,7 @@
 import "../styles/ui/Feedback.css"
 import { usePersistedState } from "../hooks/usePersistedState"
 import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "./ui/tooltip"
 
 interface clickValueType {
   id: string,

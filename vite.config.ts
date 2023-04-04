@@ -11,8 +11,8 @@ const pwaOptions: Partial<VitePWAOptions> = {
     start_url: "/",
     id: "/",
     lang: "fi",
-    name: "Luo Salasana",
-    short_name: "Luo Salasana",
+    name: "Salasanakone | Luo Salasana",
+    short_name: "Salasanakone",
     icons: [
     {
       "src": "/favicon.svg",
@@ -41,7 +41,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
   orientation: "portrait",
   background_color: "#ffffff",
   display: "standalone",
-  description: "Luo Suomalainen Salasana - Vahvat ja muistettavissa olevat salasanat helposti!"
+  description: "Salasanakone - Luo vahva, muistettava ja hyvä salasana tällä salasanageneraattorilla helposti, nopeasti ja automaattisesti käyttämällä Suomen kielen sanoja."
 
   },
   devOptions: {

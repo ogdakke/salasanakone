@@ -1,4 +1,4 @@
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@radix-ui/react-tooltip"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "../ui/tooltip"
 import { LogoIcon } from "../../assets/icons/logoIcon"
 import { ShareComponent } from "../share"
 import { ExternalLink } from "./externalLink"

@@ -14,7 +14,7 @@
 
 .form {
   opacity: 0;
-  animation: fadeIn 0.2s ease-in;
+  /* animation: fadeIn 0.2s ease-in; */
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -59,36 +59,6 @@
   justify-content: space-between;
 }
 
-.inputButton {
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 600;
-  max-width: -moz-fit-content;
-  max-width: fit-content;
-  padding: 1rem 1.5rem;
-  background-color: rgba(var(--foreground-rgb), 0.9);
-  color: rgba(var(--background-rgb));
-  cursor: pointer;
-  -webkit-user-select: none;
-  user-select: none;
-  border-radius: var(--border-radius);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-
-  transition: all 200ms ease-out;
-}
-
-.inputButton:focus-visible{
-  outline: 2px solid rgb(var(--background-rgb));
-  filter: invert(1);
-}
-
-/* button that has svg or .icon class */
-.inputButton:has(svg, .icon) {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  padding-right: 1.25rem;
-}
 
 
 .LabelRoot {
@@ -171,30 +141,18 @@
 }
 
 
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-
-.inputButton:hover {
-  transition: all 200ms ease-in;
-  /* background-color: rgba(var(--foreground-rgb), .7); */
-  filter: invert(1);
-}
-
-
-.inputButton:hover .spin {
-  animation: spinAnimation 700ms ease-out;
-}
-
 /* || Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
+  .inputButton:hover {
+    transition: all 200ms ease-in;
+    /* background-color: rgba(var(--foreground-rgb), .7); */
+    filter: invert(1);
+  }
+  
+  
+  .inputButton:hover .spin {
+    animation: spinAnimation 700ms ease-out;
+  }
   .resultCard:hover {
     background: rgba(var(--card-rgb), 0.1);
     border: 1px solid rgba(var(--card-border-rgb), 0.15);
@@ -286,7 +244,7 @@
 @media (max-width: 700px) {
   .inputGrid {
     grid-template-areas: 
-    "radio  uppercase uppercase"
+    "radio uppercase uppercase"
     "radio numbers numbers"
     "input input input"
     "slider slider slider";

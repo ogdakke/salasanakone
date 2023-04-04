@@ -13,7 +13,7 @@
   /* box-shadow: 0px 0px 8px 2px rgba(var(--card-border-rgb), 0.1); */
 }
 .RadioGroupItem:hover {
-  background-color: rgbA(var(--callout-border-rgb), 0.3);
+  background-color: rgba(var(--callout-border-rgb), 0.3);
 }
 .RadioGroupItem:focus-visible {
     box-shadow: 0px 0px 0px 2px rgba(var(--foreground-rgb), 0.8);

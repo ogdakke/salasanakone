@@ -28,9 +28,9 @@
   align-items: center;
   justify-content: center;
   /* box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4); */
-  border: 1px solid rgba(var(--background-rgb), 0);
+  border: 1px solid rgba(var(--card-rgb), 0.4);
 
-  box-shadow: 1px 1px 8px rgba(var(--card-rgb), .2);
+  box-shadow: -2px 1px 8px rgba(var(--gray-shadow), .3);
   -webkit-user-select: none;
   user-select: none;
   --delay: 200ms;
@@ -47,8 +47,8 @@
 
 @media (hover: hover) and (pointer: fine) {
   .strengthIndicator:hover {
-    border: 1px solid rgba(var(--foreground-rgb), 1);
-    box-shadow: 1px 1px 10px rgba(var(--card-rgb), 1);
+    border: 1px solid rgba(var(--foreground-rgb), 0.4);
+    box-shadow: 1px 1px 10px rgba(var(--gray-shadow), 0.5);
     transition: border, box-shadow, 200ms ease-out;
   }
 }

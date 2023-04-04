@@ -5,10 +5,8 @@
   justify-content: center;
 }
 .checkboxRoot {
-  grid-area: checkbox;
   all: unset;
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-
   background-color: rgb(var(--callout-rgb));
   width: 25px;
   height: 25px;
@@ -29,7 +27,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .checkboxRoot:hover {
-    background-color: rgbA(var(--callout-border-rgb), 0.3);
+  checkboxParent:hover .checkboxRoot {
+    background-color: rgba(var(--callout-border-rgb), 0.3);
   }
 }

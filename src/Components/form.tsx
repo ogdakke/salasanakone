@@ -87,7 +87,7 @@ const correctType = (arg: unknown, desiredType: unknown): boolean => {
 
 export default function FormComponent() {
   
-  const [finalPassword, setFinalPassword] = useState("") 
+  const [finalPassword, setFinalPassword] = useState<string>("") 
   const [formValuesTyped, setFormValuesTyped] = usePersistedState("formValues", inputValues)
   const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
   const formValues = formValuesTyped 
@@ -118,22 +118,25 @@ const validate = useCallback((sliderValue: number): number => {
   return sliderValue
 }, [formValues, setSliderValue])
 
-  const generate = useCallback(() => {
+  const generate = useCallback(async () => {
     formValues.words.selected && sliderValue < 2 ? setDisabled(true) : setDisabled(false)
     try {
-      createCryptoKey(sliderValue.toString(), formValues).then((res) => {
-        if (res === undefined) {
-          throw console.error("undefined");
-        }
-        setFinalPassword(res)
-      }).catch((error) => {
+      const pass = await createCryptoKey(sliderValue.toString(), formValues)
+      .catch((error) => {
         throw console.error(error);
       })
+      // .then((res) => {
+      //   if (res === undefined) {
+      //     throw console.error("undefined");
+      //   }
+      //   setFinalPassword(res)
+      // })
+      setFinalPassword(pass)
     } catch (err) {
       throw console.error(err);
     }
   }, [formValues, sliderValue])
-
+  
   useEffect(() => {
     let didCheck = false
     if (!didCheck) {
@@ -182,13 +185,15 @@ const validate = useCallback((sliderValue: number): number => {
 
   return (
     <>
-    <form className='form' action="submit" aria-busy="false" style={{"opacity": "1"}}>
+    <form className='form fadeIn' action="submit" aria-busy="false" 
+    onLoad={() => generate()}
+    style={{"opacity": "1"}}>
     <div className="resultWrapper">
       <p className="resultHelperText">
           Kopioi Salasana napauttamalla:         
       </p>
         <Suspense fallback={
-          <div aria-busy="true" className="card"><span className="notCopied">Loading...</span></div>}>
+          <div aria-busy="true" className="card"><span className="notCopied">Ladataan...</span></div>}>
           <Result     
             aria-busy="false"
             aria-label="Salasana, jonka voi kopioida napauttamalla"
@@ -204,20 +209,18 @@ const validate = useCallback((sliderValue: number): number => {
         // formValues[option].selected
         if (values.inputType === "checkbox") {
           return (
-          <div style={{gridArea: `${option}`}} key={option} className="flex-center">
+          <div className="checkboxParent flex-center" style={{gridArea: `${option}`}}>
             <Checkbox
               aria-label={labelForCheckbox(option)}
-              className="checkboxRoot"
               checked={formValues[option].selected === true}
               onCheckedChange={(event) => {
-                values.selected = !values.selected
+                values.selected = !values.selected;
                 valuesToForm(option, event, "selected");
               } }
               id={option}
               value={values.selected.toString()}
-              >
-            </Checkbox>
-            <Label
+            >
+            </Checkbox><Label
               title={values.info}
               htmlFor={option}>
                 {labelForCheckbox(option)}
@@ -235,11 +238,11 @@ const validate = useCallback((sliderValue: number): number => {
               values.selected = !values.selected
               valuesToForm(option, asBool, "selected")              
             }}>
-              <div key="r1" className="flex-center">
+              <div className="flex-center">
                 <RadioGroupItem value="true" id="r1" key="r1"/>
                 <Label htmlFor="r1" >Käytä sanoja</Label>
               </div>
-              <div key="r2" className="flex-center">
+              <div className="flex-center">
               <RadioGroupItem value="false" id="r2" key="r2"/>
                 <Label htmlFor="r2" >Käytä merkkejä</Label>
               </div>

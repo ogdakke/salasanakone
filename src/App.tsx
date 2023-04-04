@@ -20,7 +20,7 @@ function App() {
       <div className="wrapper">
         <div className="flex-center" style={{"gap": "1rem"}}>
           <LogoIcon width={40} height={40} />
-          <h1>Luo Salasana</h1>
+          <h1>Salasanakone</h1>
         </div>
         <Suspense fallback={<Loading />}>
           <ErrorBoundary fallbackRender={({error, resetErrorBoundary}) => {
