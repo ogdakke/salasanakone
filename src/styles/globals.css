@@ -45,7 +45,7 @@
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
       
-  --form-bg-rgb: 252, 252, 252;
+  --form-bg-rgb: 254, 254, 254;
     
   --gray-shadow: 100,100,100;
   --skeleton-glow: 240, 240, 240;
@@ -69,7 +69,7 @@
     --background-start-rgb: 0, 0, 0;
     --background-rgb: 10, 10, 10;
     
-    --form-bg-rgb: 12, 12, 12;
+    --form-bg-rgb: 15, 15, 15;
     --skeleton-glow: 22, 22, 22;
 
     --primary-glow: radial-gradient(rgba(50, 196, 86, 0.4), rgba(1, 65, 255, 0));
