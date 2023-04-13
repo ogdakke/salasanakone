@@ -1,4 +1,4 @@
-import { PasteClipboard } from "iconoir-react";
+import { Check, PasteClipboard } from "iconoir-react";
 import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 import "../styles/Result.css"
@@ -17,7 +17,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
     {finalPassword
         ? <div
             title={copyText}
-            className="card interact resultCard"
+            className="card interact resultCard relative"
             itemType="button"
             tabIndex={0}
             onClick={async () => { 
@@ -32,23 +32,20 @@ export default function Result(props: { finalPassword: string; copyText: string 
               } return;
             }}
             >
+              <span>
                 <span className={
-                  isCopied 
-                  ? "copied"
-                  : "notCopied"
+                  isCopied ? "copiedSpanText" : "notCopiedSpan"
                 }>
-                  {
-                    isCopied
-                    ? <span className="copiedSpanText">
-                      <PasteClipboard className="clipboard icon" width={20} height={20}/> 
-                      Kopioitu Leikepöydälle</span>
-                    :<span className="notCopiedSpan">
-                    {finalPassword.length
+                  {finalPassword.length
                   ? finalPassword
                   : "Jotain meni vikaan... Salasanaa ei luotu."}
                   </span>
-                  }
                 </span>
+                  <span className="absoluteCopiedIcon">
+                    {isCopied
+                    ? <PasteClipboard />
+                    : null}
+                  </span>
               </div>
         : <div className="card">
           Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.

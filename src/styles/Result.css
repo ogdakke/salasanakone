@@ -16,34 +16,47 @@
 .copied span {
   word-break: keep-all;
   white-space: nowrap;
-  -webkit-filter: blur(2px);
-  filter: blur(2px);
   transition: filter 2500ms ease-out;
   /* opacity: 0; */
 }
 
 .copiedSpanText {
+  -webkit-filter: blur(2px);
+  filter: blur(2px);
   /* padding-right: 3.25rem; */
   transition: all 200ms, border 200ms;
   color: rgba(var(--foreground-rgb), .7);
   display: flex;
   gap: 0.275rem;
   align-items: center;
+  word-break: keep-all;
+  white-space: nowrap;
+
   /* animation: move-reverse 300ms   900ms ease-out 1; */
 }
 
 .notCopiedSpan {
   word-break: keep-all;
   white-space: nowrap;
+  -webkit-filter: blur(0px);
+  filter: blur(0px);
+  transition: filter 200ms ease-in;
   /* animation: move 650ms ease-out 1; */
 }
 .notCopied span {
-  -webkit-filter: blur(2px);
-  filter: blur(0px);
-  transition: filter 400ms ease-in;
   opacity: 100%;
   word-break: keep-all;
   white-space: nowrap;
+}
+.relative {
+  position: relative;
+}
+.absoluteCopiedIcon {
+  position: absolute;
+  right: 0;
+  display: inline-block;
+  top: 1rem;
+  padding: 0.5rem;
 }
 
 
