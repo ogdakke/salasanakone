@@ -17,13 +17,15 @@ import { Loading } from "./Components/ui/loading";
 
 const FormComponent = React.lazy(async () => await import("./Components/form"));
 
+const isDev = import.meta.env.DEV;
+
 function App() {
     return (
         <main className="main">
             <div className="wrapper">
                 <div className="flex-center" style={{ gap: "1rem" }}>
                     <LogoIcon width={40} height={40} />
-                    <h1>Salasanakone</h1>
+                    <h1>Salasanakone{isDev ? " Dev Env" : null}</h1>
                 </div>
                 <Suspense fallback={<Loading />}>
                     <ErrorBoundary

@@ -19,6 +19,7 @@
         "@radix-ui/react-slider": "^1.1.0",
         "@radix-ui/react-tooltip": "^1.0.5",
         "@rollup/plugin-replace": "^5.0.2",
+        "@types/node": "^20.4.2",
         "@zxcvbn-ts/core": "^2.2.1",
         "@zxcvbn-ts/language-common": "^2.0.1",
         "@zxcvbn-ts/language-en": "^2.1.0",
