@@ -1,19 +1,16 @@
-import * as React from "react"
-import "../../styles/ui/Input.css"
+import * as React from "react";
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
+import "../../styles/ui/Input.css";
+
+export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className="", ...props }, ref) => {
-    return (
-      <input
-        className={`TextInput ${className}`}
-        ref={ref}
-        {...props}
-      />
-    )
-  }
-)
-InputComponent.displayName = "Input"
+    ({ className = "", ...props }, ref) => {
+        return (
+            <input className={`TextInput ${className}`} ref={ref} {...props} />
+        );
+    },
+);
+InputComponent.displayName = "Input";
 
-export { InputComponent }
+export { InputComponent };

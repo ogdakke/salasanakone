@@ -1,91 +1,87 @@
 .copied {
-  pointer-events: none;
-  transition: filter 650ms;
-  
-  -webkit-user-select: none;
-  user-select:none;
+    pointer-events: none;
+    transition: filter 650ms;
+
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .notCopied {
-  padding-right: 1rem;
+    padding-right: 1rem;
 
-  transition: filter 400ms;
-  /* transform: translateX(-100%); */
+    transition: filter 400ms;
+    /* transform: translateX(-100%); */
 }
 
 .copied span {
-  word-break: keep-all;
-  white-space: nowrap;
-  transition: filter 2500ms ease-out;
-  /* opacity: 0; */
+    word-break: keep-all;
+    white-space: nowrap;
+    transition: filter 2500ms ease-out;
+    /* opacity: 0; */
 }
 
 .copiedSpanText {
-  -webkit-filter: blur(2px);
-  filter: blur(2px);
-  /* padding-right: 3.25rem; */
-  transition: all 200ms, border 200ms;
-  color: rgba(var(--foreground-rgb), .7);
-  display: flex;
-  gap: 0.275rem;
-  align-items: center;
-  word-break: keep-all;
-  white-space: nowrap;
+    -webkit-filter: blur(2px);
+    filter: blur(2px);
+    /* padding-right: 3.25rem; */
+    transition: all 200ms, border 200ms;
+    color: rgba(var(--foreground-rgb), 0.7);
+    display: flex;
+    gap: 0.275rem;
+    align-items: center;
+    word-break: keep-all;
+    white-space: nowrap;
 
-  /* animation: move-reverse 300ms   900ms ease-out 1; */
+    /* animation: move-reverse 300ms   900ms ease-out 1; */
 }
 
 .notCopiedSpan {
-  word-break: keep-all;
-  white-space: nowrap;
-  -webkit-filter: blur(0px);
-  filter: blur(0px);
-  transition: filter 200ms ease-in;
-  /* animation: move 650ms ease-out 1; */
+    word-break: keep-all;
+    white-space: nowrap;
+    -webkit-filter: blur(0px);
+    filter: blur(0px);
+    transition: filter 200ms ease-in;
+    /* animation: move 650ms ease-out 1; */
 }
 .notCopied span {
-  opacity: 100%;
-  word-break: keep-all;
-  white-space: nowrap;
+    opacity: 100%;
+    word-break: keep-all;
+    white-space: nowrap;
 }
 .relative {
-  position: relative;
+    position: relative;
 }
 .absoluteCopiedIcon {
-  position: absolute;
-  right: 0;
-  display: inline-block;
-  top: 1rem;
-  padding: 0.5rem;
+    position: absolute;
+    right: 0;
+    display: inline-block;
+    top: 1rem;
+    padding: 0.5rem;
 }
 
-
 @keyframes move {
-  0% {
-    transform: translate(-100%);
-  }
-  100% {
-    transform: translateX(0%);
-  }
+    0% {
+        transform: translate(-100%);
+    }
+    100% {
+        transform: translateX(0%);
+    }
 }
 
 @keyframes move-reverse {
-  0% {
-    transform: translate(0);
-  }
-  100% {
-    transform: translateX(-80%);
-  }
+    0% {
+        transform: translate(0);
+    }
+    100% {
+        transform: translateX(-80%);
+    }
 }
-
 
 @media (prefers-reduced-motion) {
-  .copiedSpanText {
-    animation: none;
-  }
-  .notCopiedSpan {
-    animation: none;
-  }
+    .copiedSpanText {
+        animation: none;
+    }
+    .notCopiedSpan {
+        animation: none;
+    }
 }
-
-

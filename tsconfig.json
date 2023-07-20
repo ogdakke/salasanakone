@@ -12,13 +12,13 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "noEmit": true,
     "jsx": "react-jsx",
     "types": [
       "vite-plugin-pwa/client"
     ]
   },
-  "include": ["src/*"],
+  "include": ["src/**/*", "eslintrc.cjs"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
