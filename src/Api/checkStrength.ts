@@ -1,19 +1,13 @@
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core";
-
 const loadOptions = async () => {
     const sanat = (await import("../sanat")).sanat;
-    // const zxcvbnCommonPackage = await import('@zxcvbn-ts/language-common')
     const zxcvbnFiPackage = await import("@zxcvbn-ts/language-fi");
-    // const zxcvbnEnPackage = await import('@zxcvbn-ts/language-en')
-
     return {
         dictionary: {
-            // ...zxcvbnCommonPackage.default.dictionary,
-            ...zxcvbnFiPackage.default.dictionary,
+            ...zxcvbnFiPackage.dictionary,
             userInputs: sanat,
         },
-        // graphs: zxcvbnCommonPackage.default.adjacencyGraphs,
-        translations: zxcvbnFiPackage.default.translations,
+        translations: zxcvbnFiPackage.translations,
     };
 };
 console.time("setOptions");
