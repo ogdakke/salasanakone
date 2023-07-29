@@ -40,14 +40,20 @@
 }
 
 .strengthIndicator::before {
-    transition: border, box-shadow, 200ms ease-in;
+    transition:
+        border,
+        box-shadow,
+        200ms ease-in;
 }
 
 @media (hover: hover) and (pointer: fine) {
     .strengthIndicator:hover {
         border: 1px solid rgba(var(--foreground-rgb), 0.4);
         box-shadow: 1px 1px 10px rgba(var(--gray-shadow), 0.5);
-        transition: border, box-shadow, 200ms ease-out;
+        transition:
+            border,
+            box-shadow,
+            200ms ease-out;
     }
 }
 

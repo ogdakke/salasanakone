@@ -1,33 +1,33 @@
-import "../styles/ui/Feedback.css";
+import "../styles/ui/Feedback.css"
 
-import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react";
+import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
 
-import { usePersistedState } from "../hooks/usePersistedState";
+import { usePersistedState } from "../hooks/usePersistedState"
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "./ui/tooltip";
+} from "./ui/tooltip"
 
 interface clickValueType {
-    id: string;
-    value: boolean;
+    id: string
+    value: boolean
 }
 
 export const Feedback = () => {
-    const newId = new Date().getTime().toString();
+    const newId = new Date().getTime().toString()
 
     const initialClickValues: clickValueType = {
         id: newId,
         value: false,
-    };
+    }
     const [clicked, setClicked] = usePersistedState(
         "isClicked",
         initialClickValues,
-    );
+    )
 
-    const questionText = "Mitä mieltä olet sivusta?";
+    const questionText = "Mitä mieltä olet sivusta?"
 
     if (!clicked.value) {
         return (
@@ -44,7 +44,7 @@ export const Feedback = () => {
                                 setClicked({
                                     ...initialClickValues,
                                     value: true,
-                                });
+                                })
                             }}
                             className="submitButton inputButton flex-center"
                             href="https://palaute.simple.ink/"
@@ -55,7 +55,7 @@ export const Feedback = () => {
                     </div>
                 </form>
             </div>
-        );
+        )
     } else {
         return (
             <div className="flex-center">
@@ -82,6 +82,6 @@ export const Feedback = () => {
                     </Tooltip>
                 </TooltipProvider>
             </div>
-        );
+        )
     }
-};
+}

@@ -2,7 +2,7 @@ export const LogoIcon = (
     { ...props },
     size: { width: number; height: number },
 ) => {
-    const { width, height } = size;
+    const { width, height } = size
     return (
         <svg
             width={width}
@@ -42,5 +42,5 @@ export const LogoIcon = (
                 </linearGradient>
             </defs>
         </svg>
-    );
-};
+    )
+}

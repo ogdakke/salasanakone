@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { useRegisterSW } from "virtual:pwa-register/react";
+import { useState } from "react"
+import { useRegisterSW } from "virtual:pwa-register/react"
 
-import "../styles/ReloadPrompt.css";
+import "../styles/ReloadPrompt.css"
 
-import { Refresh } from "iconoir-react";
+import { Refresh } from "iconoir-react"
 
 function ReloadPrompt() {
-    const [isTrue, setIsTrue] = useState(false);
+    const [isTrue, setIsTrue] = useState(false)
     const {
         offlineReady: [offlineReady, setOfflineReady],
         needRefresh: [needRefresh, setNeedRefresh],
@@ -17,27 +17,27 @@ function ReloadPrompt() {
                 ? () => {
                       console.log(
                           `${needRefresh} Needs refresh, clearing localstorage...`,
-                      );
-                      window.localStorage.clear();
-                      console.log("localStorage cleared successfully.");
-                      return r;
+                      )
+                      window.localStorage.clear()
+                      console.log("localStorage cleared successfully.")
+                      return r
                   }
                 : () => {
-                      console.log("No refresh needed.");
-                      return r;
-                  };
-            console.log("Registered worker successfully.");
+                      console.log("No refresh needed.")
+                      return r
+                  }
+            console.log("Registered worker successfully.")
         },
         onRegisterError(error) {
-            console.error(error, "Failed to register worker.");
-            throw error;
+            console.error(error, "Failed to register worker.")
+            throw error
         },
-    });
+    })
 
     const close = () => {
-        setOfflineReady(false);
-        setNeedRefresh(false);
-    };
+        setOfflineReady(false)
+        setNeedRefresh(false)
+    }
     return (
         <div className="ReloadPrompt-container">
             {(offlineReady || needRefresh) && (
@@ -59,8 +59,8 @@ function ReloadPrompt() {
                             type="button"
                             className="ToastButton inputButton"
                             onClick={() => {
-                                console.log("Click: => updateServiceWorker()");
-                                updateServiceWorker(true);
+                                console.log("Click: => updateServiceWorker()")
+                                updateServiceWorker(true)
                             }}
                         >
                             <Refresh width={20} height={20} />
@@ -72,9 +72,9 @@ function ReloadPrompt() {
                             type="button"
                             className={"ToastButton inputButton"}
                             onClick={() => {
-                                console.log("Click: => close()");
-                                setIsTrue(true);
-                                close();
+                                console.log("Click: => close()")
+                                setIsTrue(true)
+                                close()
                             }}
                         >
                             Ok
@@ -83,7 +83,7 @@ function ReloadPrompt() {
                 </div>
             )}
         </div>
-    );
+    )
 }
 
-export default ReloadPrompt;
+export default ReloadPrompt

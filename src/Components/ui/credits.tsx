@@ -1,14 +1,14 @@
-import { LogoIcon } from "../../assets/icons/logoIcon";
-import { ShareComponent } from "../share";
+import { LogoIcon } from "../../assets/icons/logoIcon"
+import { ShareComponent } from "../share"
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "../ui/tooltip";
-import { ExternalLink } from "./externalLink";
+} from "../ui/tooltip"
+import { ExternalLink } from "./externalLink"
 
-import "../../styles/ui/Tooltip.css";
+import "../../styles/ui/Tooltip.css"
 
 export const Credits = () => {
     return (
@@ -45,5 +45,5 @@ export const Credits = () => {
                 </Tooltip>
             </TooltipProvider>
         </div>
-    );
-};
+    )
+}

@@ -1,7 +1,7 @@
-import * as SliderPrimitive from "@radix-ui/react-slider";
-import React from "react";
+import * as SliderPrimitive from "@radix-ui/react-slider"
+import React from "react"
 
-import "../../styles/ui/Slider.css";
+import "../../styles/ui/Slider.css"
 
 const Slider = React.forwardRef<
     React.ElementRef<typeof SliderPrimitive.Root>,
@@ -16,7 +16,7 @@ const Slider = React.forwardRef<
             aria-label="Slider Thumb"
         />
     </SliderPrimitive.Root>
-));
-Slider.displayName = SliderPrimitive.Root.displayName;
+))
+Slider.displayName = SliderPrimitive.Root.displayName
 
-export { Slider };
+export { Slider }

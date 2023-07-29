@@ -1,21 +1,21 @@
-import { OpenNewWindow } from "iconoir-react";
-import { type PropsWithChildren } from "react";
+import { OpenNewWindow } from "iconoir-react"
+import { type PropsWithChildren } from "react"
 
 interface Props {
-    link: string;
-    size?: number;
-    children?: JSX.Element | string;
-    className?: string;
+    link: string
+    size?: number
+    children?: JSX.Element | string
+    className?: string
 }
 
 export const ExternalLink = (
     { link, size = 20, children, className = "" }: PropsWithChildren<Props>,
     { ...props },
 ) => {
-    const key = new Date().getTime().toString();
+    const key = new Date().getTime().toString()
     const clicked = () => {
-        console.log(key, new Date().getTime());
-    };
+        console.log(key, new Date().getTime())
+    }
 
     return (
         <a
@@ -29,5 +29,5 @@ export const ExternalLink = (
             {children}
             <OpenNewWindow width={size} height={size} />
         </a>
-    );
-};
+    )
+}

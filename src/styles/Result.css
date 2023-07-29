@@ -24,7 +24,9 @@
     -webkit-filter: blur(2px);
     filter: blur(2px);
     /* padding-right: 3.25rem; */
-    transition: all 200ms, border 200ms;
+    transition:
+        all 200ms,
+        border 200ms;
     color: rgba(var(--foreground-rgb), 0.7);
     display: flex;
     gap: 0.275rem;

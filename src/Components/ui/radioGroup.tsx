@@ -1,9 +1,9 @@
-"use client";
+"use client"
 
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
-import * as React from "react";
+import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
+import * as React from "react"
 
-import "../../styles/ui/RadioGroup.css";
+import "../../styles/ui/RadioGroup.css"
 
 const RadioGroup = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Root>,
@@ -15,9 +15,9 @@ const RadioGroup = React.forwardRef<
             {...props}
             ref={ref}
         />
-    );
-});
-RadioGroup.displayName = RadioGroupPrimitive.Root.displayName;
+    )
+})
+RadioGroup.displayName = RadioGroupPrimitive.Root.displayName
 
 const RadioGroupItem = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Item>,
@@ -31,8 +31,8 @@ const RadioGroupItem = React.forwardRef<
         >
             <RadioGroupPrimitive.Indicator className="RadioGroupIndicator" />
         </RadioGroupPrimitive.Item>
-    );
-});
-RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName;
+    )
+})
+RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName
 
-export { RadioGroup, RadioGroupItem };
+export { RadioGroup, RadioGroupItem }

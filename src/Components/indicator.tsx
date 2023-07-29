@@ -1,33 +1,33 @@
-import { Suspense, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react"
 
 import {
     Tooltip,
     TooltipContent,
     TooltipProvider,
     TooltipTrigger,
-} from "./ui/tooltip";
+} from "./ui/tooltip"
 
 // import { FormType } from "./form";
-import "../styles/Indicator.css";
+import "../styles/Indicator.css"
 
-import { InfoEmpty, OpenSelectHandGesture } from "iconoir-react";
-import { ErrorBoundary } from "react-error-boundary";
+import { InfoEmpty, OpenSelectHandGesture } from "iconoir-react"
+import { ErrorBoundary } from "react-error-boundary"
 
-import { ErrorComponent } from "./errorComponent";
-import { type InputValueTypes } from "./form";
-import { Divider } from "./ui/divider";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { ErrorComponent } from "./errorComponent"
+import { type InputValueTypes } from "./form"
+import { Divider } from "./ui/divider"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 // console.time("checkingTime")
 const checker = async (password: string) => {
     const check = await import("../Api/checkStrength").then(
         (r) => r.checkStrength,
-    );
+    )
     // const now = performance.now()
     // console.log("🚀 ~ file: indicator.tsx:8 ~ checker ~ now:", now-then, "ms")
 
-    return await check(password.toString());
-};
+    return await check(password.toString())
+}
 // console.timeEnd("checkingTime")
 
 /**
@@ -37,80 +37,80 @@ const checker = async (password: string) => {
  * @returns string, mutated or not
  */
 const validateLength = (str: string, length: number) => {
-    let final = str;
-    console.log(`Checked string of length ${str.length}`);
+    let final = str
+    console.log(`Checked string of length ${str.length}`)
     if (str.length > length) {
-        final = str.substring(0, length);
+        final = str.substring(0, length)
     }
-    return final;
-};
+    return final
+}
 
 const parseValue = (value: number) => {
-    let mutatedValue = value;
+    let mutatedValue = value
     if (value.toString().length > 10) {
-        return "Miljardeja vuosia";
+        return "Miljardeja vuosia"
     }
     if (value.toString().length > 7) {
-        mutatedValue = Math.floor(value / 1000000);
-        return `${mutatedValue} milj. vuotta`;
+        mutatedValue = Math.floor(value / 1000000)
+        return `${mutatedValue} milj. vuotta`
     }
-    return mutatedValue + " vuotta";
-};
+    return mutatedValue + " vuotta"
+}
 
-let didInit = false;
-let didCheckTime = false;
+let didInit = false
+let didCheckTime = false
 /**
  * Calculates the strength of a given password and returns a element
  * @param props {object} {formValues: object, password: string, sliderValue: number}
  * @returns JSX element
  */
 export function StrengthIndicator(props: {
-    formValues: InputValueTypes;
-    password: string;
-    sliderValue: number;
+    formValues: InputValueTypes
+    password: string
+    sliderValue: number
 }): JSX.Element {
-    const { formValues, password, sliderValue } = props;
+    const { formValues, password, sliderValue } = props
 
     const validateString = useCallback(() => {
         if (!formValues.words.selected && sliderValue > 15) {
             // a rndm string needs not be checked if its longer than 15
-            return false;
+            return false
         } else if (formValues.words.selected && sliderValue > 3) {
-            return false;
+            return false
         }
-        return true;
-    }, [formValues, sliderValue]);
+        return true
+    }, [formValues, sliderValue])
 
-    const [output, setOutput] = useState("Loistava");
+    const [output, setOutput] = useState("Loistava")
 
-    const [score, setScore] = useState(4);
-    const [time, setTime] = useState<string[]>([""]);
+    const [score, setScore] = useState(4)
+    const [time, setTime] = useState<string[]>([""])
 
     const timeToCheck = async () => {
         // didCheckTime prevents unneccessary computation. eg. user clicks again, even if password has not changed
         if (!didCheckTime) {
-            console.time("timeToCheck");
-            didCheckTime = true;
+            console.time("timeToCheck")
+            didCheckTime = true
             await checker(validateLength(password, 70)).then((r) => {
                 let timeToDo =
-                    r.crackTimesDisplay.offlineSlowHashing1e4PerSecond.toString();
+                    r.crackTimesDisplay.offlineSlowHashing1e4PerSecond.toString()
 
                 const timeInSecs =
-                    r.crackTimesSeconds.offlineSlowHashing1e4PerSecond;
-                const years = Math.floor(timeInSecs / 31556952);
+                    r.crackTimesSeconds.offlineSlowHashing1e4PerSecond
+                const years = Math.floor(timeInSecs / 31556952)
 
                 if (
                     timeToDo.includes("vuotta") ||
                     timeToDo.includes("vuosikymmeniä")
                 ) {
-                    timeToDo = parseValue(years);
+                    timeToDo = parseValue(years)
                 }
 
-                setTime([timeToDo]);
-            });
-            console.timeEnd("timeToCheck");
+                setTime([timeToDo])
+            })
+            console.timeEnd("timeToCheck")
         }
-    };
+    }
 
     // runs excactly once when mounting/initializing. -- so runs on page load.
     /**
@@ -120,49 +120,49 @@ export function StrengthIndicator(props: {
     useEffect(() => {
         if (!didInit) {
             if (password.length > 0) {
-                didInit = true;
+                didInit = true
                 checker(password)
                     .then((r) => {
                         // console.log("🚀 ~ file: indicator.tsx:106 ~ checker ~ password:", password)
-                        console.log("Mounted and checking...");
-                        setScore(r.score);
-                        setOutput(numberToString(r.score));
+                        console.log("Mounted and checking...")
+                        setScore(r.score)
+                        setOutput(numberToString(r.score))
                     })
                     .catch((err) => {
-                        console.error("Error in checking", ...err);
+                        console.error("Error in checking", ...err)
                     })
                     .finally(() => {
-                        console.log("Mounted and checked successfully.");
-                    });
+                        console.log("Mounted and checked successfully.")
+                    })
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [])
 
     useEffect(() => {
         // THis is run each time the dep array gets a hit, so set time check to false.
-        didCheckTime = false;
+        didCheckTime = false
         // kikkailua, jotta ei tarvis laskea aina scorea, koska se on kallista.
         if (!validateString()) {
-            setScore(4);
-            setOutput(numberToString(4));
+            setScore(4)
+            setOutput(numberToString(4))
         } else {
             if (password.length > 0) {
                 checker(password)
                     .then((r) => {
-                        setScore(r.score);
-                        setOutput(numberToString(r.score));
-                        console.log("Checked strength succesfully");
+                        setScore(r.score)
+                        setOutput(numberToString(r.score))
+                        console.log("Checked strength succesfully")
                     })
                     .catch((err) => {
-                        console.error(err);
-                    });
+                        console.error(err)
+                    })
             }
         }
         return () => {
-            didCheckTime = true;
-        };
-    }, [password]);
+            didCheckTime = true
+        }
+    }, [password])
 
     // const [op, setOp] = useState(false)
 
@@ -174,7 +174,7 @@ export function StrengthIndicator(props: {
                         error={error}
                         resetErrorBoundary={resetErrorBoundary}
                     />
-                );
+                )
             }}
         >
             <Suspense
@@ -187,7 +187,7 @@ export function StrengthIndicator(props: {
                 <Popover modal={true}>
                     <PopoverTrigger
                         onClick={async () => {
-                            await timeToCheck();
+                            await timeToCheck()
                         }}
                     >
                         <div>
@@ -221,7 +221,7 @@ export function StrengthIndicator(props: {
                         side="top"
                         className="PopoverContent"
                         onOpenAutoFocus={(e) => {
-                            e.preventDefault();
+                            e.preventDefault()
                         }}
                     >
                         <div className="popCard">
@@ -270,22 +270,22 @@ export function StrengthIndicator(props: {
                 </Popover>
             </Suspense>
         </ErrorBoundary>
-    );
+    )
 }
 
 function numberToString(value: number) {
     switch (value) {
         case 0:
-            return "Surkea";
+            return "Surkea"
         case 1:
-            return "Huono";
+            return "Huono"
         case 2:
-            return "Ok";
+            return "Ok"
         case 3:
-            return "Hyvä";
+            return "Hyvä"
         case 4:
-            return "Loistava";
+            return "Loistava"
         default:
-            return "Arvio";
+            return "Arvio"
     }
 }

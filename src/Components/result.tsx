@@ -1,28 +1,28 @@
-import { PasteClipboard } from "iconoir-react";
-import React, { useState } from "react";
+import { PasteClipboard } from "iconoir-react"
+import React, { useState } from "react"
 
-import copyToClipboard from "../Api/copyToClipboard";
+import copyToClipboard from "../Api/copyToClipboard"
 
-import "../styles/Result.css";
+import "../styles/Result.css"
 
 export default function Result(props: {
-    finalPassword: string;
-    copyText: string;
+    finalPassword: string
+    copyText: string
 }) {
-    const { finalPassword, copyText } = props;
+    const { finalPassword, copyText } = props
     const copy = () => {
-        setCopied(true);
+        setCopied(true)
         setTimeout(() => {
-            setCopied(false);
-        }, 1100);
-    };
+            setCopied(false)
+        }, 1100)
+    }
 
-    const [isCopied, setCopied] = useState(false);
+    const [isCopied, setCopied] = useState(false)
 
     const handleClick = async (word: string) => {
-        await copyToClipboard(word);
-        copy();
-    };
+        await copyToClipboard(word)
+        copy()
+    }
 
     return (
         <>
@@ -35,7 +35,7 @@ export default function Result(props: {
                     onClick={() => handleClick(finalPassword)}
                     onKeyDown={async (e) => {
                         if (e.key === "Enter") {
-                            await handleClick(finalPassword);
+                            await handleClick(finalPassword)
                         }
                     }}
                 >
@@ -61,5 +61,5 @@ export default function Result(props: {
                 </div>
             )}
         </>
-    );
+    )
 }

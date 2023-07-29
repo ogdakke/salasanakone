@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
-import "../styles/Description.css";
+import "../styles/Description.css"
 
-import { Divider } from "./ui/divider";
-import { ExternalLink } from "./ui/externalLink";
+import { Divider } from "./ui/divider"
+import { ExternalLink } from "./ui/externalLink"
 
 const Description: React.FC = () => {
     return (
@@ -100,6 +100,6 @@ const Description: React.FC = () => {
                 </p>
             </div>
         </>
-    );
-};
-export default Description;
+    )
+}
+export default Description

@@ -1,21 +1,21 @@
-import React, { Suspense } from "react";
+import React, { Suspense } from "react"
 
 // styles
-import "./styles/globals.css";
-import "./styles/App.css";
+import "./styles/globals.css"
+import "./styles/App.css"
 
-import { ErrorBoundary } from "react-error-boundary";
+import { ErrorBoundary } from "react-error-boundary"
 
-import { LogoIcon } from "./assets/icons/logoIcon";
+import { LogoIcon } from "./assets/icons/logoIcon"
 // components
-import Description from "./Components/description";
-import { ErrorComponent } from "./Components/errorComponent";
-import { Feedback } from "./Components/feedback";
-import ReloadPrompt from "./Components/reloadPrompt";
-import { Credits } from "./Components/ui/credits";
-import { Loading } from "./Components/ui/loading";
+import Description from "./Components/description"
+import { ErrorComponent } from "./Components/errorComponent"
+import { Feedback } from "./Components/feedback"
+import ReloadPrompt from "./Components/reloadPrompt"
+import { Credits } from "./Components/ui/credits"
+import { Loading } from "./Components/ui/loading"
 
-const FormComponent = React.lazy(async () => await import("./Components/form"));
+const FormComponent = React.lazy(async () => await import("./Components/form"))
 
 function App() {
     return (
@@ -42,7 +42,7 @@ function App() {
                                         Yritä uudelleen
                                     </button>
                                 </>
-                            );
+                            )
                         }}
                     >
                         <FormComponent />
@@ -54,7 +54,7 @@ function App() {
                 <ReloadPrompt />
             </div>
         </main>
-    );
+    )
 }
 
-export default App;
+export default App

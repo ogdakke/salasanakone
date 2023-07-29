@@ -1,4 +1,4 @@
-import styles from "../../styles/modules/Divider.module.css";
+import styles from "../../styles/modules/Divider.module.css"
 
 export const Divider = (margin: { margin: string }, { ...props }) => {
     return (
@@ -7,5 +7,5 @@ export const Divider = (margin: { margin: string }, { ...props }) => {
             style={{ margin: margin.margin }}
             {...props}
         />
-    );
-};
+    )
+}

@@ -1,43 +1,43 @@
 // modules
-import React, { Suspense, useCallback, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react"
 
 // hooks
-import { usePersistedState } from "../hooks/usePersistedState";
+import { usePersistedState } from "../hooks/usePersistedState"
 
 // styles
-import "../styles/Form.css";
-import "../styles/ui/Checkbox.css";
+import "../styles/Form.css"
+import "../styles/ui/Checkbox.css"
 
 // Icons
-import { Refresh } from "iconoir-react";
+import { Refresh } from "iconoir-react"
 
 // components
-import { createCrypto } from "../main";
-import { StrengthIndicator } from "./indicator";
-import { Checkbox } from "./ui/checkbox";
-import { InputComponent } from "./ui/input";
+import { createCrypto } from "../main"
+import { StrengthIndicator } from "./indicator"
+import { Checkbox } from "./ui/checkbox"
+import { InputComponent } from "./ui/input"
 // ui
-import { Label } from "./ui/label";
-import { RadioGroup, RadioGroupItem } from "./ui/radioGroup";
-import { Slider } from "./ui/slider";
+import { Label } from "./ui/label"
+import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
+import { Slider } from "./ui/slider"
 
-const Result = React.lazy(async () => await import("./result"));
+const Result = React.lazy(async () => await import("./result"))
 // passgen module
-const createCryptoKey = await createCrypto;
+const createCryptoKey = await createCrypto
 
-type InputType = "checkbox" | "input" | "radio";
-type KeyType = "words" | "uppercase" | "numbers" | "randomChars";
+type InputType = "checkbox" | "input" | "radio"
+type KeyType = "words" | "uppercase" | "numbers" | "randomChars"
 
 interface InputValue {
-    inputType: InputType;
-    value?: string;
-    selected: boolean;
-    info: string;
+    inputType: InputType
+    value?: string
+    selected: boolean
+    info: string
 }
 
 export type InputValueTypes = {
-    [key in KeyType]: InputValue;
-};
+    [key in KeyType]: InputValue
+}
 
 const inputValues: InputValueTypes = {
     words: {
@@ -61,44 +61,44 @@ const inputValues: InputValueTypes = {
         selected: false,
         info: "Välimerkki, joka yhdistää sanat.",
     },
-};
+}
 
 const lang = {
     Finnish: true,
     English: false,
-};
+}
 
 // const initialKeys: string[] = Object.keys(initialFormValues)
-const initialInputKeys = Object.entries(inputValues);
+const initialInputKeys = Object.entries(inputValues)
 
 const correctType = (arg: unknown, desiredType: unknown): boolean => {
-    const isType = typeof arg;
+    const isType = typeof arg
     if (isType === desiredType) {
         // console.log("Type does match", isType, " is ", desiredType);
-        return true;
+        return true
     } else {
-        console.error("Type does not match", isType, " is not ", desiredType);
-        return false;
+        console.error("Type does not match", isType, " is not ", desiredType)
+        return false
     }
-};
+}
 
 export default function FormComponent(): JSX.Element {
-    const [finalPassword, setFinalPassword] = useState<string>("");
+    const [finalPassword, setFinalPassword] = useState<string>("")
     const [formValuesTyped, setFormValuesTyped] = usePersistedState(
         "formValues",
         inputValues,
-    );
-    const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4);
-    const formValues = formValuesTyped;
+    )
+    const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
+    const formValues = formValuesTyped
     // as FormType // explicitly type formValues as FormType
-    const setFormValues = setFormValuesTyped;
+    const setFormValues = setFormValuesTyped
     // as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
-    const [isDisabled, setDisabled] = useState(false);
+    const [isDisabled, setDisabled] = useState(false)
 
-    const minLengthForChars = 4;
-    const minLengthForWords = 1;
-    const maxLengthForChars = 64;
-    const maxLengthForWords = 12;
+    const minLengthForChars = 4
+    const minLengthForWords = 1
+    const maxLengthForChars = 64
+    const maxLengthForWords = 12
 
     const validate = useCallback(
         (sliderValue: number): number => {
@@ -108,28 +108,28 @@ export default function FormComponent(): JSX.Element {
                     sliderValue < 1 ||
                     !correctType(sliderValue, "number")) // should return false
             ) {
-                setSliderValue(maxLengthForWords);
-                return maxLengthForWords;
+                setSliderValue(maxLengthForWords)
+                return maxLengthForWords
             } else if (
                 !formValues.words.selected &&
                 sliderValue < minLengthForChars
             ) {
-                setSliderValue(minLengthForChars);
-                return minLengthForChars;
+                setSliderValue(minLengthForChars)
+                return minLengthForChars
             }
-            return sliderValue;
+            return sliderValue
         },
         [formValues, setSliderValue],
-    );
+    )
 
     const generate = useCallback(async () => {
         formValues.words.selected && sliderValue < 2
             ? setDisabled(true)
-            : setDisabled(false);
+            : setDisabled(false)
         try {
             setFinalPassword(
                 await createCryptoKey(sliderValue.toString(), formValues),
-            );
+            )
             // .then((r) => {
             //     setFinalPassword(r);
             // })
@@ -137,42 +137,42 @@ export default function FormComponent(): JSX.Element {
             //     throw new Error("Error generating key");
             // });
         } catch (err) {
-            console.error(err);
-            throw new Error("Error setting password");
+            console.error(err)
+            throw new Error("Error setting password")
         }
-    }, [formValues, sliderValue]);
+    }, [formValues, sliderValue])
 
     useEffect(() => {
-        let didCheck = false;
+        let didCheck = false
         if (!didCheck) {
-            didCheck = true;
-            validate(sliderValue);
-            generate();
+            didCheck = true
+            validate(sliderValue)
+            generate()
         }
         return () => {
-            didCheck = false;
-        };
-    }, [generate, sliderValue, validate]);
+            didCheck = false
+        }
+    }, [generate, sliderValue, validate])
 
     const valuesToForm = (option: KeyType, event: any, value: string): void => {
         setFormValues((formValues) => {
-            const updatedFormValues = { ...formValues };
+            const updatedFormValues = { ...formValues }
             if (value === "selected") {
                 const updatedFormValue = {
                     ...updatedFormValues[option],
                     selected: event,
-                };
-                updatedFormValues[option] = updatedFormValue;
+                }
+                updatedFormValues[option] = updatedFormValue
             } else {
                 const updatedFormValue = {
                     ...updatedFormValues[option],
                     value: event,
-                };
-                updatedFormValues[option] = updatedFormValue;
+                }
+                updatedFormValues[option] = updatedFormValue
             }
-            return updatedFormValues;
-        });
-    };
+            return updatedFormValues
+        })
+    }
 
     const labelForCheckbox = (
         option: string,
@@ -183,21 +183,21 @@ export default function FormComponent(): JSX.Element {
         | "Salalause"
         | "Käytä sanoja" => {
         if (option === "uppercase") {
-            return "Isot Kirjaimet";
+            return "Isot Kirjaimet"
         } else if (option === "randomChars") {
-            return "Välimerkit";
+            return "Välimerkit"
         } else if (option === "numbers") {
-            return "Numerot";
+            return "Numerot"
         } else if (option === "passphrase") {
-            return "Salalause";
+            return "Salalause"
         }
-        return "Käytä sanoja";
-    };
+        return "Käytä sanoja"
+    }
 
     const sliderVal = (value: number): number => {
-        setSliderValue(validate(value));
-        return value;
-    };
+        setSliderValue(validate(value))
+        return value
+    }
 
     return (
         <>
@@ -229,8 +229,8 @@ export default function FormComponent(): JSX.Element {
 
                 <div className="inputGrid">
                     {initialInputKeys.map(([item, objEntries]) => {
-                        const option = item as KeyType;
-                        const values = objEntries;
+                        const option = item as KeyType
+                        const values = objEntries
                         // formValues[option].selected
                         if (values.inputType === "checkbox") {
                             return (
@@ -243,12 +243,12 @@ export default function FormComponent(): JSX.Element {
                                         aria-label={labelForCheckbox(option)}
                                         checked={formValues[option].selected}
                                         onCheckedChange={(event) => {
-                                            values.selected = !values.selected;
+                                            values.selected = !values.selected
                                             valuesToForm(
                                                 option,
                                                 event,
                                                 "selected",
-                                            );
+                                            )
                                         }}
                                         id={option}
                                         value={values.selected.toString()}
@@ -257,7 +257,7 @@ export default function FormComponent(): JSX.Element {
                                         {labelForCheckbox(option)}
                                     </Label>
                                 </div>
-                            );
+                            )
                         } else if (values.inputType === "radio") {
                             return (
                                 <div key={option} className="flex-center radio">
@@ -268,14 +268,14 @@ export default function FormComponent(): JSX.Element {
                                         onValueChange={(event) => {
                                             const asBool = JSON.parse(
                                                 event.toLowerCase(),
-                                            ) as unknown; // JSON.parse is a handy way to get boolean value, since we know it is either given "true" of "false"
+                                            ) as unknown // JSON.parse is a handy way to get boolean value, since we know it is either given "true" of "false"
 
-                                            values.selected = !values.selected;
+                                            values.selected = !values.selected
                                             valuesToForm(
                                                 option,
                                                 asBool,
                                                 "selected",
-                                            );
+                                            )
                                         }}
                                     >
                                         <div className="flex-center">
@@ -300,7 +300,7 @@ export default function FormComponent(): JSX.Element {
                                         </div>
                                     </RadioGroup>
                                 </div>
-                            );
+                            )
                         } else {
                             // if values.inputType === "input"
                             return (
@@ -333,7 +333,7 @@ export default function FormComponent(): JSX.Element {
                                                         option,
                                                         event.target.value,
                                                         "value",
-                                                    );
+                                                    )
                                                 }}
                                             />
                                         </div>
@@ -352,12 +352,12 @@ export default function FormComponent(): JSX.Element {
                                                 }
                                                 onCheckedChange={(event) => {
                                                     values.selected =
-                                                        !values.selected;
+                                                        !values.selected
                                                     valuesToForm(
                                                         option,
                                                         event,
                                                         "selected",
-                                                    );
+                                                    )
                                                 }}
                                                 id={option}
                                                 value={values.selected.toString()}
@@ -368,7 +368,7 @@ export default function FormComponent(): JSX.Element {
                                         </div>
                                     )}
                                 </div>
-                            );
+                            )
                         }
                     })}
                     <div className="sliderWrapper">
@@ -409,8 +409,8 @@ export default function FormComponent(): JSX.Element {
                         aria-label="Luo Uusi Salasana"
                         type="submit"
                         onClick={(e) => {
-                            e.preventDefault();
-                            generate();
+                            e.preventDefault()
+                            generate()
                         }}
                     >
                         Uusi Salasana
@@ -423,10 +423,8 @@ export default function FormComponent(): JSX.Element {
                 </div>
             </form>
         </>
-    );
+    )
 }
 
-const copyText = lang.Finnish
-    ? "Kopioi Salasana Klikkaamalla"
-    : "Click to Copy";
-const inputPlaceholder = 'Esim. "-" tai "?" tai "3!"';
+const copyText = lang.Finnish ? "Kopioi Salasana Klikkaamalla" : "Click to Copy"
+const inputPlaceholder = 'Esim. "-" tai "?" tai "3!"'

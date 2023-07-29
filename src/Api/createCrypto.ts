@@ -1,12 +1,10 @@
-import { type InputValueTypes } from "../Components/form";
-
-// import { sanat } from "../sanat";
+import { type InputValueTypes } from "../Components/form"
 
 export interface checkboxes {
-    uppercase?: boolean;
-    randomChars?: boolean;
-    numbers?: boolean;
-    words?: boolean;
+    uppercase?: boolean
+    randomChars?: boolean
+    numbers?: boolean
+    words?: boolean
 }
 
 export default async function createCryptoKey(
@@ -14,18 +12,18 @@ export default async function createCryptoKey(
     data: InputValueTypes,
 ): Promise<string> {
     // console.log("🚀 ~ file: createCrypto.ts:13 ~ createCryptoKey ~ data:", data)
-    const sanatModule = await import("../sanat");
-    const arrayOfWords = sanatModule.sanat;
+    const sanatModule = await import("../sanat")
+    const arrayOfWords = sanatModule.sanat
 
-    const USER_SPECIALS = data.randomChars.value;
-    const length = parseInt(sliderValue);
+    const USER_SPECIALS = data.randomChars.value
+    const length = parseInt(sliderValue)
 
     const handleReturns = (length: number) => {
         function handle(length: number): string {
             // if words is true --->
             if (data.words.selected) {
                 /* this is the string[] that is generated when data.words is true */
-                const wordString = getWordsWithObject(length, arrayOfWords);
+                const wordString = getWordsWithObject(length, arrayOfWords)
 
                 if (data.randomChars.value != null) {
                     if (data.numbers.selected) {
@@ -33,50 +31,50 @@ export default async function createCryptoKey(
                             return insertRandomNumber(
                                 capitalizeFirstLetter(wordString),
                                 length,
-                            ).join(USER_SPECIALS);
+                            ).join(USER_SPECIALS)
                         }
                         return insertRandomNumber(wordString, length).join(
                             USER_SPECIALS,
-                        );
+                        )
                     }
                     if (data.uppercase.selected) {
                         return capitalizeFirstLetter(wordString).join(
                             USER_SPECIALS,
-                        );
+                        )
                     }
-                    return wordString.join(USER_SPECIALS);
+                    return wordString.join(USER_SPECIALS)
                 }
                 if (data.numbers.selected) {
-                    const numberedArr = insertRandomNumber(wordString, length);
+                    const numberedArr = insertRandomNumber(wordString, length)
 
-                    return numberedArr.join("").toString();
+                    return numberedArr.join("").toString()
                 }
                 if (data.uppercase.selected) {
-                    return capitalizeFirstLetter(wordString).join("");
+                    return capitalizeFirstLetter(wordString).join("")
                 }
-                return wordString.join("");
+                return wordString.join("")
             }
             // if words is false -------->
             else if (data.randomChars.selected && data.numbers.selected) {
-                return createFromString(specialsAndNums);
+                return createFromString(specialsAndNums)
             } else if (!data.numbers.selected && !data.randomChars.selected) {
-                return createFromString(chars);
+                return createFromString(chars)
             } else if (data.numbers.selected) {
-                return createFromString(charsWithNumbers);
+                return createFromString(charsWithNumbers)
             } else if (data.randomChars.selected) {
-                return createFromString(charsAndSpecials);
+                return createFromString(charsAndSpecials)
             }
-            return " ";
+            return " "
         }
 
         // handle the handle :D
-        const finalString = handle(length);
+        const finalString = handle(length)
 
         if (data.uppercase.selected && !data.words.selected) {
-            return toUppercase(finalString).toString();
+            return toUppercase(finalString).toString()
         }
-        return finalString;
-    };
+        return finalString
+    }
 
     /**
      * Creates a randomised string of chars from a input string
@@ -84,18 +82,18 @@ export default async function createCryptoKey(
      * @returns randomized string
      */
     const createFromString = (stringToUse: string): string => {
-        const numArr = generateRandomArray(length, 0, stringToUse.length - 1);
+        const numArr = generateRandomArray(length, 0, stringToUse.length - 1)
 
-        const charArr = stringToUse.split("");
+        const charArr = stringToUse.split("")
 
-        const str: string[] = [];
+        const str: string[] = []
         numArr.map((_num, i) => {
-            return str.push(charArr[numArr[i]]);
-        });
-        return str.join("");
-    };
+            return str.push(charArr[numArr[i]])
+        })
+        return str.join("")
+    }
 
-    return handleReturns(length);
+    return handleReturns(length)
 }
 
 /**
@@ -105,60 +103,60 @@ export default async function createCryptoKey(
  */
 const toUppercase = (stringToUpper: string[] | string): string | string[] => {
     const someCharToUpper = (someStr: string): string => {
-        const len = someStr.length;
+        const len = someStr.length
         // so that there is always at least ONE char left lowercase (of course not possible if contains nums or specials...) we do "len - 1" for the arrays length
-        const arr = generateRandomArray(len - 1, 0, len);
+        const arr = generateRandomArray(len - 1, 0, len)
 
-        const strArr = someStr.split("");
+        const strArr = someStr.split("")
         arr.forEach((i) => {
             if (i < len) {
-                strArr[i] = strArr[i].toUpperCase();
+                strArr[i] = strArr[i].toUpperCase()
             }
-        });
-        return strArr.join("");
-    };
+        })
+        return strArr.join("")
+    }
 
     if (typeof stringToUpper === "string") {
-        return someCharToUpper(stringToUpper);
+        return someCharToUpper(stringToUpper)
         // return stringToUpper.toUpperCase()
     }
-    const strArr: string[] = [];
+    const strArr: string[] = []
     stringToUpper.map((str) => {
-        return strArr.push(someCharToUpper(str));
-    });
-    return strArr;
-};
+        return strArr.push(someCharToUpper(str))
+    })
+    return strArr
+}
 
 // Generate a random integer  with equal chance in  min <= r < max.     https://stackoverflow.com/questions/41437492/how-to-use-window-crypto-getrandomvalues-to-get-random-values-in-a-specific-rang
 function generateRandomNumberInRange(min: number, max: number): number {
-    const range = max - min;
+    const range = max - min
 
     if (max <= min) {
-        throw new Error("Max must be larger than min");
+        throw new Error("Max must be larger than min")
     }
-    const requestBytes = Math.ceil(Math.log2(range) / 8);
+    const requestBytes = Math.ceil(Math.log2(range) / 8)
     if (requestBytes === 0) {
         // No randomness required
-        return 0;
+        return 0
     }
-    const maxNum = Math.pow(256, requestBytes);
-    const ar = new Uint8Array(requestBytes);
+    const maxNum = Math.pow(256, requestBytes)
+    const ar = new Uint8Array(requestBytes)
 
-    let val: number;
+    let val: number
 
     do {
         // Fill the typed array with cryptographically secure random values
-        window.crypto.getRandomValues(ar);
+        window.crypto.getRandomValues(ar)
 
         // Combine the array of random bytes into a single integer
-        val = 0;
+        val = 0
         for (let i = 0; i < requestBytes; i++) {
-            val = (val << 8) + ar[i];
+            val = (val << 8) + ar[i]
         }
-    } while (val >= maxNum - (maxNum % range));
+    } while (val >= maxNum - (maxNum % range))
 
     // Return a random number within the specified range
-    return min + (val % range);
+    return min + (val % range)
 }
 
 /**
@@ -171,12 +169,12 @@ function generateRandomArray(
     min: number,
     max: number,
 ): number[] {
-    const arr = [];
+    const arr = []
     for (let i = 0; i < length; i++) {
-        const randomNumber = generateRandomNumberInRange(min, max);
-        arr.push(...[randomNumber]);
+        const randomNumber = generateRandomNumberInRange(min, max)
+        arr.push(...[randomNumber])
     }
-    return arr;
+    return arr
 }
 
 /**
@@ -186,12 +184,12 @@ function generateRandomArray(
  */
 function capitalizeFirstLetter(stringArrToConvert: string[]): string[] {
     if (stringArrToConvert === undefined) {
-        throw new Error("Virhe");
+        throw new Error("Virhe")
     }
     const convertedArr = stringArrToConvert.map((sana) => {
-        return sana.charAt(0).toUpperCase() + sana.slice(1);
-    });
-    return convertedArr;
+        return sana.charAt(0).toUpperCase() + sana.slice(1)
+    })
+    return convertedArr
 }
 
 /**
@@ -202,23 +200,23 @@ function capitalizeFirstLetter(stringArrToConvert: string[]): string[] {
  */
 function getWordsWithObject(length: number, objektiSanat: string[]): string[] {
     // console.time("length")
-    const maxCount = objektiSanat.length - 1; // the max word count in sanat.json
+    const maxCount = objektiSanat.length - 1 // the max word count in sanat.json
 
     // const then = performance.now()
-    const randomNumsArray = generateRandomArray(length, 0, maxCount);
+    const randomNumsArray = generateRandomArray(length, 0, maxCount)
 
-    const sanaArray: string[] = [];
+    const sanaArray: string[] = []
 
     for (const num of randomNumsArray) {
         try {
-            sanaArray.push(objektiSanat[num]);
+            sanaArray.push(objektiSanat[num])
         } catch (error) {
             // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
-            console.error(error);
+            console.error(error)
         }
     }
     // console.timeEnd("length")
-    return sanaArray;
+    return sanaArray
 }
 
 /**
@@ -248,42 +246,41 @@ const insertRandomNumber = (
     stringArr: string[],
     sliderValue: number,
 ): string[] => {
-    const finalArr = [];
-    let mutated: string[] = [];
-    let mutatedArr = "";
+    const finalArr = []
+    let mutated: string[] = []
+    let mutatedArr = ""
 
     try {
         for (let i = 0; i < sliderValue; i++) {
-            const maxValue = stringArr[i].toString().length;
-            const randomIndex = generateRandomNumberInRange(0, maxValue);
-            const intToInsert = generateRandomNumberInRange(0, 9).toString();
+            const maxValue = stringArr[i].toString().length
+            const randomIndex = generateRandomNumberInRange(0, maxValue)
+            const intToInsert = generateRandomNumberInRange(0, 9).toString()
 
-            mutated = stringArr[i].split("");
+            mutated = stringArr[i].split("")
 
-            mutated = insertAtIndex(mutated, randomIndex, intToInsert);
+            mutated = insertAtIndex(mutated, randomIndex, intToInsert)
 
-            mutatedArr = mutated.join("");
-            finalArr.push(mutatedArr);
+            mutatedArr = mutated.join("")
+            finalArr.push(mutatedArr)
         }
     } catch (err) {
-        console.error(err);
+        console.error(err)
     }
 
-    return finalArr;
-};
+    return finalArr
+}
 
 function insertAtIndex(
     arr: string[],
     index: number,
     element: string,
 ): string[] {
-    arr.splice(index, 0, element);
-    return arr;
+    arr.splice(index, 0, element)
+    return arr
 }
 
 const specialsAndNums =
-    "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#";
-const charsAndSpecials = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#";
-const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890";
-const chars = "abcdefghijklmnopqrstuyäöxz";
-const specials = "><,.-_*?+/()@%&!€=#";
+    "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#"
+const charsAndSpecials = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#"
+const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
+const chars = "abcdefghijklmnopqrstuyäöxz"

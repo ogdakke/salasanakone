@@ -1,13 +1,13 @@
-import { CheckCircle, ShareAndroid, ShareIos } from "iconoir-react";
-import { useState } from "react";
+import { CheckCircle, ShareAndroid, ShareIos } from "iconoir-react"
+import { useState } from "react"
 
-import copyToClipboard from "../Api/copyToClipboard";
-import { meta } from "../assets/constants/meta";
+import copyToClipboard from "../Api/copyToClipboard"
+import { meta } from "../assets/constants/meta"
 
-export const isAndroid = navigator.userAgent.match(/Android/i);
+export const isAndroid = navigator.userAgent.match(/Android/i)
 
 export const ShareComponent = () => {
-    const [isCopied, setCopied] = useState(false);
+    const [isCopied, setCopied] = useState(false)
 
     const shareAction = async () => {
         if (navigator.share) {
@@ -21,22 +21,22 @@ export const ShareComponent = () => {
                     console.log(
                         "WebShare worked successfully",
                         new Date().getTime(),
-                    );
-                    return val;
+                    )
+                    return val
                 })
                 .catch((err) => {
-                    console.log("error sharing", err);
-                });
+                    console.log("error sharing", err)
+                })
         } else {
-            await copyToClipboard(meta.url);
-            setCopied(true);
+            await copyToClipboard(meta.url)
+            setCopied(true)
             setTimeout(() => {
-                setCopied(false);
-            }, 1500);
+                setCopied(false)
+            }, 1500)
         }
-    };
+    }
 
-    const size = 28;
+    const size = 28
     return (
         <>
             <div className="shareWrapper">
@@ -48,7 +48,7 @@ export const ShareComponent = () => {
                 ) : null}
                 <div
                     onClick={async () => {
-                        await shareAction();
+                        await shareAction()
                     }}
                     className="shareButton"
                 >
@@ -68,5 +68,5 @@ export const ShareComponent = () => {
                 </div>
             </div>
         </>
-    );
-};
+    )
+}
