@@ -195,7 +195,7 @@ export function StrengthIndicator(props: {
                       whileFocus={{}}
                       transition={{
                         type: "spring",
-                        duration: 0.5,
+                        duration: 0.6,
                       }}
                       className={`interact strengthIndicator case${score.toString()}`}
                     >

@@ -33,16 +33,17 @@ export const Island = ({ generate, finalPassword, formValues, sliderValue }: Pro
   return (
     <motion.div
       initial={{
-        scaleX: 0.5,
-        scaleY: 0.25,
+        scaleX: 0.9,
+        scaleY: 0.95,
       }}
       animate={{
         scaleX: 1,
         scaleY: 1,
       }}
       transition={{
-        duration: 0.5,
-        delay: 1,
+        duration: 0.2,
+        type: "spring",
+        damping: 10,
       }}
       // variants={island}
       className="IslandMain"
