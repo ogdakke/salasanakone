@@ -1,5 +1,5 @@
 import { type InputValueTypes } from "../Components/form"
-
+import { sanat } from "../sanat"
 export interface checkboxes {
     uppercase?: boolean
     randomChars?: boolean
@@ -7,13 +7,8 @@ export interface checkboxes {
     words?: boolean
 }
 
-export default async function createCryptoKey(
-    sliderValue: string,
-    data: InputValueTypes,
-): Promise<string> {
-    // console.log("🚀 ~ file: createCrypto.ts:13 ~ createCryptoKey ~ data:", data)
-    const sanatModule = await import("../sanat")
-    const arrayOfWords = sanatModule.sanat
+export default async function createCryptoKey(sliderValue: string, data: InputValueTypes): Promise<string> {
+    const arrayOfWords = sanat
 
     const USER_SPECIALS = data.randomChars.value
     const length = parseInt(sliderValue)
@@ -28,24 +23,17 @@ export default async function createCryptoKey(
                 if (data.randomChars.value != null) {
                     if (data.numbers.selected) {
                         if (data.uppercase.selected) {
-                            return insertRandomNumber(
-                                capitalizeFirstLetter(wordString),
-                                length,
-                            ).join(USER_SPECIALS)
+                            return randomNumberOnString(capitalizeFirstLetter(wordString)).join(USER_SPECIALS)
                         }
-                        return insertRandomNumber(wordString, length).join(
-                            USER_SPECIALS,
-                        )
+                        return randomNumberOnString(wordString).join(USER_SPECIALS)
                     }
                     if (data.uppercase.selected) {
-                        return capitalizeFirstLetter(wordString).join(
-                            USER_SPECIALS,
-                        )
+                        return capitalizeFirstLetter(wordString).join(USER_SPECIALS)
                     }
                     return wordString.join(USER_SPECIALS)
                 }
                 if (data.numbers.selected) {
-                    const numberedArr = insertRandomNumber(wordString, length)
+                    const numberedArr = randomNumberOnString(wordString)
 
                     return numberedArr.join("").toString()
                 }
@@ -164,11 +152,7 @@ function generateRandomNumberInRange(min: number, max: number): number {
  * @param {number} length how many numbers are in the array
  * @returns array of numbers
  */
-function generateRandomArray(
-    length: number,
-    min: number,
-    max: number,
-): number[] {
+function generateRandomArray(length: number, min: number, max: number): number[] {
     const arr = []
     for (let i = 0; i < length; i++) {
         const randomNumber = generateRandomNumberInRange(min, max)
@@ -220,32 +204,20 @@ function getWordsWithObject(length: number, objektiSanat: string[]): string[] {
 }
 
 /**
- * adds a random char at the end of an array of strings
- * @param stringArr array of strings
- * @returns array of strings with random char
+ * adds a random number at the end of an string
+ * @param stringArr array of strings from which the string is selected
+ * @returns string[]
  */
-// const randomCharsForJoins = (stringArr: string []) => {
-//   const lastChar = (specials.length - 1)
+const randomNumberOnString = (stringArr: string[]): string[] => {
+    const indexToSelect = generateRandomNumberInRange(0, stringArr.length)
+    const numToPadWith = generateRandomNumberInRange(0, 10).toString()
 
-//   const arr: string[] = []
-//   specials.split('').map(() => {
-//     const num = generateRandomNumberInRange(0, lastChar)
-//     return arr.push(specials[num])
-//   })
+    const paddedWithNumber = stringArr[indexToSelect] + numToPadWith
+    stringArr[indexToSelect] = paddedWithNumber
+    return stringArr
+}
 
-//   const arrWithChars: string[] = []
-
-//   for (let i = 0; i < stringArr.length; i++) {
-//     const muted = stringArr[i].concat(arr[i])
-//     arrWithChars.push(muted)
-//   }
-//   return arrWithChars
-// }
-
-const insertRandomNumber = (
-    stringArr: string[],
-    sliderValue: number,
-): string[] => {
+const insertRandomNumber = (stringArr: string[], sliderValue: number): string[] => {
     const finalArr = []
     let mutated: string[] = []
     let mutatedArr = ""
@@ -270,17 +242,12 @@ const insertRandomNumber = (
     return finalArr
 }
 
-function insertAtIndex(
-    arr: string[],
-    index: number,
-    element: string,
-): string[] {
+function insertAtIndex(arr: string[], index: number, element: string): string[] {
     arr.splice(index, 0, element)
     return arr
 }
 
-const specialsAndNums =
-    "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#"
+const specialsAndNums = "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#"
 const charsAndSpecials = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#"
 const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
 const chars = "abcdefghijklmnopqrstuyäöxz"

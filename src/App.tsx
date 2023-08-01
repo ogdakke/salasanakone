@@ -30,15 +30,8 @@ function App() {
                         fallbackRender={({ error, resetErrorBoundary }) => {
                             return (
                                 <>
-                                    <ErrorComponent
-                                        error={error}
-                                        resetErrorBoundary={resetErrorBoundary}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="inputButton"
-                                        onClick={resetErrorBoundary}
-                                    >
+                                    <ErrorComponent error={error} resetErrorBoundary={resetErrorBoundary} />
+                                    <button type="button" className="inputButton" onClick={resetErrorBoundary}>
                                         Yritä uudelleen
                                     </button>
                                 </>

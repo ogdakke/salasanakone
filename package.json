@@ -24,6 +24,7 @@
         "@zxcvbn-ts/language-common": "^3.0.3",
         "@zxcvbn-ts/language-en": "^3.0.1",
         "@zxcvbn-ts/language-fi": "^3.0.1",
+        "framer-motion": "^10.15.0",
         "iconoir-react": "^6.10.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",

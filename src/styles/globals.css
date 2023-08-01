@@ -6,13 +6,16 @@
     scroll-behavior: smooth;
     font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: auto;
-    --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-        "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-        "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+    --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono", "Roboto Mono", "Oxygen Mono",
+        "Ubuntu Monospace", "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
     --foreground-rgb: 0, 0, 0;
     --background-start-rgb: 214, 219, 220;
     --background-rgb: 255, 255, 255;
+    --helperTextColor: #2a2a2a;
+    --form-bg-rgb: 254, 254, 254;
+    --skeleton-glow: 240, 240, 240;
+
     --error: 255, 0, 0;
 
     --primary-glow: conic-gradient(
@@ -23,48 +26,33 @@
         #0071ff33 160deg,
         transparent 360deg
     );
-    --secondary-glow: radial-gradient(
-        rgba(255, 255, 255, 1),
-        rgba(255, 255, 255, 0)
-    );
+    --secondary-glow: radial-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
 
     --tile-start-rgb: 239, 245, 249;
     --tile-end-rgb: 228, 232, 233;
-    --tile-border: conic-gradient(
-        #00000080,
-        #00000040,
-        #00000030,
-        #00000020,
-        #00000010,
-        #00000010,
-        #00000080
-    );
+    --tile-border: conic-gradient(#00000080, #00000040, #00000030, #00000020, #00000010, #00000010, #00000080);
 
     --callout-rgb: 238, 240, 241;
     --callout-border-rgb: 172, 175, 176;
     --card-rgb: 180, 185, 188;
     --card-border-rgb: 131, 134, 135;
 
-    --form-bg-rgb: 254, 254, 254;
-
     --gray-shadow: 100, 100, 100;
-    --skeleton-glow: 240, 240, 240;
     --black-text-rgb: 10, 10, 10;
 
-    --green-go-rgb: 108, 241, 109; /*loistva*/
-    --yellow-better-rgb: 137, 224, 133; /* Hyvä*/
-    --yellow-ok-rgb: 240, 173, 78; /* OK */
-    --orange-bad-rgb: 220, 60, 60; /* Huono */
-    --red-worst-rgb: 180, 0, 10; /* surkea */
+    --green-go-rgb: 108, 241, 109;
+    /*loistva*/
+    --yellow-better-rgb: 137, 224, 133;
+    /* Hyvä*/
+    --yellow-ok-rgb: 240, 173, 78;
+    /* OK */
+    --orange-bad-rgb: 220, 60, 60;
+    /* Huono */
+    --red-worst-rgb: 180, 0, 10;
+    /* surkea */
 
     --red-rgb: 255, 60, 60;
-    --success-gradient: linear-gradient(
-        to right,
-        #0ba360,
-        #12b45b,
-        #1ad659,
-        #10be6a
-    );
+    --success-gradient: linear-gradient(to right, #0ba360, #12b45b, #1ad659, #10be6a);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -72,14 +60,11 @@
         --foreground-rgb: 255, 255, 255;
         --background-start-rgb: 0, 0, 0;
         --background-rgb: 10, 10, 10;
-
+        --helperTextColor: #636363;
         --form-bg-rgb: 15, 15, 15;
         --skeleton-glow: 22, 22, 22;
 
-        --primary-glow: radial-gradient(
-            rgba(50, 196, 86, 0.4),
-            rgba(1, 65, 255, 0)
-        );
+        --primary-glow: radial-gradient(rgba(50, 196, 86, 0.4), rgba(1, 65, 255, 0));
         --secondary-glow: linear-gradient(
             to bottom right,
             rgba(40, 121, 20, 0),
@@ -89,15 +74,7 @@
 
         --tile-start-rgb: 40, 45, 45;
         --tile-end-rgb: 2, 5, 19;
-        --tile-border: conic-gradient(
-            #ffffff80,
-            #ffffff40,
-            #ffffff30,
-            #ffffff20,
-            #ffffff10,
-            #ffffff10,
-            #ffffff80
-        );
+        --tile-border: conic-gradient(#ffffff80, #ffffff40, #ffffff30, #ffffff20, #ffffff10, #ffffff10, #ffffff80);
 
         --callout-rgb: 20, 20, 20;
         --callout-border-rgb: 108, 108, 108;
@@ -144,14 +121,44 @@ ul {
     padding-inline-start: 1.125rem;
 }
 
+kbd {
+    -moz-border-radius: 3px;
+    -moz-box-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.2),
+        0 0 0 2px rgb(var(--callout-rgb)) inset;
+    -webkit-border-radius: 3px;
+    -webkit-box-shadow:
+        0 1px 0 rgba(0, 0, 0, 0.2),
+        0 0 0 2px rgb(var(--callout-rgb)) inset;
+    background-color: rgb(var(--callout-rgb));
+    /* border: 1px solid rgb(var(--callout-border-rgb)); */
+    border-radius: 3px;
+    box-shadow:
+        1px 1px 2px rgba(0, 0, 0, 0.2),
+        0 0 0 2px rgba(var(--callout-border-rgb), 0.1) inset;
+    color: var(--helperTextColor);
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    margin: 0 0.1rem 0 0.1rem;
+    padding: 0.1em 0.6em;
+}
+
+.resultHelperText {
+    font-size: 0.875rem;
+    color: var(--helperTextColor);
+}
+
 /* reset */
 button {
     all: unset;
 }
+
 fieldset,
 input {
     all: unset;
 }
+
 @media (prefers-color-scheme: dark) {
     html {
         color-scheme: dark;

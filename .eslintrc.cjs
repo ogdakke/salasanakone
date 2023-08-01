@@ -16,7 +16,9 @@ module.exports = {
         project: true,
         ecmaVersion: "latest",
         sourceType: "module",
-        rules: {},
+        rules: {
+            "no-unused-vars": "error",
+        },
     },
     plugins: ["react", "@typescript-eslint"],
     rules: {
@@ -24,4 +26,4 @@ module.exports = {
         "react/react-in-jsx-scope": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
     },
-};
+}
