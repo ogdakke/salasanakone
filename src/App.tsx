@@ -18,36 +18,36 @@ import { Loading } from "./Components/ui/loading"
 const FormComponent = React.lazy(async () => await import("./Components/form"))
 
 function App() {
-    return (
-        <main className="main">
-            <div className="wrapper">
-                <div className="flex-center" style={{ gap: "1rem" }}>
-                    <LogoIcon width={40} height={40} />
-                    <h1>Salasanakone</h1>
-                </div>
-                <Suspense fallback={<Loading />}>
-                    <ErrorBoundary
-                        fallbackRender={({ error, resetErrorBoundary }) => {
-                            return (
-                                <>
-                                    <ErrorComponent error={error} resetErrorBoundary={resetErrorBoundary} />
-                                    <button type="button" className="inputButton" onClick={resetErrorBoundary}>
-                                        Yritä uudelleen
-                                    </button>
-                                </>
-                            )
-                        }}
-                    >
-                        <FormComponent />
-                    </ErrorBoundary>
-                </Suspense>
-                <Description />
-                <Feedback />
-                <Credits />
-                <ReloadPrompt />
-            </div>
-        </main>
-    )
+  return (
+    <main className="main">
+      <div className="wrapper">
+        <div className="flex-center" style={{ gap: "1rem" }}>
+          <LogoIcon width={40} height={40} />
+          <h1>Salasanakone</h1>
+        </div>
+        <Suspense fallback={<Loading height="var(--formContainerHeight)" />}>
+          <ErrorBoundary
+            fallbackRender={({ error, resetErrorBoundary }) => {
+              return (
+                <>
+                  <ErrorComponent error={error} resetErrorBoundary={resetErrorBoundary} />
+                  <button type="button" className="inputButton" onClick={resetErrorBoundary}>
+                    Yritä uudelleen
+                  </button>
+                </>
+              )
+            }}
+          >
+            <FormComponent />
+          </ErrorBoundary>
+        </Suspense>
+        <Description />
+        <Feedback />
+        <Credits />
+        <ReloadPrompt />
+      </div>
+    </main>
+  )
 }
 
 export default App

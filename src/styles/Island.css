@@ -1,11 +1,18 @@
 .IslandMain {
-  position: fixed;
-  bottom: 1.25rem;
-  width: clamp(360px, 50%, 400px);
+  width: 100%;
+}
+
+@media (max-width: 700px) {
+  .IslandMain {
+    padding: 0 0.5rem;
+    position: fixed;
+    bottom: 1.25rem;
+    width: clamp(300px, 100dvw, 450px);
+  }
 }
 
 .IslandContent {
-  border-radius: 2rem;
+  border-radius: 1.75rem;
   background-color: rgba(0, 0, 0, 1);
   color: #636363;
   padding: 1.125rem;
@@ -26,7 +33,6 @@
   padding: 0.25rem;
   background-color: hwb(0 98% 2% / 0.1);
 }
-
 @media (hover: hover) and (pointer: fine) {
   .IslandGenerateButton:hover {
     /* transition: all 200ms ease-in; */

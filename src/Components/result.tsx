@@ -5,6 +5,10 @@ import copyToClipboard from "../Api/copyToClipboard"
 
 import "../styles/Result.css"
 import { motion } from "framer-motion"
+import { specials } from "../Api/createCrypto"
+import { HighlightCondition, Highlighter } from "./ui/utils/highlight"
+
+const numbers = "0123456789"
 
 export default function Result(props: { finalPassword: string; copyText: string }) {
   const { finalPassword, copyText } = props
@@ -31,6 +35,31 @@ export default function Result(props: { finalPassword: string; copyText: string 
   // }) this is fucked
 
   // const [scope, animate] = useAnimate()
+
+  const tap = {
+    opacity: 0.2,
+    transition: {
+      duration: 0.2,
+    },
+  }
+
+  const highlightNumbers: HighlightCondition = {
+    condition: numbers,
+    style: {
+      fontWeight: "bold",
+      color: "var(--emphasis)",
+    },
+  }
+
+  const highlightSpecials: HighlightCondition = {
+    condition: specials,
+    style: {
+      fontWeight: "bold",
+      opacity: "0.7",
+    },
+  }
+
+  const highlightConditions = [highlightNumbers, highlightSpecials]
 
   return (
     <>
@@ -67,7 +96,11 @@ export default function Result(props: { finalPassword: string; copyText: string 
         >
           <span>
             <span className={isCopied ? "copiedSpanText" : "notCopiedSpan"}>
-              {finalPassword.length !== 0 ? finalPassword : "Jotain meni vikaan... Salasanaa ei luotu."}
+              {finalPassword.length !== 0 ? (
+                <Highlighter text={finalPassword} highlightConditions={highlightConditions} />
+              ) : (
+                "Jotain meni vikaan... Salasanaa ei luotu."
+              )}
             </span>
           </span>
           <span className="absoluteCopiedIcon">{isCopied ? <PasteClipboard /> : null}</span>

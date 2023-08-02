@@ -13,7 +13,7 @@ import { Refresh } from "iconoir-react"
 
 // components
 import { createCrypto } from "../main"
-import { StrengthIndicator } from "./indicator"
+import { StrengthIndicator, validateLength } from "./indicator"
 import { Checkbox } from "./ui/checkbox"
 import { InputComponent } from "./ui/input"
 // ui
@@ -83,9 +83,6 @@ const correctType = (arg: unknown, desiredType: unknown): boolean => {
   }
 }
 
-export let globalSliderValue: number = 4
-export let globalFormvalues: InputValueTypes = inputValues
-
 export async function generatePassword(formValues: InputValueTypes, sliderValue: number): Promise<string> {
   return await createCryptoKey(sliderValue.toString(), formValues)
 }
@@ -104,6 +101,7 @@ export default function FormComponent(): React.ReactNode {
   const minLengthForWords = 1
   const maxLengthForChars = 64
   const maxLengthForWords = 12
+  const inputFieldMaxLength = 8
 
   const validate = useCallback(
     (sliderValue: number): number => {
@@ -266,11 +264,11 @@ export default function FormComponent(): React.ReactNode {
                       </Label>
                       <InputComponent
                         disabled={isDisabled}
-                        maxLength={32}
+                        maxLength={inputFieldMaxLength}
                         defaultValue={formValues[option].value}
                         placeholder={inputPlaceholder}
                         onChange={(event) => {
-                          valuesToForm(option, event.target.value, "value")
+                          valuesToForm(option, validateLength(event.target.value, inputFieldMaxLength), "value")
                         }}
                       />
                     </div>

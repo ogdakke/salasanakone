@@ -1,120 +1,120 @@
 .header,
 .header a {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
 }
 
 .code {
-    letter-spacing: 0.1em;
-    font-weight: 400;
-    font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  font-weight: 400;
+  font-family: var(--font-mono);
 }
 
 .form {
-    opacity: 0;
-    /* animation: fadeIn 0.2s ease-in; */
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    padding-top: 2rem;
-    padding: 1rem;
-    background-color: rgba(var(--form-bg-rgb), 1);
-    border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-    border-radius: calc(var(--border-radius) + 1rem);
-    margin-bottom: 2rem;
-    box-shadow: 0px 2px 8px -1px #0000001a;
+  opacity: 0;
+  /* animation: fadeIn 0.2s ease-in; */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding-top: 2rem;
+  padding: 1rem;
+  background-color: rgba(var(--form-bg-rgb), 1);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: calc(var(--border-radius) + 1rem);
+  /* margin-bottom: 2rem; */
+  box-shadow: 0px 2px 8px -1px #0000001a;
 }
 
 /* || Grid ---------------------------------------------- */
 .inputGrid {
-    display: grid;
-    /* grid-template-columns: 1fr 1fr 1fr; */
-    /* grid-template-rows: 1fr slider slider; */
+  display: grid;
+  /* grid-template-columns: 1fr 1fr 1fr; */
+  /* grid-template-rows: 1fr slider slider; */
 
-    grid-template-areas:
-        "radio uppercase"
-        "radio numbers"
-        "slider input"
-        "slider input";
-    gap: 1rem;
+  grid-template-areas:
+    "radio uppercase"
+    "radio numbers"
+    "slider input"
+    "slider input";
+  gap: 1rem;
 }
 .textInputBox {
-    grid-area: input;
+  grid-area: input;
 }
 .radio {
-    grid-area: radio;
+  grid-area: radio;
 }
 
 /* ----------------------------------Grid */
 
 /*  */
 .buttonWrapper {
-    display: flex;
-    align-content: center;
-    justify-content: space-between;
+  display: flex;
+  align-content: center;
+  justify-content: space-between;
 }
 
 .LabelRoot {
-    cursor: pointer;
-    padding-left: 0.3rem;
+  cursor: pointer;
+  padding-left: 0.3rem;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: 1fr;
+  display: grid;
+  grid-template-columns: 1fr;
 }
 
 .card {
-    /* top right bottom left */
-    padding: 1.5rem 1.2rem 1.5rem 1.2rem;
-    position: relative;
-    border-radius: var(--border-radius);
-    background: rgba(var(--card-rgb), 0);
-    border: 1px dashed rgba(var(--card-border-rgb), 0.2);
-    transition:
-        all 200ms,
-        border 200ms;
-    width: 100%;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    scroll-padding-right: 2.5rem;
-    scroll-margin-right: 1rem;
+  /* top right bottom left */
+  padding: 1.5rem 1.2rem 1.5rem 1.2rem;
+  position: relative;
+  border-radius: var(--border-radius);
+  background: rgba(var(--card-rgb), 0);
+  border: 1px dashed rgba(var(--card-border-rgb), 0.2);
+  transition:
+    all 200ms,
+    border 200ms;
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-padding-right: 2.5rem;
+  scroll-margin-right: 1rem;
 }
 
 .card:focus-visible {
-    background: rgba(var(--card-rgb), 0.1);
-    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  background: rgba(var(--card-rgb), 0.1);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
 }
 
 .card h2 {
-    color: rgba(var(--foreground-rgb), 0.6);
-    font-weight: 500;
+  color: rgba(var(--foreground-rgb), 0.6);
+  font-weight: 500;
 }
 
 .card p {
-    margin: 0;
-    opacity: 0.6;
-    font-size: 0.875rem;
-    line-height: 1.5;
-    max-width: 30ch;
+  margin: 0;
+  opacity: 0.6;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  max-width: 30ch;
 }
 
 .resultWrapper {
-    -webkit-user-select: none;
-    user-select: none;
-    /* margin-top: 1rem; */
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+  -webkit-user-select: none;
+  user-select: none;
+  /* margin-top: 1rem; */
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .resultCard {
-    position: relative;
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    /* display: grid;
+  position: relative;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  /* display: grid;
   grid-template-rows: 1fr;
   grid-template-columns: 80% auto;
   justify-items: end;
@@ -123,120 +123,120 @@
 }
 
 .inputWrapper {
-    display: flex;
-    gap: 0.25rem;
-    align-items: center;
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
 }
 
 .IslandWrapper {
-    position: relative;
-    display: flex;
-    justify-content: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 /* || Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
-    .spin:hover {
-        animation: spinAnimation 700ms ease-out;
+  .spin:hover {
+    animation: spinAnimation 700ms ease-out;
+  }
+  .resultCard:hover {
+    background: rgba(var(--card-rgb), 0.1);
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  }
+  .card:hover h2 {
+    color: rgba(var(--foreground-rgb), 0.9);
+  }
+
+  @keyframes spinAnimation {
+    0% {
+      transform: rotate(0);
     }
-    .resultCard:hover {
-        background: rgba(var(--card-rgb), 0.1);
-        border: 1px solid rgba(var(--card-border-rgb), 0.15);
-    }
-    .card:hover h2 {
-        color: rgba(var(--foreground-rgb), 0.9);
+    40% {
+      transform: rotate(340deg);
     }
 
-    @keyframes spinAnimation {
-        0% {
-            transform: rotate(0);
-        }
-        40% {
-            transform: rotate(340deg);
-        }
-
-        60% {
-            transform: rotate(380deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
+    60% {
+      transform: rotate(380deg);
     }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 
-    /* .buttonWrapper button[type=button]:hover {
+  /* .buttonWrapper button[type=button]:hover {
     background-color: rgba(205, 0,1, 0.8);
   } */
 
-    /* scrollbar  on firefox*/
-    html,
-    .card {
-        scrollbar-width: thin;
-        /* scrollbar-gutter: stable; */
-        scrollbar-color: rgba(var(--foreground-rgb), 0.3) transparent;
-    }
+  /* scrollbar  on firefox*/
+  html,
+  .card {
+    scrollbar-width: thin;
+    /* scrollbar-gutter: stable; */
+    scrollbar-color: rgba(var(--foreground-rgb), 0.3) transparent;
+  }
 
-    /* this is because the scrollbar height is 9px */
-    .card {
-        padding: 1.5rem 1.2rem calc(1.5rem - 9px) 1.2rem;
-    }
+  /* this is because the scrollbar height is 9px */
+  .card {
+    padding: 1.5rem 1.2rem calc(1.5rem - 9px) 1.2rem;
+  }
 
-    /* edge, chrome, safari */
-    .card::-webkit-scrollbar {
-        height: 9px;
-    }
-    .card::-webkit-scrollbar-thumb {
-        background-color: rgba(var(--foreground-rgb), 0.3);
-        border-radius: 9px;
-    }
+  /* edge, chrome, safari */
+  .card::-webkit-scrollbar {
+    height: 9px;
+  }
+  .card::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--foreground-rgb), 0.3);
+    border-radius: 9px;
+  }
 }
 
 /* || firefox specific rules  */
 @supports (-moz-appearance: none) {
-    /* Because firefox does something weird with  the scrollbar*/
-    .card {
-        padding: 1.5rem 1.2rem 1.5rem 1.2rem;
-    }
+  /* Because firefox does something weird with  the scrollbar*/
+  .card {
+    padding: 1.5rem 1.2rem 1.5rem 1.2rem;
+  }
 }
 
 @supports not selector(:has(*)) {
-    /* firefox or android do not support :has()  -- so need to override those */
-    .inputButton {
-        display: flex;
-        gap: 0.5rem;
-        align-items: center;
-    }
+  /* firefox or android do not support :has()  -- so need to override those */
+  .inputButton {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
 }
 
 @media (prefers-reduced-motion) {
-    .inputButton:hover .spin {
-        animation: none;
-    }
-    .loading::before {
-        animation: none;
-    }
+  .inputButton:hover .spin {
+    animation: none;
+  }
+  .loading::before {
+    animation: none;
+  }
 
-    .card:hover span {
-        transform: none;
-    }
+  .card:hover span {
+    transform: none;
+  }
 }
 
 /* || Mobile */
 @media (max-width: 700px) {
-    .inputGrid {
-        grid-template-areas:
-            "radio uppercase uppercase"
-            "radio numbers numbers"
-            "input input input"
-            "slider slider slider";
-    }
+  .inputGrid {
+    grid-template-areas:
+      "radio uppercase uppercase"
+      "radio numbers numbers"
+      "input input input"
+      "slider slider slider";
+  }
 
-    .header {
-        flex-direction: column;
-        gap: 3rem;
-        align-items: flex-start;
-    }
+  .header {
+    flex-direction: column;
+    gap: 3rem;
+    align-items: flex-start;
+  }
 
-    .inputWrapper input {
-        font-size: 1rem;
-    }
+  .inputWrapper input {
+    font-size: 1rem;
+  }
 }

@@ -12,7 +12,8 @@ import { ErrorComponent } from "./errorComponent"
 import { type InputValueTypes } from "./form"
 import { Divider } from "./ui/divider"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
-import { motion } from "framer-motion"
+import { LayoutGroup, motion } from "framer-motion"
+import { Loading } from "./ui/loading"
 // console.time("checkingTime")
 const checker = async (password: string) => {
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
@@ -26,12 +27,13 @@ const checker = async (password: string) => {
  * @param str string to check
  * @returns string, mutated or not
  */
-const validateLength = (str: string, length: number) => {
+export const validateLength = (str: string, length: number) => {
   let final = str
-  console.log(`Checked string of length ${str.length}`)
   if (str.length > length) {
     final = str.substring(0, length)
+    // console.log(`Checked string of length ${final.length}`)
   }
+  // console.log(`Checked string of length ${final.length}`)
   return final
 }
 
@@ -74,12 +76,12 @@ export function StrengthIndicator(props: {
   const [output, setOutput] = useState("Loistava")
 
   const [score, setScore] = useState(4)
-  const [time, setTime] = useState([""])
+  const [time, setTime] = useState<string[]>([])
 
   const calculateTimeToCheck = async () => {
     // didCheckTime prevents unneccessary computation. eg. user clicks again, even if password has not changed
     if (!didCheckTime) {
-      console.time("timeToCheck")
+      console.time("Time to check")
       didCheckTime = true
       await checker(validateLength(password, 70)).then((r) => {
         let timeToDo = r.crackTimesDisplay.offlineSlowHashing1e4PerSecond.toString()
@@ -92,7 +94,7 @@ export function StrengthIndicator(props: {
         }
         setTime([timeToDo])
       })
-      console.timeEnd("timeToCheck")
+      console.timeEnd("Time to check")
     }
   }
 
@@ -105,7 +107,7 @@ export function StrengthIndicator(props: {
     if (!didInit) {
       if (password.length > 0) {
         didInit = true
-        checker(password)
+        checker(validateLength(password, 70))
           .then((r) => {
             // console.log("🚀 ~ file: indicator.tsx:106 ~ checker ~ password:", password)
             console.log("Mounted and checking...")
@@ -131,7 +133,7 @@ export function StrengthIndicator(props: {
       setScore(4)
       setOutput(numberToString(4))
     } else {
-      setTime([""])
+      // setTime([""])
       if (password.length > 0) {
         checker(password)
           .then((r) => {
@@ -175,6 +177,7 @@ export function StrengthIndicator(props: {
                 <Tooltip>
                   <TooltipTrigger type="button" asChild>
                     <motion.div
+                      layout
                       key={output}
                       animate={{
                         width: "100%",
@@ -225,11 +228,11 @@ export function StrengthIndicator(props: {
               <div className="">
                 <Divider margin="0.25rem 0rem" />
                 <div className="flex-center space-between">
-                  <p className="fadeIn">{time[0]}</p>
+                  {time[0] != null ? <p className="fadeIn">{time[0]}</p> : <p>Ladataan...</p>}
                   <TooltipProvider delayDuration={600}>
                     <Tooltip>
                       <TooltipTrigger>
-                        <a className="flex-center" aria-label="Info" href="#miten-vahvuus-arvioidaan">
+                        <a className="flex-center" aria-label="Info" href="/#miten-vahvuus-arvioidaan">
                           <InfoEmpty
                             className="hover interact"
                             width={20}
