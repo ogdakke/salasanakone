@@ -1,16 +1,18 @@
-export type HighlightCondition = {
+import { CSSProperties } from "react"
+
+export interface HighlightCondition {
   condition: string
   style: React.CSSProperties
 }
 
-type HighlightProps = {
+interface HighlightProps {
   text: string
   highlightConditions: HighlightCondition[]
 }
 
 export const Highlighter = ({ text, highlightConditions }: HighlightProps) => {
   // Create an object to hold styles for each character in the text
-  const stylesForCharacters: { [key: string]: React.CSSProperties } = {}
+  const stylesForCharacters: Record<string, CSSProperties> = {}
 
   // Process each highlight condition
   highlightConditions.forEach(({ condition, style }) => {

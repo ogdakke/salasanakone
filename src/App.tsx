@@ -14,8 +14,11 @@ import { Feedback } from "./Components/feedback"
 import ReloadPrompt from "./Components/reloadPrompt"
 import { Credits } from "./Components/ui/credits"
 import { Loading } from "./Components/ui/loading"
+import { motion } from "framer-motion"
 
 const FormComponent = React.lazy(async () => await import("./Components/form"))
+
+const isSmallScreen = screen.width < 700
 
 function App() {
   return (
@@ -25,7 +28,18 @@ function App() {
           <LogoIcon width={40} height={40} />
           <h1>Salasanakone</h1>
         </div>
-        <Suspense fallback={<Loading height="var(--formContainerHeight)" />}>
+        <Suspense
+          fallback={
+            <div className="relative">
+              <Loading height={isSmallScreen ? "394.375px" : "309px"} />
+              <div style={{ height: "1.5rem" }}> </div>
+              <Loading
+                height={"84.1875px"}
+                className={isSmallScreen ? `'absolute bottom-0'` : ``}
+              />
+            </div>
+          }
+        >
           <ErrorBoundary
             fallbackRender={({ error, resetErrorBoundary }) => {
               return (

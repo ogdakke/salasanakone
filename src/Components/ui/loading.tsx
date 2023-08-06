@@ -1,17 +1,26 @@
 import styles from "../../styles/modules/Loading.module.css"
 
-type LoadingProps = {
+interface LoadingProps {
+  className?: string
   width?: string
-  height: string
+  height?: string
 }
 
-export function Loading({ width, height }: LoadingProps) {
+/**
+ * Loading component with custom size
+ * @param width width? as string | default "100%"
+ * @param height height as string
+ * @returns
+ */
+export function Loading({ className, width = "100%", height }: LoadingProps, { ...props }) {
   return (
     <div
+      {...props}
       style={{
+        width: width,
         height: height,
       }}
-      className={styles.loading}
+      className={`${className ? className : ""} ${styles.loading}`}
       aria-busy="true"
     >
       {/* <span role="progressbar" aria-label="Loader animation" className="loader"></span> */}

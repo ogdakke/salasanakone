@@ -36,7 +36,7 @@
 }
 
 .inputButton:focus-visible {
-  outline: 2px solid rgb(var(--background-rgb));
+  box-shadow: 2px solid rgb(var(--background-rgb));
   filter: invert(1);
 }
 
@@ -58,6 +58,10 @@
 }
 
 /* || global reusable styles */
+.flex {
+  display: flex;
+}
+
 .flex-center {
   display: flex;
   align-items: center;
@@ -80,6 +84,30 @@
 
 .fadeIn {
   animation: fadeIn 200ms ease-in;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.bottom-0 {
+  bottom: 0;
+}
+
+.mt-05 {
+  margin-top: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mb-05 {
+  margin-bottom: 0.5rem;
 }
 
 @keyframes fadeIn {

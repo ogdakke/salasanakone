@@ -5,7 +5,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/t
 // import { FormType } from "./form";
 import "../styles/Indicator.css"
 
-import { InfoEmpty, OpenSelectHandGesture } from "iconoir-react"
+import { Circle, InfoEmpty, OpenSelectHandGesture } from "iconoir-react"
 import { ErrorBoundary } from "react-error-boundary"
 
 import { ErrorComponent } from "./errorComponent"
@@ -177,14 +177,8 @@ export function StrengthIndicator(props: {
                 <Tooltip>
                   <TooltipTrigger type="button" asChild>
                     <motion.div
-                      layout
+                      layoutId="strengthIndicator"
                       key={output}
-                      animate={{
-                        width: "100%",
-                      }}
-                      initial={{
-                        width: "fit-content",
-                      }}
                       whileHover={{
                         scale: 1.1,
                         transition: {
@@ -216,6 +210,9 @@ export function StrengthIndicator(props: {
             </div>
           </PopoverTrigger>
           <PopoverContent
+            style={{
+              zIndex: 3,
+            }}
             align="center"
             side="top"
             className="PopoverContent"
@@ -224,33 +221,10 @@ export function StrengthIndicator(props: {
             }}
           >
             <div className="popCard">
-              <p className="fadeIn resultHelperText">Murtamiseen vaadittu aika</p>
-              <div className="">
-                <Divider margin="0.25rem 0rem" />
-                <div className="flex-center space-between">
-                  {time[0] != null ? <p className="fadeIn">{time[0]}</p> : <p>Ladataan...</p>}
-                  <TooltipProvider delayDuration={600}>
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <a className="flex-center" aria-label="Info" href="/#miten-vahvuus-arvioidaan">
-                          <InfoEmpty
-                            className="hover interact"
-                            width={20}
-                            height={20}
-                            strokeWidth={1.75}
-                            opacity={0.75}
-                          />
-                        </a>
-                      </TooltipTrigger>
-                      <TooltipContent sideOffset={6} className="TooltipContent">
-                        <div className="flex-center">
-                          <OpenSelectHandGesture width={20} height={20} />
-                          Miten vahvuus arvioidaan?
-                        </div>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
+              <p className="fadeIn resultHelperText">Murtamisaika</p>
+              <Divider margin="0.25rem 0rem" />
+              <div className="flex-center space-between">
+                {time[0] != null ? <p className="fadeIn">{time[0]}</p> : <p>Ladataan...</p>}
               </div>
             </div>
           </PopoverContent>

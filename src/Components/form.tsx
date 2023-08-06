@@ -21,6 +21,7 @@ import { Label } from "./ui/label"
 import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
 import { Slider } from "./ui/slider"
 import { Island } from "./island"
+import { motion } from "framer-motion"
 
 const Result = React.lazy(async () => await import("./result"))
 // passgen module
@@ -83,7 +84,10 @@ const correctType = (arg: unknown, desiredType: unknown): boolean => {
   }
 }
 
-export async function generatePassword(formValues: InputValueTypes, sliderValue: number): Promise<string> {
+export async function generatePassword(
+  formValues: InputValueTypes,
+  sliderValue: number,
+): Promise<string> {
   return await createCryptoKey(sliderValue.toString(), formValues)
 }
 
@@ -213,7 +217,11 @@ export default function FormComponent(): React.ReactNode {
             // formValues[option].selected
             if (values.inputType === "checkbox") {
               return (
-                <div key={option} className="checkboxParent flex-center" style={{ gridArea: `${option}` }}>
+                <div
+                  key={option}
+                  className="checkboxParent flex-center"
+                  style={{ gridArea: `${option}` }}
+                >
                   <Checkbox
                     aria-label={labelForCheckbox(option)}
                     checked={formValues[option].selected}
@@ -260,7 +268,11 @@ export default function FormComponent(): React.ReactNode {
                     <div className="fadeIn labelOnTop">
                       <Label className="flex-bottom" title={values.info} htmlFor={option}>
                         {labelForCheckbox(option)}
-                        {isDisabled ? <span className="resultHelperText">Lisää sanoja</span> : <span></span>}
+                        {isDisabled ? (
+                          <span className="resultHelperText">Lisää sanoja</span>
+                        ) : (
+                          <span></span>
+                        )}
                       </Label>
                       <InputComponent
                         disabled={isDisabled}
@@ -268,7 +280,11 @@ export default function FormComponent(): React.ReactNode {
                         defaultValue={formValues[option].value}
                         placeholder={inputPlaceholder}
                         onChange={(event) => {
-                          valuesToForm(option, validateLength(event.target.value, inputFieldMaxLength), "value")
+                          valuesToForm(
+                            option,
+                            validateLength(event.target.value, inputFieldMaxLength),
+                            "value",
+                          )
                         }}
                       />
                     </div>
@@ -307,12 +323,24 @@ export default function FormComponent(): React.ReactNode {
               max={formValues.words.selected ? maxLengthForWords : maxLengthForChars}
               min={formValues.words.selected ? minLengthForWords : minLengthForChars}
               step={1}
-            />
+            >
+              <motion.span
+                initial={{ scale: 1 }}
+                whileTap={{
+                  scale: 0.9,
+                }}
+              ></motion.span>
+            </Slider>
           </div>
         </div>
       </form>
       <div className="IslandWrapper">
-        <Island generate={generate} finalPassword={finalPassword} formValues={formValues} sliderValue={sliderValue} />
+        <Island
+          generate={generate}
+          finalPassword={finalPassword}
+          formValues={formValues}
+          sliderValue={sliderValue}
+        />
       </div>
     </>
   )
