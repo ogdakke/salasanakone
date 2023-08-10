@@ -1,15 +1,15 @@
-import { Refresh } from "iconoir-react"
-import "../styles/Island.css"
-import { InputValueTypes } from "./form"
-import { StrengthIndicator } from "./indicator"
 import { motion } from "framer-motion"
+import { Refresh } from "iconoir-react"
 import { Suspense } from "react"
+import { IndexableInputValue } from "../models"
+import "../styles/Island.css"
+import { StrengthIndicator } from "./indicator"
 import { Loading } from "./ui/loading"
 
 interface Props {
   generate: () => void
   finalPassword: string
-  formValues: InputValueTypes
+  formValues: IndexableInputValue
   sliderValue: number
 }
 
@@ -60,9 +60,9 @@ export const Island = ({ generate, finalPassword, formValues, sliderValue }: Pro
                 scale: 0.95,
               }}
               className="IslandGenerateButton"
-              onClick={() => generate()}
+              onClick={() => void generate()}
             >
-              <Refresh width={32} height={32} />
+              <Refresh className="Refresh spin" width={32} height={32} />
             </motion.button>
           </motion.div>
         </div>

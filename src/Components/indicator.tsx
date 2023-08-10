@@ -1,25 +1,19 @@
+import { OpenSelectHandGesture } from "iconoir-react"
 import { Suspense, useCallback, useEffect, useState } from "react"
-
+import { ErrorBoundary } from "react-error-boundary"
+import "../styles/Indicator.css"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
 
-// import { FormType } from "./form";
-import "../styles/Indicator.css"
-
-import { Circle, InfoEmpty, OpenSelectHandGesture } from "iconoir-react"
-import { ErrorBoundary } from "react-error-boundary"
-
+import { motion } from "framer-motion"
+import { IndexableInputValue } from "../models"
 import { ErrorComponent } from "./errorComponent"
-import { type InputValueTypes } from "./form"
 import { Divider } from "./ui/divider"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
-import { LayoutGroup, motion } from "framer-motion"
-import { Loading } from "./ui/loading"
-// console.time("checkingTime")
+
 const checker = async (password: string) => {
   const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
   return check(password.toString())
 }
-// console.timeEnd("checkingTime")
 
 /**
  * returns a substring of desired length {length} if str is longer than {length}
@@ -57,7 +51,7 @@ let didCheckTime = false
  * @returns JSX element
  */
 export function StrengthIndicator(props: {
-  formValues: InputValueTypes
+  formValues: IndexableInputValue
   password: string
   sliderValue: number
 }): React.ReactNode {
@@ -67,7 +61,7 @@ export function StrengthIndicator(props: {
     if (!formValues.words.selected && sliderValue > 15) {
       // a rndm string needs not be checked if its longer than 15
       return false
-    } else if (formValues.words.selected && sliderValue > 3) {
+    } else if (formValues.words.selected && sliderValue > 4) {
       return false
     }
     return true
@@ -115,14 +109,14 @@ export function StrengthIndicator(props: {
             setOutput(numberToString(r.score))
           })
           .catch((err) => {
-            console.error("Error in checking", ...err)
+            console.error("Error in checking", err)
           })
           .finally(() => {
             console.log("Mounted and checked successfully.")
           })
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -133,7 +127,6 @@ export function StrengthIndicator(props: {
       setScore(4)
       setOutput(numberToString(4))
     } else {
-      // setTime([""])
       if (password.length > 0) {
         checker(password)
           .then((r) => {
@@ -151,12 +144,10 @@ export function StrengthIndicator(props: {
     }
   }, [password])
 
-  // const [op, setOp] = useState(false)
-
   return (
     <ErrorBoundary
       fallbackRender={({ error, resetErrorBoundary }) => {
-        return <ErrorComponent error={error} resetErrorBoundary={resetErrorBoundary} />
+        return <ErrorComponent error={error as unknown} resetErrorBoundary={resetErrorBoundary} />
       }}
     >
       <Suspense
@@ -168,8 +159,8 @@ export function StrengthIndicator(props: {
       >
         <Popover modal={true}>
           <PopoverTrigger
-            onClick={async () => {
-              await calculateTimeToCheck()
+            onClick={() => {
+              void calculateTimeToCheck().catch(console.error)
             }}
           >
             <div>
@@ -224,7 +215,7 @@ export function StrengthIndicator(props: {
               <p className="fadeIn resultHelperText">Murtamisaika</p>
               <Divider margin="0.25rem 0rem" />
               <div className="flex-center space-between">
-                {time[0] != null ? <p className="fadeIn">{time[0]}</p> : <p>Ladataan...</p>}
+                <p>{time[0]}</p>
               </div>
             </div>
           </PopoverContent>

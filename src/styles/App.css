@@ -87,7 +87,7 @@
 }
 
 .absolute {
-  position: absolute;
+  position: absolute !important;
 }
 
 .relative {
@@ -95,7 +95,7 @@
 }
 
 .bottom-0 {
-  bottom: 0;
+  bottom: 0 !important;
 }
 
 .mt-05 {

@@ -1,1 +1,7 @@
-/src/sanat.js
+node_modules/
+.vscode/
+.vercel/
+dev-dist/
+dist/
+public/
+src/sanat.js

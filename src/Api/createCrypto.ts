@@ -1,4 +1,4 @@
-import { type InputValueTypes } from "../Components/form"
+import { IndexableInputValue } from "../models"
 import { sanat } from "../sanat"
 export interface checkboxes {
   uppercase?: boolean
@@ -7,81 +7,102 @@ export interface checkboxes {
   words?: boolean
 }
 
-export default async function createCryptoKey(sliderValue: string, data: InputValueTypes): Promise<string> {
-  const arrayOfWords = sanat
-
-  const USER_SPECIALS = data.randomChars.value
+export default function createCryptoKey(sliderValue: string, data: IndexableInputValue): string {
   const length = parseInt(sliderValue)
+  return handleReturns(length, data)
+}
 
-  const handleReturns = (length: number) => {
-    function handle(length: number): string {
-      // if words is true --->
-      if (data.words.selected) {
-        /* this is the string[] that is generated when data.words is true */
-        const wordString = getWordsWithObject(length, arrayOfWords)
+function handleReturns(length: number, data: IndexableInputValue): string {
+  const USER_SPECIALS = data.randomChars.value || ""
+  const wordString = data.words.selected ? getWordsWithObject(length, sanat) : null
 
-        if (data.randomChars.value != null) {
-          if (data.numbers.selected) {
-            if (data.uppercase.selected) {
-              return randomNumberOnString(capitalizeFirstLetter(wordString)).join(USER_SPECIALS)
-            }
-            return randomNumberOnString(wordString).join(USER_SPECIALS)
-          }
-          if (data.uppercase.selected) {
-            return capitalizeFirstLetter(wordString).join(USER_SPECIALS)
-          }
-          return wordString.join(USER_SPECIALS)
-        }
-        if (data.numbers.selected) {
-          const numberedArr = randomNumberOnString(wordString)
+  let finalString: string
 
-          return numberedArr.join("").toString()
-        }
-        if (data.uppercase.selected) {
-          return capitalizeFirstLetter(wordString).join("")
-        }
-        return wordString.join("")
-      }
-      // if words is false -------->
-      else if (data.randomChars.selected && data.numbers.selected) {
-        return createFromString(specialsAndNums)
-      } else if (!data.numbers.selected && !data.randomChars.selected) {
-        return createFromString(chars)
-      } else if (data.numbers.selected) {
-        return createFromString(charsWithNumbers)
-      } else if (data.randomChars.selected) {
-        return createFromString(charsAndSpecials)
-      }
-      return " "
-    }
-
-    // handle the handle :D
-    const finalString = handle(length)
-
-    if (data.uppercase.selected && !data.words.selected) {
-      return toUppercase(finalString).toString()
-    }
-    return finalString
+  if (wordString !== null) {
+    finalString = handleWordsTrue(data, wordString, USER_SPECIALS)
+  } else {
+    finalString = handleWordsFalse(data, length)
   }
 
-  /**
-   * Creates a randomised string of chars from a input string
-   * @param stringToUse string that contains all the chars to generate the random string from
-   * @returns randomized string
-   */
-  const createFromString = (stringToUse: string): string => {
-    const numArr = generateRandomArray(length, 0, stringToUse.length - 1)
-
-    const charArr = stringToUse.split("")
-
-    const str: string[] = []
-    numArr.map((_num, i) => {
-      return str.push(charArr[numArr[i]])
-    })
-    return str.join("")
+  if (data.uppercase.selected && !data.words.selected) {
+    finalString = toUppercase(finalString).toString()
   }
 
-  return handleReturns(length)
+  return finalString
+}
+
+function handleWordsTrue(
+  data: IndexableInputValue,
+  wordString: string[],
+  USER_SPECIALS: string,
+): string {
+  if (data.randomChars.value != null) {
+    const joinedWordString = applyTransformationsToWords(data, wordString).join(USER_SPECIALS)
+    return joinedWordString
+  }
+
+  if (data.numbers.selected) {
+    const numberedArr = randomNumberOnString(wordString)
+    return numberedArr.join("").toString()
+  }
+
+  if (data.uppercase.selected) {
+    return capitalizeFirstLetter(wordString).join("")
+  }
+
+  return wordString.join("")
+}
+
+function applyTransformationsToWords(data: IndexableInputValue, wordString: string[]): string[] {
+  if (data.numbers.selected) {
+    if (data.uppercase.selected) {
+      return randomNumberOnString(capitalizeFirstLetter(wordString))
+    }
+    return randomNumberOnString(wordString)
+  }
+
+  if (data.uppercase.selected) {
+    return capitalizeFirstLetter(wordString)
+  }
+
+  return wordString
+}
+
+function handleWordsFalse(data: IndexableInputValue, length: number): string {
+  if (data.randomChars.selected && data.numbers.selected) {
+    return createFromString(specialsAndNums, length)
+  }
+
+  if (!data.numbers.selected && !data.randomChars.selected) {
+    return createFromString(characters, length)
+  }
+
+  if (data.numbers.selected) {
+    return createFromString(charsWithNumbers, length)
+  }
+
+  if (data.randomChars.selected) {
+    return createFromString(charactersAndSpecialCharacters, length)
+  }
+
+  return " "
+}
+
+/**
+ * Creates a randomised string of chars from a input string
+ * @param stringToUse string that contains all the chars to generate the random string from
+ * @returns randomized string
+ */
+const createFromString = (stringToUse: string, length: number): string => {
+  const numArr = generateRandomArray(length, 0, stringToUse.length - 1)
+  const charArr = stringToUse.split("")
+
+  const str: string[] = []
+  numArr.map((_num, i) => {
+    return str.push(charArr[numArr[i]])
+  })
+
+  return str.join("")
 }
 
 /**
@@ -128,18 +149,18 @@ function generateRandomNumberInRange(min: number, max: number): number {
     return 0
   }
   const maxNum = Math.pow(256, requestBytes)
-  const ar = new Uint8Array(requestBytes)
+  const arr = new Uint8Array(requestBytes)
 
   let val: number
 
   do {
     // Fill the typed array with cryptographically secure random values
-    window.crypto.getRandomValues(ar)
+    window.crypto.getRandomValues(arr)
 
     // Combine the array of random bytes into a single integer
     val = 0
     for (let i = 0; i < requestBytes; i++) {
-      val = (val << 8) + ar[i]
+      val = (val << 8) + arr[i]
     }
   } while (val >= maxNum - (maxNum % range))
 
@@ -217,38 +238,8 @@ const randomNumberOnString = (stringArr: string[]): string[] => {
   return stringArr
 }
 
-const insertRandomNumber = (stringArr: string[], sliderValue: number): string[] => {
-  const finalArr = []
-  let mutated: string[] = []
-  let mutatedArr = ""
-
-  try {
-    for (let i = 0; i < sliderValue; i++) {
-      const maxValue = stringArr[i].toString().length
-      const randomIndex = generateRandomNumberInRange(0, maxValue)
-      const intToInsert = generateRandomNumberInRange(0, 9).toString()
-
-      mutated = stringArr[i].split("")
-
-      mutated = insertAtIndex(mutated, randomIndex, intToInsert)
-
-      mutatedArr = mutated.join("")
-      finalArr.push(mutatedArr)
-    }
-  } catch (err) {
-    console.error(err)
-  }
-
-  return finalArr
-}
-
-function insertAtIndex(arr: string[], index: number, element: string): string[] {
-  arr.splice(index, 0, element)
-  return arr
-}
-
 const specialsAndNums = "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#"
-const charsAndSpecials = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#"
+const charactersAndSpecialCharacters = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#"
 const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
-const chars = "abcdefghijklmnopqrstuyäöxz"
+const characters = "abcdefghijklmnopqrstuyäöxz"
 export const specials = "><,.-_*?+/()@%&!€=#"

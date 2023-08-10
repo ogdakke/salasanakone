@@ -3,9 +3,9 @@ import { useState } from "react"
 
 import copyToClipboard from "../Api/copyToClipboard"
 
-import "../styles/Result.css"
 import { motion } from "framer-motion"
 import { specials } from "../Api/createCrypto"
+import "../styles/Result.css"
 import { HighlightCondition, Highlighter } from "./ui/utils/highlight"
 
 const numbers = "0123456789"
@@ -87,10 +87,10 @@ export default function Result(props: { finalPassword: string; copyText: string 
           className="card interact resultCard relative"
           itemType="button"
           tabIndex={0}
-          onClick={() => handleClick(finalPassword)}
-          onKeyDown={async (e) => {
+          onClick={() => void handleClick(finalPassword).catch(console.error)}
+          onKeyDown={(e) => {
             if (e.key === "Enter") {
-              await handleClick(finalPassword)
+              void handleClick(finalPassword).catch(console.error)
             }
           }}
         >

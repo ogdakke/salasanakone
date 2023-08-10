@@ -19,6 +19,6 @@
       "vite-plugin-pwa/client"
     ]
   },
-  "include": ["src/**/*", "eslintrc.cjs"],
+  "include": ["src/**/*", "config/**/*", "eslintrc.cjs", "vite.*"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

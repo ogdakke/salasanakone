@@ -44,8 +44,8 @@ export const ShareComponent = () => {
           </div>
         ) : null}
         <div
-          onClick={async () => {
-            await shareAction()
+          onClick={() => {
+            shareAction().catch(console.error)
           }}
           className="shareButton"
         >

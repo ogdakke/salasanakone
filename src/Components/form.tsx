@@ -1,4 +1,5 @@
 // modules
+import { motion } from "framer-motion"
 import React, { Suspense, useCallback, useEffect, useState } from "react"
 
 // hooks
@@ -8,69 +9,32 @@ import { usePersistedState } from "../hooks/usePersistedState"
 import "../styles/Form.css"
 import "../styles/ui/Checkbox.css"
 
-// Icons
-import { Refresh } from "iconoir-react"
+// config
+import { inputValues, labelForCheckbox } from "../../config/form-config"
+
+// models
+import { IndexableInputValue, InputLabel } from "../models"
 
 // components
-import { createCrypto } from "../main"
-import { StrengthIndicator, validateLength } from "./indicator"
+import { validateLength } from "./indicator"
 import { Checkbox } from "./ui/checkbox"
 import { InputComponent } from "./ui/input"
+const Result = React.lazy(async () => await import("./result"))
+
 // ui
+import { Island } from "./island"
 import { Label } from "./ui/label"
 import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
 import { Slider } from "./ui/slider"
-import { Island } from "./island"
-import { motion } from "framer-motion"
 
-const Result = React.lazy(async () => await import("./result"))
 // passgen module
-const createCryptoKey = await createCrypto
-
-type InputType = "checkbox" | "input" | "radio"
-type KeyType = "words" | "uppercase" | "numbers" | "randomChars"
-
-interface InputValue {
-  inputType: InputType
-  value?: string
-  selected: boolean
-  info: string
-}
-
-export type InputValueTypes = {
-  [key in KeyType]: InputValue
-}
-
-const inputValues: InputValueTypes = {
-  words: {
-    inputType: "radio",
-    selected: true,
-    info: "Luodaanko salasana sanoista?",
-  },
-  uppercase: {
-    inputType: "checkbox",
-    selected: false,
-    info: "Sisältääkö Salasana isoja kirjaimia.",
-  },
-  numbers: {
-    inputType: "checkbox",
-    selected: true,
-    info: "Sisältääkö Salasana numeroita satunnaisissa paikoissa.",
-  },
-  randomChars: {
-    inputType: "input",
-    value: "-",
-    selected: false,
-    info: "Välimerkki, joka yhdistää sanat.",
-  },
-}
+import createCryptoKey from "../Api/createCrypto"
 
 const lang = {
   Finnish: true,
   English: false,
 }
 
-// const initialKeys: string[] = Object.keys(initialFormValues)
 const initialInputKeys = Object.entries(inputValues)
 
 const correctType = (arg: unknown, desiredType: unknown): boolean => {
@@ -84,11 +48,8 @@ const correctType = (arg: unknown, desiredType: unknown): boolean => {
   }
 }
 
-export async function generatePassword(
-  formValues: InputValueTypes,
-  sliderValue: number,
-): Promise<string> {
-  return await createCryptoKey(sliderValue.toString(), formValues)
+export function generatePassword(formValues: IndexableInputValue, sliderValue: number) {
+  return createCryptoKey(sliderValue.toString(), formValues)
 }
 
 export default function FormComponent(): React.ReactNode {
@@ -109,13 +70,14 @@ export default function FormComponent(): React.ReactNode {
 
   const validate = useCallback(
     (sliderValue: number): number => {
+      const { selected } = formValues.words
       if (
-        formValues.words.selected &&
+        selected &&
         (sliderValue > maxLengthForWords || sliderValue < 1 || !correctType(sliderValue, "number")) // should return false
       ) {
         setSliderValue(maxLengthForWords)
         return maxLengthForWords
-      } else if (!formValues.words.selected && sliderValue < minLengthForChars) {
+      } else if (!selected && sliderValue < minLengthForChars) {
         setSliderValue(minLengthForChars)
         return minLengthForChars
       }
@@ -124,10 +86,11 @@ export default function FormComponent(): React.ReactNode {
     [formValues, setSliderValue],
   )
 
-  const generate = useCallback(async () => {
-    formValues.words.selected && sliderValue < 2 ? setDisabled(true) : setDisabled(false)
+  const generate = useCallback(() => {
+    inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)
     try {
-      setFinalPassword(await generatePassword(formValues, sliderValue))
+      const setPassword = () => generatePassword(formValues, sliderValue)
+      setFinalPassword(setPassword())
     } catch (err) {
       console.error(err)
       throw new Error("Error setting password")
@@ -135,55 +98,33 @@ export default function FormComponent(): React.ReactNode {
   }, [formValues, sliderValue])
 
   useEffect(() => {
-    let didCheck = false
-    if (!didCheck) {
-      didCheck = true
-      validate(sliderValue)
-      generate()
-    }
-    return () => {
-      didCheck = false
-    }
+    validate(sliderValue)
+    generate()
   }, [generate, sliderValue, validate])
 
-  const valuesToForm = (option: KeyType, event: any, value: string): void => {
-    setFormValues((formValues) => {
-      const updatedFormValues = { ...formValues }
-      if (value === "selected") {
-        const updatedFormValue = {
-          ...updatedFormValues[option],
-          selected: event,
-        }
-        updatedFormValues[option] = updatedFormValue
-      } else {
-        const updatedFormValue = {
-          ...updatedFormValues[option],
-          value: event,
-        }
-        updatedFormValues[option] = updatedFormValue
-      }
-      return updatedFormValues
-    })
-  }
+  const valuesToForm = useCallback(
+    (option: InputLabel, event: unknown, value: "selected" | "value") => {
+      setFormValues((prev) => {
+        const updatedValues = { ...prev }
 
-  const labelForCheckbox = (
-    option: string,
-  ): "Isot Kirjaimet" | "Välimerkit" | "Numerot" | "Salalause" | "Käytä sanoja" => {
-    if (option === "uppercase") {
-      return "Isot Kirjaimet"
-    } else if (option === "randomChars") {
-      return "Välimerkit"
-    } else if (option === "numbers") {
-      return "Numerot"
-    } else if (option === "passphrase") {
-      return "Salalause"
-    }
-    return "Käytä sanoja"
-  }
+        if (value === "selected" && typeof event === "boolean") {
+          updatedValues[option] = { ...updatedValues[option], selected: event }
+        } else if (typeof event === "string") {
+          updatedValues[option] = { ...updatedValues[option], value: event }
+        }
+        return updatedValues
+      })
+    },
+    [setFormValues],
+  )
 
   const sliderVal = (value: number): number => {
     setSliderValue(validate(value))
     return value
+  }
+
+  const inputFieldShouldDisable = () => {
+    return formValues.words.selected && sliderValue < 2
   }
 
   return (
@@ -211,9 +152,9 @@ export default function FormComponent(): React.ReactNode {
         </div>
 
         <div className="inputGrid">
-          {initialInputKeys.map(([item, objEntries]) => {
-            const option = item as KeyType
-            const values = objEntries
+          {initialInputKeys.map(([item, entry]) => {
+            const option = item as InputLabel
+            const values = entry
             // formValues[option].selected
             if (values.inputType === "checkbox") {
               return (
@@ -243,10 +184,9 @@ export default function FormComponent(): React.ReactNode {
                   <RadioGroup
                     defaultValue={formValues[option].selected.toString()}
                     onValueChange={(event) => {
-                      const asBool = JSON.parse(event.toLowerCase()) as unknown // JSON.parse is a handy way to get boolean value, since we know it is either given "true" of "false"
-
                       values.selected = !values.selected
-                      valuesToForm(option, asBool, "selected")
+                      const isBool = event === "true" ? true : false
+                      valuesToForm(option, isBool, "selected")
                     }}
                   >
                     <div className="flex-center">
@@ -311,8 +251,8 @@ export default function FormComponent(): React.ReactNode {
           <div className="sliderWrapper">
             <Label htmlFor="slider">
               {formValues.words.selected
-                ? `Pituus: ${validate(sliderValue)} Sanaa`
-                : `Pituus: ${validate(sliderValue)} Merkkiä`}
+                ? `Pituus: ${sliderValue} Sanaa`
+                : `Pituus: ${sliderValue} Merkkiä`}
             </Label>
             <Slider
               id="slider"

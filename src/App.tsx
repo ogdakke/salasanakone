@@ -1,8 +1,8 @@
 import React, { Suspense } from "react"
 
 // styles
-import "./styles/globals.css"
 import "./styles/App.css"
+import "./styles/globals.css"
 
 import { ErrorBoundary } from "react-error-boundary"
 
@@ -14,7 +14,6 @@ import { Feedback } from "./Components/feedback"
 import ReloadPrompt from "./Components/reloadPrompt"
 import { Credits } from "./Components/ui/credits"
 import { Loading } from "./Components/ui/loading"
-import { motion } from "framer-motion"
 
 const FormComponent = React.lazy(async () => await import("./Components/form"))
 
@@ -30,14 +29,14 @@ function App() {
         </div>
         <Suspense
           fallback={
-            <div className="relative">
+            <>
               <Loading height={isSmallScreen ? "394.375px" : "309px"} />
               <div style={{ height: "1.5rem" }}> </div>
               <Loading
                 height={"84.1875px"}
                 className={isSmallScreen ? `'absolute bottom-0'` : ``}
               />
-            </div>
+            </>
           }
         >
           <ErrorBoundary
