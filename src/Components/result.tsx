@@ -4,7 +4,7 @@ import { useState } from "react"
 import copyToClipboard from "../Api/copyToClipboard"
 
 import { motion } from "framer-motion"
-import { specials } from "../Api/createCrypto"
+import { specials } from "../../config"
 import "../styles/Result.css"
 import { HighlightCondition, Highlighter } from "./ui/utils/highlight"
 

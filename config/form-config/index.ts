@@ -1,5 +1,7 @@
 import { IndexableInputValue, IndexedLabels, InputLabel } from "../../src/models"
 
+export const inputFieldMaxLength = 8
+
 export const inputValues: IndexableInputValue = {
   words: {
     inputType: "radio",

@@ -7,9 +7,11 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
+    "test": "vitest",
     "bp": "pnpm run build && pnpm run preview",
     "lint": "npx eslint src/ && prettier -c src/",
-    "prettier:format": "prettier src/ --write"
+    "prettier:format": "prettier src/ --write",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -24,7 +26,7 @@
     "@zxcvbn-ts/language-en": "^3.0.1",
     "@zxcvbn-ts/language-fi": "^3.0.1",
     "framer-motion": "^10.15.1",
-    "globals": "^13.20.0",
+    "globals": "^13.21.0",
     "iconoir-react": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -32,25 +34,30 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@eslint/js": "^8.46.0",
+    "@eslint/js": "^8.47.0",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@types/zxcvbn": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
     "@vitejs/plugin-react": "^4.0.4",
-    "eslint": "^8.46.0",
+    "@vitest/coverage-v8": "^0.34.1",
+    "@vitest/ui": "^0.34.1",
+    "eslint": "^8.47.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.28.0",
     "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.33.1",
     "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3",
+    "jsdom": "^22.1.0",
     "prettier": "^3.0.1",
     "prettier-plugin-organize-imports": "^3.2.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.9",
     "vite-plugin-pwa": "^0.16.4",
+    "vitest": "^0.34.1",
     "workbox-window": "^7.0.0"
   }
 }

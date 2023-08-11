@@ -1,34 +1,28 @@
-// modules
 import { motion } from "framer-motion"
 import React, { Suspense, useCallback, useEffect, useState } from "react"
-
-// hooks
+import {
+  inputFieldMaxLength,
+  inputValues,
+  labelForCheckbox,
+  maxLengthForChars,
+  maxLengthForWords,
+  minLengthForChars,
+  minLengthForWords,
+} from "../../config"
+import { createCryptoKey } from "../Api/createCrypto"
 import { usePersistedState } from "../hooks/usePersistedState"
-
-// styles
+import { IndexableInputValue, InputLabel } from "../models"
 import "../styles/Form.css"
 import "../styles/ui/Checkbox.css"
-
-// config
-import { inputValues, labelForCheckbox } from "../../config/form-config"
-
-// models
-import { IndexableInputValue, InputLabel } from "../models"
-
-// components
+import { correctType } from "../utils/helpers"
 import { validateLength } from "./indicator"
+import { Island } from "./island"
 import { Checkbox } from "./ui/checkbox"
 import { InputComponent } from "./ui/input"
-const Result = React.lazy(async () => await import("./result"))
-
-// ui
-import { Island } from "./island"
 import { Label } from "./ui/label"
 import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
 import { Slider } from "./ui/slider"
-
-// passgen module
-import createCryptoKey from "../Api/createCrypto"
+const Result = React.lazy(async () => await import("./result"))
 
 const lang = {
   Finnish: true,
@@ -36,17 +30,6 @@ const lang = {
 }
 
 const initialInputKeys = Object.entries(inputValues)
-
-const correctType = (arg: unknown, desiredType: unknown): boolean => {
-  const isType = typeof arg
-  if (isType === desiredType) {
-    // console.log("Type does match", isType, " is ", desiredType);
-    return true
-  } else {
-    console.error("Type does not match", isType, " is not ", desiredType)
-    return false
-  }
-}
 
 export function generatePassword(formValues: IndexableInputValue, sliderValue: number) {
   return createCryptoKey(sliderValue.toString(), formValues)
@@ -61,12 +44,6 @@ export default function FormComponent(): React.ReactNode {
   const setFormValues = setFormValuesTyped
   // as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
   const [isDisabled, setDisabled] = useState(false)
-
-  const minLengthForChars = 4
-  const minLengthForWords = 1
-  const maxLengthForChars = 64
-  const maxLengthForWords = 12
-  const inputFieldMaxLength = 8
 
   const validate = useCallback(
     (sliderValue: number): number => {

@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react"
 import { URL, fileURLToPath } from "node:url"
-import { defineConfig } from "vite"
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa"
+import { defineConfig } from "vitest/config"
 
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: "production",
@@ -67,4 +67,7 @@ export default defineConfig({
     },
   },
   plugins: [react(), VitePWA(pwaOptions)],
+  test: {
+    environment: "jsdom",
+  },
 })

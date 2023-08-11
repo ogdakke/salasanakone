@@ -5,3 +5,4 @@ dev-dist/
 dist/
 public/
 src/sanat.js
+coverage/

@@ -1,14 +1,26 @@
+import {
+  characters,
+  charactersAndSpecialCharacters,
+  charsWithNumbers,
+  maxLengthForChars,
+  maxLengthForWords,
+  minLengthForChars,
+  minLengthForWords,
+  specialsAndNums,
+} from "../../config"
+
 import { IndexableInputValue } from "../models"
 import { sanat } from "../sanat"
-export interface checkboxes {
-  uppercase?: boolean
-  randomChars?: boolean
-  numbers?: boolean
-  words?: boolean
-}
 
-export default function createCryptoKey(sliderValue: string, data: IndexableInputValue): string {
-  const length = parseInt(sliderValue)
+let variableMinLength = minLengthForWords
+let variableMaxLength = maxLengthForChars
+
+export function createCryptoKey(sliderValue: string, data: IndexableInputValue): string {
+  variableMinLength = data.words.selected ? minLengthForWords : minLengthForChars
+  variableMaxLength = data.words.selected ? maxLengthForWords : maxLengthForChars
+
+  const length = validateStringToBeNumber(sliderValue)
+
   return handleReturns(length, data)
 }
 
@@ -103,6 +115,32 @@ const createFromString = (stringToUse: string, length: number): string => {
   })
 
   return str.join("")
+}
+
+const validateStringToBeNumber = (stringToCheck: string) => {
+  if (stringToCheck == null) {
+    throw new Error("Value cannot be undefined or null")
+  }
+
+  if (isNaN(Number(stringToCheck))) {
+    throw new Error("Value must be a numeric string")
+  }
+
+  const strAsNumber = parseInt(stringToCheck)
+
+  if (strAsNumber < 1) {
+    throw new Error("Value must be a positive number larger than 0")
+  }
+
+  if (strAsNumber > variableMaxLength) {
+    throw new Error(`Value must not exceed ${variableMaxLength}`)
+  }
+
+  if (strAsNumber < variableMinLength) {
+    throw new Error(`Value cannot be smaller than ${variableMinLength}`)
+  }
+
+  return strAsNumber
 }
 
 /**
@@ -237,9 +275,3 @@ const randomNumberOnString = (stringArr: string[]): string[] => {
   stringArr[indexToSelect] = paddedWithNumber
   return stringArr
 }
-
-const specialsAndNums = "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!€=#"
-const charactersAndSpecialCharacters = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!€=#"
-const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
-const characters = "abcdefghijklmnopqrstuyäöxz"
-export const specials = "><,.-_*?+/()@%&!€=#"
