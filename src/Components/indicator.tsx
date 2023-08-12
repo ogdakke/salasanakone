@@ -183,7 +183,7 @@ export function StrengthIndicator(props: {
                       whileFocus={{}}
                       transition={{
                         type: "spring",
-                        duration: 0.6,
+                        duration: 0.1,
                       }}
                       className={`interact strengthIndicator case${score.toString()}`}
                     >
@@ -210,12 +210,13 @@ export function StrengthIndicator(props: {
             onOpenAutoFocus={(e) => {
               e.preventDefault()
             }}
+            asChild
           >
             <div className="popCard">
               <p className="fadeIn resultHelperText">Murtamisaika</p>
               <Divider margin="0.25rem 0rem" />
               <div className="flex-center space-between">
-                <p>{time[0]}</p>
+                <span>{time[0]}</span>
               </div>
             </div>
           </PopoverContent>

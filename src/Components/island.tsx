@@ -41,29 +41,31 @@ export const Island = ({ generate, finalPassword, formValues, sliderValue }: Pro
             initial={{
               opacity: 0,
             }}
-            className="flex space-between"
+            className="flex-center space-between "
           >
             <StrengthIndicator
               password={finalPassword}
               sliderValue={sliderValue}
               formValues={formValues}
             />
-            <motion.button
-              whileHover={{
-                scale: 1.1,
-                transition: {
-                  type: "tween",
-                  duration: 0.1,
-                },
-              }}
-              whileTap={{
-                scale: 0.95,
-              }}
-              className="IslandGenerateButton"
-              onClick={() => void generate()}
-            >
-              <Refresh className="Refresh spin" width={32} height={32} />
-            </motion.button>
+            <div className="relative">
+              <motion.button
+                whileHover={{
+                  scale: 1.1,
+                  transition: {
+                    type: "tween",
+                    duration: 0.3,
+                  },
+                }}
+                whileTap={{
+                  scale: 0.95,
+                }}
+                className="IslandGenerateButton"
+                onClick={() => void generate()}
+              >
+                <Refresh className="Refresh" width={34} height={34} />
+              </motion.button>
+            </div>
           </motion.div>
         </div>
       </motion.div>

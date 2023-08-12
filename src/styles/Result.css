@@ -21,22 +21,33 @@
 }
 
 .copiedSpanText {
-  -webkit-filter: blur(2px);
-  filter: blur(2px);
-  /* padding-right: 3.25rem; */
-  transition:
-    all 200ms,
-    border 200ms;
-  color: rgba(var(--foreground-rgb), 0.2);
+  color: rgba(var(--foreground-rgb), 0.4);
   display: flex;
   gap: 0.275rem;
   align-items: center;
   word-break: keep-all;
   white-space: nowrap;
-
-  /* animation: move-reverse 300ms   900ms ease-out 1; */
 }
 
+.absoluteCopiedIcon {
+  opacity: 0;
+  position: absolute;
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  /* padding-right: 3.25rem; */
+  transition: filter 200ms;
+  /* animation: move-reverse 300ms   900ms ease-out 1; */
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: 0.5rem;
+  right: 0.5rem;
+  display: inline-block;
+  top: 1rem;
+  padding: 0.45rem;
+}
+
+.parent[data-isCopied="true"] .absoluteCopiedIcon {
+  opacity: 1;
+}
 .notCopiedSpan {
   word-break: keep-all;
   white-space: nowrap;
@@ -52,13 +63,6 @@
 }
 .relative {
   position: relative;
-}
-.absoluteCopiedIcon {
-  position: absolute;
-  right: 0;
-  display: inline-block;
-  top: 1rem;
-  padding: 0.5rem;
 }
 
 @keyframes move {
