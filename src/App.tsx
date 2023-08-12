@@ -31,11 +31,7 @@ function App() {
           fallback={
             <>
               <Loading height={isSmallScreen ? "394.375px" : "309px"} />
-              <div style={{ height: "1.5rem" }}> </div>
-              <Loading
-                height={"84.1875px"}
-                className={isSmallScreen ? `'absolute bottom-0'` : ``}
-              />
+              {!isSmallScreen ? <Loading height={"84.1875px"} /> : null}
             </>
           }
         >

@@ -1,4 +1,15 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm test && pnpm lint
+if pnpm test -- --run --coverage; then
+  echo "\nTests and linting ran successfully" 
+else
+  echo "\nTests failed..."
+fi
+
+if pnpm lint; then
+  echo "\nLinting ran successfully"
+else
+  echo "\nLinting FAILED, running prettier:format..."
+  pnpm prettier:format
+fi
