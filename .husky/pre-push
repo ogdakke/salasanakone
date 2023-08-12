@@ -9,16 +9,17 @@ fi
 # Add the analysis file to staging 
 # Replace path/to/analysis/file with the actual path to your generated analysis file
 if git add bundle-analysis/analyse.html; then
-  echo "\nAnalysis file added successfully."
+  printf "\nAnalysis file added successfully."
 else
-  echo "\nFailed to add the analysis file. Aborting push."
+  printf "\nFailed to add the analysis file. Aborting push."
   exit 1
 fi
 
 # Amend the analysis file to the latest commit without changing the commit message
-if git commit --amend --no-edit; then
-  echo "\nAnalysis file added to the latest commit successfully."
+# Also don't verify this, since it's already done beforehand
+if git commit --amend --no-edit --no-verify; then
+  printf "\nAnalysis file added to the latest commit successfully."
 else
-  echo "\nFailed to amend the commit. Aborting push."
+  printf "\nFailed to amend the commit. Aborting push."
   exit 1
 fi
