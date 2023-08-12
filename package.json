@@ -27,7 +27,7 @@
     "@zxcvbn-ts/language-fi": "^3.0.1",
     "framer-motion": "^10.15.1",
     "globals": "^13.21.0",
-    "iconoir-react": "^6.10.0",
+    "iconoir-react": "^6.11.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-error-boundary": "^4.0.11",

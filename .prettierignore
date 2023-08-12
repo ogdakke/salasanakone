@@ -1,8 +1,10 @@
 node_modules/
 .vscode/
-.vercel/
 dev-dist/
 dist/
 public/
 src/sanat.*
 coverage/
+bundle-analysis/
+.github/
+.husky/
