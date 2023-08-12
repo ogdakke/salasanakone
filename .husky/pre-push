@@ -1,4 +1,18 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm build 
+if ! pnpm build; then
+  printf "\nBuild FAILED... Aborting push\n\n"
+  exit 1
+fi
+
+# Add the analysis file to staging 
+# Replace path/to/analysis/file with the actual path to your generated analysis file
+if git add build-analysis/analyze.html; then
+  echo "\nAnalysis file added successfully."
+else
+  echo "\nFailed to add the analysis file. Aborting push."
+  exit 1
+fi
+
+
