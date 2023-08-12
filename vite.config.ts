@@ -1,5 +1,7 @@
 import react from "@vitejs/plugin-react"
 import { URL, fileURLToPath } from "node:url"
+import { PluginVisualizerOptions, visualizer } from "rollup-plugin-visualizer"
+import { type PluginOption } from "vite"
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa"
 import { defineConfig } from "vitest/config"
 
@@ -53,6 +55,14 @@ const pwaOptions: Partial<VitePWAOptions> = {
   },
 }
 
+const visualizerOptions: PluginVisualizerOptions = {
+  template: "sunburst",
+  open: true,
+  gzipSize: true,
+  brotliSize: true,
+  filename: "bundle-analysis/analyse.html", // will be saved in project's root
+}
+
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
@@ -66,7 +76,7 @@ export default defineConfig({
       "@": fileURLToPath(new URL("src", import.meta.url)),
     },
   },
-  plugins: [react(), VitePWA(pwaOptions)],
+  plugins: [react(), VitePWA(pwaOptions), visualizer(visualizerOptions) as PluginOption],
   test: {
     environment: "jsdom",
   },

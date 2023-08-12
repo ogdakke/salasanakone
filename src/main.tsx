@@ -6,16 +6,16 @@ import App from "./App"
 // import { DataFunc } from "./Api/data"
 
 export const createCrypto = import("./Api/createCrypto")
-    .then((res) => {
-        return res.default
-    })
-    .catch((err) => {
-        console.error(err, "Failed to import script")
-        throw err
-    })
+  .then((res) => {
+    return res.createCryptoKey
+  })
+  .catch((err) => {
+    console.error(err, "Failed to import script")
+    throw err
+  })
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
 )

@@ -10,7 +10,8 @@ import {
 } from "../../config"
 
 import { IndexableInputValue } from "../models"
-import { sanat } from "../sanat"
+
+const sanat = await import("../sanat.json")
 
 let variableMinLength = minLengthForWords
 let variableMaxLength = maxLengthForChars
@@ -26,7 +27,7 @@ export function createCryptoKey(sliderValue: string, data: IndexableInputValue):
 
 function handleReturns(length: number, data: IndexableInputValue): string {
   const USER_SPECIALS = data.randomChars.value || ""
-  const wordString = data.words.selected ? getWordsWithObject(length, sanat) : null
+  const wordString = data.words.selected ? getWordsWithObject(length, sanat.default) : null
 
   let finalString: string
 

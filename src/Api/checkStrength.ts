@@ -1,11 +1,11 @@
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core"
 const loadOptions = async () => {
-  const sanat = (await import("../sanat")).sanat
+  const sanat = await import("../sanat.json")
   const zxcvbnFiPackage = await import("@zxcvbn-ts/language-fi")
   return {
     dictionary: {
       ...zxcvbnFiPackage.dictionary,
-      userInputs: sanat,
+      userInputs: sanat.default,
     },
     translations: zxcvbnFiPackage.translations,
   }

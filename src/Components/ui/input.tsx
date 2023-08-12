@@ -5,11 +5,9 @@ import "../../styles/ui/Input.css"
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
-    ({ className = "", ...props }, ref) => {
-        return (
-            <input className={`TextInput ${className}`} ref={ref} {...props} />
-        )
-    },
+  ({ className = "", ...props }, ref) => {
+    return <input className={`TextInput ${className}`} ref={ref} {...props} />
+  },
 )
 InputComponent.displayName = "Input"
 

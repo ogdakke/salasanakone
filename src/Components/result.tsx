@@ -1,10 +1,8 @@
+import { motion } from "framer-motion"
 import { PasteClipboard } from "iconoir-react"
 import { useState } from "react"
-
-import copyToClipboard from "../Api/copyToClipboard"
-
-import { motion } from "framer-motion"
 import { specials } from "../../config"
+import copyToClipboard from "../Api/copyToClipboard"
 import "../styles/Result.css"
 import { HighlightCondition, Highlighter } from "./ui/utils/highlight"
 
@@ -24,23 +22,6 @@ export default function Result(props: { finalPassword: string; copyText: string 
   const handleClick = async (word: string) => {
     await copyToClipboard(word)
     copy()
-  }
-
-  // document.addEventListener("keydown", async (event) => {
-  //   await animate(scope.current, { scale: 1.015 }, { duration: 0.1 })
-  //   await animate(scope.current, { scale: 1.0 }, { duration: 0.5 })
-  //   if (event.key === "c") {
-  //     handleClick(finalPassword)
-  //   }
-  // }) this is fucked
-
-  // const [scope, animate] = useAnimate()
-
-  const tap = {
-    opacity: 0.2,
-    transition: {
-      duration: 0.2,
-    },
   }
 
   const highlightNumbers: HighlightCondition = {

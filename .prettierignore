@@ -4,5 +4,5 @@ node_modules/
 dev-dist/
 dist/
 public/
-src/sanat.js
+src/sanat.*
 coverage/

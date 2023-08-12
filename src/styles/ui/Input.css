@@ -1,28 +1,28 @@
 .TextInput {
-    grid-area: input;
-    display: flex;
-    /* width: 100%; */
-    border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-    border-radius: 4px;
-    padding: 0.325rem 0.5rem;
+  grid-area: input;
+  display: flex;
+  /* width: 100%; */
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: 4px;
+  padding: 0.325rem 0.5rem;
 }
 
 .TextInput:disabled {
-    cursor: not-allowed;
-    background-color: rgba(var(--card-rgb), 0.3);
-    border: 1px solid rgba(var(--callout-border-rgb), 0.8);
+  cursor: not-allowed;
+  background-color: rgba(var(--card-rgb), 0.3);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.8);
 }
 
 .TextInput:focus-visible {
-    border: 1px solid rgba(var(--callout-border-rgb), 1);
+  border: 1px solid rgba(var(--callout-border-rgb), 1);
 }
 
 .labelOnTop {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .labelOnTop .LabelRoot {
-    padding-left: 0;
+  padding-left: 0;
 }
