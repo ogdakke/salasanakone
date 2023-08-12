@@ -7,8 +7,7 @@ export default function useEventCallback<Args extends unknown[], R>(fn: (...args
     throw new Error("Cannot call an event handler while rendering.")
   })
 
-  useIsomorphicLayoutEffect(
-    () => {
+  useIsomorphicLayoutEffect(() => {
     ref.current = fn
   }, [fn])
 
