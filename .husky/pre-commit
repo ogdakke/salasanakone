@@ -2,15 +2,15 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 if pnpm test -- --run --coverage; then
-  printf "\nTests and linting ran successfully" 
+  printf "\nTests and linting ran successfully\n" 
 else
-  printf "\nTests failed..."
+  printf "\nTests FAILED...\n\n"
 fi
 
 if pnpm lint; then
-  printf "\nLinting ran successfully"
+  printf "\nLinting ran successfully\n"
 else
-  printf "\nLinting FAILED, running prettier:format..."
+  printf "\nLinting FAILED, running prettier:format...\n"
   pnpm prettier:format && printf "\nRan prettier, try commiting again.\n\n"
   exit 1
 fi
