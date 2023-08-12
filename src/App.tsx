@@ -2,7 +2,7 @@ import React, { Suspense } from "react"
 
 // styles
 import "./styles/App.css"
-import "./styles/Globals.css"
+import "./styles/globals.css"
 
 import { ErrorBoundary } from "react-error-boundary"
 
