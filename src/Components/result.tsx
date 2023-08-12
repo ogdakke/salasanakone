@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { PasteClipboard } from "iconoir-react"
 import { useState } from "react"
 import { specials } from "../../config"
-import copyToClipboard from "../Api/copyToClipboard"
+import copyToClipboard from "../services/copyToClipboard"
 import "../styles/Result.css"
 import { HighlightCondition, Highlighter } from "./ui/utils/highlight"
 

@@ -9,9 +9,9 @@ import {
   minLengthForChars,
   minLengthForWords,
 } from "../../config"
-import { createCryptoKey } from "../Api/createCrypto"
 import { usePersistedState } from "../hooks/usePersistedState"
 import { IndexableInputValue, InputLabel } from "../models"
+import { createCryptoKey } from "../services/createCrypto"
 import "../styles/Form.css"
 import "../styles/ui/Checkbox.css"
 import { correctType } from "../utils/helpers"

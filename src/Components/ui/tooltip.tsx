@@ -6,7 +6,9 @@ import "../../styles/ui/Tooltip.css"
 const TooltipProvider = TooltipPrimitive.Provider
 
 const Tooltip = ({ ...props }) => <TooltipPrimitive.Root {...props} />
-const TooltipTrigger = ({ ...props }) => <TooltipPrimitive.Trigger {...props} />
+const TooltipTrigger = ({ asChild = false, ...props }) => (
+  <TooltipPrimitive.Trigger {...props} asChild={asChild} />
+)
 Tooltip.displayName = TooltipPrimitive.Tooltip.displayName
 
 // const TooltipTrigger = TooltipPrimitive.Trigger

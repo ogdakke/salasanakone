@@ -2,20 +2,20 @@ import React, { Suspense } from "react"
 
 // styles
 import "./styles/App.css"
-import "./styles/globals.css"
+import "./styles/Globals.css"
 
 import { ErrorBoundary } from "react-error-boundary"
 
 import { LogoIcon } from "./assets/icons/logoIcon"
 // components
-import Description from "./Components/description"
-import { ErrorComponent } from "./Components/errorComponent"
-import { Feedback } from "./Components/feedback"
-import ReloadPrompt from "./Components/reloadPrompt"
-import { Credits } from "./Components/ui/credits"
-import { Loading } from "./Components/ui/loading"
+import Description from "./components/description"
+import { ErrorComponent } from "./components/errorComponent"
+import { Feedback } from "./components/feedback"
+import ReloadPrompt from "./components/reloadPrompt"
+import { Credits } from "./components/ui/credits"
+import { Loading } from "./components/ui/loading"
 
-const FormComponent = React.lazy(async () => await import("./Components/form"))
+const FormComponent = React.lazy(async () => await import("./components/form"))
 
 const isSmallScreen = screen.width < 700
 

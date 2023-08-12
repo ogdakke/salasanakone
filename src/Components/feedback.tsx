@@ -15,7 +15,7 @@ export const Feedback = () => {
   }
   const [clicked, setClicked] = usePersistedState("isClicked", initialClickValues)
 
-  const questionText = "Mitä mieltä olet sivusta?"
+  const questionText = "Jätä palaute"
 
   if (clicked.value === false) {
     return (
@@ -28,7 +28,9 @@ export const Feedback = () => {
                   value: true,
                 })
               }}
-              className="submitButton inputButton flex-center"
+              className="submitButton inputButton flex-center no-decoration"
+              target="_blank"
+              rel="noreferrer"
               href="https://palaute.simple.ink/"
             >
               {questionText}
@@ -43,10 +45,15 @@ export const Feedback = () => {
       <div className="flex-center">
         <TooltipProvider delayDuration={600}>
           <Tooltip>
-            <TooltipTrigger className="flex-center interact hover resultHelperText">
-              <a className="flex-center" href="https://palaute.simple.ink/">
+            <TooltipTrigger className="flex-center interact hover resultHelperText" asChild>
+              <a
+                className="flex-center no-decoration"
+                target="_blank"
+                rel="noreferrer"
+                href="https://palaute.simple.ink/"
+              >
                 <ChatBubbleEmpty className="interact " />
-                Palaute
+                Kiitos palautteesta!
               </a>
             </TooltipTrigger>
             <TooltipContent className="TooltipContent" sideOffset={4}>

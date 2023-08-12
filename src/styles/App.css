@@ -82,6 +82,14 @@
   cursor: pointer;
 }
 
+.unset {
+  all: unset;
+}
+
+.no-decoration {
+  text-decoration: none;
+}
+
 .fadeIn {
   animation: fadeIn 200ms ease-in;
 }

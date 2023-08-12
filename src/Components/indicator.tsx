@@ -11,7 +11,7 @@ import { Divider } from "./ui/divider"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 const checker = async (password: string) => {
-  const check = await import("../Api/checkStrength").then((r) => r.checkStrength)
+  const check = await import("../services/checkStrength").then((r) => r.checkStrength)
   return check(password.toString())
 }
 

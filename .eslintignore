@@ -1,3 +1,11 @@
 **/*.js
 **/*.json
 coverage/
+node_modules/
+.vscode/
+dev-dist/
+dist/
+public/
+bundle-analysis/
+.github/
+.husky/

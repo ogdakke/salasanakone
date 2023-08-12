@@ -1,8 +1,8 @@
 import { CheckCircle, ShareAndroid, ShareIos } from "iconoir-react"
 import { useState } from "react"
 
-import copyToClipboard from "../Api/copyToClipboard"
 import { meta } from "../assets/constants/meta"
+import copyToClipboard from "../services/copyToClipboard"
 
 export const isAndroid = navigator.userAgent.match(/Android/i)
 

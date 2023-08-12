@@ -45,8 +45,8 @@ dependencies:
     specifier: ^13.21.0
     version: 13.21.0
   iconoir-react:
-    specifier: ^6.10.0
-    version: 6.10.0(react@18.2.0)
+    specifier: ^6.11.0
+    version: 6.11.0(react@18.2.0)
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -4013,8 +4013,8 @@ packages:
     hasBin: true
     dev: true
 
-  /iconoir-react@6.10.0(react@18.2.0):
-    resolution: {integrity: sha512-gau34HMBa+XwCyIK4GzIYbBCVWWadaSjBVX4CQecqwAZfSDI3FPp7AWLZ40FRGuvGmiUpWz+g0P/T/CQlzOTEw==}
+  /iconoir-react@6.11.0(react@18.2.0):
+    resolution: {integrity: sha512-+1RgmEWh/9H0aYR2e8sDL5elDUYnkyOXO0E+RnwhkjhJY36Lge6r/9nv1n1FvDXoeFY48omkPUl8s/ciA0XOAg==}
     peerDependencies:
       react: ^16.8.6 || ^17 || ^18
     dependencies:

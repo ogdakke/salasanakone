@@ -1,22 +1,22 @@
+import { meta } from "../../assets/constants/meta"
 import { LogoIcon } from "../../assets/icons/logoIcon"
+import "../../styles/ui/Tooltip.css"
 import { ShareComponent } from "../share"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { ExternalLink } from "./externalLink"
-
-import "../../styles/ui/Tooltip.css"
 
 export const Credits = () => {
   return (
     <div className="imageWrapper">
       <TooltipProvider delayDuration={300}>
         <Tooltip>
-          <TooltipTrigger>
-            <div className="credits">
+          <TooltipTrigger asChild>
+            <button className="credits">
               <LogoIcon loading="lazy" width={20} height={20} className="svgImage interact" />
-              <ExternalLink link="https://www.dwe.fi" size={18}>
+              <ExternalLink link={meta.dweUrl} size={18}>
                 dwe.fi
               </ExternalLink>
-            </div>
+            </button>
           </TooltipTrigger>
           <TooltipContent className="TooltipContent" sideOffset={0}>
             <p>Vieraile sivuillani</p>
