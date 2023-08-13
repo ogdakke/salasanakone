@@ -246,6 +246,9 @@ export default function FormComponent(): React.ReactNode {
                 whileTap={{
                   scale: 0.9,
                 }}
+                whileFocus={{
+                  scale: 0.9,
+                }}
               ></motion.span>
             </Slider>
           </div>

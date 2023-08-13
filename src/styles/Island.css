@@ -33,6 +33,10 @@
   background-color: rgba(250, 250, 250, 0.15);
 }
 
+.Refresh {
+  color: rgb(180, 180, 180);
+}
+
 @media (hover: hover) and (pointer: fine) {
   .IslandGenerateButton:hover,
   .IslandGenerateButton:focus-visible {

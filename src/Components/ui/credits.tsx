@@ -18,7 +18,7 @@ export const Credits = () => {
               </ExternalLink>
             </button>
           </TooltipTrigger>
-          <TooltipContent className="TooltipContent" sideOffset={0}>
+          <TooltipContent className="TooltipContent" sideOffset={0} asChild>
             <p>Vieraile sivuillani</p>
           </TooltipContent>
         </Tooltip>

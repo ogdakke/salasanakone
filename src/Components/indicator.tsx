@@ -157,48 +157,47 @@ export function StrengthIndicator(props: {
           </div>
         }
       >
-        <Popover modal={true}>
+        <Popover>
           <PopoverTrigger
             onClick={() => {
               void calculateTimeToCheck().catch(console.error)
             }}
           >
-            <div>
-              <TooltipProvider delayDuration={600}>
-                <Tooltip>
-                  <TooltipTrigger type="button" asChild>
-                    <motion.div
-                      layoutId="strengthIndicator"
-                      key={output}
-                      whileHover={{
-                        scale: 1.1,
-                        transition: {
-                          type: "tween",
-                          duration: 0.1,
-                        },
-                      }}
-                      whileTap={{
-                        scale: 0.95,
-                      }}
-                      whileFocus={{}}
-                      transition={{
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger type="button" asChild>
+                  <motion.div
+                    layoutId="strengthIndicator"
+                    key={output}
+                    whileHover={{
+                      scale: 1,
+                      transition: {
+                        type: "tween",
+                        // duration: 0.1,
+                      },
+                    }}
+                    whileTap={{
+                      scale: 0.95,
+                    }}
+                    whileFocus={{
+                      scale: 0.95,
+                      transition: {
                         type: "spring",
-                        duration: 0.1,
-                      }}
-                      className={`interact strengthIndicator case${score.toString()}`}
-                    >
-                      <motion.span>{output}</motion.span>
-                    </motion.div>
-                  </TooltipTrigger>
-                  <TooltipContent sideOffset={4} className="TooltipContent">
-                    <div className="flex-center">
-                      <OpenSelectHandGesture width={20} height={20} />
-                      Lisätietoja
-                    </div>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
+                      },
+                    }}
+                    className={`interact strengthIndicator case${score.toString()}`}
+                  >
+                    <motion.span>{output}</motion.span>
+                  </motion.div>
+                </TooltipTrigger>
+                <TooltipContent sideOffset={4} className="TooltipContent">
+                  <div className="flex-center">
+                    <OpenSelectHandGesture width={20} height={20} />
+                    Lisätietoja
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </PopoverTrigger>
           <PopoverContent
             style={{

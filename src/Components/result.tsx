@@ -1,21 +1,25 @@
-import { motion } from "framer-motion"
-import { ClipboardCheck } from "iconoir-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
+import { Transition, motion } from "framer-motion"
+import { ClipboardCheck, OpenSelectHandGesture } from "iconoir-react"
 import { useEffect, useState } from "react"
 import { specials } from "../../config"
 import copyToClipboard from "../services/copyToClipboard"
 import "../styles/Result.css"
+import { t } from "../utils/getLanguage"
 import { HighlightCondition, Highlighter } from "./ui/utils/highlight"
 
 const numbers = "0123456789"
 
 export default function Result(props: { finalPassword: string; copyText: string }) {
   const { finalPassword, copyText } = props
+  const [isCopied, setCopied] = useState(false)
+  const [shouldAnimate, setShouldAnimate] = useState(false)
 
   const copy = () => {
+    setShouldAnimate(true)
+    setTimeout(() => setShouldAnimate(false), 700)
     setCopied(true)
   }
-
-  const [isCopied, setCopied] = useState(false)
 
   const handleClick = async (word: string) => {
     await copyToClipboard(word)
@@ -23,6 +27,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
   }
 
   useEffect(() => {
+    setShouldAnimate(false)
     setCopied(false)
   }, [finalPassword])
 
@@ -88,18 +93,39 @@ export default function Result(props: { finalPassword: string; copyText: string 
               </span>
             </span>
           </motion.div>
-          <motion.span
-            className="absoluteCopiedIcon"
-            initial={{ opacity: 0 }}
-            animate={{
-              zIndex: isCopied ? 1 : -1,
-              opacity: isCopied ? 1 : 0,
-            }}
-            transition={fade}
-            onClick={() => void handleClick(finalPassword).catch(console.error)}
-          >
-            <ClipboardCheck alignmentBaseline="central" className="flex-center" />
-          </motion.span>
+
+          <TooltipProvider delayDuration={600}>
+            <Tooltip>
+              <TooltipTrigger type="button" asChild>
+                <motion.span
+                  layout
+                  className="Shine absoluteCopiedIcon interact"
+                  data-animate={shouldAnimate ? true : false}
+                  initial={{
+                    scale: 1,
+                  }}
+                  animate={{
+                    translateX: isCopied ? 0 : 20,
+                    opacity: isCopied ? 1 : 0,
+                    scale: shouldAnimate ? 0.95 : 1,
+                  }}
+                  whileHover={{
+                    scale: 0.9,
+                  }}
+                  transition={fade}
+                  onClick={() => void handleClick(finalPassword).catch(console.error)}
+                >
+                  <ClipboardCheck alignmentBaseline="central" className="flex-center" />
+                </motion.span>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={4} className="TooltipContent">
+                <div className="flex-center">
+                  <OpenSelectHandGesture width={20} height={20} />
+                  {t("hasCopiedPassword")}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       ) : (
         <div className="card">Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.</div>
@@ -107,7 +133,29 @@ export default function Result(props: { finalPassword: string; copyText: string 
     </>
   )
 }
-const fade = {
-  type: "tween",
-  duration: 0.6,
+const fade: Transition = {
+  type: "spring",
+  // duration: 0.2,
+  damping: 10,
+  bounce: 0.1,
+  opacity: {
+    type: "tween",
+  },
+  scale: {
+    duration: 0.2,
+  },
+}
+
+const content = (section: "form" | "description", language: "finnish" | "english") => {
+  switch (section) {
+    case "form":
+      return {
+        hasCopiedPassword: "",
+      }
+    case "description":
+      return {}
+    default:
+      "main"
+      return {}
+  }
 }
