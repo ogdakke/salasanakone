@@ -14,7 +14,7 @@ dev-dist
 *.local
 .env
 coverage/
-
+bundle-analysis/
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
