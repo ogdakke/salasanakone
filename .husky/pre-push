@@ -5,20 +5,3 @@ if ! pnpm build; then
   printf "\nBuild FAILED... Aborting push\n\n"
   exit 1
 fi
-
-# Add the analysis file to staging 
-if git add bundle-analysis/analyse.html; then
-  printf "\nAnalysis file added successfully.\n"
-else
-  printf "\nFailed to add the analysis file. Aborting push.\n"
-  exit 1
-fi
-
-# Amend the analysis file to the latest commit without changing the commit message
-# Also don't verify this, since it's already done beforehand
-if git commit --amend --no-edit --no-verify; then
-  printf "\nAnalysis file added to the latest commit successfully.\n"
-else
-  printf "\nFailed to amend the commit. Aborting push.\n\n"
-  exit 1
-fi
