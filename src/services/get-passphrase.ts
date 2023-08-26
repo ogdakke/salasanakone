@@ -28,7 +28,7 @@ export async function getPassphrase({
       headers: {
         Accept: "application/json",
         // If you need to send authentication headers or any other headers, add them here
-        "X-API-KEY": import.meta.env["VITE-X-API-KEY"],
+        "X-API-KEY": import.meta.env["VITE_X_API_KEY"],
       },
     })
 
