@@ -10,8 +10,9 @@ import {
   minLengthForWords,
 } from "../../config"
 import { usePersistedState } from "../hooks/usePersistedState"
-import { IndexableInputValue, InputLabel } from "../models"
+import { ApiSalaCall, IndexableInputValue, InputLabel } from "../models"
 import { createCryptoKey } from "../services/createCrypto"
+import { getPassphrase } from "../services/get-passphrase"
 import "../styles/Form.css"
 import "../styles/ui/Checkbox.css"
 import { correctType } from "../utils/helpers"
@@ -44,6 +45,8 @@ export default function FormComponent(): React.ReactNode {
   const setFormValues = setFormValuesTyped
   // as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
   const [isDisabled, setDisabled] = useState(false)
+  const [isError, setError] = useState(false)
+  const [isLoading, setLoading] = useState(false)
 
   const validate = useCallback(
     (sliderValue: number): number => {
@@ -104,6 +107,27 @@ export default function FormComponent(): React.ReactNode {
     return formValues.words.selected && sliderValue < 2
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const apiParams: ApiSalaCall = {
+          lang: "fi",
+          passLength: sliderValue,
+          inputValues: formValues,
+        }
+
+        const fetchedPassphrase = await getPassphrase(apiParams)
+        setFinalPassword(fetchedPassphrase ? fetchedPassphrase : "failed")
+      } catch (err) {
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData().catch(console.error)
+  }, [])
+
   return (
     <>
       <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
@@ -143,7 +167,7 @@ export default function FormComponent(): React.ReactNode {
                   <Checkbox
                     aria-label={labelForCheckbox(option)}
                     checked={formValues[option].selected}
-                    onCheckedChange={(event) => {
+                    onCheckedChange={(event: unknown) => {
                       values.selected = !values.selected
                       valuesToForm(option, event, "selected")
                     }}
@@ -160,7 +184,7 @@ export default function FormComponent(): React.ReactNode {
                 <div key={option} className="flex-center radio">
                   <RadioGroup
                     defaultValue={formValues[option].selected.toString()}
-                    onValueChange={(event) => {
+                    onValueChange={(event: unknown) => {
                       values.selected = !values.selected
                       const isBool = event === "true" ? true : false
                       valuesToForm(option, isBool, "selected")
@@ -211,7 +235,7 @@ export default function FormComponent(): React.ReactNode {
                         aria-label={labelForCheckbox(option)}
                         className="checkboxRoot"
                         checked={formValues[option].selected}
-                        onCheckedChange={(event) => {
+                        onCheckedChange={(event: unknown) => {
                           values.selected = !values.selected
                           valuesToForm(option, event, "selected")
                         }}
