@@ -1,6 +1,12 @@
 import { ApiSalaCall } from "../models"
+import { isKey } from "../utils/helpers"
 
 const apiUrl = "https://api.salasanakone.com"
+
+export interface SalaApiResponse {
+  passphrase: string
+  passLength: number
+}
 
 export async function getPassphrase({
   lang,
@@ -13,14 +19,7 @@ export async function getPassphrase({
   const hasRandomChars = inputValues.randomChars.selected
   const randomCharsValue = inputValues.randomChars.value
 
-  const url = `${apiUrl}/?
-    passLength=${passLength}
-    &words=${hasWords}  
-    &numbers=${hasNumbers}
-    &uppercase=${hasUppercase}
-    &randomChars=${hasRandomChars}
-    &randomCharsValue=${randomCharsValue}
-  `
+  const url = `${apiUrl}/?passLength=${passLength}&words=${hasWords}&numbers=${hasNumbers}&uppercase=${hasUppercase}&randomChars=${hasRandomChars}&randomCharsValue=${randomCharsValue}`
 
   try {
     const response = await fetch(url, {
@@ -33,20 +32,20 @@ export async function getPassphrase({
     })
 
     if (!response.ok) {
+      console.error("Response body", await response.text())
       throw new Error(`API call failed with status: ${response.status}`)
     }
 
-    const data = await response.json().then((res) => JSON.parse(res))
+    const data = (await response.json()) as SalaApiResponse
 
     // Assuming the API returns a field named "passphrase"
-    if (typeof data === "object" && Object.hasOwn(data, "passphrase")) {
-      console.log(data)
+    if (data && isKey(data, "passphrase") && Object.hasOwn(data, "passphrase")) {
       return data.passphrase
     }
-    console.log("--------", data)
   } catch (error) {
-    console.error("Error fetching passphrase:", error)
-    throw error
+    if (error instanceof Error) {
+      throw new Error("error fetching passphrase", error)
+    }
   }
   return undefined
 }

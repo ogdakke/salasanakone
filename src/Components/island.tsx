@@ -7,7 +7,7 @@ import { StrengthIndicator } from "./indicator"
 import { Loading } from "./ui/loading"
 
 interface Props {
-  generate: () => void
+  generate: () => Promise<void>
   finalPassword: string
   formValues: IndexableInputValue
   sliderValue: number
@@ -61,7 +61,7 @@ export const Island = ({ generate, finalPassword, formValues, sliderValue }: Pro
                   scale: 0.95,
                 }}
                 className="IslandGenerateButton"
-                onClick={() => void generate()}
+                onClick={() => void generate().catch(console.error)}
               >
                 <Refresh className="Refresh" width={34} height={34} />
               </motion.button>

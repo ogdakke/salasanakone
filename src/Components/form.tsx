@@ -1,5 +1,5 @@
 import { motion } from "framer-motion"
-import React, { Suspense, useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import {
   inputFieldMaxLength,
   inputValues,
@@ -11,7 +11,6 @@ import {
 } from "../../config"
 import { usePersistedState } from "../hooks/usePersistedState"
 import { ApiSalaCall, IndexableInputValue, InputLabel } from "../models"
-import { createCryptoKey } from "../services/createCrypto"
 import { getPassphrase } from "../services/get-passphrase"
 import "../styles/Form.css"
 import "../styles/ui/Checkbox.css"
@@ -21,6 +20,7 @@ import { Island } from "./island"
 import { Checkbox } from "./ui/checkbox"
 import { InputComponent } from "./ui/input"
 import { Label } from "./ui/label"
+import { Loading } from "./ui/loading"
 import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
 import { Slider } from "./ui/slider"
 const Result = React.lazy(async () => await import("./result"))
@@ -32,8 +32,8 @@ const lang = {
 
 const initialInputKeys = Object.entries(inputValues)
 
-export function generatePassword(formValues: IndexableInputValue, sliderValue: number) {
-  return createCryptoKey(sliderValue.toString(), formValues)
+export async function generatePassword(formValues: IndexableInputValue, sliderValue: number) {
+  return await getPassphrase({ passLength: sliderValue, inputValues: formValues })
 }
 
 export default function FormComponent(): React.ReactNode {
@@ -66,20 +66,24 @@ export default function FormComponent(): React.ReactNode {
     [formValues, setSliderValue],
   )
 
-  const generate = useCallback(() => {
-    inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)
-    try {
-      const setPassword = () => generatePassword(formValues, sliderValue)
-      setFinalPassword(setPassword())
-    } catch (err) {
-      console.error(err)
-      throw new Error("Error setting password")
+  const generate = useCallback(async () => {
+    if (inputFieldShouldDisable()) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+      try {
+        const pass = await generatePassword(formValues, sliderValue)
+        setFinalPassword(pass ?? "Virhe salasanaa haettaessa")
+      } catch (err) {
+        console.error(err)
+        setError(true)
+      }
     }
   }, [formValues, sliderValue])
 
   useEffect(() => {
     validate(sliderValue)
-    generate()
+    generate().catch(console.error)
   }, [generate, sliderValue, validate])
 
   const valuesToForm = useCallback(
@@ -108,6 +112,7 @@ export default function FormComponent(): React.ReactNode {
   }
 
   useEffect(() => {
+    setLoading(true)
     const fetchData = async () => {
       try {
         const apiParams: ApiSalaCall = {
@@ -115,18 +120,16 @@ export default function FormComponent(): React.ReactNode {
           passLength: sliderValue,
           inputValues: formValues,
         }
-
-        const fetchedPassphrase = await getPassphrase(apiParams)
-        setFinalPassword(fetchedPassphrase ? fetchedPassphrase : "failed")
+        const fetchedPassphrase = await getPassphrase(apiParams).catch(console.error)
+        setFinalPassword(fetchedPassphrase ? fetchedPassphrase : "Virhe haettaessa salasanaa")
       } catch (err) {
         setError(true)
       } finally {
         setLoading(false)
       }
     }
-
     fetchData().catch(console.error)
-  }, [])
+  }, [sliderValue])
 
   return (
     <>
@@ -136,20 +139,16 @@ export default function FormComponent(): React.ReactNode {
             Kopioi Salasana napauttamalla
             {/* tai paina<kbd>C</kbd> */}
           </p>
-          <Suspense
-            fallback={
-              <div aria-busy="true" className="card">
-                <span className="notCopied">Ladataan...</span>
-              </div>
-            }
-          >
+          {isLoading ? (
+            <Loading height="71px" />
+          ) : (
             <Result
               aria-busy="false"
               aria-label="Salasana, jonka voi kopioida napauttamalla"
               finalPassword={finalPassword}
               copyText={copyText}
             />
-          </Suspense>
+          )}
         </div>
 
         <div className="inputGrid">
