@@ -1,20 +1,13 @@
-import {
-  defaultFormValues,
-  maxLengthForChars,
-  maxLengthForWords,
-  minLengthForChars,
-  minLengthForWords,
-} from "@/../config"
-import { InputField, Island } from "@/Components"
-import { Label, Loading, Slider } from "@/Components/ui"
-import { usePersistedState } from "@/hooks/usePersistedState"
+import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../config"
+import { InputField, Island, SliderComponent } from "@/Components"
+import { Loading } from "@/Components/ui"
+import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
+import { useDispatch, useSelector } from "@/hooks"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
 import { t } from "@/utils/getLanguage"
-import { correctType } from "@/utils/helpers"
-import { motion } from "framer-motion"
 import React, { Suspense, useCallback, useEffect, useState } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 
@@ -26,27 +19,27 @@ export function generatePassword(formValues: IndexableFormValues, sliderValue: n
 
 export default function FormComponent(): React.ReactNode {
   const [finalPassword, setFinalPassword] = useState<string>()
-  const [formValues, setFormValues] = usePersistedState("formValues", defaultFormValues)
-  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
+  // const [formValues, setFormValues] = usePersistedState("formValues", defaultFormValues)
   const [isDisabled, setDisabled] = useState(false)
 
-  const validate = useCallback(
-    (sliderValue: number): number => {
-      const { selected } = formValues.words
-      if (
-        selected &&
-        (sliderValue > maxLengthForWords || sliderValue < 1 || !correctType(sliderValue, "number")) // should return false
-      ) {
-        setSliderValue(maxLengthForWords)
-        return maxLengthForWords
-      } else if (!selected && sliderValue < minLengthForChars) {
-        setSliderValue(minLengthForChars)
-        return minLengthForChars
-      }
-      return sliderValue
-    },
-    [formValues, setSliderValue],
-  )
+  const dispatch = useDispatch()
+  const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
+  const formValues = useSelector((state) => state.passphraseForm.formValues)
+
+  const validate = (sliderValue: number): number => {
+    const { selected } = formValues.words
+    if (
+      selected &&
+      (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
+    ) {
+      // dispatch(setSliderValue(maxLengthForWords))
+      return maxLengthForWords
+    } else if (!selected && sliderValue < minLengthForChars) {
+      // dispatch(setSliderValue(minLengthForChars))
+      return minLengthForChars
+    }
+    return sliderValue
+  }
 
   const generate = useCallback(() => {
     inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)
@@ -65,27 +58,18 @@ export default function FormComponent(): React.ReactNode {
   }, [generate, sliderValue, validate])
 
   const valuesToForm = useCallback(
-    (option: InputLabel, event: unknown, value: "selected" | "value") => {
-      console.log(option, event, value)
+    (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
+      const updatedValue: IndexableFormValues = { ...formValues }
+      if (value === "selected" && typeof event === "boolean") {
+        updatedValue[option] = { ...defaultFormValues[option], selected: event }
+      } else if (typeof event === "string") {
+        updatedValue[option] = { ...defaultFormValues[option], value: event }
+      }
 
-      setFormValues((prev) => {
-        const updatedValues = { ...prev }
-
-        if (value === "selected" && typeof event === "boolean") {
-          updatedValues[option] = { ...updatedValues[option], selected: event }
-        } else if (typeof event === "string") {
-          updatedValues[option] = { ...updatedValues[option], value: event }
-        }
-        return updatedValues
-      })
+      dispatch(setFormField({ field: option, value: updatedValue[option] }))
     },
-    [setFormValues],
+    [dispatch],
   )
-
-  const sliderVal = (value: number): number => {
-    setSliderValue(validate(value))
-    return value
-  }
 
   const inputFieldShouldDisable = () => {
     return formValues.words.selected && sliderValue < 2
@@ -103,48 +87,24 @@ export default function FormComponent(): React.ReactNode {
           />
         </Suspense>
 
+        <button
+          className="inputButton"
+          type="button"
+          onClick={() => dispatch(setSliderValue(sliderValue + 1))}
+        >
+          set
+        </button>
         <div className="inputGrid">
           {initialInputKeys.map(([item, entry]) => (
             <InputField
               key={item}
               option={item as InputLabel}
               values={entry}
-              formValues={formValues}
               isDisabled={isDisabled}
               valuesToForm={valuesToForm}
             />
           ))}
-          <div className="sliderWrapper">
-            <Label htmlFor="slider">
-              {formValues.words.selected
-                ? t("lengthOfPassPhrase", {
-                    passLength: sliderValue.toString(),
-                  })
-                : t("lengthOfPassWord", {
-                    passLength: sliderValue.toString(),
-                  })}
-            </Label>
-            <Slider
-              id="slider"
-              name="slider"
-              aria-label="Salasanan pituus"
-              value={[validate(sliderValue)]}
-              onValueChange={(val) => sliderVal(val[0])} // makes sure val is not a "number[]"
-              max={formValues.words.selected ? maxLengthForWords : maxLengthForChars}
-              min={formValues.words.selected ? minLengthForWords : minLengthForChars}
-              step={1}
-            >
-              <motion.span
-                initial={{ scale: 1 }}
-                whileTap={{
-                  scale: 0.9,
-                }}
-                whileFocus={{
-                  scale: 0.9,
-                }}
-              ></motion.span>
-            </Slider>
-          </div>
+          <SliderComponent validate={validate} />
         </div>
       </form>
       <div className="IslandWrapper">

@@ -12,7 +12,8 @@
     "module": "ESNext",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@/config/*": [".config/*"]
     },
     "moduleResolution": "Node",
     "resolveJsonModule": true,

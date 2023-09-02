@@ -74,6 +74,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "@/config": path.resolve(__dirname, "./config"),
     },
   },
   plugins: [react(), VitePWA(pwaOptions), visualizer(visualizerOptions) as PluginOption],

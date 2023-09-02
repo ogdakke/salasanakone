@@ -1,24 +1,26 @@
 import { inputFieldMaxLength, labelForCheckbox } from "@/../config"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
-import { IndexableFormValues, InputLabel, InputValue } from "@/models"
+import { InputLabel, InputValue } from "@/models"
+import { RootState } from "@/store"
 import { t } from "@/utils/getLanguage"
 import { validateLength } from "@/utils/helpers"
+import { useSelector } from "react-redux"
 
 type InputFieldProps = {
   option: InputLabel
   values: InputValue
-  formValues: IndexableFormValues
   isDisabled: boolean
-  valuesToForm: (option: InputLabel, event: unknown, value: "selected" | "value") => void
+  valuesToForm: (option: InputLabel, event: string | boolean, value: "selected" | "value") => void
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
   option,
   values,
-  formValues,
   isDisabled,
   valuesToForm,
 }) => {
+  const formValues = useSelector((state: RootState) => state.passphraseForm.formValues)
+
   if (values.inputType === "checkbox") {
     return (
       <div key={option} className="checkboxParent flex-center" style={{ gridArea: `${option}` }}>
@@ -26,8 +28,8 @@ export const InputField: React.FC<InputFieldProps> = ({
           aria-label={labelForCheckbox(option)}
           checked={formValues[option].selected}
           onCheckedChange={(event) => {
-            values.selected = !values.selected
-            valuesToForm(option, event, "selected")
+            // values.selected = !values.selected
+            valuesToForm(option, event as boolean, "selected")
           }}
           id={option}
           value={values.selected.toString()}
@@ -43,7 +45,7 @@ export const InputField: React.FC<InputFieldProps> = ({
         <RadioGroup
           defaultValue={formValues[option].selected.toString()}
           onValueChange={(event) => {
-            values.selected = !values.selected
+            // dispatch(setFormField(option, values.selected))
             const isBool = event === "true" ? true : false
             valuesToForm(option, isBool, "selected")
           }}
@@ -94,7 +96,6 @@ export const InputField: React.FC<InputFieldProps> = ({
               className="checkboxRoot"
               checked={formValues[option].selected}
               onCheckedChange={(event) => {
-                values.selected = !values.selected
                 valuesToForm(option, event, "selected")
               }}
               id={option}

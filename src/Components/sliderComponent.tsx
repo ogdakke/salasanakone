@@ -5,24 +5,27 @@ import {
   minLengthForWords,
 } from "@/../config"
 import { Label, Slider } from "@/Components/ui"
-import { IndexableFormValues } from "@/models"
+import { setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
+import { RootState } from "@/store"
 import { t } from "@/utils/getLanguage"
 import { motion } from "framer-motion"
+import { FC } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 type SliderComponentProps = {
-  sliderValue: number
-  formValues: IndexableFormValues
-  validate: (sliderValue: number) => number
-  sliderVal: (value: number) => number
+  validate: (value: number) => number
 }
 
-const SliderComponent: React.FC<SliderComponentProps> = ({
-  sliderValue,
-  formValues,
-  validate,
-  sliderVal,
-}) => {
-  console.log(sliderValue)
+const SliderComponent: FC<SliderComponentProps> = ({ validate }) => {
+  const sliderValue = useSelector((state: RootState) => state.passphraseForm.sliderValue)
+  const formValues = useSelector((state: RootState) => state.passphraseForm.formValues)
+  const dispatch = useDispatch()
+
+  const sliderVal = (value: number): number => {
+    const validated = validate(value)
+    dispatch(setSliderValue(validated))
+    return value
+  }
 
   return (
     <div className="sliderWrapper">

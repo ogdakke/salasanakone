@@ -1,7 +1,7 @@
 import { IndexableFormValues, IndexedLabels, InputLabel } from "../../src/models"
 
 export const inputFieldMaxLength = 8
-
+export const defaultSliderValue = 3
 export const defaultFormValues: IndexableFormValues = {
   words: {
     inputType: "radio",

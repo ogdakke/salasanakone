@@ -12,5 +12,8 @@ export interface InputValue {
 }
 
 export type IndexableFormValues = {
-  [key in InputLabel]: InputValue
+  words: InputValue
+  uppercase: InputValue
+  numbers: InputValue
+  randomChars: InputValue
 }
