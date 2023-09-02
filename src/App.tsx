@@ -1,19 +1,13 @@
 import React, { Suspense } from "react"
 
-// styles
-import "./styles/App.css"
-import "./styles/globals.css"
-
+import { Description, ReloadPrompt } from "@/Components"
+import { ErrorComponent } from "@/Components/errorComponent"
+import { Feedback } from "@/Components/feedback"
+import { Credits, Loading } from "@/Components/ui"
+import { LogoIcon } from "@/assets/icons/logoIcon"
+import "@/styles/App.css"
+import "@/styles/globals.css"
 import { ErrorBoundary } from "react-error-boundary"
-
-import { LogoIcon } from "./assets/icons/logoIcon"
-// components
-import Description from "./Components/description"
-import { ErrorComponent } from "./Components/errorComponent"
-import { Feedback } from "./Components/feedback"
-import ReloadPrompt from "./Components/reloadPrompt"
-import { Credits } from "./Components/ui/credits"
-import { Loading } from "./Components/ui/loading"
 
 const FormComponent = React.lazy(async () => await import("./Components/form"))
 

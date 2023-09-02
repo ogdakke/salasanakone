@@ -7,11 +7,11 @@ import {
   minLengthForChars,
   minLengthForWords,
   specialsAndNums,
-} from "../../config"
+} from "@/../config"
 
-import { IndexableInputValue } from "../models"
+import { IndexableInputValue } from "@/models"
 
-const sanat = await import("../sanat.json")
+const sanat = await import("@/sanat.json")
 
 let variableMinLength = minLengthForWords
 let variableMaxLength = maxLengthForChars

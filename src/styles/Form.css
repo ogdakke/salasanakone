@@ -29,8 +29,6 @@
 /* || Grid ---------------------------------------------- */
 .inputGrid {
   display: grid;
-  /* grid-template-columns: 1fr 1fr 1fr; */
-  /* grid-template-rows: 1fr slider slider; */
 
   grid-template-areas:
     "radio uppercase"
@@ -48,7 +46,6 @@
 
 /* ----------------------------------Grid */
 
-/*  */
 .buttonWrapper {
   display: flex;
   align-content: center;

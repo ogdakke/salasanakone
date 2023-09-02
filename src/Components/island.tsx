@@ -4,11 +4,11 @@ import { Suspense } from "react"
 import { IndexableInputValue } from "../models"
 import "../styles/Island.css"
 import { StrengthIndicator } from "./indicator"
-import { Loading } from "./ui/loading"
+import { Loading } from "./ui"
 
 interface Props {
   generate: () => void
-  finalPassword: string
+  finalPassword: string | undefined
   formValues: IndexableInputValue
   sliderValue: number
 }

@@ -1,9 +1,8 @@
 import React from "react"
 
-import "../styles/Description.css"
+import "@/styles/Description.css"
 
-import { Divider } from "./ui/divider"
-import { ExternalLink } from "./ui/externalLink"
+import { Divider, ExternalLink } from "./ui"
 
 const Description: React.FC = () => {
   return (
@@ -96,4 +95,4 @@ const Description: React.FC = () => {
     </article>
   )
 }
-export default Description
+export { Description }

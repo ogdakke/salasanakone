@@ -16,7 +16,7 @@ export function setLocale(locale: Locale) {
   return currentLocale
 }
 
-export const t = (key: TranslationKey, placeholders?: Record<string, string>): string => {
+export const t = (key: TranslationKey, placeholders?: Record<PropertyKey, string>): string => {
   const translation = appTranslations[currentLocale][key] || key
 
   if (!placeholders) {

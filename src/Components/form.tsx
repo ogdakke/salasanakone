@@ -1,33 +1,22 @@
-import { motion } from "framer-motion"
-import React, { Suspense, useCallback, useEffect, useState } from "react"
 import {
-  inputFieldMaxLength,
   inputValues,
-  labelForCheckbox,
   maxLengthForChars,
   maxLengthForWords,
   minLengthForChars,
   minLengthForWords,
-} from "../../config"
-import { usePersistedState } from "../hooks/usePersistedState"
-import { IndexableInputValue, InputLabel } from "../models"
-import { createCryptoKey } from "../services/createCrypto"
-import "../styles/Form.css"
-import "../styles/ui/Checkbox.css"
-import { correctType } from "../utils/helpers"
-import { validateLength } from "./indicator"
-import { Island } from "./island"
-import { Checkbox } from "./ui/checkbox"
-import { InputComponent } from "./ui/input"
-import { Label } from "./ui/label"
-import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
-import { Slider } from "./ui/slider"
-const Result = React.lazy(async () => await import("./result"))
-
-const lang = {
-  Finnish: true,
-  English: false,
-}
+} from "@/../config"
+import { InputField, Island } from "@/Components"
+import { Label, Loading, Slider } from "@/Components/ui"
+import { usePersistedState } from "@/hooks/usePersistedState"
+import { IndexableInputValue, InputLabel } from "@/models"
+import { createCryptoKey } from "@/services/createCrypto"
+import "@/styles/Form.css"
+import "@/styles/ui/Checkbox.css"
+import { t } from "@/utils/getLanguage"
+import { correctType } from "@/utils/helpers"
+import { motion } from "framer-motion"
+import React, { Suspense, useCallback, useEffect, useState } from "react"
+const Result = React.lazy(async () => await import("@/Components/result"))
 
 const initialInputKeys = Object.entries(inputValues)
 
@@ -36,13 +25,9 @@ export function generatePassword(formValues: IndexableInputValue, sliderValue: n
 }
 
 export default function FormComponent(): React.ReactNode {
-  const [finalPassword, setFinalPassword] = useState("")
-  const [formValuesTyped, setFormValuesTyped] = usePersistedState("formValues", inputValues)
+  const [finalPassword, setFinalPassword] = useState<string>()
+  const [formValues, setFormValues] = usePersistedState("formValues", inputValues)
   const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
-  const formValues = formValuesTyped
-  // as FormType // explicitly type formValues as FormType
-  const setFormValues = setFormValuesTyped
-  // as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
   const [isDisabled, setDisabled] = useState(false)
 
   const validate = useCallback(
@@ -70,7 +55,7 @@ export default function FormComponent(): React.ReactNode {
       setFinalPassword(setPassword())
     } catch (err) {
       console.error(err)
-      throw new Error("Error setting password")
+      throw new Error(`error setting password`)
     }
   }, [formValues, sliderValue])
 
@@ -81,6 +66,8 @@ export default function FormComponent(): React.ReactNode {
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: unknown, value: "selected" | "value") => {
+      console.log(option, event, value)
+
       setFormValues((prev) => {
         const updatedValues = { ...prev }
 
@@ -107,129 +94,35 @@ export default function FormComponent(): React.ReactNode {
   return (
     <>
       <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
-        <div className="resultWrapper">
-          <p className="resultHelperText">
-            Kopioi Salasana napauttamalla
-            {/* tai paina<kbd>C</kbd> */}
-          </p>
-          <Suspense
-            fallback={
-              <div aria-busy="true" className="card">
-                <span className="notCopied">Ladataan...</span>
-              </div>
-            }
-          >
-            <Result
-              aria-busy="false"
-              aria-label="Salasana, jonka voi kopioida napauttamalla"
-              finalPassword={finalPassword}
-              copyText={copyText}
-            />
-          </Suspense>
-        </div>
+        <Suspense fallback={<Loading height="71px" />}>
+          <Result
+            aria-busy="false"
+            aria-label="Salasana, jonka voi kopioida napauttamalla"
+            finalPassword={finalPassword}
+            copyText={t("clickToCopy")}
+          />
+        </Suspense>
 
         <div className="inputGrid">
-          {initialInputKeys.map(([item, entry]) => {
-            const option = item as InputLabel
-            const values = entry
-            // formValues[option].selected
-            if (values.inputType === "checkbox") {
-              return (
-                <div
-                  key={option}
-                  className="checkboxParent flex-center"
-                  style={{ gridArea: `${option}` }}
-                >
-                  <Checkbox
-                    aria-label={labelForCheckbox(option)}
-                    checked={formValues[option].selected}
-                    onCheckedChange={(event) => {
-                      values.selected = !values.selected
-                      valuesToForm(option, event, "selected")
-                    }}
-                    id={option}
-                    value={values.selected.toString()}
-                  ></Checkbox>
-                  <Label title={values.info} htmlFor={option}>
-                    {labelForCheckbox(option)}
-                  </Label>
-                </div>
-              )
-            } else if (values.inputType === "radio") {
-              return (
-                <div key={option} className="flex-center radio">
-                  <RadioGroup
-                    defaultValue={formValues[option].selected.toString()}
-                    onValueChange={(event) => {
-                      values.selected = !values.selected
-                      const isBool = event === "true" ? true : false
-                      valuesToForm(option, isBool, "selected")
-                    }}
-                  >
-                    <div className="flex-center">
-                      <RadioGroupItem value="true" id="r1" key="r1" />
-                      <Label htmlFor="r1">Käytä sanoja</Label>
-                    </div>
-                    <div className="flex-center">
-                      <RadioGroupItem value="false" id="r2" key="r2" />
-                      <Label htmlFor="r2">Käytä merkkejä</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-              )
-            } else {
-              // if values.inputType === "input"
-              return (
-                <div key={option} className="textInputBox">
-                  {formValues.words.selected ? (
-                    <div className="fadeIn labelOnTop">
-                      <Label className="flex-bottom" title={values.info} htmlFor={option}>
-                        {labelForCheckbox(option)}
-                        {isDisabled ? (
-                          <span className="resultHelperText">Lisää sanoja</span>
-                        ) : (
-                          <span></span>
-                        )}
-                      </Label>
-                      <InputComponent
-                        disabled={isDisabled}
-                        maxLength={inputFieldMaxLength}
-                        defaultValue={formValues[option].value}
-                        placeholder={inputPlaceholder}
-                        onChange={(event) => {
-                          valuesToForm(
-                            option,
-                            validateLength(event.target.value, inputFieldMaxLength),
-                            "value",
-                          )
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div key={option} className="flex-center fadeIn">
-                      <Checkbox
-                        aria-label={labelForCheckbox(option)}
-                        className="checkboxRoot"
-                        checked={formValues[option].selected}
-                        onCheckedChange={(event) => {
-                          values.selected = !values.selected
-                          valuesToForm(option, event, "selected")
-                        }}
-                        id={option}
-                        value={values.selected.toString()}
-                      ></Checkbox>
-                      <Label htmlFor={option}>Erikoismerkit</Label>
-                    </div>
-                  )}
-                </div>
-              )
-            }
-          })}
+          {initialInputKeys.map(([item, entry]) => (
+            <InputField
+              key={item}
+              option={item as InputLabel}
+              values={entry}
+              formValues={formValues}
+              isDisabled={isDisabled}
+              valuesToForm={valuesToForm}
+            />
+          ))}
           <div className="sliderWrapper">
             <Label htmlFor="slider">
               {formValues.words.selected
-                ? `Pituus: ${sliderValue} Sanaa`
-                : `Pituus: ${sliderValue} Merkkiä`}
+                ? t("lengthOfPassPhrase", {
+                    passLength: sliderValue.toString(),
+                  })
+                : t("lengthOfPassWord", {
+                    passLength: sliderValue.toString(),
+                  })}
             </Label>
             <Slider
               id="slider"
@@ -265,6 +158,3 @@ export default function FormComponent(): React.ReactNode {
     </>
   )
 }
-
-const copyText = lang.Finnish ? "Kopioi Salasana Klikkaamalla" : "Click to Copy"
-const inputPlaceholder = 'Esim. "-" tai "?" tai "3!"'

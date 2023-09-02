@@ -1,7 +1,7 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import * as React from "react"
 
-import "../../styles/ui/RadioGroup.css"
+import "@/styles/ui/RadioGroup.css"
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,

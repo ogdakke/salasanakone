@@ -1,11 +1,16 @@
-import { meta } from "../../assets/constants/meta"
-import { LogoIcon } from "../../assets/icons/logoIcon"
-import "../../styles/ui/Tooltip.css"
-import { ShareComponent } from "../share"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
-import { ExternalLink } from "./externalLink"
+import { Share } from "@/Components"
+import {
+  ExternalLink,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/Components/ui"
+import { meta } from "@/assets/constants/meta"
+import { LogoIcon } from "@/assets/icons/logoIcon"
+import "@/styles/ui/Tooltip.css"
 
-export const Credits = () => {
+const Credits = () => {
   return (
     <div className="imageWrapper">
       <TooltipProvider delayDuration={300}>
@@ -27,7 +32,7 @@ export const Credits = () => {
       <TooltipProvider delayDuration={300}>
         <Tooltip>
           <TooltipTrigger>
-            <ShareComponent />
+            <Share />
           </TooltipTrigger>
           <TooltipContent className="TooltipContent" sideOffset={0}>
             <p>Jaa</p>
@@ -37,3 +42,5 @@ export const Credits = () => {
     </div>
   )
 }
+
+export { Credits }

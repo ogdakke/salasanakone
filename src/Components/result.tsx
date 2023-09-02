@@ -1,16 +1,14 @@
+import { numbers, specials } from "@/../config"
+import { HighlightCondition, Highlighter } from "@/Components/ui/utils/highlight"
+import copyToClipboard from "@/services/copyToClipboard"
+import "@/styles/Result.css"
+import { t } from "@/utils/getLanguage"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
 import { Transition, motion } from "framer-motion"
 import { ClipboardCheck, OpenSelectHandGesture } from "iconoir-react"
 import { useEffect, useState } from "react"
-import { specials } from "../../config"
-import copyToClipboard from "../services/copyToClipboard"
-import "../styles/Result.css"
-import { t } from "../utils/getLanguage"
-import { HighlightCondition, Highlighter } from "./ui/utils/highlight"
 
-const numbers = "0123456789"
-
-export default function Result(props: { finalPassword: string; copyText: string }) {
+const Result = (props: { finalPassword: string | undefined; copyText: string }) => {
   const { finalPassword, copyText } = props
   const [isCopied, setCopied] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
@@ -50,8 +48,9 @@ export default function Result(props: { finalPassword: string; copyText: string 
   const highlightConditions = [highlightNumbers, highlightSpecials]
 
   return (
-    <>
-      {finalPassword.length > 0 ? (
+    <div className="resultWrapper">
+      <p className="resultHelperText">{copyText}</p>
+      {finalPassword && finalPassword.length > 0 ? (
         <div className="relative">
           <motion.div
             whileHover={{
@@ -130,7 +129,7 @@ export default function Result(props: { finalPassword: string; copyText: string 
       ) : (
         <div className="card">Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.</div>
       )}
-    </>
+    </div>
   )
 }
 const fade: Transition = {
@@ -146,16 +145,4 @@ const fade: Transition = {
   },
 }
 
-const content = (section: "form" | "description", language: "finnish" | "english") => {
-  switch (section) {
-    case "form":
-      return {
-        hasCopiedPassword: "",
-      }
-    case "description":
-      return {}
-    default:
-      "main"
-      return {}
-  }
-}
+export default Result

@@ -1,34 +1,25 @@
+import { validateLength } from "@/utils/helpers"
+import { motion } from "framer-motion"
 import { OpenSelectHandGesture } from "iconoir-react"
 import { Suspense, useCallback, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
-import "../styles/Indicator.css"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip"
-
-import { motion } from "framer-motion"
 import { IndexableInputValue } from "../models"
+import "../styles/Indicator.css"
 import { ErrorComponent } from "./errorComponent"
-import { Divider } from "./ui/divider"
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import {
+  Divider,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui"
 
 const checker = async (password: string) => {
   const check = await import("../services/checkStrength").then((r) => r.checkStrength)
   return check(password.toString())
-}
-
-/**
- * returns a substring of desired length {length} if str is longer than {length}
- * @param length desired length
- * @param str string to check
- * @returns string, mutated or not
- */
-export const validateLength = (str: string, length: number) => {
-  let final = str
-  if (str.length > length) {
-    final = str.substring(0, length)
-    // console.log(`Checked string of length ${final.length}`)
-  }
-  // console.log(`Checked string of length ${final.length}`)
-  return final
 }
 
 const parseValue = (value: number) => {
@@ -52,7 +43,7 @@ let didCheckTime = false
  */
 export function StrengthIndicator(props: {
   formValues: IndexableInputValue
-  password: string
+  password: string | undefined
   sliderValue: number
 }): React.ReactNode {
   const { formValues, password, sliderValue } = props
@@ -74,7 +65,7 @@ export function StrengthIndicator(props: {
 
   const calculateTimeToCheck = async () => {
     // didCheckTime prevents unneccessary computation. eg. user clicks again, even if password has not changed
-    if (!didCheckTime) {
+    if (password && !didCheckTime) {
       console.time("Time to check")
       didCheckTime = true
       await checker(validateLength(password, 70)).then((r) => {
@@ -99,7 +90,7 @@ export function StrengthIndicator(props: {
    */
   useEffect(() => {
     if (!didInit) {
-      if (password.length > 0) {
+      if (password && password.length > 0) {
         didInit = true
         checker(validateLength(password, 70))
           .then((r) => {
@@ -127,7 +118,7 @@ export function StrengthIndicator(props: {
       setScore(4)
       setOutput(numberToString(4))
     } else {
-      if (password.length > 0) {
+      if (password && password.length > 0) {
         checker(password)
           .then((r) => {
             setScore(r.score)

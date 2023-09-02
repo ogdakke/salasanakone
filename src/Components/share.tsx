@@ -1,12 +1,12 @@
 import { CheckCircle, ShareAndroid, ShareIos } from "iconoir-react"
 import { useState } from "react"
 
-import { meta } from "../assets/constants/meta"
-import copyToClipboard from "../services/copyToClipboard"
+import { meta } from "@/assets/constants/meta"
+import copyToClipboard from "@/services/copyToClipboard"
 
 export const isAndroid = navigator.userAgent.match(/Android/i)
 
-export const ShareComponent = () => {
+export const Share = () => {
   const [isCopied, setCopied] = useState(false)
 
   const shareAction = async () => {

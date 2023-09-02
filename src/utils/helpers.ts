@@ -12,3 +12,19 @@ export function correctType(arg: unknown, desiredType: unknown): boolean {
     return false
   }
 }
+
+/**
+ * returns a substring of desired length {length} if str is longer than {length}
+ * @param length desired length
+ * @param str string to check
+ * @returns string, mutated or not
+ */
+export const validateLength = (str: string, length: number): string => {
+  let final = str
+  if (str.length > length) {
+    final = str.substring(0, length)
+    // console.log(`Checked string of length ${final.length}`)
+  }
+  // console.log(`Checked string of length ${final.length}`)
+  return final
+}
