@@ -26,20 +26,23 @@ export default function FormComponent(): React.ReactNode {
   const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
   const formValues = useSelector((state) => state.passphraseForm.formValues)
 
-  const validate = (sliderValue: number): number => {
-    const { selected } = formValues.words
-    if (
-      selected &&
-      (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
-    ) {
-      // dispatch(setSliderValue(maxLengthForWords))
-      return maxLengthForWords
-    } else if (!selected && sliderValue < minLengthForChars) {
-      // dispatch(setSliderValue(minLengthForChars))
-      return minLengthForChars
-    }
-    return sliderValue
-  }
+  const validate = useCallback(
+    (sliderValue: number): number => {
+      const { selected } = formValues.words
+      if (
+        selected &&
+        (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
+      ) {
+        dispatch(setSliderValue(maxLengthForWords))
+        return maxLengthForWords
+      } else if (!selected && sliderValue < minLengthForChars) {
+        dispatch(setSliderValue(minLengthForChars))
+        return minLengthForChars
+      }
+      return sliderValue
+    },
+    [formValues],
+  )
 
   const generate = useCallback(() => {
     inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)

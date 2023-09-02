@@ -1,5 +1,5 @@
 import { IndexableFormValues, InputValue } from "@/models"
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
 // Assuming the defaultFormValues and defaultSliderValue are imported:
 import { defaultFormValues, defaultSliderValue } from "@/../config" // Replace 'path_to_your_defaults_file' with the actual path
