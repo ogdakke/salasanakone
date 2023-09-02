@@ -1,13 +1,13 @@
 import { inputFieldMaxLength, labelForCheckbox } from "@/../config"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
-import { IndexableInputValue, InputLabel, InputValue } from "@/models"
+import { IndexableFormValues, InputLabel, InputValue } from "@/models"
 import { t } from "@/utils/getLanguage"
 import { validateLength } from "@/utils/helpers"
 
 type InputFieldProps = {
   option: InputLabel
   values: InputValue
-  formValues: IndexableInputValue
+  formValues: IndexableFormValues
   isDisabled: boolean
   valuesToForm: (option: InputLabel, event: unknown, value: "selected" | "value") => void
 }

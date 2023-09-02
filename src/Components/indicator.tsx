@@ -3,7 +3,7 @@ import { motion } from "framer-motion"
 import { OpenSelectHandGesture } from "iconoir-react"
 import { Suspense, useCallback, useEffect, useState } from "react"
 import { ErrorBoundary } from "react-error-boundary"
-import { IndexableInputValue } from "../models"
+import { IndexableFormValues } from "../models"
 import "../styles/Indicator.css"
 import { ErrorComponent } from "./errorComponent"
 import {
@@ -42,7 +42,7 @@ let didCheckTime = false
  * @returns JSX element
  */
 export function StrengthIndicator(props: {
-  formValues: IndexableInputValue
+  formValues: IndexableFormValues
   password: string | undefined
   sliderValue: number
 }): React.ReactNode {

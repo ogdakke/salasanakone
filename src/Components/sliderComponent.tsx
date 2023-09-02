@@ -5,13 +5,13 @@ import {
   minLengthForWords,
 } from "@/../config"
 import { Label, Slider } from "@/Components/ui"
-import { IndexableInputValue } from "@/models"
+import { IndexableFormValues } from "@/models"
 import { t } from "@/utils/getLanguage"
 import { motion } from "framer-motion"
 
 type SliderComponentProps = {
   sliderValue: number
-  formValues: IndexableInputValue
+  formValues: IndexableFormValues
   validate: (sliderValue: number) => number
   sliderVal: (value: number) => number
 }

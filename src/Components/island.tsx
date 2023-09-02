@@ -1,7 +1,7 @@
 import { motion } from "framer-motion"
 import { Refresh } from "iconoir-react"
 import { Suspense } from "react"
-import { IndexableInputValue } from "../models"
+import { IndexableFormValues } from "../models"
 import "../styles/Island.css"
 import { StrengthIndicator } from "./indicator"
 import { Loading } from "./ui"
@@ -9,7 +9,7 @@ import { Loading } from "./ui"
 interface Props {
   generate: () => void
   finalPassword: string | undefined
-  formValues: IndexableInputValue
+  formValues: IndexableFormValues
   sliderValue: number
 }
 

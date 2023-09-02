@@ -1,5 +1,5 @@
 import {
-  inputValues,
+  defaultFormValues,
   maxLengthForChars,
   maxLengthForWords,
   minLengthForChars,
@@ -8,7 +8,7 @@ import {
 import { InputField, Island } from "@/Components"
 import { Label, Loading, Slider } from "@/Components/ui"
 import { usePersistedState } from "@/hooks/usePersistedState"
-import { IndexableInputValue, InputLabel } from "@/models"
+import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
@@ -18,15 +18,15 @@ import { motion } from "framer-motion"
 import React, { Suspense, useCallback, useEffect, useState } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 
-const initialInputKeys = Object.entries(inputValues)
+const initialInputKeys = Object.entries(defaultFormValues)
 
-export function generatePassword(formValues: IndexableInputValue, sliderValue: number) {
+export function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
   return createCryptoKey(sliderValue.toString(), formValues)
 }
 
 export default function FormComponent(): React.ReactNode {
   const [finalPassword, setFinalPassword] = useState<string>()
-  const [formValues, setFormValues] = usePersistedState("formValues", inputValues)
+  const [formValues, setFormValues] = usePersistedState("formValues", defaultFormValues)
   const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
   const [isDisabled, setDisabled] = useState(false)
 

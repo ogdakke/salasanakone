@@ -9,14 +9,14 @@ import {
   specialsAndNums,
 } from "@/../config"
 
-import { IndexableInputValue } from "@/models"
+import { IndexableFormValues } from "@/models"
 
 const sanat = await import("@/sanat.json")
 
 let variableMinLength = minLengthForWords
 let variableMaxLength = maxLengthForChars
 
-export function createCryptoKey(sliderValue: string, data: IndexableInputValue): string {
+export function createCryptoKey(sliderValue: string, data: IndexableFormValues): string {
   variableMinLength = data.words.selected ? minLengthForWords : minLengthForChars
   variableMaxLength = data.words.selected ? maxLengthForWords : maxLengthForChars
 
@@ -25,7 +25,7 @@ export function createCryptoKey(sliderValue: string, data: IndexableInputValue):
   return handleReturns(length, data)
 }
 
-function handleReturns(length: number, data: IndexableInputValue): string {
+function handleReturns(length: number, data: IndexableFormValues): string {
   const USER_SPECIALS = data.randomChars.value || ""
   const wordString = data.words.selected ? getWordsWithObject(length, sanat.default) : null
 
@@ -45,7 +45,7 @@ function handleReturns(length: number, data: IndexableInputValue): string {
 }
 
 function handleWordsTrue(
-  data: IndexableInputValue,
+  data: IndexableFormValues,
   wordString: string[],
   USER_SPECIALS: string,
 ): string {
@@ -66,7 +66,7 @@ function handleWordsTrue(
   return wordString.join("")
 }
 
-function applyTransformationsToWords(data: IndexableInputValue, wordString: string[]): string[] {
+function applyTransformationsToWords(data: IndexableFormValues, wordString: string[]): string[] {
   if (data.numbers.selected) {
     if (data.uppercase.selected) {
       return randomNumberOnString(capitalizeFirstLetter(wordString))
@@ -81,7 +81,7 @@ function applyTransformationsToWords(data: IndexableInputValue, wordString: stri
   return wordString
 }
 
-function handleWordsFalse(data: IndexableInputValue, length: number): string {
+function handleWordsFalse(data: IndexableFormValues, length: number): string {
   if (data.randomChars.selected && data.numbers.selected) {
     return createFromString(specialsAndNums, length)
   }

@@ -11,6 +11,6 @@ export interface InputValue {
   info: string
 }
 
-export type IndexableInputValue = {
+export type IndexableFormValues = {
   [key in InputLabel]: InputValue
 }
