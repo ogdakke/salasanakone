@@ -2,7 +2,6 @@ import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../co
 import { InputField, Island, SliderComponent } from "@/Components"
 import { Loading } from "@/Components/ui"
 import { useDispatch, useSelector } from "@/common/hooks"
-import { t } from "@/common/utils/getLanguage"
 import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
@@ -85,7 +84,6 @@ export default function FormComponent(): React.ReactNode {
             aria-busy="false"
             aria-label="Salasana, jonka voi kopioida napauttamalla"
             finalPassword={finalPassword}
-            copyText={t("clickToCopy")}
           />
         </Suspense>
         <div className="inputGrid">

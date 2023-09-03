@@ -79,7 +79,7 @@ export const InputField: React.FC<InputFieldProps> = ({
               disabled={isDisabled}
               maxLength={inputFieldMaxLength}
               defaultValue={formValues[option].value}
-              placeholder={t("inputPlaceholder")}
+              placeholder={t("inputPlaceholder").toString()}
               onChange={(event) => {
                 valuesToForm(
                   option,

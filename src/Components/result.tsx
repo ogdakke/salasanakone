@@ -8,8 +8,8 @@ import { Transition, motion } from "framer-motion"
 import { ClipboardCheck, OpenSelectHandGesture } from "iconoir-react"
 import { useEffect, useState } from "react"
 
-const Result = (props: { finalPassword: string | undefined; copyText: string }) => {
-  const { finalPassword, copyText } = props
+const Result = (props: { finalPassword: string | undefined }) => {
+  const { finalPassword } = props
   const [isCopied, setCopied] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
 
@@ -49,7 +49,7 @@ const Result = (props: { finalPassword: string | undefined; copyText: string }) 
 
   return (
     <div className="resultWrapper">
-      <p className="resultHelperText">{copyText}</p>
+      <p className="resultHelperText">{t("clickToCopy")}</p>
       {finalPassword && finalPassword.length > 0 ? (
         <div className="relative">
           <motion.div
@@ -71,7 +71,7 @@ const Result = (props: { finalPassword: string | undefined; copyText: string }) 
             initial={{
               scale: 1,
             }}
-            title={copyText}
+            title={t("clickToCopy").toString()}
             className="card interact resultCard relative"
             itemType="button"
             tabIndex={0}
