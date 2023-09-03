@@ -1,13 +1,13 @@
 import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../config"
 import { InputField, Island, SliderComponent } from "@/Components"
 import { Loading } from "@/Components/ui"
+import { useDispatch, useSelector } from "@/common/hooks"
+import { t } from "@/common/utils/getLanguage"
 import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
-import { useDispatch, useSelector } from "@/hooks"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
-import { t } from "@/utils/getLanguage"
 import React, { Suspense, useCallback, useEffect, useState } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 

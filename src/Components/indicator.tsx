@@ -1,4 +1,4 @@
-import { validateLength } from "@/utils/helpers"
+import { validateLength } from "@/common/utils/helpers"
 import { motion } from "framer-motion"
 import { OpenSelectHandGesture } from "iconoir-react"
 import { Suspense, useCallback, useEffect, useState } from "react"

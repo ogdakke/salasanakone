@@ -5,9 +5,9 @@ import {
   minLengthForWords,
 } from "@/../config"
 import { Label, Slider } from "@/Components/ui"
+import { t } from "@/common/utils/getLanguage"
 import { setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
 import { RootState } from "@/store"
-import { t } from "@/utils/getLanguage"
 import { motion } from "framer-motion"
 import { FC } from "react"
 import { useDispatch, useSelector } from "react-redux"

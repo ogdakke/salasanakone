@@ -3,7 +3,7 @@ import "@/styles/ui/Feedback.css"
 import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
-import { usePersistedState } from "@/hooks/usePersistedState"
+import { usePersistedState } from "@/common/hooks/usePersistedState"
 
 interface clickValueType {
   value: boolean

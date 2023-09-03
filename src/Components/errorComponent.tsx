@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { useInterval } from "@/hooks/useInterval"
+import { useInterval } from "@/common/hooks/useInterval"
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
