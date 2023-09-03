@@ -39,7 +39,6 @@ const passphraseFormSlice = createSlice({
       const field = action.payload
       state.formValues[field].selected = !state.formValues[field].selected
     },
-    // ... add more reducers as required
   },
 })
 

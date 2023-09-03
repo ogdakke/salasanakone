@@ -1,11 +1,4 @@
-import { validateLength } from "@/common/utils/helpers"
-import { motion } from "framer-motion"
-import { OpenSelectHandGesture } from "iconoir-react"
-import { Suspense, useCallback, useEffect, useState } from "react"
-import { ErrorBoundary } from "react-error-boundary"
-import { IndexableFormValues } from "../models"
-import "../styles/Indicator.css"
-import { ErrorComponent } from "./errorComponent"
+import { ErrorComponent } from "@/Components"
 import {
   Divider,
   Popover,
@@ -15,7 +8,15 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "./ui"
+} from "@/Components/ui"
+import { t } from "@/common/utils/getLanguage"
+import { validateLength } from "@/common/utils/helpers"
+import { IndexableFormValues } from "@/models"
+import "@/styles/Indicator.css"
+import { motion } from "framer-motion"
+import { OpenSelectHandGesture } from "iconoir-react"
+import { Suspense, useCallback, useEffect, useState } from "react"
+import { ErrorBoundary } from "react-error-boundary"
 
 const checker = async (password: string) => {
   const check = await import("../services/checkStrength").then((r) => r.checkStrength)
@@ -184,7 +185,7 @@ export function StrengthIndicator(props: {
                 <TooltipContent sideOffset={4} className="TooltipContent">
                   <div className="flex-center">
                     <OpenSelectHandGesture width={20} height={20} />
-                    Lisätietoja
+                    {t("moreInfo")}
                   </div>
                 </TooltipContent>
               </Tooltip>
@@ -203,7 +204,7 @@ export function StrengthIndicator(props: {
             asChild
           >
             <div className="popCard">
-              <p className="fadeIn resultHelperText">Murtamisaika</p>
+              <p className="fadeIn resultHelperText">{t("timeToCrack")}</p>
               <Divider margin="0.25rem 0rem" />
               <div className="flex-center space-between">
                 <span>{time[0]}</span>
@@ -219,16 +220,17 @@ export function StrengthIndicator(props: {
 function numberToString(value: number) {
   switch (value) {
     case 0:
-      return "Surkea"
+      // To be able to set the state, these need to be strings
+      return t("strengthAwful").toString()
     case 1:
-      return "Huono"
+      return t("strengthBad").toString()
     case 2:
-      return "Ok"
+      return t("strengthOk").toString()
     case 3:
-      return "Hyvä"
+      return t("strengthGood").toString()
     case 4:
-      return "Loistava"
+      return t("strengthGreat").toString()
     default:
-      return "Arvio"
+      return t("strengthDefault").toString()
   }
 }

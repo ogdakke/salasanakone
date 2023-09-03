@@ -4,6 +4,7 @@ import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
 import { usePersistedState } from "@/common/hooks/usePersistedState"
+import { t } from "@/common/utils/getLanguage"
 
 interface clickValueType {
   value: boolean
@@ -15,11 +16,9 @@ export const Feedback = () => {
   }
   const [clicked, setClicked] = usePersistedState("isClicked", initialClickValues)
 
-  const questionText = "Jätä palaute"
-
   if (clicked.value === false) {
     return (
-      <div>
+      <div key={"notClicked"}>
         <form className="" action="submit" method="post" style={{ opacity: 1 }}>
           <div title="Anna palautetta sivustosta">
             <a
@@ -33,7 +32,7 @@ export const Feedback = () => {
               rel="noreferrer"
               href="https://palaute.simple.ink/"
             >
-              {questionText}
+              {t("leaveFeedback")}
               <OpenNewWindow width={20} height={20} />
             </a>
           </div>
@@ -42,7 +41,7 @@ export const Feedback = () => {
     )
   } else {
     return (
-      <div className="flex-center">
+      <div key={"clicked"} className="flex-center">
         <TooltipProvider delayDuration={600}>
           <Tooltip>
             <TooltipTrigger className="flex-center interact hover resultHelperText" asChild>
@@ -53,14 +52,11 @@ export const Feedback = () => {
                 href="https://palaute.simple.ink/"
               >
                 <ChatBubbleEmpty className="interact " />
-                Kiitos palautteesta!
+                {t("thanksForFeedback")}
               </a>
             </TooltipTrigger>
             <TooltipContent className="TooltipContent" sideOffset={4}>
-              <p>
-                Kiitos jos annoit palautetta, voit antaa
-                <br /> uuden palautteen klikkaamalla.
-              </p>
+              <p>{t("thanksForFeedbackLeaveAnother")}</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

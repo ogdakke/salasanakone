@@ -19,7 +19,6 @@ export function generatePassword(formValues: IndexableFormValues, sliderValue: n
 
 export default function FormComponent(): React.ReactNode {
   const [finalPassword, setFinalPassword] = useState<string>()
-  // const [formValues, setFormValues] = usePersistedState("formValues", defaultFormValues)
   const [isDisabled, setDisabled] = useState(false)
 
   const dispatch = useDispatch()
@@ -29,6 +28,7 @@ export default function FormComponent(): React.ReactNode {
   const validate = useCallback(
     (sliderValue: number): number => {
       const { selected } = formValues.words
+
       if (
         selected &&
         (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
@@ -47,29 +47,28 @@ export default function FormComponent(): React.ReactNode {
   const generate = useCallback(() => {
     inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)
     try {
-      const setPassword = () => generatePassword(formValues, sliderValue)
+      const setPassword = () => generatePassword(formValues, validate(sliderValue))
       setFinalPassword(setPassword())
     } catch (err) {
       console.error(err)
-      throw new Error(`error setting password`)
     }
   }, [formValues, sliderValue])
 
   useEffect(() => {
-    validate(sliderValue)
     generate()
   }, [generate, sliderValue, validate])
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
       const updatedValue: IndexableFormValues = { ...formValues }
+      validate(sliderValue)
       if (value === "selected" && typeof event === "boolean") {
-        updatedValue[option] = { ...defaultFormValues[option], selected: event }
+        updatedValue[option] = { ...updatedValue[option], selected: event }
+        dispatch(setFormField({ field: option, value: updatedValue[option] }))
       } else if (typeof event === "string") {
-        updatedValue[option] = { ...defaultFormValues[option], value: event }
+        updatedValue[option] = { ...updatedValue[option], value: event }
+        dispatch(setFormField({ field: option, value: updatedValue[option] }))
       }
-
-      dispatch(setFormField({ field: option, value: updatedValue[option] }))
     },
     [dispatch],
   )
@@ -89,14 +88,6 @@ export default function FormComponent(): React.ReactNode {
             copyText={t("clickToCopy")}
           />
         </Suspense>
-
-        <button
-          className="inputButton"
-          type="button"
-          onClick={() => dispatch(setSliderValue(sliderValue + 1))}
-        >
-          set
-        </button>
         <div className="inputGrid">
           {initialInputKeys.map(([item, entry]) => (
             <InputField
@@ -111,12 +102,7 @@ export default function FormComponent(): React.ReactNode {
         </div>
       </form>
       <div className="IslandWrapper">
-        <Island
-          generate={generate}
-          finalPassword={finalPassword}
-          formValues={formValues}
-          sliderValue={sliderValue}
-        />
+        <Island generate={generate} finalPassword={finalPassword} />
       </div>
     </>
   )

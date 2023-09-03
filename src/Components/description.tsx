@@ -37,7 +37,7 @@ const Description: React.FC = () => {
         <article title="Mikä on salalause?">
           <p>
             Salalause on yhdistelmä sanoja, ja sen tarkoituksena on olla pidempi kuin salasanat
-            yleensä. Salalauseen päälimäisenä hyöty on muistettavuus.
+            yleensä. Salalauseen päälimäisenä hyötynä on muistettavuus.
           </p>
         </article>
         <h3 className="mt-05">Onko salalause parempi kuin salasana?</h3>

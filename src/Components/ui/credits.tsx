@@ -8,6 +8,7 @@ import {
 } from "@/Components/ui"
 import { meta } from "@/assets/constants/meta"
 import { LogoIcon } from "@/assets/icons/logoIcon"
+import { t } from "@/common/utils/getLanguage"
 import "@/styles/ui/Tooltip.css"
 
 const Credits = () => {
@@ -19,12 +20,12 @@ const Credits = () => {
             <button className="credits">
               <LogoIcon loading="lazy" width={20} height={20} className="svgImage interact" />
               <ExternalLink link={meta.dweUrl} size={18}>
-                dwe.fi
+                {meta.dweDisplayText}
               </ExternalLink>
             </button>
           </TooltipTrigger>
           <TooltipContent className="TooltipContent" sideOffset={0} asChild>
-            <p>Vieraile sivuillani</p>
+            <span>{t("visitMySite")}</span>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -34,8 +35,8 @@ const Credits = () => {
           <TooltipTrigger>
             <Share />
           </TooltipTrigger>
-          <TooltipContent className="TooltipContent" sideOffset={0}>
-            <p>Jaa</p>
+          <TooltipContent className="TooltipContent" sideOffset={0} asChild>
+            <span>{t("share")}</span>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
