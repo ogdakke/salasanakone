@@ -1,22 +1,9 @@
-import { ErrorComponent } from "@/Components"
-import {
-  Divider,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/Components/ui"
+import { useSelector } from "@/common/hooks"
 import { t } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
-import { IndexableFormValues } from "@/models"
 import "@/styles/Indicator.css"
 import { motion } from "framer-motion"
-import { OpenSelectHandGesture } from "iconoir-react"
-import { Suspense, useCallback, useEffect, useState } from "react"
-import { ErrorBoundary } from "react-error-boundary"
+import { useCallback, useEffect, useState } from "react"
 
 const checker = async (password: string) => {
   const check = await import("../services/checkStrength").then((r) => r.checkStrength)
@@ -37,17 +24,12 @@ const parseValue = (value: number) => {
 
 let didInit = false
 let didCheckTime = false
-/**
- * Calculates the strength of a given password and returns a element
- * @param props {object} {formValues: object, password: string, sliderValue: number}
- * @returns JSX element
- */
-export function StrengthIndicator(props: {
-  formValues: IndexableFormValues
-  password: string | undefined
-  sliderValue: number
-}): React.ReactNode {
-  const { formValues, password, sliderValue } = props
+
+export function StrengthIndicator(props: { password: string | undefined }): React.ReactNode {
+  const { password } = props
+
+  const formValues = useSelector((state) => state.passphraseForm.formValues)
+  const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
 
   const validateString = useCallback(() => {
     if (!formValues.words.selected && sliderValue > 15) {
@@ -95,16 +77,16 @@ export function StrengthIndicator(props: {
         didInit = true
         checker(validateLength(password, 70))
           .then((r) => {
-            // console.log("🚀 ~ file: indicator.tsx:106 ~ checker ~ password:", password)
-            console.log("Mounted and checking...")
+            console.info("Mounted and checking...")
             setScore(r.score)
             setOutput(numberToString(r.score))
           })
           .catch((err) => {
+            if (err instanceof Error) throw new Error(err.message)
             console.error("Error in checking", err)
           })
           .finally(() => {
-            console.log("Mounted and checked successfully.")
+            console.info("Mounted and checked successfully.")
           })
       }
     }
@@ -112,9 +94,10 @@ export function StrengthIndicator(props: {
   }, [])
 
   useEffect(() => {
-    // THis is run each time the dep array gets a hit, so set time check to false.
+    // THis is run each time the dep array gets a hit, so set time check to false initially
     didCheckTime = false
-    // kikkailua, jotta ei tarvis laskea aina scorea, koska se on kallista.
+
+    // fake checking for better perf
     if (!validateString()) {
       setScore(4)
       setOutput(numberToString(4))
@@ -127,6 +110,9 @@ export function StrengthIndicator(props: {
             console.log("Checked strength succesfully")
           })
           .catch((err) => {
+            if (err instanceof Error) {
+              throw new Error(err.message)
+            }
             console.error(err)
           })
       }
@@ -136,84 +122,95 @@ export function StrengthIndicator(props: {
     }
   }, [password])
 
+  enum StrengthIndicatorVariants {
+    bar,
+    text,
+  }
+
+  const [strengthIndicatorVariant, setStrengthIndicatorVariant] =
+    useState<StrengthIndicatorVariants>(StrengthIndicatorVariants.bar)
+
+  /**
+   * Bar variant
+   */
+  // if (strengthIndicatorVariant === StrengthIndicatorVariants.bar) {
+  //   return <StrengthBar strength={score} />
+  // }
+
   return (
-    <ErrorBoundary
-      fallbackRender={({ error, resetErrorBoundary }) => {
-        return <ErrorComponent error={error as unknown} resetErrorBoundary={resetErrorBoundary} />
-      }}
-    >
-      <Suspense
-        fallback={
-          <div className="strengthIndicator case5">
-            <span>Arvio</span>
-          </div>
-        }
-      >
-        <Popover>
-          <PopoverTrigger
-            onClick={() => {
-              void calculateTimeToCheck().catch(console.error)
-            }}
-          >
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger type="button" asChild>
-                  <motion.div
-                    layoutId="strengthIndicator"
-                    key={output}
-                    whileHover={{
-                      scale: 1,
-                      transition: {
-                        type: "tween",
-                        // duration: 0.1,
-                      },
-                    }}
-                    whileTap={{
-                      scale: 0.95,
-                    }}
-                    whileFocus={{
-                      scale: 0.95,
-                      transition: {
-                        type: "spring",
-                      },
-                    }}
-                    className={`interact strengthIndicator case${score.toString()}`}
-                  >
-                    <motion.span>{output}</motion.span>
-                  </motion.div>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={4} className="TooltipContent">
-                  <div className="flex-center">
-                    <OpenSelectHandGesture width={20} height={20} />
-                    {t("moreInfo")}
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </PopoverTrigger>
-          <PopoverContent
-            style={{
-              zIndex: 3,
-            }}
-            align="center"
-            side="top"
-            className="PopoverContent"
-            onOpenAutoFocus={(e) => {
-              e.preventDefault()
-            }}
-            asChild
-          >
-            <div className="popCard">
-              <p className="fadeIn resultHelperText">{t("timeToCrack")}</p>
-              <Divider margin="0.25rem 0rem" />
-              <div className="flex-center space-between">
-                <span>{time[0]}</span>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-      </Suspense>
-    </ErrorBoundary>
+    <StrengthBar strength={score} />
+
+    // <ErrorBoundary
+    //   fallbackRender={({ error, resetErrorBoundary }) => {
+    //     return <ErrorComponent error={error as unknown} resetErrorBoundary={resetErrorBoundary} />
+    //   }}
+    // >
+    //   <Suspense
+    //     fallback={
+    //       <div className="strengthIndicator case5">
+    //         <span>{t("strengthDefault")}</span>
+    //       </div>
+    //     }
+    //   >
+    //     <Popover>
+    //       <PopoverTrigger
+    //         onClick={() => {
+    //           void calculateTimeToCheck().catch(console.error)
+    //         }}
+    //       >
+    //         <TooltipProvider delayDuration={0}>
+    //           <Tooltip>
+    //             <TooltipTrigger type="button" asChild>
+    //               <motion.div
+    //                 layoutId="strengthIndicator"
+    //                 key={output}
+    //                 whileHover={{
+    //                   scale: 1,
+    //                   transition: {
+    //                     type: "tween",
+    //                     // duration: 0.1,
+    //                   },
+    //                 }}
+    //                 whileTap={{ scale: 0.95 }}
+    //                 whileFocus={{
+    //                   scale: 0.95,
+    //                   transition: {
+    //                     type: "spring",
+    //                   },
+    //                 }}
+    //                 className={`interact strengthIndicator case${score.toString()}`}
+    //               >
+    //                 <motion.span>{output}</motion.span>
+    //               </motion.div>
+    //             </TooltipTrigger>
+    //             <TooltipContent sideOffset={4} className="TooltipContent">
+    //               <div className="flex-center">
+    //                 <OpenSelectHandGesture width={20} height={20} />
+    //                 {t("moreInfo")}
+    //               </div>
+    //             </TooltipContent>
+    //           </Tooltip>
+    //         </TooltipProvider>
+    //       </PopoverTrigger>
+    //       <PopoverContent
+    //         style={{ zIndex: 3 }}
+    //         align="center"
+    //         side="top"
+    //         className="PopoverContent"
+    //         onOpenAutoFocus={(e) => e.preventDefault()}
+    //         asChild
+    //       >
+    //         <div className="popCard">
+    //           <p className="fadeIn resultHelperText">{t("timeToCrack")}</p>
+    //           <Divider margin="0.25rem 0rem" />
+    //           <div className="flex-center space-between">
+    //             <span>{time[0]}</span>
+    //           </div>
+    //         </div>
+    //       </PopoverContent>
+    //     </Popover>
+    //   </Suspense>
+    // </ErrorBoundary>
   )
 }
 
@@ -233,4 +230,43 @@ function numberToString(value: number) {
     default:
       return t("strengthDefault").toString()
   }
+}
+
+type StrengthBarProps = {
+  strength: number
+}
+
+const StrengthBar = ({ strength }: StrengthBarProps) => {
+  const percentageOfMax = (strength / 4) * 100
+
+  let delay = 0.05
+  useEffect(() => {
+    delay = 0
+  }, [])
+
+  return (
+    <motion.span
+      id="StrengthBar"
+      className={`StrengthBar case${strength}`}
+      style={{
+        width: "0",
+      }}
+      initial={{
+        width: "0%",
+      }}
+      animate={{
+        width: `${percentageOfMax}%`,
+      }}
+      transition={{
+        delay: delay,
+        duration: 0.6,
+      }}
+      exit={{
+        width: 0,
+        transition: {
+          duration: 0.2,
+        },
+      }}
+    ></motion.span>
+  )
 }
