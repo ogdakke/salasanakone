@@ -43,25 +43,10 @@ export const Island = ({ generate, finalPassword }: Props) => {
 
   return (
     <Suspense fallback={<Loading height="84" />}>
-      <motion.div
-        onMouseEnter={onHoverOrTap}
-        onTap={onHoverOrTap}
-        // whileHover={() => onHoverOrTap()}
-        initial={{ height: "80px" }}
-        animate={{ height: "80px" }}
-        transition={{
-          duration: 5,
-          type: "spring",
-          damping: 12,
-          delay: 0,
-        }}
-        className="IslandMain"
-        data-state={islandVariant}
-        layout
-      >
+      <div onMouseEnter={onHoverOrTap} className="IslandMain" data-state={islandVariant}>
         {/* Render all different variants conditionally */}
         {islandVariants[islandVariant]}
-      </motion.div>
+      </div>
     </Suspense>
   )
 }
@@ -70,47 +55,45 @@ type PillIslandProps = Props & {
   isVisible: boolean
 }
 const PillIsland = ({ isVisible, generate, finalPassword }: PillIslandProps) => {
-  const [pillWidth, setPillWidth] = useState(60)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const num = parseFloat(e.target.value)
-    setPillWidth(num)
   }
 
   return (
-    <>
+    <motion.div
+      key="Pill"
+      className="IslandContent PillIsland"
+      layoutId="Island"
+      initial={{
+        borderRadius: "32px",
+      }}
+    >
       <motion.div
-        className="IslandContent PillIsland"
-        layoutId="Island"
-        initial={{
-          borderRadius: "32px",
+        className="flex-center space-between"
+        animate={{ opacity: 1 }}
+        initial={{ width: 0 }}
+        transition={{
+          type: "spring",
+          duration: 0.2,
         }}
       >
-        <motion.div
-          className="flex-center space-between"
-          animate={{ width: pillWidth, opacity: 1 }}
-          initial={{ width: 0 }}
-          transition={{
-            type: "spring",
-            duration: 0.2,
-          }}
-          layout
-        >
-          <AnimatePresence>
-            {isVisible ? <StrengthIndicator password={finalPassword} /> : null}
-          </AnimatePresence>
-        </motion.div>
+        <AnimatePresence>
+          {isVisible ? <StrengthIndicator password={finalPassword} /> : null}
+        </AnimatePresence>
       </motion.div>
-    </>
+    </motion.div>
   )
 }
 
 const FullIsland = ({ generate, finalPassword }: Props) => (
   <motion.div
+    key="Full"
     className="IslandContent FullIsland"
     layoutId="Island"
     initial={{
       borderRadius: "32px",
       width: "340px",
+      opacity: 1,
     }}
   >
     <motion.div
@@ -126,7 +109,6 @@ const FullIsland = ({ generate, finalPassword }: Props) => (
       transition={{
         delay: 0.25,
       }}
-      layout
     >
       {/* <StrengthIndicator password={finalPassword} /> */}
       <div className="relative">
