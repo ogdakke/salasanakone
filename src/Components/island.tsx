@@ -21,24 +21,59 @@ export const Island = ({ generate, finalPassword }: Props) => {
   const [islandVariant, setIslandVariant] = useState<IslandVariants>(IslandVariants.pill)
   let isVisible = islandVariant === IslandVariants.pill
 
-  const islandVariants = {
-    [IslandVariants.full]: <FullIsland generate={generate} finalPassword={finalPassword} />,
-    [IslandVariants.pill]: (
-      <PillIsland isVisible={isVisible} generate={generate} finalPassword={finalPassword} />
-    ),
+  const onHoverOrTap = () => {
+    // Set the variant to Full
+    if (islandVariant === IslandVariants.pill) {
+      isVisible = false
+      setIslandVariant(IslandVariants.full)
+    }
   }
 
+  // On deps change, set variant to Pill
   useEffect(() => {
     if (islandVariant === IslandVariants.full) {
       setIslandVariant(IslandVariants.pill)
     }
   }, [formValues, sliderValue])
 
-  const onHoverOrTap = () => {
-    if (islandVariant === IslandVariants.pill) {
-      isVisible = false
-      setIslandVariant(IslandVariants.full)
-    }
+  const PillIsland = () => {
+    return (
+      <motion.button
+        key="Pill"
+        className="IslandContent PillIsland"
+        type="button"
+        layoutId="Island"
+        initial={{ borderRadius: "32px" }}
+        animate={{ borderRadius: "32px" }}
+        whileFocus={{ scale: 1.1 }}
+        onClick={onHoverOrTap}
+      >
+        <AnimatePresence>
+          {isVisible ? <StrengthIndicator password={finalPassword} /> : null}
+        </AnimatePresence>
+      </motion.button>
+    )
+  }
+
+  const FullIsland = () => (
+    <motion.div
+      key="Full"
+      className="IslandContent FullIsland"
+      layoutId="Island"
+      initial={{
+        borderRadius: "32px",
+        width: "340px",
+        opacity: 1,
+      }}
+    >
+      <MotionButton generate={generate} />
+    </motion.div>
+  )
+
+  /** List the variants */
+  const islandVariants = {
+    [IslandVariants.full]: <FullIsland />,
+    [IslandVariants.pill]: <PillIsland />,
   }
 
   return (
@@ -51,73 +86,6 @@ export const Island = ({ generate, finalPassword }: Props) => {
   )
 }
 
-type PillIslandProps = Props & {
-  isVisible: boolean
-}
-const PillIsland = ({ isVisible, generate, finalPassword }: PillIslandProps) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const num = parseFloat(e.target.value)
-  }
-
-  return (
-    <motion.div
-      key="Pill"
-      className="IslandContent PillIsland"
-      layoutId="Island"
-      initial={{
-        borderRadius: "32px",
-      }}
-    >
-      <motion.div
-        className="flex-center space-between"
-        animate={{ opacity: 1 }}
-        initial={{ width: 0 }}
-        transition={{
-          type: "spring",
-          duration: 0.2,
-        }}
-      >
-        <AnimatePresence>
-          {isVisible ? <StrengthIndicator password={finalPassword} /> : null}
-        </AnimatePresence>
-      </motion.div>
-    </motion.div>
-  )
-}
-
-const FullIsland = ({ generate, finalPassword }: Props) => (
-  <motion.div
-    key="Full"
-    className="IslandContent FullIsland"
-    layoutId="Island"
-    initial={{
-      borderRadius: "32px",
-      width: "340px",
-      opacity: 1,
-    }}
-  >
-    <motion.div
-      className="flex-center space-between "
-      animate={{
-        scaleY: 1,
-        opacity: 1,
-      }}
-      initial={{
-        scaleY: 0.5,
-        opacity: 0,
-      }}
-      transition={{
-        delay: 0.25,
-      }}
-    >
-      {/* <StrengthIndicator password={finalPassword} /> */}
-      <div className="relative">
-        <MotionButton generate={generate} />
-      </div>
-    </motion.div>
-  </motion.div>
-)
-
 const MotionButton = ({ generate }: Props) => {
   return (
     <motion.button
@@ -129,14 +97,12 @@ const MotionButton = ({ generate }: Props) => {
         borderRadius: "3rem",
         scale: 1,
         transition: {
-          delay: 0.2,
           type: "spring",
         },
       }}
       whileHover={{
         scale: 1.1,
         transition: {
-          delay: 0,
           type: "tween",
           duration: 0.3,
         },
@@ -146,7 +112,7 @@ const MotionButton = ({ generate }: Props) => {
       onClick={() => void generate()}
       layout
     >
-      <Refresh className="Refresh" width={30} height={30} />
+      <Refresh className="Refresh spin" width={30} height={30} />
     </motion.button>
   )
 }

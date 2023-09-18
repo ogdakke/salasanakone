@@ -3,7 +3,7 @@ import { t } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
 import "@/styles/Indicator.css"
 import { motion } from "framer-motion"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 const checker = async (password: string) => {
   const check = await import("../services/checkStrength").then((r) => r.checkStrength)
@@ -79,7 +79,7 @@ export function StrengthIndicator(props: { password: string | undefined }): Reac
           .then((r) => {
             console.info("Mounted and checking...")
             setScore(r.score)
-            setOutput(numberToString(r.score))
+            setOutput(numberToString(r.score).label)
           })
           .catch((err) => {
             if (err instanceof Error) throw new Error(err.message)
@@ -100,13 +100,13 @@ export function StrengthIndicator(props: { password: string | undefined }): Reac
     // fake checking for better perf
     if (!validateString()) {
       setScore(4)
-      setOutput(numberToString(4))
+      setOutput(numberToString(4).label)
     } else {
       if (password && password.length > 0) {
         checker(password)
           .then((r) => {
             setScore(r.score)
-            setOutput(numberToString(r.score))
+            setOutput(numberToString(r.score).label)
             console.log("Checked strength succesfully")
           })
           .catch((err) => {
@@ -218,17 +218,35 @@ function numberToString(value: number) {
   switch (value) {
     case 0:
       // To be able to set the state, these need to be strings
-      return t("strengthAwful").toString()
+      return {
+        label: t("strengthAwful").toString(),
+        color: "var(--red-worst-rgb)",
+      }
     case 1:
-      return t("strengthBad").toString()
+      return {
+        label: t("strengthBad").toString(),
+        color: "var(--orange-bad-rgb)",
+      }
     case 2:
-      return t("strengthOk").toString()
+      return {
+        label: t("strengthOk").toString(),
+        color: "var(--yellow-ok-rgb)",
+      }
     case 3:
-      return t("strengthGood").toString()
+      return {
+        label: t("strengthGood").toString(),
+        color: "var(--yellow-better-rgb)",
+      }
     case 4:
-      return t("strengthGreat").toString()
+      return {
+        label: t("strengthGreat").toString(),
+        color: "var(--green-go-rgb)",
+      }
     default:
-      return t("strengthDefault").toString()
+      return {
+        label: t("strengthDefault").toString(),
+        color: "var(--foreground-rgb)",
+      }
   }
 }
 
@@ -237,28 +255,41 @@ type StrengthBarProps = {
 }
 
 const StrengthBar = ({ strength }: StrengthBarProps) => {
-  const percentageOfMax = (strength / 4) * 100
+  const [strengthState, setStrenthValue] = useState<number>(strength)
 
-  let delay = 0.05
-  useEffect(() => {
-    delay = 0
-  }, [])
+  useMemo(() => {
+    console.log(strengthState)
+
+    if (strengthState === strength) {
+      console.log("it was same")
+
+      return
+    }
+    setStrenthValue(strength)
+  }, [strength])
+
+  const percentageOfMax = (strengthState / 4) * 100
 
   return (
     <motion.span
+      key="strengthBar"
       id="StrengthBar"
-      className={`StrengthBar case${strength}`}
-      style={{
-        width: "0",
-      }}
+      className="StrengthBar"
+      // style={{
+      //   width: "0",
+      // }}
       initial={{
         width: "0%",
       }}
       animate={{
         width: `${percentageOfMax}%`,
+        backgroundColor: `${numberToString(strengthState).color}`,
+        transition: {
+          delay: 0.15,
+        },
       }}
       transition={{
-        delay: delay,
+        delay: 0.15,
         duration: 0.6,
       }}
       exit={{

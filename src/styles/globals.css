@@ -49,15 +49,15 @@
   --gray-shadow: 100, 100, 100;
   --black-text-rgb: 10, 10, 10;
 
-  --green-go-rgb: 108, 241, 109;
+  --green-go-rgb: rgb(108, 241, 109);
   /*loistva*/
-  --yellow-better-rgb: 137, 224, 133;
+  --yellow-better-rgb: rgb(137, 224, 133);
   /* Hyvä*/
-  --yellow-ok-rgb: 240, 173, 78;
+  --yellow-ok-rgb: rgb(240, 173, 78);
   /* OK */
-  --orange-bad-rgb: 220, 60, 60;
+  --orange-bad-rgb: rgb(220, 60, 60);
   /* Huono */
-  --red-worst-rgb: 180, 0, 10;
+  --red-worst-rgb: rgb(180, 0, 10);
   /* surkea */
 
   --red-rgb: 255, 60, 60;
