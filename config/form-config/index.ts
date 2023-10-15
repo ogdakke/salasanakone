@@ -1,12 +1,12 @@
-import { IndexableInputValue, IndexedLabels, InputLabel } from "../../src/models"
+import { IndexableFormValues, IndexedLabels, InputLabel } from "../../src/models"
 
 export const inputFieldMaxLength = 8
-
-export const inputValues: IndexableInputValue = {
+export const defaultSliderValue = 3
+export const defaultFormValues: IndexableFormValues = {
   words: {
     inputType: "radio",
     selected: true,
-    info: "Luodaanko salasana sanoista?",
+    info: "Luodaanko salalause sanoista?",
   },
   uppercase: {
     inputType: "checkbox",
@@ -16,7 +16,7 @@ export const inputValues: IndexableInputValue = {
   numbers: {
     inputType: "checkbox",
     selected: true,
-    info: "Sisältääkö Salasana numeroita satunnaisissa paikoissa.",
+    info: "Sisällytetäänkö salasanaan numeroita",
   },
   randomChars: {
     inputType: "input",

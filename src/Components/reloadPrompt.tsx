@@ -87,4 +87,4 @@ function ReloadPrompt() {
   )
 }
 
-export default ReloadPrompt
+export { ReloadPrompt }

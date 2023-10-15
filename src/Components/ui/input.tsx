@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import "../../styles/ui/Input.css"
+import "@/styles/ui/Input.css"
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 

@@ -11,13 +11,15 @@ export interface InputValue {
   info: string
 }
 
-export type Lang = "fi" | "en" | "se"
-export type IndexableInputValue = {
-  [key in InputLabel]: InputValue
+export type IndexableFormValues = {
+  words: InputValue
+  uppercase: InputValue
+  numbers: InputValue
+  randomChars: InputValue
 }
 
 export interface ApiSalaCall {
-  lang?: Lang
+  lang?: "fi" | "en"
   passLength: number
-  inputValues: IndexableInputValue
+  inputValues: IndexableFormValues
 }

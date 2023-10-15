@@ -8,3 +8,4 @@ export const charactersAndSpecialCharacters = "abcdefghijklmnopqrstuyäöxz><,.-
 export const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
 export const characters = "abcdefghijklmnopqrstuyäöxz"
 export const specials = "><,.-_*?+/()@%&!$€=#"
+export const numbers = "0123456789"

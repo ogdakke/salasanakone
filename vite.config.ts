@@ -1,5 +1,5 @@
 import react from "@vitejs/plugin-react"
-import { URL, fileURLToPath } from "node:url"
+import path from "path"
 import { PluginVisualizerOptions, visualizer } from "rollup-plugin-visualizer"
 import { type PluginOption } from "vite"
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa"
@@ -73,7 +73,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("src", import.meta.url)),
+      "@": path.resolve(__dirname, "./src"),
+      "@/config": path.resolve(__dirname, "./config"),
     },
   },
   plugins: [react(), VitePWA(pwaOptions), visualizer(visualizerOptions) as PluginOption],

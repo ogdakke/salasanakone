@@ -1,9 +1,8 @@
 import React from "react"
 
-import "../styles/Description.css"
+import "@/styles/Description.css"
 
-import { Divider } from "./ui/divider"
-import { ExternalLink } from "./ui/externalLink"
+import { Divider, ExternalLink } from "./ui"
 
 const Description: React.FC = () => {
   return (
@@ -38,7 +37,7 @@ const Description: React.FC = () => {
         <article title="Mikä on salalause?">
           <p>
             Salalause on yhdistelmä sanoja, ja sen tarkoituksena on olla pidempi kuin salasanat
-            yleensä. Salalauseen päälimäisenä hyöty on muistettavuus.
+            yleensä. Salalauseen päälimäisenä hyötynä on muistettavuus.
           </p>
         </article>
         <h3 className="mt-05">Onko salalause parempi kuin salasana?</h3>
@@ -96,4 +95,4 @@ const Description: React.FC = () => {
     </article>
   )
 }
-export default Description
+export { Description }

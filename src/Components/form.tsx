@@ -1,111 +1,78 @@
-import { motion } from "framer-motion"
-import React, { useCallback, useEffect, useState } from "react"
-import {
-  inputFieldMaxLength,
-  inputValues,
-  labelForCheckbox,
-  maxLengthForChars,
-  maxLengthForWords,
-  minLengthForChars,
-  minLengthForWords,
-} from "../../config"
-import { usePersistedState } from "../hooks/usePersistedState"
-import { ApiSalaCall, IndexableInputValue, InputLabel } from "../models"
-import { getPassphrase } from "../services/get-passphrase"
-import "../styles/Form.css"
-import "../styles/ui/Checkbox.css"
-import { correctType } from "../utils/helpers"
-import { validateLength } from "./indicator"
-import { Island } from "./island"
-import { Checkbox } from "./ui/checkbox"
-import { InputComponent } from "./ui/input"
-import { Label } from "./ui/label"
-import { Loading } from "./ui/loading"
-import { RadioGroup, RadioGroupItem } from "./ui/radioGroup"
-import { Slider } from "./ui/slider"
-const Result = React.lazy(async () => await import("./result"))
+import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../config"
+import { InputField, Island, SliderComponent } from "@/Components"
+import { Loading } from "@/Components/ui"
+import { useDispatch, useSelector } from "@/common/hooks"
+import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
+import { IndexableFormValues, InputLabel } from "@/models"
+import { createCryptoKey } from "@/services/createCrypto"
+import "@/styles/Form.css"
+import "@/styles/ui/Checkbox.css"
+import React, { Suspense, useCallback, useEffect, useState } from "react"
+const Result = React.lazy(async () => await import("@/Components/result"))
 
-const lang = {
-  Finnish: true,
-  English: false,
-}
+const initialInputKeys = Object.entries(defaultFormValues)
 
-const initialInputKeys = Object.entries(inputValues)
-
-export async function generatePassword(formValues: IndexableInputValue, sliderValue: number) {
-  return await getPassphrase({ passLength: sliderValue, inputValues: formValues })
+export function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
+  return createCryptoKey(sliderValue.toString(), formValues)
 }
 
 export default function FormComponent(): React.ReactNode {
-  const [finalPassword, setFinalPassword] = useState("")
-  const [formValuesTyped, setFormValuesTyped] = usePersistedState("formValues", inputValues)
-  const [sliderValue, setSliderValue] = usePersistedState("sliderValue", 4)
-  const formValues = formValuesTyped
-  // as FormType // explicitly type formValues as FormType
-  const setFormValues = setFormValuesTyped
-  // as Dispatch<SetStateAction<FormType>> // explicitly type setFormValues as Dispatch<SetStateAction<FormType>>
+  const [finalPassword, setFinalPassword] = useState<string>()
   const [isDisabled, setDisabled] = useState(false)
   const [isError, setError] = useState(false)
   const [isLoading, setLoading] = useState(false)
 
+  const dispatch = useDispatch()
+  const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
+  const formValues = useSelector((state) => state.passphraseForm.formValues)
+
   const validate = useCallback(
     (sliderValue: number): number => {
       const { selected } = formValues.words
+
       if (
         selected &&
-        (sliderValue > maxLengthForWords || sliderValue < 1 || !correctType(sliderValue, "number")) // should return false
+        (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
       ) {
-        setSliderValue(maxLengthForWords)
+        dispatch(setSliderValue(maxLengthForWords))
         return maxLengthForWords
       } else if (!selected && sliderValue < minLengthForChars) {
-        setSliderValue(minLengthForChars)
+        dispatch(setSliderValue(minLengthForChars))
         return minLengthForChars
       }
       return sliderValue
     },
-    [formValues, setSliderValue],
+    [formValues],
   )
 
-  const generate = useCallback(async () => {
-    if (inputFieldShouldDisable()) {
-      setDisabled(true)
-    } else {
-      setDisabled(false)
-      try {
-        const pass = await generatePassword(formValues, sliderValue)
-        setFinalPassword(pass ?? "Virhe salasanaa haettaessa")
-      } catch (err) {
-        console.error(err)
-        setError(true)
-      }
+  const generate = useCallback(() => {
+    inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)
+    try {
+      const setPassword = () => generatePassword(formValues, validate(sliderValue))
+      setFinalPassword(setPassword())
+    } catch (err) {
+      console.error(err)
     }
   }, [formValues, sliderValue])
 
   useEffect(() => {
-    validate(sliderValue)
-    generate().catch(console.error)
+    generate()
   }, [generate, sliderValue, validate])
 
   const valuesToForm = useCallback(
-    (option: InputLabel, event: unknown, value: "selected" | "value") => {
-      setFormValues((prev) => {
-        const updatedValues = { ...prev }
-
-        if (value === "selected" && typeof event === "boolean") {
-          updatedValues[option] = { ...updatedValues[option], selected: event }
-        } else if (typeof event === "string") {
-          updatedValues[option] = { ...updatedValues[option], value: event }
-        }
-        return updatedValues
-      })
+    (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
+      const updatedValue: IndexableFormValues = { ...formValues }
+      validate(sliderValue)
+      if (value === "selected" && typeof event === "boolean") {
+        updatedValue[option] = { ...updatedValue[option], selected: event }
+        dispatch(setFormField({ field: option, value: updatedValue[option] }))
+      } else if (typeof event === "string") {
+        updatedValue[option] = { ...updatedValue[option], value: event }
+        dispatch(setFormField({ field: option, value: updatedValue[option] }))
+      }
     },
-    [setFormValues],
+    [dispatch],
   )
-
-  const sliderVal = (value: number): number => {
-    setSliderValue(validate(value))
-    return value
-  }
 
   const inputFieldShouldDisable = () => {
     return formValues.words.selected && sliderValue < 2
@@ -134,160 +101,29 @@ export default function FormComponent(): React.ReactNode {
   return (
     <>
       <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
-        <div className="resultWrapper">
-          <p className="resultHelperText">
-            Kopioi Salasana napauttamalla
-            {/* tai paina<kbd>C</kbd> */}
-          </p>
-          {isLoading ? (
-            <Loading height="71px" />
-          ) : (
-            <Result
-              aria-busy="false"
-              aria-label="Salasana, jonka voi kopioida napauttamalla"
-              finalPassword={finalPassword}
-              copyText={copyText}
-            />
-          )}
-        </div>
-
+        <Suspense fallback={<Loading height="71px" />}>
+          <Result
+            aria-busy="false"
+            aria-label="Salasana, jonka voi kopioida napauttamalla"
+            finalPassword={finalPassword}
+          />
+        </Suspense>
         <div className="inputGrid">
-          {initialInputKeys.map(([item, entry]) => {
-            const option = item as InputLabel
-            const values = entry
-            // formValues[option].selected
-            if (values.inputType === "checkbox") {
-              return (
-                <div
-                  key={option}
-                  className="checkboxParent flex-center"
-                  style={{ gridArea: `${option}` }}
-                >
-                  <Checkbox
-                    aria-label={labelForCheckbox(option)}
-                    checked={formValues[option].selected}
-                    onCheckedChange={(event: unknown) => {
-                      values.selected = !values.selected
-                      valuesToForm(option, event, "selected")
-                    }}
-                    id={option}
-                    value={values.selected.toString()}
-                  ></Checkbox>
-                  <Label title={values.info} htmlFor={option}>
-                    {labelForCheckbox(option)}
-                  </Label>
-                </div>
-              )
-            } else if (values.inputType === "radio") {
-              return (
-                <div key={option} className="flex-center radio">
-                  <RadioGroup
-                    defaultValue={formValues[option].selected.toString()}
-                    onValueChange={(event: unknown) => {
-                      values.selected = !values.selected
-                      const isBool = event === "true" ? true : false
-                      valuesToForm(option, isBool, "selected")
-                    }}
-                  >
-                    <div className="flex-center">
-                      <RadioGroupItem value="true" id="r1" key="r1" />
-                      <Label htmlFor="r1">Käytä sanoja</Label>
-                    </div>
-                    <div className="flex-center">
-                      <RadioGroupItem value="false" id="r2" key="r2" />
-                      <Label htmlFor="r2">Käytä merkkejä</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-              )
-            } else {
-              // if values.inputType === "input"
-              return (
-                <div key={option} className="textInputBox">
-                  {formValues.words.selected ? (
-                    <div className="fadeIn labelOnTop">
-                      <Label className="flex-bottom" title={values.info} htmlFor={option}>
-                        {labelForCheckbox(option)}
-                        {isDisabled ? (
-                          <span className="resultHelperText">Lisää sanoja</span>
-                        ) : (
-                          <span></span>
-                        )}
-                      </Label>
-                      <InputComponent
-                        disabled={isDisabled}
-                        maxLength={inputFieldMaxLength}
-                        defaultValue={formValues[option].value}
-                        placeholder={inputPlaceholder}
-                        onChange={(event) => {
-                          valuesToForm(
-                            option,
-                            validateLength(event.target.value, inputFieldMaxLength),
-                            "value",
-                          )
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div key={option} className="flex-center fadeIn">
-                      <Checkbox
-                        aria-label={labelForCheckbox(option)}
-                        className="checkboxRoot"
-                        checked={formValues[option].selected}
-                        onCheckedChange={(event: unknown) => {
-                          values.selected = !values.selected
-                          valuesToForm(option, event, "selected")
-                        }}
-                        id={option}
-                        value={values.selected.toString()}
-                      ></Checkbox>
-                      <Label htmlFor={option}>Erikoismerkit</Label>
-                    </div>
-                  )}
-                </div>
-              )
-            }
-          })}
-          <div className="sliderWrapper">
-            <Label htmlFor="slider">
-              {formValues.words.selected
-                ? `Pituus: ${sliderValue} Sanaa`
-                : `Pituus: ${sliderValue} Merkkiä`}
-            </Label>
-            <Slider
-              id="slider"
-              name="slider"
-              aria-label="Salasanan pituus"
-              value={[validate(sliderValue)]}
-              onValueChange={(val) => sliderVal(val[0])} // makes sure val is not a "number[]"
-              max={formValues.words.selected ? maxLengthForWords : maxLengthForChars}
-              min={formValues.words.selected ? minLengthForWords : minLengthForChars}
-              step={1}
-            >
-              <motion.span
-                initial={{ scale: 1 }}
-                whileTap={{
-                  scale: 0.9,
-                }}
-                whileFocus={{
-                  scale: 0.9,
-                }}
-              ></motion.span>
-            </Slider>
-          </div>
+          {initialInputKeys.map(([item, entry]) => (
+            <InputField
+              key={item}
+              option={item as InputLabel}
+              values={entry}
+              isDisabled={isDisabled}
+              valuesToForm={valuesToForm}
+            />
+          ))}
+          <SliderComponent validate={validate} />
         </div>
       </form>
       <div className="IslandWrapper">
-        <Island
-          generate={generate}
-          finalPassword={finalPassword}
-          formValues={formValues}
-          sliderValue={sliderValue}
-        />
+        <Island generate={generate} finalPassword={finalPassword} />
       </div>
     </>
   )
 }
-
-const copyText = lang.Finnish ? "Kopioi Salasana Klikkaamalla" : "Click to Copy"
-const inputPlaceholder = 'Esim. "-" tai "?" tai "3!"'

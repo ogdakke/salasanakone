@@ -1,11 +1,17 @@
-import { meta } from "../../assets/constants/meta"
-import { LogoIcon } from "../../assets/icons/logoIcon"
-import "../../styles/ui/Tooltip.css"
-import { ShareComponent } from "../share"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
-import { ExternalLink } from "./externalLink"
+import { Share } from "@/Components"
+import {
+  ExternalLink,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/Components/ui"
+import { meta } from "@/assets/constants/meta"
+import { LogoIcon } from "@/assets/icons/logoIcon"
+import { t } from "@/common/utils/getLanguage"
+import "@/styles/ui/Tooltip.css"
 
-export const Credits = () => {
+const Credits = () => {
   return (
     <div className="imageWrapper">
       <TooltipProvider delayDuration={300}>
@@ -14,12 +20,12 @@ export const Credits = () => {
             <button className="credits">
               <LogoIcon loading="lazy" width={20} height={20} className="svgImage interact" />
               <ExternalLink link={meta.dweUrl} size={18}>
-                dwe.fi
+                {meta.dweDisplayText}
               </ExternalLink>
             </button>
           </TooltipTrigger>
           <TooltipContent className="TooltipContent" sideOffset={0} asChild>
-            <p>Vieraile sivuillani</p>
+            <span>{t("visitMySite")}</span>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -27,13 +33,15 @@ export const Credits = () => {
       <TooltipProvider delayDuration={300}>
         <Tooltip>
           <TooltipTrigger>
-            <ShareComponent />
+            <Share />
           </TooltipTrigger>
-          <TooltipContent className="TooltipContent" sideOffset={0}>
-            <p>Jaa</p>
+          <TooltipContent className="TooltipContent" sideOffset={0} asChild>
+            <span>{t("share")}</span>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
     </div>
   )
 }
+
+export { Credits }

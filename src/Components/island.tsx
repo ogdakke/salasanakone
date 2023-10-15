@@ -1,30 +1,25 @@
+import { useSelector } from "@/common/hooks"
 import { motion } from "framer-motion"
 import { Refresh } from "iconoir-react"
 import { Suspense } from "react"
-import { IndexableInputValue } from "../models"
 import "../styles/Island.css"
 import { StrengthIndicator } from "./indicator"
-import { Loading } from "./ui/loading"
+import { Loading } from "./ui"
 
 interface Props {
-  generate: () => Promise<void>
-  finalPassword: string
-  formValues: IndexableInputValue
-  sliderValue: number
+  generate: () => void
+  finalPassword: string | undefined
 }
 
-export const Island = ({ generate, finalPassword, formValues, sliderValue }: Props) => {
+export const Island = ({ generate, finalPassword }: Props) => {
+  const formValues = useSelector((state) => state.passphraseForm.formValues)
+  const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
+
   return (
     <Suspense fallback={<Loading height="84" />}>
       <motion.div
-        initial={{
-          y: 0,
-          scale: 1,
-        }}
-        animate={{
-          y: 0,
-          scale: 1,
-        }}
+        initial={{ y: 0, scale: 1 }}
+        animate={{ y: 0, scale: 1 }}
         transition={{
           duration: 5,
           type: "spring",
@@ -35,12 +30,8 @@ export const Island = ({ generate, finalPassword, formValues, sliderValue }: Pro
       >
         <div className="IslandContent">
           <motion.div
-            animate={{
-              opacity: 1,
-            }}
-            initial={{
-              opacity: 0,
-            }}
+            animate={{ opacity: 1 }}
+            initial={{ opacity: 0 }}
             className="flex-center space-between "
           >
             <StrengthIndicator
@@ -57,9 +48,7 @@ export const Island = ({ generate, finalPassword, formValues, sliderValue }: Pro
                     duration: 0.3,
                   },
                 }}
-                whileTap={{
-                  scale: 0.95,
-                }}
+                whileTap={{ scale: 0.95 }}
                 className="IslandGenerateButton"
                 onClick={() => void generate().catch(console.error)}
               >
