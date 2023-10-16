@@ -3,18 +3,14 @@ import { InputField, Island, SliderComponent } from "@/Components"
 import { Loading } from "@/Components/ui"
 import { useDispatch, useSelector } from "@/common/hooks"
 import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
-import { IndexableFormValues, InputLabel } from "@/models"
-import { createCryptoKey } from "@/services/createCrypto"
+import { ApiSalaCall, IndexableFormValues, InputLabel } from "@/models"
+import { getPassphrase } from "@/services/get-passphrase"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
 import React, { Suspense, useCallback, useEffect, useState } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 
 const initialInputKeys = Object.entries(defaultFormValues)
-
-export function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
-  return createCryptoKey(sliderValue.toString(), formValues)
-}
 
 export default function FormComponent(): React.ReactNode {
   const [finalPassword, setFinalPassword] = useState<string>()
@@ -45,18 +41,23 @@ export default function FormComponent(): React.ReactNode {
     [formValues],
   )
 
-  const generate = useCallback(() => {
+  const generate = useCallback(async () => {
     inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)
     try {
-      const setPassword = () => generatePassword(formValues, validate(sliderValue))
-      setFinalPassword(setPassword())
+      const apiParams: ApiSalaCall = {
+        lang: "fi",
+        passLength: sliderValue,
+        inputValues: formValues,
+      }
+      const fetchedPassphrase = await getPassphrase(apiParams).catch(console.error)
+      setFinalPassword(fetchedPassphrase ? fetchedPassphrase : "Virhe haettaessa salasanaa")
     } catch (err) {
       console.error(err)
     }
   }, [formValues, sliderValue])
 
   useEffect(() => {
-    generate()
+    generate().catch(console.error)
   }, [generate, sliderValue, validate])
 
   const valuesToForm = useCallback(
@@ -78,25 +79,25 @@ export default function FormComponent(): React.ReactNode {
     return formValues.words.selected && sliderValue < 2
   }
 
-  useEffect(() => {
-    setLoading(true)
-    const fetchData = async () => {
-      try {
-        const apiParams: ApiSalaCall = {
-          lang: "fi",
-          passLength: sliderValue,
-          inputValues: formValues,
-        }
-        const fetchedPassphrase = await getPassphrase(apiParams).catch(console.error)
-        setFinalPassword(fetchedPassphrase ? fetchedPassphrase : "Virhe haettaessa salasanaa")
-      } catch (err) {
-        setError(true)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData().catch(console.error)
-  }, [sliderValue])
+  // useEffect(() => {
+  //   setLoading(true)
+  //   const fetchData = async () => {
+  //     try {
+  //       const apiParams: ApiSalaCall = {
+  //         lang: "fi",
+  //         passLength: sliderValue,
+  //         inputValues: formValues,
+  //       }
+  //       const fetchedPassphrase = await getPassphrase(apiParams).catch(console.error)
+  //       setFinalPassword(fetchedPassphrase ? fetchedPassphrase : "Virhe haettaessa salasanaa")
+  //     } catch (err) {
+  //       setError(true)
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
+  //   fetchData().catch(console.error)
+  // }, [sliderValue, formValues])
 
   return (
     <>

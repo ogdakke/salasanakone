@@ -7,7 +7,7 @@ import { StrengthIndicator } from "./indicator"
 import { Loading } from "./ui"
 
 interface Props {
-  generate: () => void
+  generate: () => Promise<void>
   finalPassword: string | undefined
 }
 
@@ -50,7 +50,7 @@ export const Island = ({ generate, finalPassword }: Props) => {
                 }}
                 whileTap={{ scale: 0.95 }}
                 className="IslandGenerateButton"
-                onClick={() => void generate().catch(console.error)}
+                onClick={() => void generate()}
               >
                 <Refresh className="Refresh" width={34} height={34} />
               </motion.button>

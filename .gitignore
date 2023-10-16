@@ -26,4 +26,5 @@ coverage/
 *.sln
 *.sw?
 .vercel
+bundle-analysis/
 bundle-analysis/analyse.html
