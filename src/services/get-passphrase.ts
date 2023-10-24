@@ -1,12 +1,7 @@
 import { isKey } from "@/common/utils/helpers"
-import { ApiSalaCall } from "../models"
+import { ApiSalaCall, SalaApiResponse } from "../models"
 
-const apiUrl: URL = new URL("https://api.salasanakone.com")
-
-export interface SalaApiResponse {
-  passphrase: string
-  passLength: number
-}
+const apiUrl = "https://www.salasanakone.com/api"
 
 export async function getPassphrase({
   lang,
@@ -35,8 +30,7 @@ export async function getPassphrase({
       method: "POST",
       headers: {
         Accept: "application/json",
-        // If you need to send authentication headers or any other headers, add them here
-        "X-API-KEY": import.meta.env["VITE_X_API_KEY"],
+        "X-API-KEY": import.meta.env.VITE_X_API_KEY,
       },
       body: JSON.stringify(payload),
     })
@@ -48,7 +42,6 @@ export async function getPassphrase({
 
     const data = (await response.json()) as SalaApiResponse
 
-    // Assuming the API returns a field named "passphrase"
     if (data && isKey(data, "passphrase") && Object.hasOwn(data, "passphrase")) {
       return data.passphrase
     }

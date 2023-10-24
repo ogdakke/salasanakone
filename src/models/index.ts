@@ -18,8 +18,12 @@ export type IndexableFormValues = {
   randomChars: InputValue
 }
 
-export interface ApiSalaCall {
+export type ApiSalaCall = {
   lang?: "fi" | "en"
   passLength: number
   inputValues: IndexableFormValues
+}
+export type SalaApiResponse = {
+  passphrase: string
+  passLength: number
 }
