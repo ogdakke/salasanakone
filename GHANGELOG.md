@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Changed
+
+- Update dependencies
+
+### Fixed
+
+- Safari font-size got too big on copy of text inside Result
+
 ## [2.0.0](https://github.com/ogdakke/salasanakone/commits/2.0.0) - 03-08-2023
 
 ### Added
@@ -20,3 +28,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 -
+

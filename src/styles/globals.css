@@ -117,6 +117,10 @@ body {
 body {
   color: rgba(var(--foreground-rgb), 0.87);
   background: rgb(var(--background-rgb));
+
+  /* this fixes the issue of iOS safari enlarging copyText upon copying, 
+  presumably because it thinks it is too small for some reason. */
+  -webkit-text-size-adjust: 100%;
 }
 
 p {
@@ -190,3 +194,4 @@ input {
     --islandHeight: 84.1875px;
   }
 }
+
