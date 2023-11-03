@@ -8,7 +8,7 @@ import {
 } from "@/Components/ui"
 import { meta } from "@/assets/constants/meta"
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 import "@/styles/Credits.css"
 import "@/styles/ui/Tooltip.css"
 

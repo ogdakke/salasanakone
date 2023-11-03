@@ -1,7 +1,6 @@
 import { inputFieldMaxLength, labelForCheckbox } from "@/../config"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
-import { t } from "@/common/utils/getLanguage"
-import { validateLength } from "@/common/utils/helpers"
+import { t, validateLength } from "@/common/utils"
 import { InputLabel, InputValue } from "@/models"
 import { RootState } from "@/store"
 import { useSelector } from "react-redux"

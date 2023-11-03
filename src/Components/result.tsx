@@ -1,6 +1,6 @@
 import { numbers, specials } from "@/../config"
 import { HighlightCondition, Highlighter } from "@/Components/ui/utils/highlight"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 import copyToClipboard from "@/services/copyToClipboard"
 import "@/styles/Result.css"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
@@ -115,10 +115,7 @@ const Result = (props: { finalPassword: string | undefined }) => {
           </TooltipProvider>
         </div>
       ) : (
-        <div className="card">
-          {t("errorNoGeneration")}
-          {t("tryToRefresh")}
-        </div>
+        <div className="card">{t("errorNoGeneration")}</div>
       )}
     </div>
   )

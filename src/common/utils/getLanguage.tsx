@@ -5,11 +5,11 @@ import { Locale, TranslationKey } from "../../models/translations"
 // const currentLocale: Locale = Locale.fi // You can determine this dynamically based on user preference or browser setting
 let currentLocale = Locale.fi
 
-export function getLocale() {
+function getLocale() {
   return currentLocale || Locale.fi
 }
 
-export function setLocale(locale: Locale) {
+function setLocale(locale: Locale) {
   if (locale === currentLocale) {
     return currentLocale
   }
@@ -17,7 +17,7 @@ export function setLocale(locale: Locale) {
   return currentLocale
 }
 
-export const t = (
+const t = (
   key: TranslationKey,
   placeholders?: Record<PropertyKey, string>,
 ): (string | JSX.Element)[] => {
@@ -44,3 +44,6 @@ export const t = (
 
   return translatedWithLineBreaks
 }
+
+export { getLocale, setLocale, t }
+

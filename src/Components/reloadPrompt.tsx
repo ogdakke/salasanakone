@@ -1,4 +1,4 @@
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 import "@/styles/ReloadPrompt.css"
 import { Refresh } from "iconoir-react"
 import { useState } from "react"
