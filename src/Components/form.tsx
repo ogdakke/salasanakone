@@ -1,5 +1,6 @@
 import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../config"
-import { InputField, Island, SliderComponent } from "@/Components"
+import { InputField, SliderComponent } from "@/Components"
+import { SimpleIsland } from "@/Components/island"
 import { Loading } from "@/Components/ui"
 import { useDispatch, useSelector } from "@/common/hooks"
 import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
@@ -100,8 +101,9 @@ export default function FormComponent(): React.ReactNode {
         </div>
       </form>
       <div className="IslandWrapper">
-        <Island generate={generate} finalPassword={finalPassword} />
+        <SimpleIsland generate={generate} finalPassword={finalPassword} />
       </div>
     </>
   )
 }
+

@@ -1,10 +1,11 @@
 import { StrengthIndicator } from "@/Components/indicator"
+import { Loading } from "@/Components/ui"
 import { useSelector } from "@/common/hooks"
-import { AnimatePresence, motion } from "framer-motion"
-import { Refresh } from "iconoir-react"
-import { Suspense, useEffect, useState } from "react"
-import "../styles/Island.css"
-import { Loading } from "./ui"
+import { t } from "@/common/utils/getLanguage"
+import "@/styles/Island.css"
+import { motion } from "framer-motion"
+import { Plus, Refresh } from "iconoir-react"
+import { Suspense, useState } from "react"
 
 interface Props {
   generate: () => void
@@ -15,6 +16,18 @@ enum IslandVariants {
   full = "full",
   pill = "pill",
 }
+
+export const SimpleIsland = ({ generate, finalPassword }: Props) => {
+  return (
+    <Suspense fallback={<Loading height="84" />}>
+      <motion.div className="IslandMain" data-state={IslandVariants.pill}>
+        {/* Render all different variants conditionally */}
+        <PillIsland generate={generate} finalPassword={finalPassword} />
+      </motion.div>
+    </Suspense>
+  )
+}
+
 export const Island = ({ generate, finalPassword }: Props) => {
   const formValues = useSelector((state) => state.passphraseForm.formValues)
   const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
@@ -29,32 +42,10 @@ export const Island = ({ generate, finalPassword }: Props) => {
     }
   }
 
-  // On deps change, set variant to Pill
-  useEffect(() => {
-    if (islandVariant === IslandVariants.full) {
-      setIslandVariant(IslandVariants.pill)
-    }
-  }, [formValues, sliderValue])
-
-  const PillIsland = () => {
-    return (
-      <motion.button
-        key="Pill"
-        className="IslandContent PillIsland"
-        type="button"
-        layoutId="Island"
-        initial={{ borderRadius: "32px" }}
-        animate={{ borderRadius: "32px" }}
-        whileFocus={{ scale: 1.1 }}
-        onClick={onHoverOrTap}
-      >
-        <AnimatePresence>
-          {isVisible ? <StrengthIndicator password={finalPassword} /> : null}
-        </AnimatePresence>
-      </motion.button>
-    )
-  }
-
+  /**
+   * Full Island
+   *
+   */
   const FullIsland = () => (
     <motion.div
       key="Full"
@@ -64,6 +55,13 @@ export const Island = ({ generate, finalPassword }: Props) => {
         borderRadius: "32px",
         width: "340px",
         opacity: 1,
+        filter: "blur(8px)",
+      }}
+      animate={{
+        filter: "blur(0)",
+      }}
+      transition={{
+        duration: 0.3,
       }}
     >
       <MotionButton generate={generate} />
@@ -73,20 +71,43 @@ export const Island = ({ generate, finalPassword }: Props) => {
   /** List the variants */
   const islandVariants = {
     [IslandVariants.full]: <FullIsland />,
-    [IslandVariants.pill]: <PillIsland />,
+    // [IslandVariants.pill]: <PillIsland />,
   }
 
   return (
     <Suspense fallback={<Loading height="84" />}>
-      <div onMouseEnter={onHoverOrTap} className="IslandMain" data-state={islandVariant}>
+      <motion.div className="IslandMain" data-state={IslandVariants.pill}>
         {/* Render all different variants conditionally */}
-        {islandVariants[islandVariant]}
-      </div>
+        {/* {islandVariants[IslandVariants.pill]} */}
+      </motion.div>
     </Suspense>
   )
 }
 
-const MotionButton = ({ generate }: Props) => {
+type MotionButtonProps = Props & {
+  variant?: ButtonVariant
+}
+
+enum ButtonVariant {
+  PILL = "squished",
+  ROUND = "round",
+}
+
+export const MotionButton = ({ generate, variant = ButtonVariant.PILL }: MotionButtonProps) => {
+  if (variant === ButtonVariant.PILL) {
+    return (
+      <motion.button
+        animate={{ scale: 1 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => void generate()}
+        className="IslandPillButton"
+      >
+        {t("new")}
+      </motion.button>
+    )
+  }
+
   return (
     <motion.button
       initial={{
@@ -94,9 +115,10 @@ const MotionButton = ({ generate }: Props) => {
         scale: 0.3,
       }}
       animate={{
-        borderRadius: "3rem",
+        // borderRadius: "3rem",
         scale: 1,
         transition: {
+          duration: 1,
           type: "spring",
         },
       }}
@@ -112,7 +134,31 @@ const MotionButton = ({ generate }: Props) => {
       onClick={() => void generate()}
       layout
     >
-      <Refresh className="Refresh spin" width={30} height={30} />
+      <Refresh className="Refresh" width={30} height={30} />
     </motion.button>
   )
 }
+
+/**
+ * Pill island
+ *
+ */
+const PillIsland = ({ generate, finalPassword }: Props) => {
+  const buttonSize = 32
+  return (
+    <motion.button
+      onClick={() => generate()}
+      type="button"
+      className="IslandMobileBackground"
+      whileFocus={{ scale: 1.05 }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <span className="IslandGenerateButton">
+        <Plus strokeWidth={2} height={buttonSize} width={buttonSize} />
+      </span>
+      <StrengthIndicator password={finalPassword} />
+    </motion.button>
+  )
+}
+

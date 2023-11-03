@@ -2,6 +2,7 @@ export const LogoIcon = ({ ...props }, size: { width: number; height: number }) 
   const { width, height } = size
   return (
     <svg
+      id="svgProfileImage"
       width={width}
       height={height}
       viewBox="0 0 64 64"
@@ -41,3 +42,4 @@ export const LogoIcon = ({ ...props }, size: { width: number; height: number }) 
     </svg>
   )
 }
+

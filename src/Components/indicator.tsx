@@ -1,9 +1,19 @@
+import { ErrorComponent } from "@/Components/errorComponent"
+import { Divider } from "@/Components/ui"
 import { useSelector } from "@/common/hooks"
 import { t } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
 import "@/styles/Indicator.css"
+import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
 import { motion } from "framer-motion"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { OpenSelectHandGesture } from "iconoir-react"
+import { Suspense, useCallback, useEffect, useState } from "react"
+import { ErrorBoundary } from "react-error-boundary"
+
+type StrengthBarProps = {
+  strength: number
+}
 
 const checker = async (password: string) => {
   const check = await import("../services/checkStrength").then((r) => r.checkStrength)
@@ -19,7 +29,7 @@ const parseValue = (value: number) => {
     mutatedValue = Math.floor(value / 1000000)
     return `${mutatedValue} milj. vuotta`
   }
-  return mutatedValue.toLocaleString("fi") + " vuotta"
+  return mutatedValue.toLocaleString("fi-FI") + " vuotta"
 }
 
 let didInit = false
@@ -123,94 +133,130 @@ export function StrengthIndicator(props: { password: string | undefined }): Reac
   }, [password])
 
   enum StrengthIndicatorVariants {
-    bar,
-    text,
+    BAR = "BAR",
+    BAR_WITH_TEXT = "BAR WITH TEXT",
   }
 
   const [strengthIndicatorVariant, setStrengthIndicatorVariant] =
-    useState<StrengthIndicatorVariants>(StrengthIndicatorVariants.bar)
+    useState<StrengthIndicatorVariants>(StrengthIndicatorVariants.BAR)
 
-  /**
-   * Bar variant
-   */
-  // if (strengthIndicatorVariant === StrengthIndicatorVariants.bar) {
-  //   return <StrengthBar strength={score} />
-  // }
+  if (strengthIndicatorVariant === StrengthIndicatorVariants.BAR) {
+    return (
+      <div className="IslandContent PillIsland">
+        <StrengthBar strength={score} />
+      </div>
+    )
+  }
 
   return (
-    <StrengthBar strength={score} />
+    <>
+      <ErrorBoundary
+        fallbackRender={({ error, resetErrorBoundary }) => {
+          return <ErrorComponent error={error as unknown} resetErrorBoundary={resetErrorBoundary} />
+        }}
+      >
+        <Suspense
+          fallback={
+            <div className="strengthIndicator case5">
+              <span>{t("strengthDefault")}</span>
+            </div>
+          }
+        >
+          <Popover>
+            <PopoverTrigger
+              onClick={() => {
+                void calculateTimeToCheck().catch(console.error)
+              }}
+            >
+              <TooltipProvider delayDuration={0}>
+                <Tooltip>
+                  <TooltipTrigger type="button" asChild>
+                    <motion.div
+                      layoutId="strengthIndicator"
+                      key={output}
+                      whileHover={{
+                        scale: 1,
+                        transition: {
+                          type: "tween",
+                          // duration: 0.1,
+                        },
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      whileFocus={{
+                        scale: 0.95,
+                        transition: {
+                          type: "spring",
+                        },
+                      }}
+                      // className={`interact strengthIndicator case${score.toString()}`}
+                    >
+                      {/* <motion.span>{output}</motion.span> */}
+                      <StrengthBar strength={score} />
+                    </motion.div>
+                  </TooltipTrigger>
+                  <TooltipContent sideOffset={4} className="TooltipContent">
+                    <div className="flex-center">
+                      <OpenSelectHandGesture width={20} height={20} />
+                      {t("moreInfo")}
+                    </div>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </PopoverTrigger>
+            <PopoverContent
+              style={{ zIndex: 3 }}
+              align="center"
+              side="top"
+              className="PopoverContent"
+              onOpenAutoFocus={(e) => e.preventDefault()}
+              asChild
+            >
+              <div className="popCard">
+                <p className="fadeIn resultHelperText">{t("timeToCrack")}</p>
+                <Divider margin="0.25rem 0rem" />
+                <div className="flex-center space-between">
+                  <span>{time[0]}</span>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  )
+}
 
-    // <ErrorBoundary
-    //   fallbackRender={({ error, resetErrorBoundary }) => {
-    //     return <ErrorComponent error={error as unknown} resetErrorBoundary={resetErrorBoundary} />
-    //   }}
-    // >
-    //   <Suspense
-    //     fallback={
-    //       <div className="strengthIndicator case5">
-    //         <span>{t("strengthDefault")}</span>
-    //       </div>
-    //     }
-    //   >
-    //     <Popover>
-    //       <PopoverTrigger
-    //         onClick={() => {
-    //           void calculateTimeToCheck().catch(console.error)
-    //         }}
-    //       >
-    //         <TooltipProvider delayDuration={0}>
-    //           <Tooltip>
-    //             <TooltipTrigger type="button" asChild>
-    //               <motion.div
-    //                 layoutId="strengthIndicator"
-    //                 key={output}
-    //                 whileHover={{
-    //                   scale: 1,
-    //                   transition: {
-    //                     type: "tween",
-    //                     // duration: 0.1,
-    //                   },
-    //                 }}
-    //                 whileTap={{ scale: 0.95 }}
-    //                 whileFocus={{
-    //                   scale: 0.95,
-    //                   transition: {
-    //                     type: "spring",
-    //                   },
-    //                 }}
-    //                 className={`interact strengthIndicator case${score.toString()}`}
-    //               >
-    //                 <motion.span>{output}</motion.span>
-    //               </motion.div>
-    //             </TooltipTrigger>
-    //             <TooltipContent sideOffset={4} className="TooltipContent">
-    //               <div className="flex-center">
-    //                 <OpenSelectHandGesture width={20} height={20} />
-    //                 {t("moreInfo")}
-    //               </div>
-    //             </TooltipContent>
-    //           </Tooltip>
-    //         </TooltipProvider>
-    //       </PopoverTrigger>
-    //       <PopoverContent
-    //         style={{ zIndex: 3 }}
-    //         align="center"
-    //         side="top"
-    //         className="PopoverContent"
-    //         onOpenAutoFocus={(e) => e.preventDefault()}
-    //         asChild
-    //       >
-    //         <div className="popCard">
-    //           <p className="fadeIn resultHelperText">{t("timeToCrack")}</p>
-    //           <Divider margin="0.25rem 0rem" />
-    //           <div className="flex-center space-between">
-    //             <span>{time[0]}</span>
-    //           </div>
-    //         </div>
-    //       </PopoverContent>
-    //     </Popover>
-    //   </Suspense>
-    // </ErrorBoundary>
+const StrengthBar = ({ strength }: StrengthBarProps) => {
+  const percentageOfMax = (strength / 4) * 100
+  const widthOffset = 15
+  const barWidthOver100 = widthOffset * 2
+  const barWidth = 100 + barWidthOver100
+  return (
+    <motion.span
+      // ref={scope}
+      key="strengthBar"
+      id="StrengthBar"
+      className="StrengthBar"
+      style={{
+        left: "10%",
+        width: `${barWidth}%`,
+        willChange: "transform, opacity",
+      }}
+      initial={{
+        opacity: 0.7,
+      }}
+      animate={{
+        opacity: 1,
+        translateX: `-${100 - percentageOfMax + widthOffset}%`,
+        backgroundColor: numberToString(strength).color,
+        transition: {
+          type: "spring",
+          damping: 15,
+          duration: 0.2,
+          delay: 0.1,
+        },
+      }}
+    ></motion.span>
   )
 }
 
@@ -250,54 +296,3 @@ function numberToString(value: number) {
   }
 }
 
-type StrengthBarProps = {
-  strength: number
-}
-
-const StrengthBar = ({ strength }: StrengthBarProps) => {
-  const [strengthState, setStrenthValue] = useState<number>(strength)
-
-  useMemo(() => {
-    console.log(strengthState)
-
-    if (strengthState === strength) {
-      console.log("it was same")
-
-      return
-    }
-    setStrenthValue(strength)
-  }, [strength])
-
-  const percentageOfMax = (strengthState / 4) * 100
-
-  return (
-    <motion.span
-      key="strengthBar"
-      id="StrengthBar"
-      className="StrengthBar"
-      // style={{
-      //   width: "0",
-      // }}
-      initial={{
-        width: "0%",
-      }}
-      animate={{
-        width: `${percentageOfMax}%`,
-        backgroundColor: `${numberToString(strengthState).color}`,
-        transition: {
-          delay: 0.15,
-        },
-      }}
-      transition={{
-        delay: 0.15,
-        duration: 0.6,
-      }}
-      exit={{
-        width: 0,
-        transition: {
-          duration: 0.2,
-        },
-      }}
-    ></motion.span>
-  )
-}

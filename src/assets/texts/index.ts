@@ -8,6 +8,7 @@ export const appTranslations: Translations = {
     promptToAddWords: "Add words",
   },
   fi: {
+    new: "Uusi",
     useWords: "Käytä sanoja",
     useCharacters: "Käytä merkkejä",
     useUppercase: "Isot kirjaimet",
@@ -35,3 +36,4 @@ export const appTranslations: Translations = {
     moreInfo: "Lisätietoja",
   },
 }
+

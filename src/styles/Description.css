@@ -86,14 +86,6 @@ summary::marker {
   border-radius: var(--border-radius);
 }
 
-.svgImage {
-  -webkit-filter: blur(3px);
-  filter: blur(3px);
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  backface-visibility: hidden;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .summary:hover {
     opacity: 0.9;
@@ -104,9 +96,5 @@ summary::marker {
   .shareButton:hover {
     color: rgba(var(--foreground-rgb), 1);
   }
-
-  .credits:hover .svgImage {
-    transition: filter 250ms;
-    filter: blur(0);
-  }
 }
+

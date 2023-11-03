@@ -9,33 +9,27 @@
   z-index: 2;
   --island-border-radius: 1.75rem;
   --island-content-padding: 1.125rem;
-  display: flex;
-  justify-content: center;
-  height: 80px;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  /* height: 80px; */
 }
 
-@media (max-width: 700px) {
-  .IslandMain {
-    padding: 0 0.5rem;
-    position: fixed;
-    bottom: 1.25rem;
-    width: clamp(300px, 100dvw, 450px);
-    align-items: flex-end;
-  }
+.WithButton {
+  gap: 1rem;
 }
 
 .IslandContent {
   position: relative;
   border-radius: var(--island-border-radius);
-  background-color: rgba(0, 0, 0, 1);
+  /* background-color: rgba(0, 0, 0, 1); */
   color: #636363;
   padding: var(--island-content-padding);
   border: 1px solid rgba(var(--skeleton-glow), 1);
   overflow: hidden;
-  width: 220px;
+  width: 100%;
   display: flex;
   align-items: center;
-  /* box-shadow: 1px 2px 10px 4px rgba(var(--skeleton-glow), 0.2); */
+  box-shadow: 1px 2px 10px 4px rgba(var(--skeleton-glow), 1);
 }
 
 .IslandGenerateButton {
@@ -43,8 +37,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem;
-  background-color: rgba(250, 250, 250, 0.15);
+  padding: 0.5rem 1.25rem;
+  /* background-color: rgba(250, 250, 250, 0.15); */
+}
+
+.IslandPillButton {
+  cursor: pointer;
+  /* background-color: rgba(250, 250, 250, 0.15);
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(var(--skeleton-glow), 1); */
 }
 
 .PillIsland {
@@ -71,16 +72,57 @@
 .StrengthBar {
   position: absolute;
   top: 0;
-  left: 0;
   height: 100%;
   border-radius: 32px;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .IslandGenerateButton:hover,
   .IslandGenerateButton:focus-visible {
     /* transition: all 200ms ease-in; */
     border: 1px solid rgba(var(--skeleton-glow), 0.1);
     /* filter: invert(1); */
   }
 }
+
+@media (max-width: 700px) {
+  .IslandMain {
+    padding: 0 1.5rem;
+    position: fixed;
+    bottom: 1.25rem;
+    width: clamp(300px, 100dvw, 450px);
+    /* align-items: flex-end; */
+  }
+
+  .IslandMobileBackground {
+    display: flex;
+    user-select: none;
+    -webkit-user-select: none;
+    width: 100%;
+    justify-content: space-between;
+    border-radius: calc(var(--island-border-radius) + 0.5rem);
+    border: 1px solid rgba(var(--skeleton-glow), 1);
+    background-color: rgba(var(--form-bg-rgb), 0.5);
+    --back-blur: 10px;
+    backdrop-filter: blur(var(--back-blur));
+    -webkit-backdrop-filter: blur(var(--back-blur));
+  }
+
+  .IslandContent {
+    box-shadow: none;
+    border-radius: calc(var(--island-border-radius) + 0.5rem);
+    padding: calc(var(--island-content-padding) + 0.5rem);
+  }
+
+  .PillIsland {
+    background-color: rgba(var(--form-bg-rgb), 0.5);
+  }
+
+  .IslandPillButton {
+    user-select: none;
+    -webkit-user-select: none;
+    border-radius: 1rem;
+    padding: 1rem 1.5rem;
+    background-color: rgba(var(--form-bg-rgb), 0.9);
+  }
+}
+

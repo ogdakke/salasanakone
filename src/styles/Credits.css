@@ -1,0 +1,8 @@
+.credits #svgProfileImage {
+  filter: blur(3px) !important;
+  -webkit-filter: blur(3px) !important;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
