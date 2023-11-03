@@ -31,21 +31,24 @@ export const SimpleIsland = ({ generate, finalPassword }: Props) => {
  *
  */
 const PillIsland = ({ generate, finalPassword }: Props) => {
+  const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
+
   const buttonSize = 32
   return (
-    <motion.button
+    <motion.div
       onClick={() => generate()}
-      type="button"
-      className="IslandMobileBackground"
+      onKeyDown={(e) => (e.key === "Enter" ? generate() : null)}
+      style={{ willChange: "transform" }}
+      className="IslandBackground"
       whileFocus={{ scale: 1.05 }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: isTouchDevice() ? 0.96 : 1 }}
     >
       <span className="IslandGenerateButton">
         <Plus strokeWidth={2} height={buttonSize} width={buttonSize} />
       </span>
       <StrengthIndicator password={finalPassword} />
-    </motion.button>
+    </motion.div>
   )
 }
 
