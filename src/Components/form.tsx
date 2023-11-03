@@ -2,13 +2,13 @@ import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../co
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
 import { Loading } from "@/Components/ui"
 import { useDispatch, useSelector } from "@/common/hooks"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
-import React, { Suspense, useCallback, useEffect, useState } from "react"
+import React, { Suspense, createContext, useCallback, useEffect, useState } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 
 const initialInputKeys = Object.entries(defaultFormValues)
@@ -16,6 +16,13 @@ const initialInputKeys = Object.entries(defaultFormValues)
 export function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
   return createCryptoKey(sliderValue.toString(), formValues)
 }
+
+type FormContextProps = {
+  password?: string
+  generate: () => void
+}
+
+export const FormContext = createContext<FormContextProps | undefined>(undefined)
 
 export default function FormComponent(): React.ReactNode {
   const [finalPassword, setFinalPassword] = useState<string>()
@@ -78,7 +85,7 @@ export default function FormComponent(): React.ReactNode {
   }
 
   return (
-    <>
+    <FormContext.Provider value={{ password: finalPassword, generate }}>
       <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
         <Suspense fallback={<Loading height="71px" />}>
           <Result
@@ -101,9 +108,9 @@ export default function FormComponent(): React.ReactNode {
         </div>
       </form>
       <div className="IslandWrapper">
-        <SimpleIsland generate={generate} finalPassword={finalPassword} />
+        <SimpleIsland />
       </div>
-    </>
+    </FormContext.Provider>
   )
 }
 

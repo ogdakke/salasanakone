@@ -1,9 +1,9 @@
+import { FormContext } from "@/Components/form"
 import { useSelector } from "@/common/hooks"
-import { t } from "@/common/utils/getLanguage"
-import { validateLength } from "@/common/utils/helpers"
+import { t, validateLength } from "@/common/utils"
 import "@/styles/Indicator.css"
-import { motion } from "framer-motion"
-import { useCallback, useEffect, useState } from "react"
+import { motion, useAnimate } from "framer-motion"
+import { useCallback, useContext, useEffect, useState } from "react"
 
 type StrengthBarProps = {
   strength: number
@@ -17,8 +17,9 @@ const checker = async (password: string) => {
 let didInit = false
 let didCheckTime = false
 
-export function StrengthIndicator(props: { password: string | undefined }): React.ReactNode {
-  const { password } = props
+export function StrengthIndicator(): React.ReactNode {
+  const context = useContext(FormContext)
+  const password = context?.password
 
   const formValues = useSelector((state) => state.passphraseForm.formValues)
   const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
@@ -99,9 +100,18 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
   const widthOffset = 15
   const barWidthOver100 = widthOffset * 2
   const barWidth = 100 + barWidthOver100
+  const [scope, animate] = useAnimate()
 
+  useEffect(() => {
+    void animate(
+      scope.current,
+      { filter: "blur(0px)", opacity: 1, translateX: `-${widthOffset}%` },
+      { delay: 0.3, duration: 0.85 },
+    )
+  }, [])
   return (
     <motion.span
+      ref={scope}
       key="strengthBar"
       id="StrengthBar"
       className="StrengthBar"
@@ -110,9 +120,8 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
         width: `${barWidth}%`,
         willChange: "transform, opacity",
       }}
-      initial={{ opacity: 0.7 }}
+      initial={{ opacity: 0, filter: "blur(10px)", translateX: `-${70 + widthOffset}%` }}
       animate={{
-        opacity: 1,
         translateX: `-${100 - percentageOfMax + widthOffset}%`,
         backgroundColor: numberToString(strength).color,
         transition: {

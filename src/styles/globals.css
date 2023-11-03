@@ -1,5 +1,5 @@
 :root {
-  --formContainerHeight: 399.2px;
+  --formContainerHeight: 18.9375rem;
   --max-width: 800px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
@@ -182,6 +182,10 @@ input {
   all: unset;
 }
 
+.debug {
+  box-shadow: 0 0 0 1px red;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -190,7 +194,8 @@ input {
 
 @media (max-width: 700px) {
   :root {
-    --formContainerHeight: 385.375px;
+    --oneRem: 1rem;
+    --formContainerHeight: 24.4rem;
     --islandHeight: 84.1875px;
   }
 }

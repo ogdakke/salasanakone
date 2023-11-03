@@ -1,29 +1,39 @@
-import styles from "../../styles/modules/Loading.module.css"
+import styles from "@/styles/modules/Loading.module.css"
+import React, { CSSProperties } from "react"
 
-interface LoadingProps {
+interface LoadingProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
   width?: string
   height?: string
+  radius?: string
+  style?: CSSProperties
 }
 
 /**
  * Loading component with custom size
- * @param width width? as string | default "100%"
- * @param height height as string
- * @returns
+ *
+ * Accepts: { className, width, height, radius, style }
  */
-export function Loading({ className, width = "100%", height }: LoadingProps, { ...props }) {
+export const Loading: React.FC<LoadingProps> = ({
+  className,
+  width,
+  height,
+  radius,
+  style,
+  ...props
+}) => {
   return (
     <div
       {...props}
       style={{
+        ...style,
         width: width,
         height: height,
+        borderRadius: radius,
       }}
-      className={`${className ? className : ""} ${styles.loading}`}
+      className={`${className ?? ""} ${styles.loading}`}
       aria-busy="true"
-    >
-      {/* <span role="progressbar" aria-label="Loader animation" className="loader"></span> */}
-    </div>
+    ></div>
   )
 }
+

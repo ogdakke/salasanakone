@@ -5,7 +5,7 @@ import { ErrorComponent } from "@/Components/errorComponent"
 import { Feedback } from "@/Components/feedback"
 import { Credits, Loading } from "@/Components/ui"
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 import "@/styles/App.css"
 import "@/styles/globals.css"
 import { ErrorBoundary } from "react-error-boundary"
@@ -25,8 +25,9 @@ function App() {
         <Suspense
           fallback={
             <>
-              <Loading height={isSmallScreen ? "394.375px" : "309px"} />
-              {!isSmallScreen ? <Loading height={"84.1875px"} /> : null}
+              <Loading height={"var(--formContainerHeight)"} />
+              {!isSmallScreen ? null : <span></span>}
+              {!isSmallScreen ? <LargeScreenIslandLoader /> : null}
             </>
           }
         >
@@ -53,6 +54,14 @@ function App() {
     </main>
   )
 }
+
+const LargeScreenIslandLoader = () => (
+  <div className="flex justify-center">
+    <div className="IslandMain LoadingStateIsland">
+      <Loading height="2.5rem" radius="4rem" />
+    </div>
+  </div>
+)
 
 export default App
 
