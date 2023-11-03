@@ -3,6 +3,7 @@ import { useRegisterSW } from "virtual:pwa-register/react"
 
 import "../styles/ReloadPrompt.css"
 
+import { t } from "@/common/utils/getLanguage"
 import { Refresh } from "iconoir-react"
 
 const refreshSW = (registration?: ServiceWorkerRegistration) => {
@@ -48,11 +49,9 @@ function ReloadPrompt() {
         <div className={`ReloadPrompt-toast ${isTrue}`}>
           <div className="ReloadPrompt-message">
             {offlineReady ? (
-              <span className="Toast-span-fade">Sivusto toimii nyt myös ilman verkkoyhteyttä.</span>
+              <span className="Toast-span-fade">{t("worksOffline")}</span>
             ) : (
-              <span className="Toast-span-persist">
-                Uusi versio saatavilla. Päivitä sivu napauttamalla.
-              </span>
+              <span className="Toast-span-persist">{t("updateToNewVersion")}</span>
             )}
           </div>
           {needRefresh ? (
@@ -88,3 +87,4 @@ function ReloadPrompt() {
 }
 
 export { ReloadPrompt }
+

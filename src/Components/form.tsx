@@ -2,6 +2,7 @@ import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../co
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
 import { Loading } from "@/Components/ui"
 import { useDispatch, useSelector } from "@/common/hooks"
+import { t } from "@/common/utils/getLanguage"
 import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
@@ -82,7 +83,7 @@ export default function FormComponent(): React.ReactNode {
         <Suspense fallback={<Loading height="71px" />}>
           <Result
             aria-busy="false"
-            aria-label="Salasana, jonka voi kopioida napauttamalla"
+            aria-label={t("resultHelperLabel")}
             finalPassword={finalPassword}
           />
         </Suspense>

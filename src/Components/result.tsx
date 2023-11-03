@@ -87,7 +87,7 @@ const Result = (props: { finalPassword: string | undefined }) => {
                 {finalPassword.length !== 0 ? (
                   <Highlighter text={finalPassword} highlightConditions={highlightConditions} />
                 ) : (
-                  "Jotain meni vikaan... Salasanaa ei luotu."
+                  t("errorNoGeneration")
                 )}
               </span>
             </span>
@@ -127,14 +127,16 @@ const Result = (props: { finalPassword: string | undefined }) => {
           </TooltipProvider>
         </div>
       ) : (
-        <div className="card">Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.</div>
+        <div className="card">
+          {t("errorNoGeneration")}
+          {t("tryToRefresh")}
+        </div>
       )}
     </div>
   )
 }
 const fade: Transition = {
   type: "spring",
-  // duration: 0.2,
   damping: 10,
   bounce: 0.1,
   opacity: {
@@ -146,3 +148,4 @@ const fade: Transition = {
 }
 
 export default Result
+

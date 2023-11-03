@@ -28,7 +28,6 @@ export const InputField: React.FC<InputFieldProps> = ({
           aria-label={labelForCheckbox(option)}
           checked={formValues[option].selected}
           onCheckedChange={(event) => {
-            // values.selected = !values.selected
             valuesToForm(option, event as boolean, "selected")
           }}
           id={option}
@@ -45,7 +44,6 @@ export const InputField: React.FC<InputFieldProps> = ({
         <RadioGroup
           defaultValue={formValues[option].selected.toString()}
           onValueChange={(event) => {
-            // dispatch(setFormField(option, values.selected))
             const isBool = event === "true" ? true : false
             valuesToForm(option, isBool, "selected")
           }}
@@ -108,3 +106,4 @@ export const InputField: React.FC<InputFieldProps> = ({
     )
   }
 }
+
