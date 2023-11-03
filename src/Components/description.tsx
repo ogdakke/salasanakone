@@ -83,7 +83,7 @@ const Description: React.FC = () => {
       <Divider margin={"0.5rem 0"} />
       <h2>Turvallinen ja luotettava</h2>
       <p>
-        Sivustoluo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään
+        Sivusto luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään
         muutakaan.
         <br />
         Sivu toimii myös ilman verkkoyhteyttä selaimen välimuistista{" "}
