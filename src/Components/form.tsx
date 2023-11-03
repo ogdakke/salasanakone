@@ -1,6 +1,5 @@
 import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../config"
-import { InputField, SliderComponent } from "@/Components"
-import { SimpleIsland } from "@/Components/island"
+import { InputField, SimpleIsland, SliderComponent } from "@/Components"
 import { Loading } from "@/Components/ui"
 import { useDispatch, useSelector } from "@/common/hooks"
 import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
