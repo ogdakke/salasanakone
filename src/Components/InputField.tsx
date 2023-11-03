@@ -1,7 +1,6 @@
 import { inputFieldMaxLength, labelForCheckbox } from "@/../config"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
-import { t } from "@/common/utils/getLanguage"
-import { validateLength } from "@/common/utils/helpers"
+import { t, validateLength } from "@/common/utils"
 import { InputLabel, InputValue } from "@/models"
 import { RootState } from "@/store"
 import { useSelector } from "react-redux"
@@ -28,7 +27,6 @@ export const InputField: React.FC<InputFieldProps> = ({
           aria-label={labelForCheckbox(option)}
           checked={formValues[option].selected}
           onCheckedChange={(event) => {
-            // values.selected = !values.selected
             valuesToForm(option, event as boolean, "selected")
           }}
           id={option}
@@ -45,7 +43,6 @@ export const InputField: React.FC<InputFieldProps> = ({
         <RadioGroup
           defaultValue={formValues[option].selected.toString()}
           onValueChange={(event) => {
-            // dispatch(setFormField(option, values.selected))
             const isBool = event === "true" ? true : false
             valuesToForm(option, isBool, "selected")
           }}
@@ -108,3 +105,4 @@ export const InputField: React.FC<InputFieldProps> = ({
     )
   }
 }
+

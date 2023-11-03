@@ -4,7 +4,7 @@ import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
 
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
 import { usePersistedState } from "@/common/hooks/usePersistedState"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 
 interface clickValueType {
   value: boolean
@@ -64,3 +64,4 @@ export const Feedback = () => {
     )
   }
 }
+

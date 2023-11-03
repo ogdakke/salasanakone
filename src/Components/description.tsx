@@ -1,8 +1,7 @@
 import React from "react"
 
+import { Divider, ExternalLink } from "@/Components/ui"
 import "@/styles/Description.css"
-
-import { Divider, ExternalLink } from "./ui"
 
 const Description: React.FC = () => {
   return (
@@ -84,10 +83,13 @@ const Description: React.FC = () => {
       <Divider margin={"0.5rem 0"} />
       <h2>Turvallinen ja luotettava</h2>
       <p>
-        Sivusto ei lähetä <u>mitään</u> tietoja selaimesi ulkopuolelle, ja luo salasanat täysin
-        paikallisesti - ei tietojen keräystä, mainontaa tai mitään muutakaan.
+        Sivusto luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään
+        muutakaan.
         <br />
-        Sivu toimii myös ilman verkkoyhteyttä selaimen välimuistista.
+        Sivu toimii myös ilman verkkoyhteyttä selaimen välimuistista{" "}
+        <ExternalLink link="https://www.evermade.fi/fi/artikkeli/mika-on-progressiivinen-verkkosovellus-pwa-edut/">
+          PWA-teknologialla
+        </ExternalLink>
         <br />
         Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta saat kaiken irti
         ominaisuuksista!
@@ -96,3 +98,4 @@ const Description: React.FC = () => {
   )
 }
 export { Description }
+

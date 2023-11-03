@@ -1,6 +1,6 @@
 import { numbers, specials } from "@/../config"
 import { HighlightCondition, Highlighter } from "@/Components/ui/utils/highlight"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 import copyToClipboard from "@/services/copyToClipboard"
 import "@/styles/Result.css"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
@@ -53,24 +53,16 @@ const Result = (props: { finalPassword: string | undefined }) => {
       {finalPassword && finalPassword.length > 0 ? (
         <div className="relative">
           <motion.div
-            whileHover={{
-              scale: 1.01,
-            }}
-            transition={{
-              duration: 0.175,
-            }}
-            animate={{
-              scale: 1,
-            }}
+            whileHover={{ scale: 1.01 }}
+            transition={{ duration: 0.175 }}
+            animate={{ scale: 1 }}
             whileTap={{
               scale: 0.985,
               transition: {
                 duration: 0.25,
               },
             }}
-            initial={{
-              scale: 1,
-            }}
+            initial={{ scale: 1 }}
             title={t("clickToCopy").toString()}
             className="card interact resultCard relative"
             itemType="button"
@@ -87,7 +79,7 @@ const Result = (props: { finalPassword: string | undefined }) => {
                 {finalPassword.length !== 0 ? (
                   <Highlighter text={finalPassword} highlightConditions={highlightConditions} />
                 ) : (
-                  "Jotain meni vikaan... Salasanaa ei luotu."
+                  t("errorNoGeneration")
                 )}
               </span>
             </span>
@@ -100,17 +92,13 @@ const Result = (props: { finalPassword: string | undefined }) => {
                   layout
                   className="Shine absoluteCopiedIcon interact"
                   data-animate={shouldAnimate ? true : false}
-                  initial={{
-                    scale: 1,
-                  }}
+                  initial={{ scale: 1 }}
                   animate={{
                     translateX: isCopied ? 0 : 20,
                     opacity: isCopied ? 1 : 0,
                     scale: shouldAnimate ? 0.95 : 1,
                   }}
-                  whileHover={{
-                    scale: 0.9,
-                  }}
+                  whileHover={{ scale: 0.9 }}
                   transition={fade}
                   onClick={() => void handleClick(finalPassword).catch(console.error)}
                 >
@@ -127,14 +115,13 @@ const Result = (props: { finalPassword: string | undefined }) => {
           </TooltipProvider>
         </div>
       ) : (
-        <div className="card">Jotain meni vikaan... Salasanaa ei luotu. Koeta päivittää sivu.</div>
+        <div className="card">{t("errorNoGeneration")}</div>
       )}
     </div>
   )
 }
 const fade: Transition = {
   type: "spring",
-  // duration: 0.2,
   damping: 10,
   bounce: 0.1,
   opacity: {
@@ -146,3 +133,4 @@ const fade: Transition = {
 }
 
 export default Result
+

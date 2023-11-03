@@ -1,53 +1,28 @@
-import { ErrorComponent } from "@/Components"
-import {
-  Divider,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/Components/ui"
-import { t } from "@/common/utils/getLanguage"
-import { validateLength } from "@/common/utils/helpers"
-import { IndexableFormValues } from "@/models"
+import { FormContext } from "@/Components/form"
+import { useSelector } from "@/common/hooks"
+import { t, validateLength } from "@/common/utils"
 import "@/styles/Indicator.css"
-import { motion } from "framer-motion"
-import { OpenSelectHandGesture } from "iconoir-react"
-import { Suspense, useCallback, useEffect, useState } from "react"
-import { ErrorBoundary } from "react-error-boundary"
+import { motion, useAnimate } from "framer-motion"
+import { useCallback, useContext, useEffect, useState } from "react"
+
+type StrengthBarProps = {
+  strength: number
+}
 
 const checker = async (password: string) => {
   const check = await import("../services/checkStrength").then((r) => r.checkStrength)
   return check(password.toString())
 }
 
-const parseValue = (value: number) => {
-  let mutatedValue = value
-  if (value.toString().length > 10) {
-    return "Miljardeja vuosia"
-  }
-  if (value.toString().length > 7) {
-    mutatedValue = Math.floor(value / 1000000)
-    return `${mutatedValue} milj. vuotta`
-  }
-  return mutatedValue.toLocaleString("fi") + " vuotta"
-}
-
 let didInit = false
 let didCheckTime = false
-/**
- * Calculates the strength of a given password and returns a element
- * @param props {object} {formValues: object, password: string, sliderValue: number}
- * @returns JSX element
- */
-export function StrengthIndicator(props: {
-  formValues: IndexableFormValues
-  password: string | undefined
-  sliderValue: number
-}): React.ReactNode {
-  const { formValues, password, sliderValue } = props
+
+export function StrengthIndicator(): React.ReactNode {
+  const context = useContext(FormContext)
+  const password = context?.password
+
+  const formValues = useSelector((state) => state.passphraseForm.formValues)
+  const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
 
   const validateString = useCallback(() => {
     if (!formValues.words.selected && sliderValue > 15) {
@@ -58,31 +33,7 @@ export function StrengthIndicator(props: {
     }
     return true
   }, [formValues, sliderValue])
-
-  const [output, setOutput] = useState("Loistava")
-
   const [score, setScore] = useState(4)
-  const [time, setTime] = useState<string[]>([])
-
-  const calculateTimeToCheck = async () => {
-    // didCheckTime prevents unneccessary computation. eg. user clicks again, even if password has not changed
-    if (password && !didCheckTime) {
-      console.time("Time to check")
-      didCheckTime = true
-      await checker(validateLength(password, 70)).then((r) => {
-        let timeToDo = r.crackTimesDisplay.offlineSlowHashing1e4PerSecond.toString()
-
-        const timeInSecs = r.crackTimesSeconds.offlineSlowHashing1e4PerSecond
-        const years = Math.floor(timeInSecs / 31556952)
-
-        if (timeToDo.includes("vuotta") || timeToDo.includes("vuosikymmeniä")) {
-          timeToDo = parseValue(years)
-        }
-        setTime([timeToDo])
-      })
-      console.timeEnd("Time to check")
-    }
-  }
 
   // runs excactly once when mounting/initializing. -- so runs on page load.
   /**
@@ -95,16 +46,15 @@ export function StrengthIndicator(props: {
         didInit = true
         checker(validateLength(password, 70))
           .then((r) => {
-            // console.log("🚀 ~ file: indicator.tsx:106 ~ checker ~ password:", password)
-            console.log("Mounted and checking...")
+            console.info("Mounted and checking...")
             setScore(r.score)
-            setOutput(numberToString(r.score))
           })
           .catch((err) => {
+            if (err instanceof Error) throw new Error(err.message)
             console.error("Error in checking", err)
           })
           .finally(() => {
-            console.log("Mounted and checked successfully.")
+            console.info("Mounted and checked successfully.")
           })
       }
     }
@@ -112,21 +62,23 @@ export function StrengthIndicator(props: {
   }, [])
 
   useEffect(() => {
-    // THis is run each time the dep array gets a hit, so set time check to false.
+    // THis is run each time the dep array gets a hit, so set time check to false initially
     didCheckTime = false
-    // kikkailua, jotta ei tarvis laskea aina scorea, koska se on kallista.
+
+    // fake checking for better perf
     if (!validateString()) {
       setScore(4)
-      setOutput(numberToString(4))
     } else {
       if (password && password.length > 0) {
         checker(password)
           .then((r) => {
             setScore(r.score)
-            setOutput(numberToString(r.score))
             console.log("Checked strength succesfully")
           })
           .catch((err) => {
+            if (err instanceof Error) {
+              throw new Error(err.message)
+            }
             console.error(err)
           })
       }
@@ -137,83 +89,49 @@ export function StrengthIndicator(props: {
   }, [password])
 
   return (
-    <ErrorBoundary
-      fallbackRender={({ error, resetErrorBoundary }) => {
-        return <ErrorComponent error={error as unknown} resetErrorBoundary={resetErrorBoundary} />
+    <div className="IslandContent PillIsland">
+      <StrengthBar strength={score} />
+    </div>
+  )
+}
+
+const StrengthBar = ({ strength }: StrengthBarProps) => {
+  const percentageOfMax = (strength / 4) * 100
+  const widthOffset = 15
+  const barWidthOver100 = widthOffset * 2
+  const barWidth = 100 + barWidthOver100
+  const [scope, animate] = useAnimate()
+
+  useEffect(() => {
+    void animate(
+      scope.current,
+      { filter: "blur(0px)", opacity: 1, translateX: `-${widthOffset}%` },
+      { delay: 0.3, duration: 0.85 },
+    )
+  }, [])
+  return (
+    <motion.span
+      ref={scope}
+      key="strengthBar"
+      id="StrengthBar"
+      className="StrengthBar"
+      style={{
+        left: "10%",
+        width: `${barWidth}%`,
+        willChange: "transform, opacity",
       }}
-    >
-      <Suspense
-        fallback={
-          <div className="strengthIndicator case5">
-            <span>Arvio</span>
-          </div>
-        }
-      >
-        <Popover>
-          <PopoverTrigger
-            onClick={() => {
-              void calculateTimeToCheck().catch(console.error)
-            }}
-          >
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger type="button" asChild>
-                  <motion.div
-                    layoutId="strengthIndicator"
-                    key={output}
-                    whileHover={{
-                      scale: 1,
-                      transition: {
-                        type: "tween",
-                        // duration: 0.1,
-                      },
-                    }}
-                    whileTap={{
-                      scale: 0.95,
-                    }}
-                    whileFocus={{
-                      scale: 0.95,
-                      transition: {
-                        type: "spring",
-                      },
-                    }}
-                    className={`interact strengthIndicator case${score.toString()}`}
-                  >
-                    <motion.span>{output}</motion.span>
-                  </motion.div>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={4} className="TooltipContent">
-                  <div className="flex-center">
-                    <OpenSelectHandGesture width={20} height={20} />
-                    {t("moreInfo")}
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </PopoverTrigger>
-          <PopoverContent
-            style={{
-              zIndex: 3,
-            }}
-            align="center"
-            side="top"
-            className="PopoverContent"
-            onOpenAutoFocus={(e) => {
-              e.preventDefault()
-            }}
-            asChild
-          >
-            <div className="popCard">
-              <p className="fadeIn resultHelperText">{t("timeToCrack")}</p>
-              <Divider margin="0.25rem 0rem" />
-              <div className="flex-center space-between">
-                <span>{time[0]}</span>
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
-      </Suspense>
-    </ErrorBoundary>
+      initial={{ opacity: 0, filter: "blur(10px)", translateX: `-${70 + widthOffset}%` }}
+      animate={{
+        translateX: `-${100 - percentageOfMax + widthOffset}%`,
+        backgroundColor: numberToString(strength).color,
+        transition: {
+          type: "spring",
+          damping: 15,
+          duration: 0.2,
+          delay: 0.1,
+        },
+      }}
+    ></motion.span>
   )
 }
 
@@ -221,16 +139,35 @@ function numberToString(value: number) {
   switch (value) {
     case 0:
       // To be able to set the state, these need to be strings
-      return t("strengthAwful").toString()
+      return {
+        label: t("strengthAwful").toString(),
+        color: "var(--red-worst-rgb)",
+      }
     case 1:
-      return t("strengthBad").toString()
+      return {
+        label: t("strengthBad").toString(),
+        color: "var(--orange-bad-rgb)",
+      }
     case 2:
-      return t("strengthOk").toString()
+      return {
+        label: t("strengthOk").toString(),
+        color: "var(--yellow-ok-rgb)",
+      }
     case 3:
-      return t("strengthGood").toString()
+      return {
+        label: t("strengthGood").toString(),
+        color: "var(--yellow-better-rgb)",
+      }
     case 4:
-      return t("strengthGreat").toString()
+      return {
+        label: t("strengthGreat").toString(),
+        color: "var(--green-go-rgb)",
+      }
     default:
-      return t("strengthDefault").toString()
+      return {
+        label: t("strengthDefault").toString(),
+        color: "var(--foreground-rgb)",
+      }
   }
 }
+

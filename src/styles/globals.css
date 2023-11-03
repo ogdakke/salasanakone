@@ -1,5 +1,5 @@
 :root {
-  --formContainerHeight: 399.2px;
+  --formContainerHeight: 18.9375rem;
   --max-width: 800px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
@@ -49,15 +49,15 @@
   --gray-shadow: 100, 100, 100;
   --black-text-rgb: 10, 10, 10;
 
-  --green-go-rgb: 108, 241, 109;
+  --green-go-rgb: rgb(108, 241, 109);
   /*loistva*/
-  --yellow-better-rgb: 137, 224, 133;
+  --yellow-better-rgb: rgb(117, 215, 93);
   /* Hyvä*/
-  --yellow-ok-rgb: 240, 173, 78;
+  --yellow-ok-rgb: rgb(240, 173, 78);
   /* OK */
-  --orange-bad-rgb: 220, 60, 60;
+  --orange-bad-rgb: rgb(220, 60, 60);
   /* Huono */
-  --red-worst-rgb: 180, 0, 10;
+  --red-worst-rgb: rgb(180, 0, 10);
   /* surkea */
 
   --red-rgb: 255, 60, 60;
@@ -182,6 +182,10 @@ input {
   all: unset;
 }
 
+.debug {
+  box-shadow: 0 0 0 1px red;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -190,7 +194,8 @@ input {
 
 @media (max-width: 700px) {
   :root {
-    --formContainerHeight: 385.375px;
+    --oneRem: 1rem;
+    --formContainerHeight: 24.4rem;
     --islandHeight: 84.1875px;
   }
 }

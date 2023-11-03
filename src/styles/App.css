@@ -68,6 +68,10 @@
   gap: 0.25rem;
 }
 
+.justify-center {
+  justify-content: center;
+}
+
 .flex-bottom {
   display: flex;
   gap: 0.25rem;
@@ -116,6 +120,14 @@
 
 .mb-05 {
   margin-bottom: 0.5rem;
+}
+
+.pb-15 {
+  padding-bottom: 1.5rem;
+}
+
+.pb-3 {
+  padding-bottom: 3rem;
 }
 
 @keyframes fadeIn {
@@ -167,3 +179,4 @@
     opacity: 1;
   }
 }
+

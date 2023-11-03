@@ -7,13 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### Added
+
+- UI: Island, a component that displays the strength of a password as a "progress bar".
+
+### Removed
+
+- UI: Time to crack -popover
+
+## [2.0.1](https://github.com/ogdakke/salasanakone/commits/2.0.1) - 26-10-2023
+
 ### Changed
 
 - Update dependencies
 
 ### Fixed
 
-- Safari font-size got too big on copy of text inside Result
+- UI: Safari font-size got too big on copy of text inside Result
 
 ## [2.0.0](https://github.com/ogdakke/salasanakone/commits/2.0.0) - 03-08-2023
 

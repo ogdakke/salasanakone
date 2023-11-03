@@ -8,7 +8,8 @@ import {
 } from "@/Components/ui"
 import { meta } from "@/assets/constants/meta"
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
+import "@/styles/Credits.css"
 import "@/styles/ui/Tooltip.css"
 
 const Credits = () => {
@@ -18,7 +19,7 @@ const Credits = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <button className="credits">
-              <LogoIcon loading="lazy" width={20} height={20} className="svgImage interact" />
+              <LogoIcon loading="lazy" width={20} height={20} className="interact" />
               <ExternalLink link={meta.dweUrl} size={18}>
                 {meta.dweDisplayText}
               </ExternalLink>
@@ -45,3 +46,4 @@ const Credits = () => {
 }
 
 export { Credits }
+

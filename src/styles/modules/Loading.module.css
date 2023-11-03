@@ -22,13 +22,13 @@
   z-index: -1;
 }
 
-/* Conic Gradient Animation */
-.loading::before {
+/* Conic Gradient Animation, that absolutely murders performance */
+/* .loading::before {
   animation: 8s rotate linear infinite;
   width: 300%;
   height: 300%;
   background: var(--tile-border);
-}
+} */
 
 /* Inner Square which "covers" the box */
 .loading::after {
@@ -42,14 +42,11 @@
     rgb(var(--skeleton-glow)),
     rgba(var(--form-bg-rgb), 1)
   );
-  background-size: 400% 100%;
-  animation: skeleton_loading 10s ease-in-out infinite;
+  background-size: 200% 100%;
+  animation: skeleton_loading 3s ease-in-out infinite;
 
-  /* background: rgba(var(--form-bg-rgb)); */
   -webkit-background-clip: content-box;
   background-clip: content-box;
-
-  /* animation: pulse 2s ease-in-out infinite; */
 }
 
 .loader {
@@ -95,3 +92,4 @@
 /* Mobile */
 @media (max-width: 700px) {
 }
+

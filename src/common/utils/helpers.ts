@@ -1,8 +1,8 @@
-export function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
+function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
   return k in x
 }
 
-export function correctType(arg: unknown, desiredType: unknown): boolean {
+function correctType(arg: unknown, desiredType: unknown): boolean {
   const isType = typeof arg
   if (isType === desiredType) {
     // console.log("Type does match", isType, " is ", desiredType);
@@ -19,7 +19,7 @@ export function correctType(arg: unknown, desiredType: unknown): boolean {
  * @param str string to check
  * @returns string, mutated or not
  */
-export const validateLength = (str: string, length: number): string => {
+const validateLength = (str: string, length: number): string => {
   let final = str
   if (str.length > length) {
     final = str.substring(0, length)
@@ -28,3 +28,6 @@ export const validateLength = (str: string, length: number): string => {
   // console.log(`Checked string of length ${final.length}`)
   return final
 }
+
+export { correctType, isKey, validateLength }
+

@@ -1,6 +1,7 @@
 import { useState } from "react"
 
 import { useInterval } from "@/common/hooks/useInterval"
+import { t } from "@/common/utils"
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -22,13 +23,19 @@ export const ErrorComponent = ({ error, resetErrorBoundary }: Props) => {
       tryRender()
       setRendered(true)
     },
-    isRendered ? null : 4000,
+    isRendered ? null : 6000,
   )
 
   return (
     <div role="alert">
-      <p>Jotain meni vikaan:</p>
-      <pre style={{ color: "red" }}>{(error as Error).message}</pre>
+      <h3>
+        {t("somethingWentWrong")} {t("tryToRefresh")}
+      </h3>
+      <details>
+        <summary>{t("moreInfo")}</summary>
+        <pre style={{ color: "red" }}>{(error as Error).message}</pre>
+      </details>
     </div>
   )
 }
+

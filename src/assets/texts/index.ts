@@ -8,6 +8,11 @@ export const appTranslations: Translations = {
     promptToAddWords: "Add words",
   },
   fi: {
+    salasanakone: "Salasanakone",
+    ok: "Ok",
+    update: "Päivitä",
+    new: "Uusi",
+    tryAgain: "Yritä uudelleen",
     useWords: "Käytä sanoja",
     useCharacters: "Käytä merkkejä",
     useUppercase: "Isot kirjaimet",
@@ -33,5 +38,12 @@ export const appTranslations: Translations = {
     visitMySite: "Vieraile sivuillani",
     share: "Jaa",
     moreInfo: "Lisätietoja",
+    resultHelperLabel: "Salasana, jonka voi kopioida napauttamalla",
+    errorNoGeneration: "Jotain meni vikaan... Salasanaa ei luotu.",
+    tryToRefresh: "Koeta päivittää sivu.",
+    updateToNewVersion: "Uusi versio saatavilla. Päivitä sivu napauttamalla.",
+    worksOffline: "Sivusto toimii nyt myös ilman verkkoyhteyttä.",
+    somethingWentWrong: "Jotain meni vikaan.",
   },
 }
+

@@ -1,63 +1,78 @@
-import { useSelector } from "@/common/hooks"
+import { FormContext } from "@/Components/form"
+import { StrengthIndicator } from "@/Components/indicator"
+import { Loading } from "@/Components/ui"
+import "@/styles/Island.css"
 import { motion } from "framer-motion"
-import { Refresh } from "iconoir-react"
-import { Suspense } from "react"
-import "../styles/Island.css"
-import { StrengthIndicator } from "./indicator"
-import { Loading } from "./ui"
+import { Plus } from "iconoir-react"
+import { Suspense, useContext } from "react"
 
 interface Props {
   generate: () => void
-  finalPassword: string | undefined
+  finalPassword?: string | undefined
 }
 
-export const Island = ({ generate, finalPassword }: Props) => {
-  const formValues = useSelector((state) => state.passphraseForm.formValues)
-  const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
+enum IslandVariants {
+  full = "full",
+  pill = "pill",
+}
 
+export const SimpleIsland = () => {
   return (
-    <Suspense fallback={<Loading height="84" />}>
-      <motion.div
-        initial={{ y: 0, scale: 1 }}
-        animate={{ y: 0, scale: 1 }}
-        transition={{
-          duration: 5,
-          type: "spring",
-          damping: 12,
-          delay: 0,
-        }}
-        className="IslandMain"
-      >
-        <div className="IslandContent">
-          <motion.div
-            animate={{ opacity: 1 }}
-            initial={{ opacity: 0 }}
-            className="flex-center space-between "
-          >
-            <StrengthIndicator
-              password={finalPassword}
-              sliderValue={sliderValue}
-              formValues={formValues}
-            />
-            <div className="relative">
-              <motion.button
-                whileHover={{
-                  scale: 1.1,
-                  transition: {
-                    type: "tween",
-                    duration: 0.3,
-                  },
-                }}
-                whileTap={{ scale: 0.95 }}
-                className="IslandGenerateButton"
-                onClick={() => void generate()}
-              >
-                <Refresh className="Refresh" width={34} height={34} />
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
+    <Suspense fallback={<PillLoadingState />}>
+      <motion.div className="IslandMain" data-state={IslandVariants.pill}>
+        <PillIsland />
       </motion.div>
     </Suspense>
   )
 }
+
+const PillLoadingState = () => {
+  return (
+    <div className="IslandMain">
+      <Loading className="" height="4rem" radius="4rem" />
+    </div>
+  )
+}
+
+/**
+ * Pill island
+ *
+ */
+const PillIsland = () => {
+  const context = useContext(FormContext)
+  const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
+
+  if (!context?.generate) {
+    throw new Error("Context failed to use generate() function")
+  }
+
+  const buttonSize = 32
+  return (
+    <motion.div
+      onClick={() => context.generate()}
+      onKeyDown={(e) => (e.key === "Enter" ? context.generate() : null)}
+      style={{ willChange: "transform" }}
+      className="IslandBackground"
+      whileFocus={{ scale: 1.05 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: isTouchDevice() ? 0.96 : 1 }}
+    >
+      <motion.span
+        initial={{
+          opacity: 0,
+        }}
+        animate={{
+          opacity: 1,
+          transition: {
+            duration: 2,
+          },
+        }}
+        className="IslandGenerateButton"
+      >
+        <Plus strokeWidth={2} height={buttonSize} width={buttonSize} />
+      </motion.span>
+      <StrengthIndicator />
+    </motion.div>
+  )
+}
+

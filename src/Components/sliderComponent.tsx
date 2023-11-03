@@ -5,7 +5,7 @@ import {
   minLengthForWords,
 } from "@/../config"
 import { Label, Slider } from "@/Components/ui"
-import { t } from "@/common/utils/getLanguage"
+import { t } from "@/common/utils"
 import { setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
 import { RootState } from "@/store"
 import { motion } from "framer-motion"
@@ -63,3 +63,4 @@ const SliderComponent: FC<SliderComponentProps> = ({ validate }) => {
 }
 
 export { SliderComponent }
+
