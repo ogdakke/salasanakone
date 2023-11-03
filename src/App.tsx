@@ -5,6 +5,7 @@ import { ErrorComponent } from "@/Components/errorComponent"
 import { Feedback } from "@/Components/feedback"
 import { Credits, Loading } from "@/Components/ui"
 import { LogoIcon } from "@/assets/icons/logoIcon"
+import { t } from "@/common/utils/getLanguage"
 import "@/styles/App.css"
 import "@/styles/globals.css"
 import { ErrorBoundary } from "react-error-boundary"
@@ -19,7 +20,7 @@ function App() {
       <div className="wrapper">
         <div className="flex-center" style={{ gap: "1rem" }}>
           <LogoIcon width={40} height={40} />
-          <h1>Salasanakone</h1>
+          <h1>{t("salasanakone")}</h1>
         </div>
         <Suspense
           fallback={
@@ -35,7 +36,7 @@ function App() {
                 <>
                   <ErrorComponent error={error as Error} resetErrorBoundary={resetErrorBoundary} />
                   <button type="button" className="inputButton" onClick={resetErrorBoundary}>
-                    Yritä uudelleen
+                    {t("tryAgain")}
                   </button>
                 </>
               )
@@ -54,3 +55,4 @@ function App() {
 }
 
 export default App
+

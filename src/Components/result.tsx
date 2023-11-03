@@ -53,24 +53,16 @@ const Result = (props: { finalPassword: string | undefined }) => {
       {finalPassword && finalPassword.length > 0 ? (
         <div className="relative">
           <motion.div
-            whileHover={{
-              scale: 1.01,
-            }}
-            transition={{
-              duration: 0.175,
-            }}
-            animate={{
-              scale: 1,
-            }}
+            whileHover={{ scale: 1.01 }}
+            transition={{ duration: 0.175 }}
+            animate={{ scale: 1 }}
             whileTap={{
               scale: 0.985,
               transition: {
                 duration: 0.25,
               },
             }}
-            initial={{
-              scale: 1,
-            }}
+            initial={{ scale: 1 }}
             title={t("clickToCopy").toString()}
             className="card interact resultCard relative"
             itemType="button"
@@ -100,17 +92,13 @@ const Result = (props: { finalPassword: string | undefined }) => {
                   layout
                   className="Shine absoluteCopiedIcon interact"
                   data-animate={shouldAnimate ? true : false}
-                  initial={{
-                    scale: 1,
-                  }}
+                  initial={{ scale: 1 }}
                   animate={{
                     translateX: isCopied ? 0 : 20,
                     opacity: isCopied ? 1 : 0,
                     scale: shouldAnimate ? 0.95 : 1,
                   }}
-                  whileHover={{
-                    scale: 0.9,
-                  }}
+                  whileHover={{ scale: 0.9 }}
                   transition={fade}
                   onClick={() => void handleClick(finalPassword).catch(console.error)}
                 >

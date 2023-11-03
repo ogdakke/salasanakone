@@ -1,10 +1,8 @@
+import { t } from "@/common/utils/getLanguage"
+import "@/styles/ReloadPrompt.css"
+import { Refresh } from "iconoir-react"
 import { useState } from "react"
 import { useRegisterSW } from "virtual:pwa-register/react"
-
-import "../styles/ReloadPrompt.css"
-
-import { t } from "@/common/utils/getLanguage"
-import { Refresh } from "iconoir-react"
 
 const refreshSW = (registration?: ServiceWorkerRegistration) => {
   console.log(`Needs refresh, clearing localstorage...`)
@@ -64,7 +62,7 @@ function ReloadPrompt() {
               }}
             >
               <Refresh width={20} height={20} />
-              Päivitä
+              {t("update")}
             </button>
           ) : null}
           {offlineReady && !needRefresh ? (
@@ -77,7 +75,7 @@ function ReloadPrompt() {
                 close()
               }}
             >
-              Ok
+              {t("Ok")}
             </button>
           ) : null}
         </div>
