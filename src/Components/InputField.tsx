@@ -1,9 +1,9 @@
 import { inputFieldMaxLength, labelForCheckbox } from "@/../config"
+import { FormContext } from "@/Components/FormContext"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
 import { t, validateLength } from "@/common/utils"
 import { InputLabel, InputValue } from "@/models"
-import { RootState } from "@/store"
-import { useSelector } from "react-redux"
+import { useContext } from "react"
 
 type InputFieldProps = {
   option: InputLabel
@@ -18,7 +18,9 @@ export const InputField: React.FC<InputFieldProps> = ({
   isDisabled,
   valuesToForm,
 }) => {
-  const formValues = useSelector((state: RootState) => state.passphraseForm.formValues)
+  const {
+    formState: { formValues },
+  } = useContext(FormContext)
 
   if (values.inputType === "checkbox") {
     return (
@@ -38,6 +40,8 @@ export const InputField: React.FC<InputFieldProps> = ({
       </div>
     )
   } else if (values.inputType === "radio") {
+    console.log("radio: ", formValues[option])
+
     return (
       <div key={option} className="flex-center radio">
         <RadioGroup

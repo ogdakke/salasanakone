@@ -4,26 +4,30 @@ import {
   minLengthForChars,
   minLengthForWords,
 } from "@/../config"
+import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+
 import { Label, Slider } from "@/Components/ui"
 import { t } from "@/common/utils"
-import { setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
-import { RootState } from "@/store"
+import { FormActionKind } from "@/services/reducers/formReducer"
 import { motion } from "framer-motion"
-import { FC } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { FC, useContext } from "react"
 
 type SliderComponentProps = {
   validate: (value: number) => number
 }
 
+const { SET_SLIDERVALUE } = FormActionKind
+
 const SliderComponent: FC<SliderComponentProps> = ({ validate }) => {
-  const sliderValue = useSelector((state: RootState) => state.passphraseForm.sliderValue)
-  const formValues = useSelector((state: RootState) => state.passphraseForm.formValues)
-  const dispatch = useDispatch()
+  const {
+    formState: { formValues, sliderValue },
+  } = useContext(FormContext)
+  const context = useContext(FormDispatchContext)
+  const dispatch = context?.dispatch
 
   const sliderVal = (value: number): number => {
     const validated = validate(value)
-    dispatch(setSliderValue(validated))
+    dispatch({ type: SET_SLIDERVALUE, payload: validated })
     return value
   }
 

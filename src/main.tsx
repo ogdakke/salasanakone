@@ -1,7 +1,6 @@
-import { store } from "@/store"
+import { FormProvider } from "@/Components/FormContext"
 import React from "react"
 import ReactDOM from "react-dom/client"
-import { Provider } from "react-redux"
 import App from "./App"
 
 export const createCrypto = import("./services/createCrypto")
@@ -15,8 +14,9 @@ export const createCrypto = import("./services/createCrypto")
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <FormProvider>
       <App />
-    </Provider>
+    </FormProvider>
   </React.StrictMode>,
 )
+

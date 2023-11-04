@@ -1,14 +1,14 @@
-import { defaultFormValues, maxLengthForWords, minLengthForChars } from "@/../config"
+import { defaultFormValues } from "@/../config"
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
+import { FormContext, FormDispatchContext } from "@/Components/FormContext"
 import { Loading } from "@/Components/ui"
-import { useDispatch, useSelector } from "@/common/hooks"
 import { t } from "@/common/utils"
-import { setFormField, setSliderValue } from "@/features/passphrase-form/passphrase-form.slice"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
+import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
-import React, { Suspense, createContext, useCallback, useEffect, useState } from "react"
+import React, { Suspense, useCallback, useContext, useEffect } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 
 const initialInputKeys = Object.entries(defaultFormValues)
@@ -17,53 +17,23 @@ export function generatePassword(formValues: IndexableFormValues, sliderValue: n
   return createCryptoKey(sliderValue.toString(), formValues)
 }
 
-type FormContextProps = {
-  password?: string
-  generate: () => void
-}
-
-export const FormContext = createContext<FormContextProps | undefined>(undefined)
-
 export default function FormComponent(): React.ReactNode {
-  const [finalPassword, setFinalPassword] = useState<string>()
-  const [isDisabled, setDisabled] = useState(false)
+  const { formState, generate, validate } = useContext(FormContext)
 
-  const dispatch = useDispatch()
-  const sliderValue = useSelector((state) => state.passphraseForm.sliderValue)
-  const formValues = useSelector((state) => state.passphraseForm.formValues)
+  if (!generate || !validate) {
+    throw new Error("No validate or generate found from context")
+  }
 
-  const validate = useCallback(
-    (sliderValue: number): number => {
-      const { selected } = formValues.words
+  const context = useContext(FormDispatchContext)
+  const dispatch = context?.dispatch
 
-      if (
-        selected &&
-        (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
-      ) {
-        dispatch(setSliderValue(maxLengthForWords))
-        return maxLengthForWords
-      } else if (!selected && sliderValue < minLengthForChars) {
-        dispatch(setSliderValue(minLengthForChars))
-        return minLengthForChars
-      }
-      return sliderValue
-    },
-    [formValues],
-  )
+  // if (!dispatch) {
+  //   throw new Error("No Dispatch found from context in form.tsx")
+  // }
+  const { SET_DISABLED, SET_FINALPASSWORD, SET_FORM_FIELD, SET_SLIDERVALUE, SET_FORM_VALUES } =
+    FormActionKind
 
-  const generate = useCallback(() => {
-    inputFieldShouldDisable() ? setDisabled(true) : setDisabled(false)
-    try {
-      const setPassword = () => generatePassword(formValues, validate(sliderValue))
-      setFinalPassword(setPassword())
-    } catch (err) {
-      console.error(err)
-    }
-  }, [formValues, sliderValue])
-
-  useEffect(() => {
-    generate()
-  }, [generate, sliderValue, validate])
+  const { formValues, sliderValue, isDisabled, finalPassword } = formState
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
@@ -71,21 +41,45 @@ export default function FormComponent(): React.ReactNode {
       validate(sliderValue)
       if (value === "selected" && typeof event === "boolean") {
         updatedValue[option] = { ...updatedValue[option], selected: event }
-        dispatch(setFormField({ field: option, value: updatedValue[option] }))
+        console.log(updatedValue[option])
+
+        // dispatch({
+        //   type: SET_FORM_VALUES,
+        //   payload: updatedValue,
+        // })
+
+        dispatch({
+          type: SET_FORM_FIELD,
+          payload: {
+            field: option,
+            selected: updatedValue[option].selected,
+          },
+        })
       } else if (typeof event === "string") {
         updatedValue[option] = { ...updatedValue[option], value: event }
-        dispatch(setFormField({ field: option, value: updatedValue[option] }))
+        // dispatch({
+        //   type: SET_FORM_VALUES,
+        //   payload: updatedValue,
+        // })
+
+        dispatch({
+          type: SET_FORM_FIELD,
+          payload: {
+            field: option,
+            value: updatedValue[option].value,
+          },
+        })
       }
     },
-    [dispatch],
+    [],
   )
 
-  const inputFieldShouldDisable = () => {
-    return formValues.words.selected && sliderValue < 2
-  }
+  useEffect(() => {
+    generate()
+  }, [generate, sliderValue, validate])
 
   return (
-    <FormContext.Provider value={{ password: finalPassword, generate }}>
+    <>
       <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
         <Suspense fallback={<Loading height="71px" />}>
           <Result
@@ -110,7 +104,7 @@ export default function FormComponent(): React.ReactNode {
       <div className="IslandWrapper">
         <SimpleIsland />
       </div>
-    </FormContext.Provider>
+    </>
   )
 }
 

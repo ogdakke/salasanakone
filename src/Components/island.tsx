@@ -1,15 +1,10 @@
-import { FormContext } from "@/Components/form"
+import { FormContext } from "@/Components/FormContext"
 import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
 import "@/styles/Island.css"
 import { motion } from "framer-motion"
 import { Plus } from "iconoir-react"
 import { Suspense, useContext } from "react"
-
-interface Props {
-  generate: () => void
-  finalPassword?: string | undefined
-}
 
 enum IslandVariants {
   full = "full",
@@ -39,18 +34,14 @@ const PillLoadingState = () => {
  *
  */
 const PillIsland = () => {
-  const context = useContext(FormContext)
+  const { generate } = useContext(FormContext)
   const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
-
-  if (!context?.generate) {
-    throw new Error("Context failed to use generate() function")
-  }
 
   const buttonSize = 32
   return (
     <motion.div
-      onClick={() => context.generate()}
-      onKeyDown={(e) => (e.key === "Enter" ? context.generate() : null)}
+      onClick={() => generate()}
+      onKeyDown={(e) => (e.key === "Enter" ? generate() : null)}
       style={{ willChange: "transform" }}
       className="IslandBackground"
       whileFocus={{ scale: 1.05 }}
