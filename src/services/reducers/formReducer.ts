@@ -4,7 +4,6 @@ import { IndexableFormValues, InputValue } from "@/models"
 export type FormState = {
   formValues: IndexableFormValues
   sliderValue: number
-  finalPassword?: string
   isDisabled: boolean
 }
 
@@ -19,23 +18,25 @@ export enum FormActionKind {
   SET_FORM_FIELD = "setFormField",
   SET_SLIDERVALUE = "setSlidervalue",
   TOGGLE_FIELD = "toggleSelectedField",
-  SET_FINALPASSWORD = "setFinalPassword",
   SET_DISABLED = "setDisabled",
+}
+
+/** Actions */
+export type SetSliderValueAction = { type: FormActionKind.SET_SLIDERVALUE; payload: number }
+type SetFormFieldAction = {
+  type: FormActionKind.SET_FORM_FIELD
+  payload: {
+    field: keyof IndexableFormValues
+    selected?: InputValue["selected"]
+    value?: InputValue["value"]
+  }
 }
 
 export type FormActions =
   | { type: FormActionKind.SET_FORM_VALUES; payload: IndexableFormValues }
-  | {
-      type: FormActionKind.SET_FORM_FIELD
-      payload: {
-        field: keyof IndexableFormValues
-        selected?: InputValue["selected"]
-        value?: InputValue["value"]
-      }
-    }
-  | { type: FormActionKind.SET_SLIDERVALUE; payload: FormState["sliderValue"] }
+  | SetFormFieldAction
+  | SetSliderValueAction
   | { type: FormActionKind.TOGGLE_FIELD; payload: keyof IndexableFormValues }
-  | { type: FormActionKind.SET_FINALPASSWORD; payload: string }
   | { type: FormActionKind.SET_DISABLED; payload: boolean }
 
 function reducer(state: FormState, action: FormActions): FormState {
@@ -49,6 +50,7 @@ function reducer(state: FormState, action: FormActions): FormState {
           formValues: {
             ...state.formValues,
             [action.payload.field]: {
+              ...state.formValues[action.payload.field],
               selected: action.payload.selected,
             },
           },
@@ -78,14 +80,22 @@ function reducer(state: FormState, action: FormActions): FormState {
           },
         },
       }
-    case FormActionKind.SET_FINALPASSWORD:
-      return { ...state, finalPassword: action.payload }
     case FormActionKind.SET_DISABLED:
       return { ...state, isDisabled: action.payload }
     default:
-      throw new Error()
+      return state
   }
 }
+
+export const setSlidervalue = (value: number): SetSliderValueAction => ({
+  type: FormActionKind.SET_SLIDERVALUE,
+  payload: value,
+})
+
+export const setFormField = (payload: SetFormFieldAction["payload"]) => ({
+  type: FormActionKind.SET_FORM_FIELD,
+  payload,
+})
 
 export default reducer
 
