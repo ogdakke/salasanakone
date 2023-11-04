@@ -10,8 +10,8 @@ import { Dispatch, ReactNode, createContext, useCallback, useReducer } from "rea
 
 type FormContextProps = {
   formState: FormState
-  generate?: () => void
-  validate?: (n: number) => number
+  generate: () => void
+  validate?: (sliderValue: number) => number
 }
 
 export const FormContext = createContext<FormContextProps>({
