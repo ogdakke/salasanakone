@@ -29,5 +29,13 @@ const validateLength = (str: string, length: number): string => {
   return final
 }
 
-export { correctType, isKey, validateLength }
+function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
+  obj: T,
+  key: K,
+): Omit<T, K> {
+  const { [key]: _, ...rest } = obj
+  return rest
+}
+
+export { correctType, filterKey, isKey, validateLength }
 

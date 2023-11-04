@@ -17,8 +17,6 @@ export const usePersistedReducer = <T extends Record<PropertyKey, unknown>, A>(
   const clearValue = useCallback(() => localStorage.removeItem(key), [key])
 
   useEffect(() => {
-    console.log(state)
-
     localStorage.setItem(key, JSON.stringify(state))
   }, [state])
 
