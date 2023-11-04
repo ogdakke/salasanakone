@@ -1,4 +1,4 @@
-import { FormContext } from "@/Components/FormContext"
+import { FormContext, ResultContext } from "@/Components/FormContext"
 import { t, validateLength } from "@/common/utils"
 import "@/styles/Indicator.css"
 import { motion, useAnimate } from "framer-motion"
@@ -17,12 +17,12 @@ let didInit = false
 let didCheckTime = false
 
 export function StrengthIndicator(): React.ReactNode {
-  const context = useContext(FormContext)
-  const password = context.formState.finalPassword
+  const formContext = useContext(FormContext)
+  const password = useContext(ResultContext)
 
   const {
     formState: { formValues, sliderValue },
-  } = context
+  } = formContext
 
   const validateString = useCallback(() => {
     if (!formValues.words.selected && sliderValue > 15) {

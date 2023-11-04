@@ -1,3 +1,3 @@
 export { getLocale, setLocale, t } from "./getLanguage"
-export { correctType, isKey, validateLength } from "./helpers"
+export { correctType, filterKey, isKey, validateLength } from "./helpers"
 

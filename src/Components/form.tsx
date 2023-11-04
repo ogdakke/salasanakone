@@ -1,6 +1,6 @@
 import { defaultFormValues } from "@/../config"
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import { Loading } from "@/Components/ui"
 import { t } from "@/common/utils"
 import { IndexableFormValues, InputLabel } from "@/models"
@@ -18,6 +18,7 @@ export function generatePassword(formValues: IndexableFormValues, sliderValue: n
 
 export default function FormComponent(): React.ReactNode {
   const { formState, generate, validate } = useContext(FormContext)
+  const finalPassword = useContext(ResultContext)
 
   if (!validate) {
     throw new Error("No validate found from context")
@@ -28,12 +29,12 @@ export default function FormComponent(): React.ReactNode {
 
   const { SET_FORM_FIELD } = FormActionKind
 
-  const { formValues, sliderValue, isDisabled, finalPassword } = formState
+  const { formValues, sliderValue, isDisabled } = formState
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
       const updatedValue: IndexableFormValues = { ...formValues }
-      validate(sliderValue)
+      validate(sliderValue, formState)
       if (value === "selected" && typeof event === "boolean") {
         updatedValue[option] = { ...updatedValue[option], selected: event }
 

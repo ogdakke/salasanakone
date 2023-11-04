@@ -15,19 +15,18 @@ import { useContext } from "react"
 const { SET_SLIDERVALUE } = FormActionKind
 
 const SliderComponent = () => {
-  const {
-    validate,
-    formState: { formValues, sliderValue },
-  } = useContext(FormContext)
-  const context = useContext(FormDispatchContext)
-  const dispatch = context?.dispatch
+  const context = useContext(FormContext)
+  const { validate, formState } = context
+  const { formValues, sliderValue } = formState
+  const { dispatch } = useContext(FormDispatchContext)
 
   if (!validate) {
     throw new Error("No validate found in sliderComponent")
   }
 
   const sliderVal = (value: number): number => {
-    const validated = validate(value)
+    const validated = validate(value, formState)
+
     dispatch({ type: SET_SLIDERVALUE, payload: validated })
     return value
   }
@@ -48,7 +47,7 @@ const SliderComponent = () => {
         name="slider"
         aria-label="Salasanan pituus"
         value={[sliderValue]}
-        onValueChange={(val) => sliderVal(val[0])}
+        onValueChange={([val]) => sliderVal(val)}
         max={formValues.words.selected ? maxLengthForWords : maxLengthForChars}
         min={formValues.words.selected ? minLengthForWords : minLengthForChars}
         step={1}

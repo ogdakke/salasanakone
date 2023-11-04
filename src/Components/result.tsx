@@ -1,5 +1,5 @@
 import { numbers, specials } from "@/../config"
-import { FormContext } from "@/Components/FormContext"
+import { ResultContext } from "@/Components/FormContext"
 import { HighlightCondition, Highlighter } from "@/Components/ui/utils/highlight"
 import { t } from "@/common/utils"
 import copyToClipboard from "@/services/copyToClipboard"
@@ -10,9 +10,7 @@ import { ClipboardCheck, OpenSelectHandGesture } from "iconoir-react"
 import { useContext, useEffect, useState } from "react"
 
 const Result = (props: { finalPassword: string | undefined }) => {
-  const context = useContext(FormContext)
-
-  const { finalPassword } = context.formState
+  const finalPassword = useContext(ResultContext)
   const [isCopied, setCopied] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
 
@@ -53,7 +51,7 @@ const Result = (props: { finalPassword: string | undefined }) => {
   return (
     <div className="resultWrapper">
       <p className="resultHelperText">{t("clickToCopy")}</p>
-      {finalPassword && finalPassword.length > 0 ? (
+      {finalPassword && finalPassword?.length > 0 ? (
         <div className="relative">
           <motion.div
             whileHover={{ scale: 1.01 }}
