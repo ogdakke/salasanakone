@@ -18,9 +18,7 @@ export const InputField: React.FC<InputFieldProps> = ({
   isDisabled,
   valuesToForm,
 }) => {
-  const {
-    formState: { formValues },
-  } = useContext(FormContext)
+  const { formValues } = useContext(FormContext).formState
 
   if (values.inputType === "checkbox") {
     return (
@@ -40,8 +38,6 @@ export const InputField: React.FC<InputFieldProps> = ({
       </div>
     )
   } else if (values.inputType === "radio") {
-    console.log("radio: ", formValues[option])
-
     return (
       <div key={option} className="flex-center radio">
         <RadioGroup

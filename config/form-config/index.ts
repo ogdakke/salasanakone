@@ -1,4 +1,4 @@
-import { IndexableFormValues, IndexedLabels, InputLabel } from "../../src/models"
+import { IndexableFormValues, IndexedLabels, InputLabel } from "@/models"
 
 export const inputFieldMaxLength = 8
 export const defaultSliderValue = 3
@@ -35,3 +35,4 @@ export function labelForCheckbox(option: InputLabel) {
   }
   return labels[option] || labels.words
 }
+

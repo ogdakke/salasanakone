@@ -35,6 +35,7 @@ const PillLoadingState = () => {
  */
 const PillIsland = () => {
   const { generate } = useContext(FormContext)
+
   const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
 
   const buttonSize = 32

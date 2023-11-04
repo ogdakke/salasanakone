@@ -10,20 +10,21 @@ import { Label, Slider } from "@/Components/ui"
 import { t } from "@/common/utils"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import { motion } from "framer-motion"
-import { FC, useContext } from "react"
-
-type SliderComponentProps = {
-  validate: (value: number) => number
-}
+import { useContext } from "react"
 
 const { SET_SLIDERVALUE } = FormActionKind
 
-const SliderComponent: FC<SliderComponentProps> = ({ validate }) => {
+const SliderComponent = () => {
   const {
+    validate,
     formState: { formValues, sliderValue },
   } = useContext(FormContext)
   const context = useContext(FormDispatchContext)
   const dispatch = context?.dispatch
+
+  if (!validate) {
+    throw new Error("No validate found in sliderComponent")
+  }
 
   const sliderVal = (value: number): number => {
     const validated = validate(value)

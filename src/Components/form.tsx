@@ -10,7 +10,6 @@ import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
 import React, { Suspense, useCallback, useContext, useEffect } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
-
 const initialInputKeys = Object.entries(defaultFormValues)
 
 export function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
@@ -20,18 +19,14 @@ export function generatePassword(formValues: IndexableFormValues, sliderValue: n
 export default function FormComponent(): React.ReactNode {
   const { formState, generate, validate } = useContext(FormContext)
 
-  if (!generate || !validate) {
-    throw new Error("No validate or generate found from context")
+  if (!validate) {
+    throw new Error("No validate found from context")
   }
 
   const context = useContext(FormDispatchContext)
   const dispatch = context?.dispatch
 
-  // if (!dispatch) {
-  //   throw new Error("No Dispatch found from context in form.tsx")
-  // }
-  const { SET_DISABLED, SET_FINALPASSWORD, SET_FORM_FIELD, SET_SLIDERVALUE, SET_FORM_VALUES } =
-    FormActionKind
+  const { SET_FORM_FIELD } = FormActionKind
 
   const { formValues, sliderValue, isDisabled, finalPassword } = formState
 
@@ -41,12 +36,6 @@ export default function FormComponent(): React.ReactNode {
       validate(sliderValue)
       if (value === "selected" && typeof event === "boolean") {
         updatedValue[option] = { ...updatedValue[option], selected: event }
-        console.log(updatedValue[option])
-
-        // dispatch({
-        //   type: SET_FORM_VALUES,
-        //   payload: updatedValue,
-        // })
 
         dispatch({
           type: SET_FORM_FIELD,
@@ -57,10 +46,6 @@ export default function FormComponent(): React.ReactNode {
         })
       } else if (typeof event === "string") {
         updatedValue[option] = { ...updatedValue[option], value: event }
-        // dispatch({
-        //   type: SET_FORM_VALUES,
-        //   payload: updatedValue,
-        // })
 
         dispatch({
           type: SET_FORM_FIELD,
@@ -98,7 +83,7 @@ export default function FormComponent(): React.ReactNode {
               valuesToForm={valuesToForm}
             />
           ))}
-          <SliderComponent validate={validate} />
+          <SliderComponent />
         </div>
       </form>
       <div className="IslandWrapper">
