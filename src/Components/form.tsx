@@ -68,11 +68,7 @@ export default function FormComponent(): React.ReactNode {
     <>
       <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
         <Suspense fallback={<Loading height="71px" />}>
-          <Result
-            aria-busy="false"
-            aria-label={t("resultHelperLabel")}
-            finalPassword={finalPassword}
-          />
+          <Result aria-busy="false" aria-label={t("resultHelperLabel")} />
         </Suspense>
         <div className="inputGrid">
           {initialInputKeys.map(([item, entry]) => (
@@ -80,7 +76,6 @@ export default function FormComponent(): React.ReactNode {
               key={item}
               option={item as InputLabel}
               values={entry}
-              isDisabled={isDisabled}
               valuesToForm={valuesToForm}
             />
           ))}

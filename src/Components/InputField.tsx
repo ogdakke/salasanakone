@@ -8,17 +8,11 @@ import { useContext } from "react"
 type InputFieldProps = {
   option: InputLabel
   values: InputValue
-  isDisabled: boolean
   valuesToForm: (option: InputLabel, event: string | boolean, value: "selected" | "value") => void
 }
 
-export const InputField: React.FC<InputFieldProps> = ({
-  option,
-  values,
-  isDisabled,
-  valuesToForm,
-}) => {
-  const { formValues } = useContext(FormContext).formState
+export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesToForm }) => {
+  const { formValues, isDisabled } = useContext(FormContext).formState
 
   if (values.inputType === "checkbox") {
     return (

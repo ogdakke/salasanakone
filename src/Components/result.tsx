@@ -9,7 +9,7 @@ import { Transition, motion } from "framer-motion"
 import { ClipboardCheck, OpenSelectHandGesture } from "iconoir-react"
 import { useContext, useEffect, useState } from "react"
 
-const Result = (props: { finalPassword: string | undefined }) => {
+const Result = () => {
   const finalPassword = useContext(ResultContext)
   const [isCopied, setCopied] = useState(false)
   const [shouldAnimate, setShouldAnimate] = useState(false)
