@@ -340,6 +340,7 @@ const Editor = ({ handleSave }: EditorProps) => {
         defaultValue={passwordValue}
         onKeyDown={(e) => {
           ;() => {
+            // @ts-expect-error event weirdness
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             return setInputValue(e.target.value)
           }
