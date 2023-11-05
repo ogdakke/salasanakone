@@ -1,4 +1,4 @@
-import { defaultFormValues, defaultSliderValue } from "@/../config"
+import { defaultFormValues, defaultSliderValue } from "@/config"
 import { IndexableFormValues, InputValue } from "@/models"
 
 export type FormState = {
@@ -98,4 +98,3 @@ export const setFormField = (payload: SetFormFieldAction["payload"]) => ({
 })
 
 export default reducer
-

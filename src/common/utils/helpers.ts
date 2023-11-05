@@ -38,4 +38,3 @@ function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
 }
 
 export { correctType, filterKey, isKey, validateLength }
-

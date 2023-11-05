@@ -67,4 +67,3 @@ const PillIsland = () => {
     </motion.div>
   )
 }
-

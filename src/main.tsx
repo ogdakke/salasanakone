@@ -19,4 +19,3 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </FormProvider>
   </React.StrictMode>,
 )
-

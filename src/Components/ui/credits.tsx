@@ -46,4 +46,3 @@ const Credits = () => {
 }
 
 export { Credits }
-

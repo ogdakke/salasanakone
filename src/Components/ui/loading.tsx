@@ -36,4 +36,3 @@ export const Loading: React.FC<LoadingProps> = ({
     ></div>
   )
 }
-

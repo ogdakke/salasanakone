@@ -1,6 +1,6 @@
 :root {
   --formContainerHeight: 18.9375rem;
-  --max-width: 800px;
+  --max-width: 680px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
   scroll-behavior: smooth;
@@ -50,7 +50,7 @@
   --black-text-rgb: 10, 10, 10;
 
   --green-go-rgb: rgb(108, 241, 109);
-  /*loistva*/
+  /*loistava*/
   --yellow-better-rgb: rgb(117, 215, 93);
   /* Hyvä*/
   --yellow-ok-rgb: rgb(240, 173, 78);
@@ -199,4 +199,3 @@ input {
     --islandHeight: 84.1875px;
   }
 }
-

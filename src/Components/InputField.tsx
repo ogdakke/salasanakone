@@ -1,7 +1,7 @@
-import { inputFieldMaxLength, labelForCheckbox } from "@/../config"
 import { FormContext } from "@/Components/FormContext"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
 import { t, validateLength } from "@/common/utils"
+import { inputFieldMaxLength, labelForCheckbox } from "@/config"
 import { InputLabel, InputValue } from "@/models"
 import { useContext } from "react"
 
@@ -99,4 +99,3 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
     )
   }
 }
-

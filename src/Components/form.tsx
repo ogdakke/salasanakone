@@ -1,8 +1,8 @@
-import { defaultFormValues } from "@/../config"
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
 import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import { Loading } from "@/Components/ui"
 import { t } from "@/common/utils"
+import { defaultFormValues } from "@/config"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { createCryptoKey } from "@/services/createCrypto"
 import { FormActionKind } from "@/services/reducers/formReducer"
@@ -29,7 +29,7 @@ export default function FormComponent(): React.ReactNode {
 
   const { SET_FORM_FIELD } = FormActionKind
 
-  const { formValues, sliderValue, isDisabled } = formState
+  const { formValues, sliderValue } = formState
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
@@ -88,4 +88,3 @@ export default function FormComponent(): React.ReactNode {
     </>
   )
 }
-

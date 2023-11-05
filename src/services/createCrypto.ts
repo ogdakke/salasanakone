@@ -7,7 +7,7 @@ import {
   minLengthForChars,
   minLengthForWords,
   specialsAndNums,
-} from "@/../config"
+} from "@/config"
 
 import { IndexableFormValues } from "@/models"
 

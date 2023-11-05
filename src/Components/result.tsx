@@ -1,10 +1,16 @@
-import { numbers, specials } from "@/../config"
 import { ResultContext } from "@/Components/FormContext"
-import { HighlightCondition, Highlighter } from "@/Components/ui/utils/highlight"
+import {
+  HighlightCondition,
+  Highlighter,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/Components/ui"
 import { t } from "@/common/utils"
+import { numbers, specials } from "@/config"
 import copyToClipboard from "@/services/copyToClipboard"
 import "@/styles/Result.css"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@radix-ui/react-tooltip"
 import { Transition, motion } from "framer-motion"
 import { ClipboardCheck, OpenSelectHandGesture } from "iconoir-react"
 import { useContext, useEffect, useState } from "react"
@@ -134,4 +140,3 @@ const fade: Transition = {
 }
 
 export default Result
-

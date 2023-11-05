@@ -1,10 +1,10 @@
+import { FormContext, FormDispatchContext } from "@/Components/FormContext"
 import {
   maxLengthForChars,
   maxLengthForWords,
   minLengthForChars,
   minLengthForWords,
-} from "@/../config"
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+} from "@/config"
 
 import { Label, Slider } from "@/Components/ui"
 import { t } from "@/common/utils"
@@ -67,4 +67,3 @@ const SliderComponent = () => {
 }
 
 export { SliderComponent }
-

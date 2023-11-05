@@ -1,6 +1,6 @@
-import { maxLengthForWords, minLengthForChars } from "@/../config"
 import { generatePassword } from "@/Components/form"
 import { usePersistedReducer } from "@/common/hooks/usePersistedReducer"
+import { maxLengthForWords, minLengthForChars } from "@/config"
 import reducer, {
   FormActionKind,
   FormActions,
@@ -86,4 +86,3 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     </FormContext.Provider>
   )
 }
-

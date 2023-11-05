@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { maxLengthForChars, minLengthForChars } from "../../../config"
+import { maxLengthForChars, minLengthForChars } from "../../config"
 import { IndexableFormValues, InputType } from "../../models"
 import { createCryptoKey } from "../createCrypto"
 

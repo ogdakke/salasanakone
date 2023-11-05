@@ -46,4 +46,3 @@ const t = (
 }
 
 export { getLocale, setLocale, t }
-

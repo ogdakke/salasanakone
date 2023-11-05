@@ -35,4 +35,3 @@ export function labelForCheckbox(option: InputLabel) {
   }
   return labels[option] || labels.words
 }
-

@@ -170,4 +170,3 @@ function numberToString(value: number) {
       }
   }
 }
-

@@ -46,4 +46,3 @@ export const appTranslations: Translations = {
     somethingWentWrong: "Jotain meni vikaan.",
   },
 }
-
