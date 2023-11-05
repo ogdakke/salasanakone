@@ -6,6 +6,7 @@ import reducer, {
   FormActions,
   FormState,
   initialFormState,
+  setSlidervalue,
 } from "@/services/reducers/formReducer"
 import { Dispatch, ReactNode, createContext, useCallback, useState } from "react"
 
@@ -28,13 +29,32 @@ export const FormDispatchContext = createContext<FormDispatchContextProps>({
   dispatch: () => undefined,
 })
 
-export const ResultContext = createContext<string | undefined>(undefined)
+/**
+ * isEdited is to differentiate edited (user-inputted) passwords from generated ones
+ */
+type ResultState = {
+  passwordValue?: string
+  isEdited: boolean
+}
+
+type ResultContextProps = {
+  finalPassword: ResultState
+  setFinalPassword: Dispatch<React.SetStateAction<ResultState>>
+}
+
+export const ResultContext = createContext<ResultContextProps>({
+  finalPassword: { isEdited: false },
+  setFinalPassword: () => undefined,
+})
 
 export const FormProvider = ({ children }: { children: ReactNode }) => {
   const [formState, dispatch] = usePersistedReducer(reducer, initialFormState, "formState")
-  const [finalPassword, setFinalPassword] = useState<string>()
+  const [finalPassword, setFinalPassword] = useState<ResultState>({
+    passwordValue: undefined,
+    isEdited: false,
+  })
 
-  const { SET_DISABLED, SET_SLIDERVALUE } = FormActionKind
+  const { SET_DISABLED } = FormActionKind
   if (!dispatch) {
     throw new Error("No dispatch found from context")
   }
@@ -48,10 +68,10 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
         selected &&
         (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
       ) {
-        dispatch({ type: SET_SLIDERVALUE, payload: maxLengthForWords })
+        dispatch(setSlidervalue(maxLengthForWords))
         return maxLengthForWords
       } else if (!selected && sliderValue < minLengthForChars) {
-        dispatch({ type: SET_SLIDERVALUE, payload: minLengthForChars })
+        dispatch(setSlidervalue(minLengthForChars))
         return minLengthForChars
       }
       return sliderValue
@@ -68,7 +88,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
         formState.formValues,
         validate(formState.sliderValue, formState),
       )
-      setFinalPassword(password)
+      setFinalPassword({ passwordValue: password, isEdited: false })
     } catch (err) {
       console.error(err)
     }
@@ -81,7 +101,9 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
   return (
     <FormContext.Provider value={{ formState, generate, validate }}>
       <FormDispatchContext.Provider value={{ dispatch }}>
-        <ResultContext.Provider value={finalPassword}>{children}</ResultContext.Provider>
+        <ResultContext.Provider value={{ finalPassword, setFinalPassword }}>
+          {children}
+        </ResultContext.Provider>
       </FormDispatchContext.Provider>
     </FormContext.Provider>
   )

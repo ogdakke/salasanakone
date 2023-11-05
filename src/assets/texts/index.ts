@@ -44,5 +44,8 @@ export const appTranslations: Translations = {
     updateToNewVersion: "Uusi versio saatavilla. Päivitä sivu napauttamalla.",
     worksOffline: "Sivusto toimii nyt myös ilman verkkoyhteyttä.",
     somethingWentWrong: "Jotain meni vikaan.",
+    editResult: "Muokkaa",
+    resultInputPlaceholder: "Kirjoita salasanasi, jonka haluat tarkistaa",
+    saveResult: "Tarkista",
   },
 }

@@ -10,14 +10,12 @@
   padding-right: 1rem;
 
   transition: filter 400ms;
-  /* transform: translateX(-100%); */
 }
 
 .copied span {
   word-break: keep-all;
   white-space: nowrap;
   transition: filter 2500ms ease-out;
-  /* opacity: 0; */
 }
 
 .copiedSpanText {
@@ -29,19 +27,20 @@
   white-space: nowrap;
 }
 
+.resultButtonWrapper {
+  right: 3rem;
+  display: inline-block;
+  top: 1rem;
+}
+
 .absoluteCopiedIcon {
   opacity: 0;
   position: absolute;
   -webkit-backdrop-filter: blur(2px);
   backdrop-filter: blur(2px);
-  /* padding-right: 3.25rem; */
   transition: filter 200ms;
-  /* animation: move-reverse 300ms   900ms ease-out 1; */
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   border-radius: 0.5rem;
-  right: 0.5rem;
-  display: inline-block;
-  top: 1rem;
   padding: 0.45rem;
 }
 
@@ -51,18 +50,11 @@
 .notCopiedSpan {
   word-break: keep-all;
   white-space: nowrap;
-  -webkit-filter: blur(0px);
-  filter: blur(0px);
-  transition: filter 200ms ease-in;
-  /* animation: move 650ms ease-out 1; */
 }
 .notCopied span {
   opacity: 100%;
   word-break: keep-all;
   white-space: nowrap;
-}
-.relative {
-  position: relative;
 }
 
 .Shine {
@@ -71,6 +63,10 @@
 
 .Shine[data-animate="true"]::after {
   animation: Shine 4s ease 300ms;
+}
+
+.EditButton {
+  z-index: 10;
 }
 
 .Shine::after {
@@ -91,6 +87,10 @@
   transform: rotate(45deg);
   background-size: 200% auto;
   transform: translateY(20%) translateX(10%);
+}
+
+.ResultInput {
+  width: 100%;
 }
 
 @keyframes Shine {

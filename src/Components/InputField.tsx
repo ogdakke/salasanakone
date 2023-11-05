@@ -60,7 +60,7 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
           <div className="fadeIn labelOnTop">
             <Label className="flex-bottom" title={values.info} htmlFor={option}>
               {labelForCheckbox(option)}
-              {isDisabled ? (
+              {true ? (
                 <span className="resultHelperText">{t("promptToAddWords")}</span>
               ) : (
                 <span></span>
@@ -68,6 +68,7 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
             </Label>
             <InputComponent
               disabled={isDisabled}
+              className="TextInput"
               maxLength={inputFieldMaxLength}
               defaultValue={formValues[option].value}
               placeholder={t("inputPlaceholder").toString()}
