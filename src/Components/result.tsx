@@ -157,7 +157,7 @@ const Result = () => {
   return (
     <InputContext.Provider value={{ inputValue, setInputValue }}>
       <div className="resultWrapper">
-        <p className="resultHelperText">{t("clickToCopy")}</p>
+        <p className="resultHelperText">{t("clickToCopyOrEdit")}</p>
         {passwordValue && passwordValue?.length > 0 ? (
           <div className="relative">
             {resultOptions[editor]}
@@ -283,7 +283,7 @@ const ResultComponentNoEdit = ({
         },
       }}
       initial={{ scale: 1 }}
-      title={t("clickToCopy").toString()}
+      title={t("clickToCopyOrEdit").toString()}
       className="card interact resultCard relative"
       itemType="button"
       tabIndex={0}

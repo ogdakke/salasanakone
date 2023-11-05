@@ -25,7 +25,7 @@ export const appTranslations: Translations = {
     strengthGood: "Hyvä",
     strengthGreat: "Loistava",
     timeToCrack: "Murtamisaika",
-    clickToCopy: "Kopioi klikkaamalla",
+    clickToCopyOrEdit: "Kopioi klikkaamalla laatikkoa tai muokkaa",
     hasCopiedPassword: "Kopioitu",
     inputPlaceholder: 'Esim. "-" tai "?" tai "3!"',
     promptToAddWords: "Lisää sanoja",
