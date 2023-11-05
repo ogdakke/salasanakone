@@ -68,17 +68,19 @@ const Result = () => {
   const { dispatch } = useContext(FormDispatchContext)
 
   const [inputValue, setInputValue] = useState<string | undefined>(undefined)
+  const [conditions, setConditions] = useState({
+    isCopied: false,
+    shouldAnimate: false,
+  })
 
-  const [isCopied, setCopied] = useState(false)
-  const [shouldAnimate, setShouldAnimate] = useState(false)
   const [editor, setEditor] = useState<EditorState>(EditorState.RESULT)
 
-  const showEditComponents = !isEditing && !isCopied
+  const showEditComponents = !isEditing && !conditions.isCopied
 
   const copy = () => {
-    setShouldAnimate(true)
-    setTimeout(() => setShouldAnimate(false), 700)
-    setCopied(true)
+    setConditions((s) => ({ ...s, shouldAnimate: true }))
+    setTimeout(() => setConditions((s) => ({ ...s, shouldAnimate: false })), 700)
+    setConditions((s) => ({ ...s, isCopied: true }))
   }
 
   const handleCopyClick = async (word: string) => {
@@ -101,8 +103,7 @@ const Result = () => {
   }, [formValues, passwordValue])
 
   useEffect(() => {
-    setShouldAnimate(false)
-    setCopied(false)
+    setConditions({ isCopied: false, shouldAnimate: false })
   }, [passwordValue])
 
   const highlightConditions = [highlightNumbers, highlightSpecials]
@@ -113,7 +114,7 @@ const Result = () => {
   }
 
   const handleSave = (value?: string) => {
-    if (!value || value.length < 1) {
+    if (!value || value.trim().length < 1) {
       return
     }
 
@@ -139,8 +140,8 @@ const Result = () => {
     [EditorState.EDITOR]: <SaveEditButton handleSave={handleSave} />,
     [EditorState.RESULT]: !showEditComponents ? (
       <CopiedButton
-        shouldAnimate={shouldAnimate}
-        isCopied={isCopied}
+        shouldAnimate={conditions.shouldAnimate}
+        isCopied={conditions.isCopied}
         handleCopyClick={handleCopyClick}
       />
     ) : (
@@ -319,7 +320,6 @@ const Editor = ({ handleSave }: EditorProps) => {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.175 }}
       animate={{ scale: 1 }}
       whileTap={{
@@ -338,12 +338,13 @@ const Editor = ({ handleSave }: EditorProps) => {
         className="ResultInput"
         placeholder={t("resultInputPlaceholder").toString()}
         defaultValue={passwordValue}
+        onFocus={(e) => {
+          setInputValue(e.target.value)
+        }}
+        onChange={(e) => {
+          setInputValue(e.target.value)
+        }}
         onKeyDown={(e) => {
-          ;() => {
-            // @ts-expect-error event weirdness
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-            return setInputValue(e.target.value)
-          }
           if (e.key === "Enter") {
             handleSave(e.currentTarget.value)
           }
@@ -369,11 +370,13 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
       initial={{
         translateX: 30,
         filter: "blur(4px)",
+        WebkitFilter: "blur(4px)",
         opacity: 0,
       }}
       animate={{
         translateX: 0,
         filter: "blur(0px)",
+        WebkitFilter: "blur(0px)",
         opacity: 1,
       }}
       whileHover={{ scale: 1.05 }}
@@ -386,3 +389,4 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
 }
 
 export default Result
+

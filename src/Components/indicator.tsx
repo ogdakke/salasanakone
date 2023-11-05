@@ -9,7 +9,7 @@ type StrengthBarProps = {
 }
 
 const checker = async (finalPassword: string) => {
-  const check = await import("../services/checkStrength").then((r) => r.checkStrength)
+  const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
   return check(finalPassword.toString())
 }
 
@@ -20,9 +20,6 @@ export function StrengthIndicator(): React.ReactNode {
   const formContext = useContext(FormContext)
   const { finalPassword } = useContext(ResultContext)
   const { passwordValue, isEdited } = finalPassword
-  console.log(finalPassword)
-
-  console.log("password from indicator: ", finalPassword)
 
   const {
     formState: { formValues, sliderValue },
@@ -101,7 +98,6 @@ export function StrengthIndicator(): React.ReactNode {
     const validatedLengthString = validateLength(str, 128)
     checker(validatedLengthString)
       .then((r) => {
-        console.log(r)
         setScore(r.score)
       })
       .catch(console.error)
@@ -116,7 +112,7 @@ export function StrengthIndicator(): React.ReactNode {
 
 const StrengthBar = ({ strength }: StrengthBarProps) => {
   // If percentage is 0, it would move the bar too much left, so 10 is the minimum
-  const percentageOfMax = Math.max(10, (strength / 4) * 100)
+  const percentageOfMax = Math.max(15, (strength / 4) * 100)
 
   const widthOffset = 15
   const barWidthOver100 = widthOffset * 2
@@ -191,3 +187,4 @@ function numberToString(value: number) {
       }
   }
 }
+

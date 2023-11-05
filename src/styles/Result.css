@@ -90,7 +90,7 @@
 }
 
 .ResultInput {
-  width: 100%;
+  width: calc(100% - 1.8rem);
 }
 
 @keyframes Shine {
@@ -128,3 +128,4 @@
     animation: none;
   }
 }
+

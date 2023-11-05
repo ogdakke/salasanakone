@@ -51,13 +51,6 @@ summary::marker {
   white-space: normal;
 }
 
-.credits {
-  display: flex;
-  width: min-content;
-  align-items: center;
-  gap: 0.5rem;
-  margin: 0rem 0rem;
-}
 .imageWrapper {
   display: flex;
   justify-content: space-between;
@@ -97,3 +90,4 @@ summary::marker {
     color: rgba(var(--foreground-rgb), 1);
   }
 }
+

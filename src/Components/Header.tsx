@@ -6,7 +6,7 @@ import { t } from "@/common/utils"
 export const Header = () => {
   return (
     // TODO: looks weird on mobile
-    <div className="flex-bottom space-between">
+    <div className="flex-center space-between">
       <div className="flex-center" style={{ gap: "1rem" }}>
         <LogoIcon width={40} height={40} />
         <h1>{t("salasanakone")}</h1>
@@ -15,7 +15,6 @@ export const Header = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <button className="credits">
-              <LogoIcon loading="lazy" width={20} height={20} className="interact" />
               <a href={meta.dweUrl}>{meta.dweDisplayText}</a>
             </button>
           </TooltipTrigger>
@@ -27,3 +26,4 @@ export const Header = () => {
     </div>
   )
 }
+

@@ -25,7 +25,7 @@ export const appTranslations: Translations = {
     strengthGood: "Hyvä",
     strengthGreat: "Loistava",
     timeToCrack: "Murtamisaika",
-    clickToCopy: "Kopioi Salasana Klikkaamalla",
+    clickToCopy: "Kopioi klikkaamalla",
     hasCopiedPassword: "Kopioitu",
     inputPlaceholder: 'Esim. "-" tai "?" tai "3!"',
     promptToAddWords: "Lisää sanoja",
@@ -45,7 +45,8 @@ export const appTranslations: Translations = {
     worksOffline: "Sivusto toimii nyt myös ilman verkkoyhteyttä.",
     somethingWentWrong: "Jotain meni vikaan.",
     editResult: "Muokkaa",
-    resultInputPlaceholder: "Kirjoita salasanasi, jonka haluat tarkistaa",
+    resultInputPlaceholder: "Minkä vahvuus tarkistetaan?",
     saveResult: "Tarkista",
   },
 }
+

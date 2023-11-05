@@ -73,3 +73,10 @@
     margin: 0.5rem 0rem;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  .sliderThumb {
+    box-shadow: none;
+  }
+}
+

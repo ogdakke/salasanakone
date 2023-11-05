@@ -25,6 +25,7 @@
   width: 100%;
   display: flex;
   align-items: center;
+  box-shadow: -10px 0px 15px 0px rgba(var(--skeleton-glow), 0.3);
 }
 
 .IslandBackground {
@@ -32,6 +33,7 @@
   user-select: none;
   -webkit-user-select: none;
   width: 100%;
+  overflow: hidden;
   justify-content: space-between;
   border-radius: calc(var(--island-border-radius));
   border: 1px solid rgba(var(--skeleton-glow), 1);
@@ -101,7 +103,6 @@
   }
 
   .IslandContent {
-    box-shadow: none;
     border-radius: calc(var(--island-border-radius) + 0.5rem);
     padding: calc(var(--island-content-padding) + 0.5rem);
   }
@@ -128,3 +129,4 @@
     box-shadow: none;
   }
 }
+
