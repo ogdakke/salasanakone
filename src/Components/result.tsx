@@ -48,6 +48,13 @@ const highlightSpecials: HighlightCondition = {
   },
 }
 
+type ResultNoEditProps = {
+  handleCopyClick: (finalPassword: string) => Promise<void>
+  finalPassword: string
+  highlightConditions: HighlightCondition[]
+  isCopied: boolean
+}
+
 type InputContextProps = {
   inputValue?: string
   setInputValue: React.Dispatch<React.SetStateAction<string | undefined>>
@@ -132,18 +139,6 @@ const Result = () => {
     }
   })
 
-  const resultOptions = {
-    [EditorState.RESULT]: (
-      <ResultComponentNoEdit
-        handleCopyClick={handleCopyClick}
-        highlightConditions={highlightConditions}
-        finalPassword={passwordValue}
-        isCopied
-      />
-    ),
-    [EditorState.EDITOR]: <Editor handleSave={handleSave} />,
-  }
-
   const resultIconOptions = new Map<EditorState, ReactNode>()
 
   resultIconOptions.set(EditorState.EDITOR, <SaveEditButton handleSave={handleSave} />)
@@ -165,6 +160,7 @@ const Result = () => {
     [EditorState.RESULT]: showEditComponents ? t("editResult") : t("hasCopiedPassword"),
   }
 
+  /** Early return for loading state */
   if (passwordValue === undefined) {
     return (
       <div className="resultWrapper">
@@ -172,6 +168,18 @@ const Result = () => {
         <Loading height="68px" radius="12px" />
       </div>
     )
+  }
+
+  const resultOptions = {
+    [EditorState.RESULT]: (
+      <ResultComponentNoEdit
+        handleCopyClick={handleCopyClick}
+        highlightConditions={highlightConditions}
+        finalPassword={passwordValue}
+        isCopied
+      />
+    ),
+    [EditorState.EDITOR]: <Editor handleSave={handleSave} />,
   }
 
   return (
@@ -265,12 +273,6 @@ const CopiedButton = ({ shouldAnimate, isCopied, handleCopyClick }: CopiedButton
 /**
  * Editor
  */
-type ResultNoEditProps = {
-  handleCopyClick: (finalPassword: string) => Promise<void>
-  finalPassword?: string
-  highlightConditions: HighlightCondition[]
-  isCopied: boolean
-}
 
 const ResultComponentNoEdit = ({
   handleCopyClick,
