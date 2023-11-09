@@ -2,7 +2,8 @@ import { Translations } from "@/models/translations"
 
 export const appTranslations: Translations = {
   en: {
-    clickToCopy: "Click to Copy",
+    salasanakone: "Passphrase Generator",
+    clickToCopyOrEdit: "Copy or edit",
     hasCopiedPassword: "Password is copied",
     inputPlaceholder: "eg. '-' or '?'",
     promptToAddWords: "Add words",
@@ -25,7 +26,7 @@ export const appTranslations: Translations = {
     strengthGood: "Hyvä",
     strengthGreat: "Loistava",
     timeToCrack: "Murtamisaika",
-    clickToCopyOrEdit: "Kopioi klikkaamalla laatikkoa tai muokkaa",
+    clickToCopyOrEdit: "Kopioi tai muokkaa",
     hasCopiedPassword: "Kopioitu",
     inputPlaceholder: 'Esim. "-" tai "?" tai "3!"',
     promptToAddWords: "Lisää sanoja",
