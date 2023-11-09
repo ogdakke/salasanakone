@@ -282,7 +282,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
 }
 
 /**
- * Editor
+ * Result
  */
 const ResultComponentNoEdit = ({
   handleCopyClick,

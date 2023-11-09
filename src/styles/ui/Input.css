@@ -9,8 +9,8 @@
 
 .TextInput:disabled {
   cursor: not-allowed;
-  background-color: rgba(var(--card-rgb), 0.3);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.8);
+  background-color: rgba(var(--card-rgb), 0.2);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.4);
 }
 
 .TextInput:focus-visible {
@@ -26,3 +26,4 @@
 .labelOnTop .LabelRoot {
   padding-left: 0;
 }
+
