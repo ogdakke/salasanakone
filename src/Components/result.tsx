@@ -48,11 +48,17 @@ const highlightSpecials: HighlightCondition = {
   },
 }
 
+type CopyConditions = {
+  isCopied: boolean
+  shouldAnimate: boolean
+  copyIconIsHidden: boolean
+}
+
 type ResultNoEditProps = {
   handleCopyClick: (finalPassword: string) => Promise<void>
   finalPassword: string
   highlightConditions: HighlightCondition[]
-  isCopied: boolean
+  conditions: CopyConditions
 }
 
 type InputContextProps = {
@@ -77,19 +83,20 @@ const Result = () => {
   const { dispatch } = useContext(FormDispatchContext)
 
   const [inputValue, setInputValue] = useState<string | undefined>(undefined)
-  const [conditions, setConditions] = useState({
+  const [conditions, setConditions] = useState<CopyConditions>({
     isCopied: false,
     shouldAnimate: false,
+    copyIconIsHidden: true,
   })
 
   const [editor, setEditor] = useState<EditorState>(EditorState.RESULT)
 
-  const showEditComponents = !isEditing && !conditions.isCopied
+  const showEditComponents = !isEditing && conditions.copyIconIsHidden
 
   const copy = () => {
     setConditions((s) => ({ ...s, shouldAnimate: true }))
     const time = setTimeout(() => setConditions((s) => ({ ...s, shouldAnimate: false })), 700)
-    setConditions((s) => ({ ...s, isCopied: true }))
+    setConditions((s) => ({ ...s, isCopied: true, copyIconIsHidden: false }))
     return () => clearTimeout(time)
   }
 
@@ -109,18 +116,18 @@ const Result = () => {
   }
 
   useEffect(() => {
-    const hideCopyIcon = () => setConditions((s) => ({ ...s, isCopied: false }))
+    const hideCopyIcon = () => setConditions((s) => ({ ...s, copyIconIsHidden: true }))
     const hiderTimeout = setTimeout(hideCopyIcon, 3000)
 
     return () => clearTimeout(hiderTimeout)
-  }, [conditions.isCopied])
+  }, [conditions.copyIconIsHidden])
 
   useEffect(() => {
     changeToResult()
   }, [formValues, passwordValue])
 
   useEffect(() => {
-    setConditions({ isCopied: false, shouldAnimate: false })
+    setConditions({ isCopied: false, shouldAnimate: false, copyIconIsHidden: true })
   }, [passwordValue])
 
   const highlightConditions = [highlightNumbers, highlightSpecials]
@@ -139,24 +146,13 @@ const Result = () => {
     setFinalPassword({ passwordValue: value, isEdited: true })
   }
 
-  window.addEventListener("keypress", (ev) => {
-    if (!isEditing && ev.ctrlKey && ev.key === "e") {
-      handleEditClick()
-      return
-    }
-  })
-
   const resultIconOptions = new Map<EditorState, ReactNode>()
 
   resultIconOptions.set(EditorState.EDITOR, <SaveEditButton handleSave={handleSave} />)
   resultIconOptions.set(
     EditorState.RESULT,
     !showEditComponents ? (
-      <CopiedButton
-        shouldAnimate={conditions.shouldAnimate}
-        isCopied={conditions.isCopied}
-        handleCopyClick={handleCopyClick}
-      />
+      <CopiedButton conditions={conditions} handleCopyClick={handleCopyClick} />
     ) : (
       <EditButton handleEditClick={handleEditClick} />
     ),
@@ -185,10 +181,17 @@ const Result = () => {
       handleCopyClick={handleCopyClick}
       highlightConditions={highlightConditions}
       finalPassword={passwordValue}
-      isCopied
+      conditions={conditions}
     />,
   )
   resultOptions.set(EditorState.EDITOR, <Editor handleSave={handleSave} />)
+
+  window.addEventListener("keypress", (ev) => {
+    if (!isEditing && ev.ctrlKey && ev.key === "e") {
+      handleEditClick()
+      return
+    }
+  })
 
   return (
     <InputContext.Provider value={{ inputValue, setInputValue }}>
@@ -225,6 +228,7 @@ const EditButton = ({ handleEditClick }: EditButtonProps) => {
   return (
     <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
+      data-animate={true}
       onClick={() => handleEditClick()}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
@@ -249,14 +253,13 @@ const EditButton = ({ handleEditClick }: EditButtonProps) => {
 }
 
 type CopiedButtonProps = {
-  shouldAnimate: boolean
-  isCopied: boolean
+  conditions: CopyConditions
   handleCopyClick: (finalPassword: string) => Promise<void>
 }
 
-const CopiedButton = ({ shouldAnimate, isCopied, handleCopyClick }: CopiedButtonProps) => {
+const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
   const passwordValue = useContext(ResultContext).finalPassword.passwordValue ?? ""
-
+  const { isCopied, shouldAnimate } = conditions
   return (
     <motion.span
       layout
@@ -285,19 +288,13 @@ const ResultComponentNoEdit = ({
   handleCopyClick,
   finalPassword,
   highlightConditions,
-  isCopied,
+  conditions,
 }: ResultNoEditProps) => {
+  const { isCopied } = conditions
+
   return (
     <motion.div
-      whileHover={{ scale: 1.01 }}
       transition={{ duration: 0.175 }}
-      animate={{ scale: 1 }}
-      whileTap={{
-        scale: 0.985,
-        transition: {
-          duration: 0.25,
-        },
-      }}
       initial={{ scale: 1 }}
       title={t("clickToCopyOrEdit").toString()}
       className="card interact resultCard relative"
@@ -377,6 +374,7 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
   return (
     <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
+      data-animate={true}
       onClick={() => handleSave(inputValue)}
       onKeyDown={(e) => {
         if (e.key === "Enter") {

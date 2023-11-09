@@ -25,6 +25,8 @@
   align-items: center;
   word-break: keep-all;
   white-space: nowrap;
+
+  filter: blur(6px);
 }
 
 .resultButtonWrapper {
@@ -50,6 +52,8 @@
 .notCopiedSpan {
   word-break: keep-all;
   white-space: nowrap;
+  filter: none;
+  transition: filter 200ms ease-out;
 }
 .notCopied span {
   opacity: 100%;
