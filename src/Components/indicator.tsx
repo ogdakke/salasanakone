@@ -158,27 +158,27 @@ function numberToString(value: number) {
       // To be able to set the state, these need to be strings
       return {
         label: t("strengthAwful").toString(),
-        color: "var(--red-worst-rgb)",
+        color: "rgb(180, 0, 10)",
       }
     case 1:
       return {
         label: t("strengthBad").toString(),
-        color: "var(--orange-bad-rgb)",
+        color: "rgb(220, 60, 60)",
       }
     case 2:
       return {
         label: t("strengthOk").toString(),
-        color: "var(--yellow-ok-rgb)",
+        color: "rgb(240, 173, 78)",
       }
     case 3:
       return {
         label: t("strengthGood").toString(),
-        color: "var(--yellow-better-rgb)",
+        color: "rgb(117, 215, 93)",
       }
     case 4:
       return {
         label: t("strengthGreat").toString(),
-        color: "var(--green-go-rgb)",
+        color: "rgb(108, 241, 109)",
       }
     default:
       return {
