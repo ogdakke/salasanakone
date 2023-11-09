@@ -17,13 +17,6 @@
   cursor: pointer;
 }
 
-.credits a {
-  align-items: center;
-  text-decoration: none;
-  padding: 0.5rem 0rem;
-  padding-right: 1rem;
-}
-
 .details {
   transition: all 200ms ease-in;
 }

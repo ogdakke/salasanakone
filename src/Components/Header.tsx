@@ -15,7 +15,9 @@ export const Header = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <button className="credits">
-              <a href={meta.dweUrl}>{meta.dweDisplayText}</a>
+              <a href={meta.dweUrl} target="_blank" rel="noreferrer">
+                {meta.dweDisplayText}
+              </a>
             </button>
           </TooltipTrigger>
           <TooltipContent className="TooltipContent" sideOffset={6} asChild>
