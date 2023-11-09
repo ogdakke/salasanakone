@@ -41,8 +41,8 @@ const PillIsland = () => {
   const buttonSize = 32
   return (
     <motion.div
-      onClick={() => generate()}
-      onKeyDown={(e) => (e.key === "Enter" ? generate() : null)}
+      onClick={() => void generate()}
+      onKeyDown={(e) => (e.key === "Enter" ? void generate() : null)}
       style={{ willChange: "transform" }}
       className="IslandBackground"
       whileFocus={{ scale: 1.05 }}
@@ -67,3 +67,4 @@ const PillIsland = () => {
     </motion.div>
   )
 }
+
