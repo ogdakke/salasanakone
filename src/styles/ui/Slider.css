@@ -2,8 +2,6 @@
   grid-area: slider;
   display: flex;
   flex-direction: column;
-  /* gap: 0.5rem; */
-  /* justify-content: space-between; */
 }
 
 .sliderRoot {
@@ -13,8 +11,8 @@
   -webkit-user-select: none;
   user-select: none;
   touch-action: none;
-  /* width: 50%; */
-  height: 40px;
+  height: 30px;
+  margin-top: 0.25rem;
 }
 
 .sliderTrack {
@@ -43,20 +41,15 @@
   transition: border 100ms ease-out;
 }
 
-.sliderThumb:focus {
+.sliderThumb:focus-visible {
   outline: none;
-  /* box-shadow: 0 0 0 3px rgba(var(--foreground-rgb), 0.8); */
-
   border: 3px solid rgba(var(--foreground-rgb), 0.8);
-
   background-color: rgba(var(--callout-rgb));
 }
 
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .sliderThumb:hover {
-    /* height: 27px;
-    width: 27px; */
     border: 2px solid rgba(var(--callout-rgb));
     transition: border 100ms ease-out;
   }
@@ -70,7 +63,6 @@
   .sliderRoot {
     width: 100%;
     height: 35px;
-    margin: 0.5rem 0rem;
   }
 }
 
