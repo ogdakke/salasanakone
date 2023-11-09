@@ -1,12 +1,5 @@
 import { defaultFormValues, defaultSliderValue } from "@/config"
-import { IndexableFormValues, InputValue } from "@/models"
-
-export type FormState = {
-  formValues: IndexableFormValues
-  sliderValue: number
-  isDisabled: boolean
-  isEditing: boolean
-}
+import { FormState, IndexableFormValues, InputValue } from "@/models"
 
 export const initialFormState: FormState = {
   formValues: defaultFormValues,
@@ -109,3 +102,4 @@ export const setEditing = (payload: boolean) => ({
 })
 
 export default reducer
+

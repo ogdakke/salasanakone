@@ -4,17 +4,12 @@ import { Loading } from "@/Components/ui"
 import { t } from "@/common/utils"
 import { defaultFormValues } from "@/config"
 import { IndexableFormValues, InputLabel } from "@/models"
-import { createCryptoKey } from "@/services/createCrypto"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
 import React, { Suspense, useCallback, useContext, useEffect } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 const initialInputKeys = Object.entries(defaultFormValues)
-
-export function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
-  return createCryptoKey(sliderValue.toString(), formValues)
-}
 
 export default function FormComponent(): React.ReactNode {
   const { formState, generate, validate } = useContext(FormContext)
@@ -24,7 +19,7 @@ export default function FormComponent(): React.ReactNode {
   }
 
   const context = useContext(FormDispatchContext)
-  const dispatch = context?.dispatch
+  const dispatch = context.dispatch
 
   const { SET_FORM_FIELD } = FormActionKind
 
@@ -87,3 +82,4 @@ export default function FormComponent(): React.ReactNode {
     </>
   )
 }
+
