@@ -90,7 +90,7 @@ const Result = () => {
     setConditions((s) => ({ ...s, shouldAnimate: true }))
     const time = setTimeout(() => setConditions((s) => ({ ...s, shouldAnimate: false })), 700)
     setConditions((s) => ({ ...s, isCopied: true }))
-    clearTimeout(time)
+    return () => clearTimeout(time)
   }
 
   const handleCopyClick = async (word: string) => {
@@ -107,6 +107,13 @@ const Result = () => {
     dispatch({ type: FormActionKind.SET_EDITING, payload: false })
     setEditor(EditorState.RESULT)
   }
+
+  useEffect(() => {
+    const hideCopyIcon = () => setConditions((s) => ({ ...s, isCopied: false }))
+    const hiderTimeout = setTimeout(hideCopyIcon, 3000)
+
+    return () => clearTimeout(hiderTimeout)
+  }, [conditions.isCopied])
 
   useEffect(() => {
     changeToResult()
@@ -170,24 +177,25 @@ const Result = () => {
     )
   }
 
-  const resultOptions = {
-    [EditorState.RESULT]: (
-      <ResultComponentNoEdit
-        handleCopyClick={handleCopyClick}
-        highlightConditions={highlightConditions}
-        finalPassword={passwordValue}
-        isCopied
-      />
-    ),
-    [EditorState.EDITOR]: <Editor handleSave={handleSave} />,
-  }
+  const resultOptions = new Map<EditorState, ReactNode>()
+
+  resultOptions.set(
+    EditorState.RESULT,
+    <ResultComponentNoEdit
+      handleCopyClick={handleCopyClick}
+      highlightConditions={highlightConditions}
+      finalPassword={passwordValue}
+      isCopied
+    />,
+  )
+  resultOptions.set(EditorState.EDITOR, <Editor handleSave={handleSave} />)
 
   return (
     <InputContext.Provider value={{ inputValue, setInputValue }}>
       <div className="resultWrapper">
         <p className="resultHelperText">{t("clickToCopyOrEdit")}</p>
         <div className="relative">
-          {resultOptions[editor]}
+          {resultOptions.get(editor)}
           <TooltipProvider delayDuration={600}>
             <Tooltip>
               <TooltipTrigger type="button" asChild>
@@ -273,7 +281,6 @@ const CopiedButton = ({ shouldAnimate, isCopied, handleCopyClick }: CopiedButton
 /**
  * Editor
  */
-
 const ResultComponentNoEdit = ({
   handleCopyClick,
   finalPassword,
