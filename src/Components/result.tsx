@@ -15,7 +15,7 @@ import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
 import { Transition, motion } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
-import { createContext, useContext, useEffect, useState } from "react"
+import { ReactNode, createContext, useContext, useEffect, useState } from "react"
 
 enum EditorState {
   EDITOR = "editor",
@@ -79,8 +79,9 @@ const Result = () => {
 
   const copy = () => {
     setConditions((s) => ({ ...s, shouldAnimate: true }))
-    setTimeout(() => setConditions((s) => ({ ...s, shouldAnimate: false })), 700)
+    const time = setTimeout(() => setConditions((s) => ({ ...s, shouldAnimate: false })), 700)
     setConditions((s) => ({ ...s, isCopied: true }))
+    clearTimeout(time)
   }
 
   const handleCopyClick = async (word: string) => {
@@ -129,25 +130,28 @@ const Result = () => {
       <ResultComponentNoEdit
         handleCopyClick={handleCopyClick}
         highlightConditions={highlightConditions}
-        isCopied
         finalPassword={passwordValue}
+        isCopied
       />
     ),
     [EditorState.EDITOR]: <Editor handleSave={handleSave} />,
   }
 
-  const resultIconOptions = {
-    [EditorState.EDITOR]: <SaveEditButton handleSave={handleSave} />,
-    [EditorState.RESULT]: !showEditComponents ? (
+  const resultIconOptions = new Map<EditorState, ReactNode>()
+
+  resultIconOptions.set(EditorState.EDITOR, <SaveEditButton handleSave={handleSave} />)
+  resultIconOptions.set(
+    EditorState.RESULT,
+    !showEditComponents ? (
       <CopiedButton
         shouldAnimate={conditions.shouldAnimate}
         isCopied={conditions.isCopied}
         handleCopyClick={handleCopyClick}
       />
     ) : (
-      <EditButton handleCopyClick={handleEditClick} />
+      <EditButton handleEditClick={handleEditClick} />
     ),
-  }
+  )
 
   const tooltipContentOptions = {
     [EditorState.EDITOR]: t("saveResult"),
@@ -164,7 +168,9 @@ const Result = () => {
             <TooltipProvider delayDuration={600}>
               <Tooltip>
                 <TooltipTrigger type="button" asChild>
-                  <span className="absolute resultButtonWrapper">{resultIconOptions[editor]}</span>
+                  <span className="absolute resultButtonWrapper">
+                    {resultIconOptions.get(editor)}
+                  </span>
                 </TooltipTrigger>
                 <TooltipContent sideOffset={4} className="TooltipContent">
                   <div className="flex-center">
@@ -184,27 +190,25 @@ const Result = () => {
 }
 
 type EditButtonProps = {
-  handleCopyClick: () => void
+  handleEditClick: () => void
 }
 
-const EditButton = ({ handleCopyClick }: EditButtonProps) => {
+const EditButton = ({ handleEditClick }: EditButtonProps) => {
   return (
     <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
-      onClick={() => handleCopyClick()}
+      onClick={() => handleEditClick()}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          handleCopyClick()
+          handleEditClick()
         }
       }}
       initial={{
-        translateX: 30,
-        filter: "blur(4px)",
+        scale: 0.4,
         opacity: 0,
       }}
       animate={{
-        translateX: 0,
-        filter: "blur(0px)",
+        scale: 1,
         opacity: 1,
       }}
       whileHover={{ scale: 1.05 }}
@@ -231,20 +235,15 @@ const CopiedButton = ({ shouldAnimate, isCopied, handleCopyClick }: CopiedButton
       aria-hidden={!isCopied}
       className="Shine absoluteCopiedIcon interact"
       data-animate={shouldAnimate ? true : false}
-      initial={{
-        scale: 1,
-        filter: "blur(4px)",
-      }}
+      initial={{ scale: 0.4 }}
       animate={{
-        filter: isCopied ? "blur(0px)" : "blur(4px)",
-        translateX: isCopied ? 0 : 20,
         opacity: isCopied ? 1 : 0,
         scale: shouldAnimate ? 0.95 : 1,
       }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
       transition={fade}
-      onClick={() => void handleCopyClick(passwordValue).catch(console.error)}
+      onClick={() => void handleCopyClick(passwordValue)}
     >
       <ClipboardCheck alignmentBaseline="central" className="flex-center" />
     </motion.span>
@@ -287,10 +286,10 @@ const ResultComponentNoEdit = ({
       className="card interact resultCard relative"
       itemType="button"
       tabIndex={0}
-      onClick={() => void handleCopyClick(finalPassword).catch(console.error)}
+      onClick={() => void handleCopyClick(finalPassword)}
       onKeyDown={(e) => {
         if (e.key === "Enter") {
-          void handleCopyClick(finalPassword).catch(console.error)
+          void handleCopyClick(finalPassword)
         }
       }}
     >
@@ -368,15 +367,11 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
         }
       }}
       initial={{
-        translateX: 30,
-        filter: "blur(4px)",
-        WebkitFilter: "blur(4px)",
+        scale: 0.4,
         opacity: 0,
       }}
       animate={{
-        translateX: 0,
-        filter: "blur(0px)",
-        WebkitFilter: "blur(0px)",
+        scale: 1,
         opacity: 1,
       }}
       whileHover={{ scale: 1.05 }}
