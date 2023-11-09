@@ -1,5 +1,5 @@
 :root {
-  --formContainerHeight: 18.9375rem;
+  --formContainerHeight: 18.5625rem;
   --max-width: 680px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
@@ -195,7 +195,8 @@ input {
 @media (max-width: 700px) {
   :root {
     --oneRem: 1rem;
-    --formContainerHeight: 24.4rem;
+    --formContainerHeight: 21.8125rem;
     --islandHeight: 84.1875px;
   }
 }
+
