@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 
-import { ReloadPrompt } from "@/Components"
+import { Description, ReloadPrompt } from "@/Components"
 import { Header } from "@/Components/Header"
 import { ErrorComponent } from "@/Components/errorComponent"
 import { Loading } from "@/Components/ui"
@@ -21,7 +21,7 @@ function App() {
             <FormComponent />
           </ErrorBoundary>
         </Suspense>
-        {/* <Description /> */}
+        <Description />
         {/* <Feedback /> */}
         {/* <Credits /> */}
         <ReloadPrompt />

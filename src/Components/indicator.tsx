@@ -24,6 +24,7 @@ export function StrengthIndicator(): React.ReactNode {
   const {
     formState: { formValues, sliderValue },
   } = formContext
+  const [score, setScore] = useState(-1)
 
   const validateString = useCallback(() => {
     if (!formValues.words.selected && sliderValue > 15) {
@@ -34,7 +35,6 @@ export function StrengthIndicator(): React.ReactNode {
     }
     return true
   }, [formValues, sliderValue])
-  const [score, setScore] = useState(4)
 
   // runs excactly once when mounting/initializing. -- so runs on page load.
   /**
@@ -180,10 +180,15 @@ function numberToString(value: number) {
         label: t("strengthGreat").toString(),
         color: "rgb(108, 241, 109)",
       }
+    case -1:
+      return {
+        label: t("loadingStrength").toString(),
+        color: "var(--background-hex)",
+      }
     default:
       return {
         label: t("strengthDefault").toString(),
-        color: "var(--foreground-rgb)",
+        color: "",
       }
   }
 }

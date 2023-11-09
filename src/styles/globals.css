@@ -12,6 +12,7 @@
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
+  --background-hex: #fff;
   --background-rgb: 255, 255, 255;
   --helperTextColor: #2a2a2a;
   --form-bg-rgb: 254, 254, 254;
@@ -69,6 +70,7 @@
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
+    --background-hex: #000000;
     --background-rgb: 10, 10, 10;
     --helperTextColor: #636363;
     --form-bg-rgb: 15, 15, 15;
