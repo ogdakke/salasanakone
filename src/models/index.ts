@@ -30,7 +30,7 @@ export type FormState = {
 
 export type FormContextProps = {
   formState: FormState
-  generate: () => void
+  generate: () => Promise<void>
   validate?: (value: number, state: FormState) => number
 }
 

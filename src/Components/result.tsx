@@ -3,6 +3,7 @@ import {
   HighlightCondition,
   Highlighter,
   InputComponent,
+  Loading,
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -60,6 +61,7 @@ const Result = () => {
   const {
     formState: { isEditing, formValues },
   } = useContext(FormContext)
+
   const {
     finalPassword: { passwordValue },
     setFinalPassword,
@@ -123,13 +125,12 @@ const Result = () => {
     setFinalPassword({ passwordValue: value, isEdited: true })
   }
 
-  const listenForEPress = window.addEventListener("keypress", (ev) => {
+  window.addEventListener("keypress", (ev) => {
     if (!isEditing && ev.ctrlKey && ev.key === "e") {
       handleEditClick()
       return
     }
   })
-  listenForEPress
 
   const resultOptions = {
     [EditorState.RESULT]: (
@@ -164,32 +165,37 @@ const Result = () => {
     [EditorState.RESULT]: showEditComponents ? t("editResult") : t("hasCopiedPassword"),
   }
 
+  if (passwordValue === undefined) {
+    return (
+      <div className="resultWrapper">
+        <Loading height="1.3125rem" width="20%" radius="8px" />
+        <Loading height="68px" radius="12px" />
+      </div>
+    )
+  }
+
   return (
     <InputContext.Provider value={{ inputValue, setInputValue }}>
       <div className="resultWrapper">
         <p className="resultHelperText">{t("clickToCopyOrEdit")}</p>
-        {passwordValue && passwordValue?.length > 0 ? (
-          <div className="relative">
-            {resultOptions[editor]}
-            <TooltipProvider delayDuration={600}>
-              <Tooltip>
-                <TooltipTrigger type="button" asChild>
-                  <span className="absolute resultButtonWrapper">
-                    {resultIconOptions.get(editor)}
-                  </span>
-                </TooltipTrigger>
-                <TooltipContent sideOffset={4} className="TooltipContent">
-                  <div className="flex-center">
-                    <OpenSelectHandGesture width={20} height={20} />
-                    {tooltipContentOptions[editor]}
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-        ) : (
-          <div className="card">{t("errorNoGeneration")}</div>
-        )}
+        <div className="relative">
+          {resultOptions[editor]}
+          <TooltipProvider delayDuration={600}>
+            <Tooltip>
+              <TooltipTrigger type="button" asChild>
+                <span className="absolute resultButtonWrapper">
+                  {resultIconOptions.get(editor)}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={4} className="TooltipContent">
+                <div className="flex-center">
+                  <OpenSelectHandGesture width={20} height={20} />
+                  {tooltipContentOptions[editor]}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </div>
     </InputContext.Provider>
   )
@@ -272,10 +278,6 @@ const ResultComponentNoEdit = ({
   highlightConditions,
   isCopied,
 }: ResultNoEditProps) => {
-  if (!finalPassword) {
-    throw new Error(t("errorNoGeneration").toString())
-  }
-
   return (
     <motion.div
       whileHover={{ scale: 1.01 }}

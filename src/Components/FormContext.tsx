@@ -18,7 +18,7 @@ import { ReactNode, createContext, useCallback, useState } from "react"
 
 export const FormContext = createContext<FormContextProps>({
   formState: initialFormState,
-  generate: () => undefined,
+  generate: async () => {},
 })
 
 export const FormDispatchContext = createContext<FormDispatchContextProps>({
@@ -64,12 +64,12 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     return createCryptoKey(sliderValue.toString(), formValues)
   }
 
-  const generate = useCallback(() => {
+  const generate = useCallback(async () => {
     inputFieldShouldDisable()
       ? dispatch({ type: SET_DISABLED, payload: true })
       : dispatch({ type: SET_DISABLED, payload: false })
     try {
-      const password = generatePassword(
+      const password = await generatePassword(
         formState.formValues,
         validate(formState.sliderValue, formState),
       )

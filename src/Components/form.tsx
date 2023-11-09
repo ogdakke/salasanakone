@@ -1,13 +1,12 @@
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
 import { FormContext, FormDispatchContext } from "@/Components/FormContext"
-import { Loading } from "@/Components/ui"
 import { t } from "@/common/utils"
 import { defaultFormValues } from "@/config"
 import { IndexableFormValues, InputLabel } from "@/models"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
-import React, { Suspense, useCallback, useContext, useEffect } from "react"
+import React, { useCallback, useContext, useEffect } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 const initialInputKeys = Object.entries(defaultFormValues)
 
@@ -55,15 +54,16 @@ export default function FormComponent(): React.ReactNode {
   )
 
   useEffect(() => {
-    generate()
+    const gen = async () => {
+      await generate()
+    }
+    gen().catch(console.error)
   }, [generate, sliderValue, validate])
 
   return (
     <>
       <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
-        <Suspense fallback={<Loading height="71px" />}>
-          <Result aria-busy="false" aria-label={t("resultHelperLabel")} />
-        </Suspense>
+        <Result aria-busy="false" aria-label={t("resultHelperLabel")} />
         <div className="inputGrid">
           {initialInputKeys.map(([item, entry]) => (
             <InputField

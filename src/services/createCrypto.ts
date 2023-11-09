@@ -11,12 +11,15 @@ import {
 
 import { IndexableFormValues } from "@/models"
 
-const sanat = await import("@/sanat.json")
+async function loadSanat() {
+  const sanat = (await import("@/sanat.json")).default
+  return sanat
+}
 
 let variableMinLength = minLengthForWords
 let variableMaxLength = maxLengthForChars
 
-export function createCryptoKey(sliderValue: string, data: IndexableFormValues): string {
+export function createCryptoKey(sliderValue: string, data: IndexableFormValues): Promise<string> {
   variableMinLength = data.words.selected ? minLengthForWords : minLengthForChars
   variableMaxLength = data.words.selected ? maxLengthForWords : maxLengthForChars
 
@@ -25,9 +28,9 @@ export function createCryptoKey(sliderValue: string, data: IndexableFormValues):
   return handleReturns(length, data)
 }
 
-function handleReturns(length: number, data: IndexableFormValues): string {
+async function handleReturns(length: number, data: IndexableFormValues): Promise<string> {
   const USER_SPECIALS = data.randomChars.value || ""
-  const wordString = data.words.selected ? getWordsWithObject(length, sanat.default) : null
+  const wordString = data.words.selected ? getWordsWithObject(length, await loadSanat()) : null
 
   let finalString: string
 
@@ -243,10 +246,8 @@ function capitalizeFirstLetter(stringArrToConvert: string[]): string[] {
  * @returns array of strings
  */
 function getWordsWithObject(length: number, objektiSanat: string[]): string[] {
-  // console.time("length")
   const maxCount = objektiSanat.length - 1 // the max word count in sanat.json
 
-  // const then = performance.now()
   const randomNumsArray = generateRandomArray(length, 0, maxCount)
 
   const sanaArray: string[] = []
@@ -255,11 +256,11 @@ function getWordsWithObject(length: number, objektiSanat: string[]): string[] {
     try {
       sanaArray.push(objektiSanat[num])
     } catch (error) {
-      // sometimes it returned undefined from the capitalizeFirstLetter function, so catch that here.
-      console.error(error)
+      if (error instanceof Error) {
+        throw new Error("could not push to sanaArray")
+      }
     }
   }
-  // console.timeEnd("length")
   return sanaArray
 }
 

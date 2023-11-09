@@ -9,7 +9,7 @@ import "@/styles/App.css"
 import "@/styles/globals.css"
 import { ErrorBoundary, FallbackProps } from "react-error-boundary"
 
-const FormComponent = React.lazy(async () => await import("./Components/form"))
+const FormComponent = React.lazy(async () => await import("@/Components/form"))
 
 function App() {
   return (
@@ -65,3 +65,4 @@ const LargeScreenIslandLoader = () => (
 )
 
 export default App
+
