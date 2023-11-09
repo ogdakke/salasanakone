@@ -111,7 +111,6 @@ const Result = () => {
 
   const handleEditClick = () => {
     changeToEditor()
-    focus()
   }
 
   const handleSave = (value?: string) => {
@@ -122,8 +121,15 @@ const Result = () => {
     setInputValue(value)
     changeToResult()
     setFinalPassword({ passwordValue: value, isEdited: true })
-    console.log("saved", value)
   }
+
+  const listenForEPress = window.addEventListener("keypress", (ev) => {
+    if (!isEditing && ev.ctrlKey && ev.key === "e") {
+      handleEditClick()
+      return
+    }
+  })
+  listenForEPress
 
   const resultOptions = {
     [EditorState.RESULT]: (
@@ -328,7 +334,7 @@ const Editor = ({ handleSave }: EditorProps) => {
         },
       }}
       initial={{ scale: 1 }}
-      title={t("clickToCopy").toString()}
+      title={t("clickToCopyOrEdit").toString()}
       className="card interact resultCard relative"
       itemType="button"
       tabIndex={0}
