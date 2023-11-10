@@ -1,7 +1,6 @@
 .TextInput {
   grid-area: input;
   display: flex;
-  /* width: 100%; */
   border: 1px dashed rgba(var(--callout-border-rgb), 0.3);
   border-radius: 0.5rem;
   padding: 0.325rem 0.5rem;
@@ -19,11 +18,24 @@
 
 .labelOnTop {
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 0.25rem;
 }
 
 .labelOnTop .LabelRoot {
   padding-left: 0;
+}
+
+.InputWithButton {
+  display: flex;
+  align-items: end;
+  gap: 0.5rem;
+}
+
+.SaveInputButton {
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: 0.5rem;
+  padding: 0.225rem;
 }
 

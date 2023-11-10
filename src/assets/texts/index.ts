@@ -53,6 +53,9 @@ export const appTranslations: Translations = {
     saveAndCheckString: "Tallenna ja tarkista sanan vahvuus.",
     passphraseDesc:
       "Salalause on sanoista koostuva, pidempi salasana. Siinä on usein välimerkkejä sanojen välissä, ja numero jossain kohdassa.",
+    length: "Salasanan pituus",
+    delimiterInputLabel: "Välimerkit, jotka erottavat sanat",
+    saveCustomDelimiter: "Tallenna välimerkit",
   },
 }
 

@@ -26,7 +26,7 @@ export default function FormComponent(): React.ReactNode {
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
-      const updatedValue: IndexableFormValues = { ...formValues }
+      const updatedValue: IndexableFormValues = formValues
       validate(sliderValue, formState)
       if (value === "selected" && typeof event === "boolean") {
         updatedValue[option] = { ...updatedValue[option], selected: event }
@@ -62,7 +62,7 @@ export default function FormComponent(): React.ReactNode {
 
   return (
     <>
-      <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
+      <form className="form blurFadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
         <Result aria-busy="false" aria-label={t("resultHelperLabel")} />
         <div className="inputGrid">
           {initialInputKeys.map(([item, entry]) => (
@@ -76,7 +76,7 @@ export default function FormComponent(): React.ReactNode {
           <SliderComponent />
         </div>
       </form>
-      <div className="IslandWrapper">
+      <div className="IslandWrapper blurFadeIn">
         <SimpleIsland />
       </div>
     </>

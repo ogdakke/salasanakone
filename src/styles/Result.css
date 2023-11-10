@@ -94,6 +94,7 @@
 }
 
 .ResultInput {
+  cursor: text;
   width: calc(100% - 2.5rem);
 }
 

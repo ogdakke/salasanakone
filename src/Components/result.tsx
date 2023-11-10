@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/Components/ui"
+import useEventListener from "@/common/hooks/useEventListener"
 import { t } from "@/common/utils"
 import { numbers, specials } from "@/config"
 import copyToClipboard from "@/services/copyToClipboard"
@@ -16,7 +17,15 @@ import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
 import { Transition, motion } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
-import { ReactNode, createContext, useContext, useEffect, useState } from "react"
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 
 enum EditorState {
   EDITOR = "editor",
@@ -85,6 +94,7 @@ export const InputContext = createContext<InputContextProps>({
 
 const Result = () => {
   const {
+    generate,
     formState: { isEditing, formValues },
   } = useContext(FormContext)
 
@@ -161,6 +171,18 @@ const Result = () => {
     changeToResult()
     setFinalPassword({ passwordValue: value, isEdited: true })
   }
+  const documentRef = useRef<Document>(document)
+
+  function handleKeyPress(e: KeyboardEvent) {
+    if (!isEditing && e.ctrlKey && e.key === "e") {
+      return handleEditClick()
+    }
+    if (e.ctrlKey && e.key === "Enter") {
+      return void generate()
+    }
+  }
+
+  useEventListener("keypress", handleKeyPress, documentRef)
 
   const resultIconOptions = new Map<EditorState, ReactNode>()
 
@@ -183,7 +205,10 @@ const Result = () => {
   if (passwordValue === undefined) {
     return (
       <div className="resultWrapper">
-        <Loading height="1.3125rem" width="20%" radius="8px" />
+        <div className="flex space-between">
+          <Loading height="1.0625rem" width="7.5rem" radius="0.5rem" />
+          <Loading height="1.0625rem" width="1.5rem" radius="0.5rem" />
+        </div>
         <Loading height="68px" radius="12px" />
       </div>
     )
@@ -202,18 +227,15 @@ const Result = () => {
   )
   resultOptions.set(EditorState.EDITOR, <Editor handleSave={handleSave} />)
 
-  /** ctrl + e listener for editing */
-  window.addEventListener("keypress", (ev) => {
-    if (!isEditing && ev.ctrlKey && ev.key === "e") {
-      handleEditClick()
-      return
-    }
-  })
-
   return (
     <InputContext.Provider value={{ inputValue, setInputValue }}>
-      <div className="resultWrapper">
-        <label className="resultHelperText">{t("clickToCopyOrEdit")}</label>
+      <div className="resultWrapper blurFadeIn">
+        <div className="flex space-between">
+          <label className="resultHelperText">{t("clickToCopyOrEdit")}</label>
+          <span aria-label={t("length").toString()} className="resultHelperText pr-025">
+            {passwordValue.length ?? "-"}
+          </span>
+        </div>
         <div className="relative">
           {resultOptions.get(editor)}
           <TooltipProvider delayDuration={600}>
@@ -283,23 +305,21 @@ const Editor = ({ handleSave }: EditorProps) => {
   const { setInputValue } = useContext(InputContext)
   const { passwordValue } = useContext(ResultContext).finalPassword
 
+  const handleFocusingInput = useCallback(() => {
+    document.getElementById("resultInput")?.focus()
+    return () => {}
+  }, [])
+
   return (
     <motion.div
-      transition={{ duration: 0.175 }}
-      animate={{ scale: 1 }}
-      whileTap={{
-        scale: 0.985,
-        transition: {
-          duration: 0.25,
-        },
-      }}
-      initial={{ scale: 1 }}
       title={t("clickToCopyOrEdit").toString()}
       className="card interact resultCard relative"
       itemType="button"
       tabIndex={0}
+      onClick={handleFocusingInput}
     >
       <InputComponent
+        id="resultInput"
         className="ResultInput"
         placeholder={t("resultInputPlaceholder").toString()}
         defaultValue={passwordValue}
@@ -390,14 +410,8 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
           handleSave(inputValue)
         }
       }}
-      initial={{
-        scale: 0.4,
-        opacity: 0,
-      }}
-      animate={{
-        scale: 1,
-        opacity: 1,
-      }}
+      initial={{ scale: 0.4, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
       transition={fade}

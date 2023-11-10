@@ -4,7 +4,9 @@ import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/C
 import { t, validateLength } from "@/common/utils"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
 import { IndexableFormValues, InputLabel, InputValue } from "@/models"
-import { ReactNode, useContext } from "react"
+import { motion } from "framer-motion"
+import { Check } from "iconoir-react"
+import { ReactNode, useContext, useRef } from "react"
 
 type InputFieldProps = {
   option: InputLabel
@@ -100,27 +102,47 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
 }
 
 const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: TextInputProps) => {
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handleSave = () => {
+    if (inputRef.current?.value) {
+      valuesToForm(option, validateLength(inputRef.current?.value, inputFieldMaxLength), "value")
+      inputRef.current.blur()
+    }
+  }
+
   return (
     <div key={option} className="textInputBox">
       {formValues.words.selected ? (
-        <div className="fadeIn labelOnTop">
-          <Label className="flex-bottom" title={values.info} htmlFor={option}>
-            {labelForCheckbox(option)}
-            {isDisabled ? <span className="resultHelperText">{t("promptToAddWords")}</span> : null}
-          </Label>
-          <InputComponent
-            disabled={isDisabled}
-            className="TextInput"
-            maxLength={inputFieldMaxLength}
-            defaultValue={formValues[option].value}
-            placeholder={t("inputPlaceholder").toString()}
-            onChange={(event) => {
-              valuesToForm(option, validateLength(event.target.value, inputFieldMaxLength), "value")
-            }}
-          />
+        <div className="blurFadeIn flex InputWithButton">
+          <div className="labelOnTop">
+            <Label className="flex-bottom" title={values.info} htmlFor={option}>
+              {labelForCheckbox(option)}
+              {isDisabled ? (
+                <span className="resultHelperText">{t("promptToAddWords")}</span>
+              ) : null}
+            </Label>
+            <InputComponent
+              ref={inputRef}
+              disabled={isDisabled}
+              aria-label={t("delimiterInputLabel").toString()}
+              className="TextInput"
+              maxLength={inputFieldMaxLength}
+              defaultValue={formValues[option].value}
+              placeholder={t("inputPlaceholder").toString()}
+              onPointerCancel={(event) => {
+                valuesToForm(
+                  option,
+                  validateLength(event.currentTarget.value, inputFieldMaxLength),
+                  "value",
+                )
+              }}
+            />
+          </div>
+          <SaveTextInputButton handleSave={handleSave} />
         </div>
       ) : (
-        <div key={option} className="flex-center fadeIn">
+        <div key={option} className="flex-center blurFadeIn">
           <Checkbox
             aria-label={labelForCheckbox(option)}
             className="checkboxRoot"
@@ -135,6 +157,26 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
         </div>
       )}
     </div>
+  )
+}
+
+const SaveTextInputButton = ({ handleSave }: { handleSave: () => void }) => {
+  return (
+    <motion.button
+      className="SaveInputButton interact"
+      aria-label={t("saveCustomDelimiter").toString()}
+      data-animate={true}
+      onClick={(e) => {
+        e.preventDefault()
+        handleSave()
+      }}
+      initial={{ scale: 0.4, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <Check alignmentBaseline="central" className="flex-center" />
+    </motion.button>
   )
 }
 

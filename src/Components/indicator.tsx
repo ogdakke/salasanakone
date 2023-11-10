@@ -30,7 +30,7 @@ export function StrengthIndicator(): React.ReactNode {
     if (!formValues.words.selected && sliderValue > 15) {
       // a rndm string needs not be checked if its longer than 15
       return false
-    } else if (formValues.words.selected && sliderValue > 4) {
+    } else if (formValues.words.selected && sliderValue > 3) {
       return false
     }
     return true
