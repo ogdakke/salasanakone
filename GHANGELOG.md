@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- [#7](https://github.com/ogdakke/salasanakone/pull/7): UI overhaul, result input for checking user's own string
+- [#6](https://github.com/ogdakke/salasanakone/pull/6): UI overhaul and general clean up
+
 ## [2.0.4](https://github.com/ogdakke/salasanakone/commits/2.0.4) - 04-11-2023
 
 - [#5](https://github.com/ogdakke/salasanakone/pull/5): Persist FormContext to localStorage, move passphrase to ResultContext

@@ -6,7 +6,7 @@ import "@/styles/Description.css"
 const Description: React.FC = () => {
   return (
     <article aria-label="description" className="description">
-      <h2>Salasanakone luo muistettavia salasanoja</h2>
+      <h2>Salasanakone luo ja tarkistaa salasanoja</h2>
       <section>
         <h3 className="mt-05">
           Salasanageneraattori, jolla luot vahvan salasanan suomen kielen sanoista
@@ -24,12 +24,9 @@ const Description: React.FC = () => {
         </p>
         <ul>
           <li>
-            Tällä salasanakoneella voit luoda automaattisesti vahvan ja muistettavissa olevan
-            salalauseen, joka on lisäksi vielä helppo kirjoittaa.
-          </li>
-          <li>
-            Tämä salasanageneraattori on vahva tapa luoda salasanoja, sillä itse keksimät salasanat
-            ovat monesti liian heikkoja ja arvattavia.
+            Tällä salasanageneraattorilla voit luoda automaattisesti vahvan ja muistettavissa olevan
+            salalauseen, joka on lisäksi vielä helppo kirjoittaa. Voit myös tarkistaa oman salasanan
+            vahvuuden.
           </li>
         </ul>
         <h3 className="mt-05">Onko salalause parempi kuin salasana?</h3>
@@ -86,6 +83,9 @@ const Description: React.FC = () => {
         <br />
         Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta saat kaiken irti
         ominaisuuksista!
+        <br />
+        Katso sivuston lähdekoodi täältä:{" "}
+        <ExternalLink link="https://github.com/ogdakke/salasanakone">GitHub</ExternalLink>
       </p>
     </article>
   )
