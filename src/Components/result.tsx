@@ -202,6 +202,7 @@ const Result = () => {
   )
   resultOptions.set(EditorState.EDITOR, <Editor handleSave={handleSave} />)
 
+  /** ctrl + e listener for editing */
   window.addEventListener("keypress", (ev) => {
     if (!isEditing && ev.ctrlKey && ev.key === "e") {
       handleEditClick()
@@ -212,7 +213,7 @@ const Result = () => {
   return (
     <InputContext.Provider value={{ inputValue, setInputValue }}>
       <div className="resultWrapper">
-        <p className="resultHelperText">{t("clickToCopyOrEdit")}</p>
+        <label className="resultHelperText">{t("clickToCopyOrEdit")}</label>
         <div className="relative">
           {resultOptions.get(editor)}
           <TooltipProvider delayDuration={600}>
@@ -237,7 +238,7 @@ const Result = () => {
 }
 
 /**
- * Result
+ * Result component
  */
 const ResultComponentNoEdit = ({
   handleCopyClick,
@@ -276,9 +277,8 @@ const ResultComponentNoEdit = ({
 }
 
 /**
- * Editor
+ * Editor component
  */
-
 const Editor = ({ handleSave }: EditorProps) => {
   const { setInputValue } = useContext(InputContext)
   const { passwordValue } = useContext(ResultContext).finalPassword
@@ -326,6 +326,7 @@ const EditButton = ({ handleEditClick }: EditButtonProps) => {
   return (
     <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
+      aria-label={t("editResultDesc").toString()}
       data-animate={true}
       onClick={() => handleEditClick()}
       onKeyDown={(e) => {
@@ -357,6 +358,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
     <motion.span
       layout
       aria-hidden={!isCopied}
+      aria-label={t("hasCopiedPassword").toString()}
       className="Shine absoluteCopiedIcon interact"
       data-animate={copyIconShouldAnimate ? true : false}
       initial={{ scale: 0.4 }}
@@ -380,6 +382,7 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
   return (
     <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
+      aria-label={t("saveAndCheckString").toString()}
       data-animate={true}
       onClick={() => handleSave(inputValue)}
       onKeyDown={(e) => {

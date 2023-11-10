@@ -14,11 +14,12 @@ export const appTranslations: Translations = {
     update: "Päivitä",
     new: "Uusi",
     tryAgain: "Yritä uudelleen",
-    useWords: "Käytä sanoja",
-    useCharacters: "Käytä merkkejä",
+    useWords: "Salalause",
+    useCharacters: "Normaali salasana",
     useUppercase: "Isot kirjaimet",
     useNumbers: "Numerot",
     useDenominator: "Välimerkit",
+    useSpecials: "Erikoismerkit",
     strengthDefault: "Arvio",
     strengthAwful: "Surkea",
     strengthBad: "Huono",
@@ -30,8 +31,8 @@ export const appTranslations: Translations = {
     hasCopiedPassword: "Kopioitu",
     inputPlaceholder: 'Esim. "-" tai "?" tai "3!"',
     promptToAddWords: "Lisää sanoja",
-    lengthOfPassPhrase: "Pituus: {passLength} sanaa",
-    lengthOfPassWord: "Pituus: {passLength} merkkiä",
+    lengthOfPassPhrase: "{passLength} sanaa",
+    lengthOfPassWord: "{passLength} merkkiä",
     leaveFeedback: "Jätä palaute",
     thanksForFeedback: "Kiitos palautteesta",
     thanksForFeedbackLeaveAnother:
@@ -46,8 +47,12 @@ export const appTranslations: Translations = {
     worksOffline: "Sivusto toimii nyt myös ilman verkkoyhteyttä.",
     somethingWentWrong: "Jotain meni vikaan.",
     editResult: "Muokkaa",
+    editResultDesc: "Muokkaa ja tarkista haluamasi sana",
     resultInputPlaceholder: "Minkä vahvuus tarkistetaan?",
     saveResult: "Tarkista",
+    saveAndCheckString: "Tallenna ja tarkista sanan vahvuus.",
+    passphraseDesc:
+      "Salalause on sanoista koostuva, pidempi salasana. Siinä on usein välimerkkejä sanojen välissä, ja numero jossain kohdassa.",
   },
 }
 

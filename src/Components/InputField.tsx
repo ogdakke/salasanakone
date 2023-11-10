@@ -1,3 +1,4 @@
+import { SimplePopover } from "@/Components"
 import { FormContext } from "@/Components/FormContext"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
 import { t, validateLength } from "@/common/utils"
@@ -86,11 +87,12 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
       >
         <div className="flex-center">
           <RadioGroupItem value="true" id="r1" key="r1" />
-          <Label htmlFor="r1">Käytä sanoja</Label>
+          <Label htmlFor="r1">{t("useWords")}</Label>
+          <SimplePopover type="info" text={t("passphraseDesc")} />
         </div>
         <div className="flex-center">
           <RadioGroupItem value="false" id="r2" key="r2" />
-          <Label htmlFor="r2">Käytä merkkejä</Label>
+          <Label htmlFor="r2">{t("useCharacters")}</Label>
         </div>
       </RadioGroup>
     </div>
@@ -129,7 +131,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
             id={option}
             value={values.selected.toString()}
           ></Checkbox>
-          <Label htmlFor={option}>Erikoismerkit</Label>
+          <Label htmlFor={option}>{t("useSpecials")}</Label>
         </div>
       )}
     </div>
