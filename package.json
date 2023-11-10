@@ -1,7 +1,6 @@
 {
   "name": "salasanakone",
   "private": true,
-  "version": "2.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -62,3 +61,4 @@
     "workbox-window": "^7.0.0"
   }
 }
+
