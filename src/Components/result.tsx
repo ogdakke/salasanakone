@@ -54,11 +54,24 @@ type CopyConditions = {
   copyIconIsHidden: boolean
 }
 
+type EditorProps = {
+  handleSave: (stringToSave?: string) => void
+}
+
 type ResultNoEditProps = {
   handleCopyClick: (finalPassword: string) => Promise<void>
   finalPassword: string
   highlightConditions: HighlightCondition[]
   conditions: CopyConditions
+}
+
+type CopiedButtonProps = {
+  conditions: CopyConditions
+  handleCopyClick: (finalPassword: string) => Promise<void>
+}
+
+type EditButtonProps = {
+  handleEditClick: () => void
 }
 
 type InputContextProps = {
@@ -223,67 +236,6 @@ const Result = () => {
   )
 }
 
-type EditButtonProps = {
-  handleEditClick: () => void
-}
-
-const EditButton = ({ handleEditClick }: EditButtonProps) => {
-  return (
-    <motion.span
-      className="Shine absoluteCopiedIcon EditButton interact"
-      data-animate={true}
-      onClick={() => handleEditClick()}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
-          handleEditClick()
-        }
-      }}
-      initial={{
-        scale: 0.4,
-        opacity: 0,
-      }}
-      animate={{
-        scale: 1,
-        opacity: 1,
-      }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-      transition={fade}
-    >
-      <EditPencil alignmentBaseline="central" className="flex-center" />
-    </motion.span>
-  )
-}
-
-type CopiedButtonProps = {
-  conditions: CopyConditions
-  handleCopyClick: (finalPassword: string) => Promise<void>
-}
-
-const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
-  const passwordValue = useContext(ResultContext).finalPassword.passwordValue ?? ""
-  const { isCopied, copyIconShouldAnimate } = conditions
-  return (
-    <motion.span
-      layout
-      aria-hidden={!isCopied}
-      className="Shine absoluteCopiedIcon interact"
-      data-animate={copyIconShouldAnimate ? true : false}
-      initial={{ scale: 0.4 }}
-      animate={{
-        opacity: isCopied ? 1 : 0,
-        scale: copyIconShouldAnimate ? 0.95 : 1,
-      }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
-      transition={fade}
-      onClick={() => void handleCopyClick(passwordValue)}
-    >
-      <ClipboardCheck alignmentBaseline="central" className="flex-center" />
-    </motion.span>
-  )
-}
-
 /**
  * Result
  */
@@ -326,9 +278,6 @@ const ResultComponentNoEdit = ({
 /**
  * Editor
  */
-type EditorProps = {
-  handleSave: (stringToSave?: string) => void
-}
 
 const Editor = ({ handleSave }: EditorProps) => {
   const { setInputValue } = useContext(InputContext)
@@ -370,6 +319,58 @@ const Editor = ({ handleSave }: EditorProps) => {
         autoFocus
       />
     </motion.div>
+  )
+}
+
+const EditButton = ({ handleEditClick }: EditButtonProps) => {
+  return (
+    <motion.span
+      className="Shine absoluteCopiedIcon EditButton interact"
+      data-animate={true}
+      onClick={() => handleEditClick()}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleEditClick()
+        }
+      }}
+      initial={{
+        scale: 0.4,
+        opacity: 0,
+      }}
+      animate={{
+        scale: 1,
+        opacity: 1,
+      }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
+      transition={fade}
+    >
+      <EditPencil alignmentBaseline="central" className="flex-center" />
+    </motion.span>
+  )
+}
+
+const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
+  const passwordValue = useContext(ResultContext).finalPassword.passwordValue ?? ""
+  const { isCopied, copyIconShouldAnimate } = conditions
+  return (
+    <motion.span
+      layout
+      aria-hidden={!isCopied}
+      className="Shine absoluteCopiedIcon interact"
+      data-animate={copyIconShouldAnimate ? true : false}
+      initial={{ scale: 0.4 }}
+      animate={{
+        opacity: isCopied ? 1 : 0,
+        scale: copyIconShouldAnimate ? 0.95 : 1,
+      }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
+      transition={fade}
+      onClick={() => void handleCopyClick(passwordValue)}
+    >
+      <ClipboardCheck alignmentBaseline="central" className="flex-center" />
+    </motion.span>
   )
 }
 
