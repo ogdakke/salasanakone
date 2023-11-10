@@ -38,4 +38,3 @@ export const ErrorComponent = ({ error, resetErrorBoundary }: Props) => {
     </div>
   )
 }
-

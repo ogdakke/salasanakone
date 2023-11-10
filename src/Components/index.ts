@@ -1,4 +1,5 @@
 export { InputField } from "./InputField"
+export { SimplePopover } from "./SimplePopover"
 export { Description } from "./description"
 export { ErrorComponent } from "./errorComponent"
 export { Feedback } from "./feedback"

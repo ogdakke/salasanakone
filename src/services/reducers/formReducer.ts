@@ -1,16 +1,11 @@
-import { defaultFormValues, defaultSliderValue } from "@/../config"
-import { IndexableFormValues, InputValue } from "@/models"
-
-export type FormState = {
-  formValues: IndexableFormValues
-  sliderValue: number
-  isDisabled: boolean
-}
+import { defaultFormValues, defaultSliderValue } from "@/config"
+import { FormState, IndexableFormValues, InputValue } from "@/models"
 
 export const initialFormState: FormState = {
   formValues: defaultFormValues,
   sliderValue: defaultSliderValue,
   isDisabled: false,
+  isEditing: false,
 }
 
 export enum FormActionKind {
@@ -19,6 +14,7 @@ export enum FormActionKind {
   SET_SLIDERVALUE = "setSlidervalue",
   TOGGLE_FIELD = "toggleSelectedField",
   SET_DISABLED = "setDisabled",
+  SET_EDITING = "setEditing",
 }
 
 /** Actions */
@@ -38,6 +34,7 @@ export type FormActions =
   | SetSliderValueAction
   | { type: FormActionKind.TOGGLE_FIELD; payload: keyof IndexableFormValues }
   | { type: FormActionKind.SET_DISABLED; payload: boolean }
+  | { type: FormActionKind.SET_EDITING; payload: boolean }
 
 function reducer(state: FormState, action: FormActions): FormState {
   switch (action.type) {
@@ -82,6 +79,8 @@ function reducer(state: FormState, action: FormActions): FormState {
       }
     case FormActionKind.SET_DISABLED:
       return { ...state, isDisabled: action.payload }
+    case FormActionKind.SET_EDITING:
+      return { ...state, isEditing: action.payload }
     default:
       return state
   }
@@ -94,6 +93,11 @@ export const setSlidervalue = (value: number): SetSliderValueAction => ({
 
 export const setFormField = (payload: SetFormFieldAction["payload"]) => ({
   type: FormActionKind.SET_FORM_FIELD,
+  payload,
+})
+
+export const setEditing = (payload: boolean) => ({
+  type: FormActionKind.SET_EDITING,
   payload,
 })
 

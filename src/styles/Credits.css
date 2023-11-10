@@ -1,3 +1,28 @@
+.credits {
+  display: flex;
+  width: min-content;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0 0 0;
+  margin: 0rem 0rem;
+  justify-items: end;
+
+  font-weight: 600;
+}
+
+.credits:hover {
+  opacity: 0.8;
+  transition: all 200ms ease-in-out;
+  text-decoration: underline;
+}
+
+.credits a {
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5rem 0rem;
+}
+
 .credits #svgProfileImage {
   filter: blur(3px) !important;
   -webkit-filter: blur(3px) !important;

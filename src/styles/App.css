@@ -94,6 +94,10 @@
   text-decoration: none;
 }
 
+.blurFadeIn {
+  animation: blurIn 350ms ease-out;
+}
+
 .fadeIn {
   animation: fadeIn 200ms ease-in;
 }
@@ -128,6 +132,27 @@
 
 .pb-3 {
   padding-bottom: 3rem;
+}
+
+.pr-025 {
+  padding-right: 0.25rem;
+}
+
+.pr-05 {
+  padding-right: 0.5rem;
+}
+
+@keyframes blurIn {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+    -webkit-filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+    -webkit-filter: none;
+  }
 }
 
 @keyframes fadeIn {

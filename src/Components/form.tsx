@@ -1,39 +1,32 @@
-import { defaultFormValues } from "@/../config"
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
-import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
-import { Loading } from "@/Components/ui"
+import { FormContext, FormDispatchContext } from "@/Components/FormContext"
 import { t } from "@/common/utils"
+import { defaultFormValues } from "@/config"
 import { IndexableFormValues, InputLabel } from "@/models"
-import { createCryptoKey } from "@/services/createCrypto"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
-import React, { Suspense, useCallback, useContext, useEffect } from "react"
+import React, { useCallback, useContext, useEffect } from "react"
 const Result = React.lazy(async () => await import("@/Components/result"))
 const initialInputKeys = Object.entries(defaultFormValues)
 
-export function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
-  return createCryptoKey(sliderValue.toString(), formValues)
-}
-
 export default function FormComponent(): React.ReactNode {
   const { formState, generate, validate } = useContext(FormContext)
-  const finalPassword = useContext(ResultContext)
 
   if (!validate) {
     throw new Error("No validate found from context")
   }
 
   const context = useContext(FormDispatchContext)
-  const dispatch = context?.dispatch
+  const dispatch = context.dispatch
 
   const { SET_FORM_FIELD } = FormActionKind
 
-  const { formValues, sliderValue, isDisabled } = formState
+  const { formValues, sliderValue } = formState
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
-      const updatedValue: IndexableFormValues = { ...formValues }
+      const updatedValue: IndexableFormValues = formValues
       validate(sliderValue, formState)
       if (value === "selected" && typeof event === "boolean") {
         updatedValue[option] = { ...updatedValue[option], selected: event }
@@ -61,33 +54,29 @@ export default function FormComponent(): React.ReactNode {
   )
 
   useEffect(() => {
-    generate()
+    const gen = async () => {
+      await generate()
+    }
+    gen().catch(console.error)
   }, [generate, sliderValue, validate])
 
   return (
     <>
-      <form className="form fadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
-        <Suspense fallback={<Loading height="71px" />}>
-          <Result
-            aria-busy="false"
-            aria-label={t("resultHelperLabel")}
-            finalPassword={finalPassword}
-          />
-        </Suspense>
+      <form className="form blurFadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
+        <Result aria-busy="false" aria-label={t("resultHelperLabel")} />
         <div className="inputGrid">
           {initialInputKeys.map(([item, entry]) => (
             <InputField
               key={item}
               option={item as InputLabel}
               values={entry}
-              isDisabled={isDisabled}
               valuesToForm={valuesToForm}
             />
           ))}
           <SliderComponent />
         </div>
       </form>
-      <div className="IslandWrapper">
+      <div className="IslandWrapper blurFadeIn">
         <SimpleIsland />
       </div>
     </>

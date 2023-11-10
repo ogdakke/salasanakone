@@ -1,6 +1,6 @@
+import { appTranslations } from "@/assets/texts"
+import { Locale, TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
-import { appTranslations } from "../../assets/texts"
-import { Locale, TranslationKey } from "../../models/translations"
 
 // const currentLocale: Locale = Locale.fi // You can determine this dynamically based on user preference or browser setting
 let currentLocale = Locale.fi
