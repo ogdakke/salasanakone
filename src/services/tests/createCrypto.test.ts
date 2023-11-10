@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { maxLengthForChars, minLengthForChars } from "../../../config"
+import { maxLengthForChars, minLengthForChars } from "../../config"
 import { IndexableFormValues, InputType } from "../../models"
 import { createCryptoKey } from "../createCrypto"
 
@@ -171,9 +171,9 @@ describe("Generated string includes certain characters based on user input", () 
  * - amount of special characters
  */
 describe("Generated passphrase is valid", () => {
-  it("Should have correct amount of words", () => {
+  it("Should have correct amount of words", async () => {
     const splitter = "-"
-    const passphrase = createCryptoKey(
+    const passphrase = await createCryptoKey(
       "2",
       testData({
         word: true,
@@ -186,10 +186,10 @@ describe("Generated passphrase is valid", () => {
     expect(splitStringArr).toHaveLength(2)
   })
 
-  it("Should have correct amount of splitter characters", () => {
+  it("Should have correct amount of splitter characters", async () => {
     const splitter = "?"
     const regExp = /[?]/g
-    const passphrase = createCryptoKey(
+    const passphrase = await createCryptoKey(
       "3",
       testData({
         word: true,
@@ -202,3 +202,4 @@ describe("Generated passphrase is valid", () => {
     expect(splitterArr).toStrictEqual(["?", "?"])
   })
 })
+

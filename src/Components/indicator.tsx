@@ -8,9 +8,9 @@ type StrengthBarProps = {
   strength: number
 }
 
-const checker = async (password: string) => {
-  const check = await import("../services/checkStrength").then((r) => r.checkStrength)
-  return check(password.toString())
+const checker = async (finalPassword: string) => {
+  const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
+  return check(finalPassword.toString())
 }
 
 let didInit = false
@@ -18,33 +18,34 @@ let didCheckTime = false
 
 export function StrengthIndicator(): React.ReactNode {
   const formContext = useContext(FormContext)
-  const password = useContext(ResultContext)
+  const { finalPassword } = useContext(ResultContext)
+  const { passwordValue, isEdited } = finalPassword
 
   const {
     formState: { formValues, sliderValue },
   } = formContext
+  const [score, setScore] = useState(-1)
 
   const validateString = useCallback(() => {
     if (!formValues.words.selected && sliderValue > 15) {
       // a rndm string needs not be checked if its longer than 15
       return false
-    } else if (formValues.words.selected && sliderValue > 4) {
+    } else if (formValues.words.selected && sliderValue > 3) {
       return false
     }
     return true
   }, [formValues, sliderValue])
-  const [score, setScore] = useState(4)
 
   // runs excactly once when mounting/initializing. -- so runs on page load.
   /**
    * 4.4.2023
-   * Not sure how this actually works, it does not seem to get used, since I've tried to make it wait for a non null password
+   * Not sure how this actually works, it does not seem to get used, since I've tried to make it wait for a non null finalPassword
    */
   useEffect(() => {
     if (!didInit) {
-      if (password && password.length > 0) {
+      if (passwordValue && passwordValue.length > 0) {
         didInit = true
-        checker(validateLength(password, 70))
+        checker(validateLength(passwordValue, 70))
           .then((r) => {
             console.info("Mounted and checking...")
             setScore(r.score)
@@ -65,12 +66,17 @@ export function StrengthIndicator(): React.ReactNode {
     // THis is run each time the dep array gets a hit, so set time check to false initially
     didCheckTime = false
 
+    // hop out early to check user inputted string without all the perf optimizations
+    if (isEdited && passwordValue) {
+      return checkUserInputtedString(passwordValue)
+    }
+
     // fake checking for better perf
     if (!validateString()) {
       setScore(4)
     } else {
-      if (password && password.length > 0) {
-        checker(password)
+      if (passwordValue && passwordValue.length > 0) {
+        checker(passwordValue)
           .then((r) => {
             setScore(r.score)
             console.log("Checked strength succesfully")
@@ -86,7 +92,16 @@ export function StrengthIndicator(): React.ReactNode {
     return () => {
       didCheckTime = true
     }
-  }, [password])
+  }, [finalPassword])
+
+  function checkUserInputtedString(str: string) {
+    const validatedLengthString = validateLength(str, 128)
+    checker(validatedLengthString)
+      .then((r) => {
+        setScore(r.score)
+      })
+      .catch(console.error)
+  }
 
   return (
     <div className="IslandContent PillIsland">
@@ -96,7 +111,9 @@ export function StrengthIndicator(): React.ReactNode {
 }
 
 const StrengthBar = ({ strength }: StrengthBarProps) => {
-  const percentageOfMax = (strength / 4) * 100
+  // If percentage is 0, it would move the bar too much left, so 10 is the minimum
+  const percentageOfMax = Math.max(15, (strength / 4) * 100)
+
   const widthOffset = 15
   const barWidthOver100 = widthOffset * 2
   const barWidth = 100 + barWidthOver100
@@ -141,32 +158,37 @@ function numberToString(value: number) {
       // To be able to set the state, these need to be strings
       return {
         label: t("strengthAwful").toString(),
-        color: "var(--red-worst-rgb)",
+        color: "rgb(180, 0, 10)",
       }
     case 1:
       return {
         label: t("strengthBad").toString(),
-        color: "var(--orange-bad-rgb)",
+        color: "rgb(220, 60, 60)",
       }
     case 2:
       return {
         label: t("strengthOk").toString(),
-        color: "var(--yellow-ok-rgb)",
+        color: "rgb(240, 173, 78)",
       }
     case 3:
       return {
         label: t("strengthGood").toString(),
-        color: "var(--yellow-better-rgb)",
+        color: "rgb(117, 215, 93)",
       }
     case 4:
       return {
         label: t("strengthGreat").toString(),
-        color: "var(--green-go-rgb)",
+        color: "rgb(108, 241, 109)",
+      }
+    case -1:
+      return {
+        label: t("loadingStrength").toString(),
+        color: "var(--background-hex)",
       }
     default:
       return {
         label: t("strengthDefault").toString(),
-        color: "var(--foreground-rgb)",
+        color: "",
       }
   }
 }

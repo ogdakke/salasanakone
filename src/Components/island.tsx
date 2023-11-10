@@ -31,18 +31,16 @@ const PillLoadingState = () => {
 
 /**
  * Pill island
- *
  */
 const PillIsland = () => {
   const { generate } = useContext(FormContext)
-
   const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
 
   const buttonSize = 32
   return (
     <motion.div
-      onClick={() => generate()}
-      onKeyDown={(e) => (e.key === "Enter" ? generate() : null)}
+      onClick={() => void generate()}
+      onKeyDown={(e) => (e.key === "Enter" ? void generate() : null)}
       style={{ willChange: "transform" }}
       className="IslandBackground"
       whileFocus={{ scale: 1.05 }}

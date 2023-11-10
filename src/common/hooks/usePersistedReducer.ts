@@ -22,4 +22,3 @@ export const usePersistedReducer = <T extends Record<PropertyKey, unknown>, A>(
 
   return [state, dispatch, clearValue]
 }
-

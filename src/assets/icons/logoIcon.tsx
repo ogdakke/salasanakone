@@ -42,4 +42,3 @@ export const LogoIcon = ({ ...props }, size: { width: number; height: number }) 
     </svg>
   )
 }
-

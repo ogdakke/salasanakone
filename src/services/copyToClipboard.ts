@@ -6,7 +6,6 @@ export default async function copyToClipboard(valueToCopy: string): Promise<stri
 const writeToClipboard = async (value: string) => {
   if (navigator != null) {
     const clipBoard = navigator.clipboard
-
     try {
       await clipBoard.writeText(value)
       console.log("Copied value successfully")
@@ -19,3 +18,4 @@ const writeToClipboard = async (value: string) => {
     throw new Error("No navigator detected")
   }
 }
+

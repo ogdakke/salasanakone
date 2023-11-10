@@ -108,6 +108,7 @@
   -webkit-user-select: none;
   user-select: none;
   cursor: pointer;
+  height: 4.25rem;
 }
 
 .inputWrapper {
@@ -226,6 +227,10 @@
 
   .inputWrapper input {
     font-size: 1rem;
+  }
+
+  .resultCard {
+    height: 4.375rem;
   }
 }
 

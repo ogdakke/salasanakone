@@ -1,6 +1,6 @@
 :root {
-  --formContainerHeight: 18.9375rem;
-  --max-width: 800px;
+  --formContainerHeight: 18.5625rem;
+  --max-width: 680px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
   scroll-behavior: smooth;
@@ -12,6 +12,7 @@
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
+  --background-hex: #fff;
   --background-rgb: 255, 255, 255;
   --helperTextColor: #2a2a2a;
   --form-bg-rgb: 254, 254, 254;
@@ -50,7 +51,7 @@
   --black-text-rgb: 10, 10, 10;
 
   --green-go-rgb: rgb(108, 241, 109);
-  /*loistva*/
+  /*loistava*/
   --yellow-better-rgb: rgb(117, 215, 93);
   /* Hyvä*/
   --yellow-ok-rgb: rgb(240, 173, 78);
@@ -69,6 +70,7 @@
   :root {
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
+    --background-hex: #000000;
     --background-rgb: 10, 10, 10;
     --helperTextColor: #636363;
     --form-bg-rgb: 15, 15, 15;
@@ -195,7 +197,7 @@ input {
 @media (max-width: 700px) {
   :root {
     --oneRem: 1rem;
-    --formContainerHeight: 24.4rem;
+    --formContainerHeight: 21.8125rem;
     --islandHeight: 84.1875px;
   }
 }
