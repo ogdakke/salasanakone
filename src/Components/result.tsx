@@ -50,7 +50,7 @@ const highlightSpecials: HighlightCondition = {
 
 type CopyConditions = {
   isCopied: boolean
-  shouldAnimate: boolean
+  copyIconShouldAnimate: boolean
   copyIconIsHidden: boolean
 }
 
@@ -85,7 +85,7 @@ const Result = () => {
   const [inputValue, setInputValue] = useState<string | undefined>(undefined)
   const [conditions, setConditions] = useState<CopyConditions>({
     isCopied: false,
-    shouldAnimate: false,
+    copyIconShouldAnimate: false,
     copyIconIsHidden: true,
   })
 
@@ -94,8 +94,11 @@ const Result = () => {
   const showEditComponents = !isEditing && conditions.copyIconIsHidden
 
   const copy = () => {
-    setConditions((s) => ({ ...s, shouldAnimate: true }))
-    const time = setTimeout(() => setConditions((s) => ({ ...s, shouldAnimate: false })), 700)
+    setConditions((s) => ({ ...s, copyIconShouldAnimate: true }))
+    const time = setTimeout(
+      () => setConditions((s) => ({ ...s, copyIconShouldAnimate: false })),
+      700,
+    )
     setConditions((s) => ({ ...s, isCopied: true, copyIconIsHidden: false }))
     return () => clearTimeout(time)
   }
@@ -127,7 +130,7 @@ const Result = () => {
   }, [formValues, passwordValue])
 
   useEffect(() => {
-    setConditions({ isCopied: false, shouldAnimate: false, copyIconIsHidden: true })
+    setConditions({ isCopied: false, copyIconShouldAnimate: false, copyIconIsHidden: true })
   }, [passwordValue])
 
   const highlightConditions = [highlightNumbers, highlightSpecials]
@@ -259,17 +262,17 @@ type CopiedButtonProps = {
 
 const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
   const passwordValue = useContext(ResultContext).finalPassword.passwordValue ?? ""
-  const { isCopied, shouldAnimate } = conditions
+  const { isCopied, copyIconShouldAnimate } = conditions
   return (
     <motion.span
       layout
       aria-hidden={!isCopied}
       className="Shine absoluteCopiedIcon interact"
-      data-animate={shouldAnimate ? true : false}
+      data-animate={copyIconShouldAnimate ? true : false}
       initial={{ scale: 0.4 }}
       animate={{
         opacity: isCopied ? 1 : 0,
-        scale: shouldAnimate ? 0.95 : 1,
+        scale: copyIconShouldAnimate ? 0.95 : 1,
       }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.98 }}
@@ -351,6 +354,8 @@ const Editor = ({ handleSave }: EditorProps) => {
         className="ResultInput"
         placeholder={t("resultInputPlaceholder").toString()}
         defaultValue={passwordValue}
+        minLength={1}
+        maxLength={128}
         onFocus={(e) => {
           setInputValue(e.target.value)
         }}
