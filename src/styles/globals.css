@@ -1,5 +1,5 @@
 :root {
-  --formContainerHeight: 18.5625rem;
+  --formContainerHeight: 18.5125rem;
   --max-width: 680px;
   --scrollbar-size: 20px;
   --border-radius: 12px;
@@ -63,7 +63,7 @@
 
   --red-rgb: 255, 60, 60;
   --success-gradient: linear-gradient(to right, #0ba360, #12b45b, #1ad659, #10be6a);
-  --emphasis: rgb(5, 189, 17);
+  --emphasis: #05bd11;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -100,7 +100,7 @@
     --callout-border-rgb: 108, 108, 108;
     --card-rgb: 100, 100, 100;
     --card-border-rgb: 200, 200, 200;
-    --emphasis: rgb(108, 241, 109);
+    --emphasis: #6cf16d;
   }
 }
 
@@ -197,7 +197,7 @@ input {
 @media (max-width: 700px) {
   :root {
     --oneRem: 1rem;
-    --formContainerHeight: 21.8125rem;
+    --formContainerHeight: 23.5125rem;
     --islandHeight: 84.1875px;
   }
 }

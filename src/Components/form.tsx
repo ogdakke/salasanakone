@@ -1,5 +1,5 @@
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { FormContext, FormDispatchContext } from "@/Components/providers"
 import { t } from "@/common/utils"
 import { defaultFormValues } from "@/config"
 import { IndexableFormValues, InputLabel } from "@/models"
@@ -7,22 +7,20 @@ import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
 import React, { useCallback, useContext, useEffect } from "react"
+
 const Result = React.lazy(async () => await import("@/Components/result"))
 const initialInputKeys = Object.entries(defaultFormValues)
 
 export default function FormComponent(): React.ReactNode {
   const { formState, generate, validate } = useContext(FormContext)
+  const { dispatch } = useContext(FormDispatchContext)
+  const { formValues, sliderValue } = formState
 
   if (!validate) {
     throw new Error("No validate found from context")
   }
 
-  const context = useContext(FormDispatchContext)
-  const dispatch = context.dispatch
-
   const { SET_FORM_FIELD } = FormActionKind
-
-  const { formValues, sliderValue } = formState
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
@@ -58,6 +56,7 @@ export default function FormComponent(): React.ReactNode {
       await generate()
     }
     gen().catch(console.error)
+    return () => void gen()
   }, [generate, sliderValue, validate])
 
   return (

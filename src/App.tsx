@@ -8,7 +8,7 @@ import { t } from "@/common/utils"
 import "@/styles/App.css"
 import "@/styles/globals.css"
 import { ErrorBoundary, FallbackProps } from "react-error-boundary"
-
+const FormProvider = React.lazy(async () => await import("@/Components/providers/FormProvider"))
 const FormComponent = React.lazy(async () => await import("@/Components/form"))
 
 function App() {
@@ -17,9 +17,11 @@ function App() {
       <div className="wrapper">
         <Header />
         <Suspense fallback={<FormComponentLoader />}>
-          <ErrorBoundary fallbackRender={FormErrorComponent}>
-            <FormComponent />
-          </ErrorBoundary>
+          <FormProvider>
+            <ErrorBoundary fallbackRender={FormErrorComponent}>
+              <FormComponent />
+            </ErrorBoundary>
+          </FormProvider>
         </Suspense>
         <Description />
         {/* <Feedback /> */}

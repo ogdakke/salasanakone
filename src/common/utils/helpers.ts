@@ -15,17 +15,15 @@ function correctType(arg: unknown, desiredType: unknown): boolean {
 
 /**
  * returns a substring of desired length {length} if str is longer than {length}
- * @param length desired length
+ * @param len desired length
  * @param str string to check
  * @returns string, mutated or not
  */
-const validateLength = (str: string, length: number): string => {
+const validateLength = (str: string, len: number): string => {
   let final = str
-  if (str.length > length) {
-    final = str.substring(0, length)
-    // console.log(`Checked string of length ${final.length}`)
+  if (str.length > len) {
+    final = str.substring(0, len)
   }
-  // console.log(`Checked string of length ${final.length}`)
   return final
 }
 
@@ -38,3 +36,4 @@ function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
 }
 
 export { correctType, filterKey, isKey, validateLength }
+

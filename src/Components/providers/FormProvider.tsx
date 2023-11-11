@@ -8,13 +8,18 @@ import {
   ResultContextProps,
   ResultState,
 } from "@/models"
-import { createCryptoKey } from "@/services/createCrypto"
 import reducer, {
   FormActionKind,
   initialFormState,
   setSlidervalue,
 } from "@/services/reducers/formReducer"
 import { ReactNode, createContext, useCallback, useState } from "react"
+
+const createCryptoKey = (await import("@/services/createCrypto")).createCryptoKey
+
+function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
+  return createCryptoKey(sliderValue.toString(), formValues)
+}
 
 export const FormContext = createContext<FormContextProps>({
   formState: initialFormState,
@@ -30,7 +35,7 @@ export const ResultContext = createContext<ResultContextProps>({
   setFinalPassword: () => undefined,
 })
 
-export const FormProvider = ({ children }: { children: ReactNode }) => {
+const FormProvider = ({ children }: { children: ReactNode }) => {
   const [formState, dispatch] = usePersistedReducer(reducer, initialFormState, "formState")
   const [finalPassword, setFinalPassword] = useState<ResultState>({
     passwordValue: undefined,
@@ -59,10 +64,6 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     },
     [formState.formValues],
   )
-
-  function generatePassword(formValues: IndexableFormValues, sliderValue: number) {
-    return createCryptoKey(sliderValue.toString(), formValues)
-  }
 
   const generate = useCallback(async () => {
     inputFieldShouldDisable()
@@ -95,4 +96,6 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     </FormContext.Provider>
   )
 }
+
+export default FormProvider
 

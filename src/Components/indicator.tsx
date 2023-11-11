@@ -1,8 +1,10 @@
-import { FormContext, ResultContext } from "@/Components/FormContext"
+import { FormContext, ResultContext } from "@/Components/providers/FormProvider"
 import { t, validateLength } from "@/common/utils"
+import { FormState, ResultState } from "@/models"
 import "@/styles/Indicator.css"
+import { ZxcvbnResult } from "@zxcvbn-ts/core"
 import { motion, useAnimate } from "framer-motion"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 
 type StrengthBarProps = {
   strength: number
@@ -10,98 +12,73 @@ type StrengthBarProps = {
 
 const checker = async (finalPassword: string) => {
   const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
-  return check(finalPassword.toString())
+  try {
+    return check(finalPassword.toString())
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error in checking", error)
+    }
+  }
 }
-
-let didInit = false
-let didCheckTime = false
 
 export function StrengthIndicator(): React.ReactNode {
   const formContext = useContext(FormContext)
-  const { finalPassword } = useContext(ResultContext)
-  const { passwordValue, isEdited } = finalPassword
+  const result = useContext(ResultContext).finalPassword
+  const { formState } = formContext
 
-  const {
-    formState: { formValues, sliderValue },
-  } = formContext
   const [score, setScore] = useState(-1)
 
-  const validateString = useCallback(() => {
-    if (!formValues.words.selected && sliderValue > 15) {
-      // a rndm string needs not be checked if its longer than 15
-      return false
-    } else if (formValues.words.selected && sliderValue > 3) {
-      return false
-    }
-    return true
-  }, [formValues, sliderValue])
+  const checkDelay = 400
 
-  // runs excactly once when mounting/initializing. -- so runs on page load.
-  /**
-   * 4.4.2023
-   * Not sure how this actually works, it does not seem to get used, since I've tried to make it wait for a non null finalPassword
-   */
-  useEffect(() => {
-    if (!didInit) {
-      if (passwordValue && passwordValue.length > 0) {
-        didInit = true
-        checker(validateLength(passwordValue, 70))
-          .then((r) => {
-            console.info("Mounted and checking...")
-            setScore(r.score)
-          })
-          .catch((err) => {
-            if (err instanceof Error) throw new Error(err.message)
-            console.error("Error in checking", err)
-          })
-          .finally(() => {
-            console.info("Mounted and checked successfully.")
-          })
+  const shouldCheckPassphrase = (form: FormState) =>
+    form.formValues.words.selected && form.sliderValue < 4
+  const shouldCheckPassword = (form: FormState) =>
+    !form.formValues.words.selected && form.sliderValue < 16
+
+  const checkResult = useRef<ZxcvbnResult | undefined>(undefined)
+
+  const checkStrengthOnChange = useCallback(
+    async (passwordResult: ResultState, form: FormState) => {
+      const { passwordValue, isEdited } = passwordResult
+      const allowedLengths = { generated: 100, isEdited: 128 }
+
+      async function runAndSetCheck(strToCheck: string) {
+        const res = await checker(validateLength(strToCheck, allowedLengths.isEdited))
+        checkResult.current = checkForInvalidCheckResult(res)
+        setScore(checkResult.current.score)
       }
-    }
-    // eslint-disable react-hooks/exhaustive-deps
-  }, [])
 
-  useEffect(() => {
-    // THis is run each time the dep array gets a hit, so set time check to false initially
-    didCheckTime = false
-
-    // hop out early to check user inputted string without all the perf optimizations
-    if (isEdited && passwordValue) {
-      return checkUserInputtedString(passwordValue)
-    }
-
-    // fake checking for better perf
-    if (!validateString()) {
-      setScore(4)
-    } else {
-      if (passwordValue && passwordValue.length > 0) {
-        checker(passwordValue)
-          .then((r) => {
-            setScore(r.score)
-            console.log("Checked strength succesfully")
-          })
-          .catch((err) => {
-            if (err instanceof Error) {
-              throw new Error(err.message)
-            }
-            console.error(err)
-          })
+      if (passwordValue) {
+        if (isEdited) {
+          await runAndSetCheck(passwordValue)
+        } else if (shouldCheckPassphrase(form) || shouldCheckPassword(form)) {
+          await runAndSetCheck(passwordValue)
+        } else {
+          setScore(4)
+        }
       }
-    }
-    return () => {
-      didCheckTime = true
-    }
-  }, [finalPassword])
+    },
+    [],
+  )
 
-  function checkUserInputtedString(str: string) {
-    const validatedLengthString = validateLength(str, 128)
-    checker(validatedLengthString)
-      .then((r) => {
-        setScore(r.score)
-      })
-      .catch(console.error)
+  function checkForInvalidCheckResult(result?: ZxcvbnResult) {
+    if (!result) {
+      throw new Error("Check error")
+    }
+    return result
   }
+
+  useEffect(() => {
+    if (result.isEdited) {
+      return void checkStrengthOnChange(result, formState)
+    } else {
+      const checkerTimer = setTimeout(
+        () => void checkStrengthOnChange(result, formState).then((res) => res),
+        checkDelay,
+      )
+      return () => clearTimeout(checkerTimer)
+    }
+  }, [result, checkStrengthOnChange])
 
   return (
     <div className="IslandContent PillIsland">

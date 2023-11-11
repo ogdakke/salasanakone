@@ -2,6 +2,11 @@
   display: flex;
 }
 
+.PopoverTrigger:hover {
+  opacity: 0.8;
+  transition: opacity 150ms ease-out;
+}
+
 .PopoverContent {
   font-size: 0.875rem;
   -webkit-hyphens: auto;

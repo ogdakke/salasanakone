@@ -1,4 +1,9 @@
-import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
+import {
+  FormContext,
+  FormDispatchContext,
+  ResultContext,
+  ThemeContext,
+} from "@/Components/providers"
 import {
   HighlightCondition,
   Highlighter,
@@ -41,22 +46,6 @@ const fade: Transition = {
   scale: { duration: 0.2 },
 }
 
-const highlightNumbers: HighlightCondition = {
-  condition: numbers,
-  style: {
-    fontWeight: "bold",
-    color: "var(--emphasis)",
-  },
-}
-
-const highlightSpecials: HighlightCondition = {
-  condition: specials,
-  style: {
-    fontWeight: "bold",
-    opacity: "0.7",
-  },
-}
-
 type CopyConditions = {
   isCopied: boolean
   copyIconShouldAnimate: boolean
@@ -92,6 +81,9 @@ export const InputContext = createContext<InputContextProps>({
   setInputValue: () => undefined,
 })
 
+/**
+ *  Main component
+ */
 const Result = () => {
   const {
     generate,
@@ -104,6 +96,7 @@ const Result = () => {
   } = useContext(ResultContext)
 
   const { dispatch } = useContext(FormDispatchContext)
+  const theme = useContext(ThemeContext)
 
   const [inputValue, setInputValue] = useState<string | undefined>(undefined)
   const [conditions, setConditions] = useState<CopyConditions>({
@@ -115,6 +108,21 @@ const Result = () => {
   const [editor, setEditor] = useState<EditorState>(EditorState.RESULT)
 
   const showEditComponents = !isEditing && conditions.copyIconIsHidden
+  const highlightNumbers: HighlightCondition = {
+    condition: numbers,
+    style: {
+      fontWeight: "bold",
+      color: theme === "dark" ? "#6cf16d" : "#05bd11",
+    },
+  }
+
+  const highlightSpecials: HighlightCondition = {
+    condition: specials,
+    style: {
+      fontWeight: "bold",
+      opacity: "0.7",
+    },
+  }
 
   const copy = () => {
     setConditions((s) => ({ ...s, copyIconShouldAnimate: true }))
@@ -233,7 +241,7 @@ const Result = () => {
         <div className="flex space-between">
           <label className="resultHelperText">{t("clickToCopyOrEdit")}</label>
           <span aria-label={t("length").toString()} className="resultHelperText pr-025">
-            {passwordValue.length ?? "-"}
+            {isEditing ? inputValue?.length : passwordValue.length ?? "-"}
           </span>
         </div>
         <div className="relative">
@@ -324,7 +332,7 @@ const Editor = ({ handleSave }: EditorProps) => {
         placeholder={t("resultInputPlaceholder").toString()}
         defaultValue={passwordValue}
         minLength={1}
-        maxLength={128}
+        maxLength={256}
         onFocus={(e) => {
           setInputValue(e.target.value)
         }}
