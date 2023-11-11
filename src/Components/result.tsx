@@ -108,7 +108,6 @@ const Result = () => {
   const [editor, setEditor] = useState<EditorState>(EditorState.RESULT)
 
   const showEditComponents = !isEditing && conditions.copyIconIsHidden
-
   const highlightNumbers: HighlightCondition = {
     condition: numbers,
     style: {
@@ -242,7 +241,7 @@ const Result = () => {
         <div className="flex space-between">
           <label className="resultHelperText">{t("clickToCopyOrEdit")}</label>
           <span aria-label={t("length").toString()} className="resultHelperText pr-025">
-            {passwordValue.length ?? "-"}
+            {isEditing ? inputValue?.length : passwordValue.length ?? "-"}
           </span>
         </div>
         <div className="relative">
