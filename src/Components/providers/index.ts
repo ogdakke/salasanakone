@@ -1,3 +1,3 @@
-export { FormContext, FormDispatchContext, FormProvider, ResultContext } from "./FormProvider"
+export { FormContext, FormDispatchContext, ResultContext } from "./FormProvider"
 export { ThemeContext, ThemeProvider } from "./ThemeProvider"
 
