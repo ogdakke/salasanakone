@@ -2,8 +2,9 @@ import { FormContext, ResultContext } from "@/Components/providers"
 import { t, validateLength } from "@/common/utils"
 import { FormState, ResultState } from "@/models"
 import "@/styles/Indicator.css"
+import { ZxcvbnResult } from "@zxcvbn-ts/core"
 import { motion, useAnimate } from "framer-motion"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 
 type StrengthBarProps = {
   strength: number
@@ -23,46 +24,55 @@ const checker = (finalPassword: string) => {
 export function StrengthIndicator(): React.ReactNode {
   const formContext = useContext(FormContext)
   const result = useContext(ResultContext).finalPassword
-  const {
-    formState: { formValues, sliderValue },
-  } = formContext
+  const { formState } = formContext
 
   const [score, setScore] = useState(-1)
-  const checkDelay = 800
+
+  const checkDelay = 400
 
   const shouldCheckPassphrase = (form: FormState) =>
     form.formValues.words.selected && form.sliderValue < 4
   const shouldCheckPassword = (form: FormState) =>
     !form.formValues.words.selected && form.sliderValue < 16
 
+  const checkResult = useRef<ZxcvbnResult | undefined>(undefined)
+
   const checkStrengthOnChange = useCallback((passwordResult: ResultState, form: FormState) => {
     const { passwordValue, isEdited } = passwordResult
     const allowedLengths = { generated: 100, isEdited: 128 }
 
-    console.log(passwordValue)
+    function runAndSetCheck(strToCheck: string) {
+      const res = checker(validateLength(strToCheck, allowedLengths.isEdited))
+      checkResult.current = checkForInvalidCheckResult(res)
+      setScore(checkResult.current.score)
+      console.log("Time to check", checkResult.current?.calcTime)
+    }
 
-    if (passwordValue && (shouldCheckPassphrase(form) || shouldCheckPassword(form))) {
-      const validatedLengthString = isEdited
-        ? validateLength(passwordValue, allowedLengths.isEdited)
-        : validateLength(passwordValue, allowedLengths.generated)
-      const checkResult = checker(validatedLengthString)
-      if (!checkResult) {
-        throw new Error("Checking-error")
+    if (passwordValue) {
+      if (isEdited) {
+        runAndSetCheck(passwordValue)
+      } else if (shouldCheckPassphrase(form) || shouldCheckPassword(form)) {
+        runAndSetCheck(passwordValue)
+      } else {
+        setScore(4)
       }
-      setScore(checkResult?.score)
-      console.log("Time to check", checkResult.calcTime)
-
-      return
     }
   }, [])
 
-  useEffect(() => {
-    const checkerTimer = setTimeout(
-      () => checkStrengthOnChange(result, formContext.formState),
-      checkDelay,
-    )
+  function checkForInvalidCheckResult(result?: ZxcvbnResult) {
+    if (!result) {
+      throw new Error("Check error")
+    }
+    return result
+  }
 
-    return () => clearTimeout(checkerTimer)
+  useEffect(() => {
+    if (result.isEdited) {
+      return checkStrengthOnChange(result, formState)
+    } else {
+      const checkerTimer = setTimeout(() => checkStrengthOnChange(result, formState), checkDelay)
+      return () => clearTimeout(checkerTimer)
+    }
   }, [result, checkStrengthOnChange])
 
   return (

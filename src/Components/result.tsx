@@ -333,7 +333,7 @@ const Editor = ({ handleSave }: EditorProps) => {
         placeholder={t("resultInputPlaceholder").toString()}
         defaultValue={passwordValue}
         minLength={1}
-        maxLength={128}
+        maxLength={256}
         onFocus={(e) => {
           setInputValue(e.target.value)
         }}
