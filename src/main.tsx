@@ -1,4 +1,5 @@
-import { FormProvider } from "@/Components/FormContext"
+import { ThemeProvider } from "@/Components/providers"
+import { FormProvider } from "@/Components/providers/FormProvider"
 import { MotionConfig } from "framer-motion"
 import React from "react"
 import ReactDOM from "react-dom/client"
@@ -16,9 +17,11 @@ export const createCrypto = import("./services/createCrypto")
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <MotionConfig reducedMotion="user">
-      <FormProvider>
-        <App />
-      </FormProvider>
+      <ThemeProvider>
+        <FormProvider>
+          <App />
+        </FormProvider>
+      </ThemeProvider>
     </MotionConfig>
   </React.StrictMode>,
 )

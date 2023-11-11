@@ -1,5 +1,6 @@
-import { FormContext, ResultContext } from "@/Components/FormContext"
+import { FormContext, ResultContext } from "@/Components/providers"
 import { t, validateLength } from "@/common/utils"
+import { FormState, ResultState } from "@/models"
 import "@/styles/Indicator.css"
 import { motion, useAnimate } from "framer-motion"
 import { useCallback, useContext, useEffect, useState } from "react"
@@ -7,101 +8,62 @@ import { useCallback, useContext, useEffect, useState } from "react"
 type StrengthBarProps = {
   strength: number
 }
+const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
 
-const checker = async (finalPassword: string) => {
-  const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
-  return check(finalPassword.toString())
+const checker = (finalPassword: string) => {
+  try {
+    return check(finalPassword.toString())
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error in checking", error)
+    }
+  }
 }
-
-let didInit = false
-let didCheckTime = false
 
 export function StrengthIndicator(): React.ReactNode {
   const formContext = useContext(FormContext)
-  const { finalPassword } = useContext(ResultContext)
-  const { passwordValue, isEdited } = finalPassword
-
+  const result = useContext(ResultContext).finalPassword
   const {
     formState: { formValues, sliderValue },
   } = formContext
+
   const [score, setScore] = useState(-1)
+  const checkDelay = 800
 
-  const validateString = useCallback(() => {
-    if (!formValues.words.selected && sliderValue > 15) {
-      // a rndm string needs not be checked if its longer than 15
-      return false
-    } else if (formValues.words.selected && sliderValue > 3) {
-      return false
-    }
-    return true
-  }, [formValues, sliderValue])
+  const shouldCheckPassphrase = (form: FormState) =>
+    form.formValues.words.selected && form.sliderValue < 4
+  const shouldCheckPassword = (form: FormState) =>
+    !form.formValues.words.selected && form.sliderValue < 16
 
-  // runs excactly once when mounting/initializing. -- so runs on page load.
-  /**
-   * 4.4.2023
-   * Not sure how this actually works, it does not seem to get used, since I've tried to make it wait for a non null finalPassword
-   */
-  useEffect(() => {
-    if (!didInit) {
-      if (passwordValue && passwordValue.length > 0) {
-        didInit = true
-        checker(validateLength(passwordValue, 70))
-          .then((r) => {
-            console.info("Mounted and checking...")
-            setScore(r.score)
-          })
-          .catch((err) => {
-            if (err instanceof Error) throw new Error(err.message)
-            console.error("Error in checking", err)
-          })
-          .finally(() => {
-            console.info("Mounted and checked successfully.")
-          })
+  const checkStrengthOnChange = useCallback((passwordResult: ResultState, form: FormState) => {
+    const { passwordValue, isEdited } = passwordResult
+    const allowedLengths = { generated: 100, isEdited: 128 }
+
+    console.log(passwordValue)
+
+    if (passwordValue && (shouldCheckPassphrase(form) || shouldCheckPassword(form))) {
+      const validatedLengthString = isEdited
+        ? validateLength(passwordValue, allowedLengths.isEdited)
+        : validateLength(passwordValue, allowedLengths.generated)
+      const checkResult = checker(validatedLengthString)
+      if (!checkResult) {
+        throw new Error("Checking-error")
       }
+      setScore(checkResult?.score)
+      console.log("Time to check", checkResult.calcTime)
+
+      return
     }
-    // eslint-disable react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    // THis is run each time the dep array gets a hit, so set time check to false initially
-    didCheckTime = false
+    const checkerTimer = setTimeout(
+      () => checkStrengthOnChange(result, formContext.formState),
+      checkDelay,
+    )
 
-    // hop out early to check user inputted string without all the perf optimizations
-    if (isEdited && passwordValue) {
-      return checkUserInputtedString(passwordValue)
-    }
-
-    // fake checking for better perf
-    if (!validateString()) {
-      setScore(4)
-    } else {
-      if (passwordValue && passwordValue.length > 0) {
-        checker(passwordValue)
-          .then((r) => {
-            setScore(r.score)
-            console.log("Checked strength succesfully")
-          })
-          .catch((err) => {
-            if (err instanceof Error) {
-              throw new Error(err.message)
-            }
-            console.error(err)
-          })
-      }
-    }
-    return () => {
-      didCheckTime = true
-    }
-  }, [finalPassword])
-
-  function checkUserInputtedString(str: string) {
-    const validatedLengthString = validateLength(str, 128)
-    checker(validatedLengthString)
-      .then((r) => {
-        setScore(r.score)
-      })
-      .catch(console.error)
-  }
+    return () => clearTimeout(checkerTimer)
+  }, [result, checkStrengthOnChange])
 
   return (
     <div className="IslandContent PillIsland">
