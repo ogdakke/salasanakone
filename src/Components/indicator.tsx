@@ -1,4 +1,4 @@
-import { FormContext, ResultContext } from "@/Components/providers"
+import { FormContext, ResultContext } from "@/Components/providers/FormProvider"
 import { t, validateLength } from "@/common/utils"
 import { FormState, ResultState } from "@/models"
 import "@/styles/Indicator.css"
@@ -9,9 +9,9 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react"
 type StrengthBarProps = {
   strength: number
 }
-const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
 
-const checker = (finalPassword: string) => {
+const checker = async (finalPassword: string) => {
+  const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
   try {
     return check(finalPassword.toString())
   } catch (error) {
@@ -37,27 +37,29 @@ export function StrengthIndicator(): React.ReactNode {
 
   const checkResult = useRef<ZxcvbnResult | undefined>(undefined)
 
-  const checkStrengthOnChange = useCallback((passwordResult: ResultState, form: FormState) => {
-    const { passwordValue, isEdited } = passwordResult
-    const allowedLengths = { generated: 100, isEdited: 128 }
+  const checkStrengthOnChange = useCallback(
+    async (passwordResult: ResultState, form: FormState) => {
+      const { passwordValue, isEdited } = passwordResult
+      const allowedLengths = { generated: 100, isEdited: 128 }
 
-    function runAndSetCheck(strToCheck: string) {
-      const res = checker(validateLength(strToCheck, allowedLengths.isEdited))
-      checkResult.current = checkForInvalidCheckResult(res)
-      setScore(checkResult.current.score)
-      console.log("Time to check", checkResult.current?.calcTime)
-    }
-
-    if (passwordValue) {
-      if (isEdited) {
-        runAndSetCheck(passwordValue)
-      } else if (shouldCheckPassphrase(form) || shouldCheckPassword(form)) {
-        runAndSetCheck(passwordValue)
-      } else {
-        setScore(4)
+      async function runAndSetCheck(strToCheck: string) {
+        const res = await checker(validateLength(strToCheck, allowedLengths.isEdited))
+        checkResult.current = checkForInvalidCheckResult(res)
+        setScore(checkResult.current.score)
       }
-    }
-  }, [])
+
+      if (passwordValue) {
+        if (isEdited) {
+          await runAndSetCheck(passwordValue)
+        } else if (shouldCheckPassphrase(form) || shouldCheckPassword(form)) {
+          await runAndSetCheck(passwordValue)
+        } else {
+          setScore(4)
+        }
+      }
+    },
+    [],
+  )
 
   function checkForInvalidCheckResult(result?: ZxcvbnResult) {
     if (!result) {
@@ -68,9 +70,12 @@ export function StrengthIndicator(): React.ReactNode {
 
   useEffect(() => {
     if (result.isEdited) {
-      return checkStrengthOnChange(result, formState)
+      return void checkStrengthOnChange(result, formState)
     } else {
-      const checkerTimer = setTimeout(() => checkStrengthOnChange(result, formState), checkDelay)
+      const checkerTimer = setTimeout(
+        () => void checkStrengthOnChange(result, formState).then((res) => res),
+        checkDelay,
+      )
       return () => clearTimeout(checkerTimer)
     }
   }, [result, checkStrengthOnChange])
