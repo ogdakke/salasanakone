@@ -114,14 +114,12 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
   return (
     <div key={option} className="textInputBox">
       {formValues.words.selected ? (
-        <div className="blurFadeIn flex InputWithButton">
-          <div className="labelOnTop">
-            <Label className="flex-bottom" title={values.info} htmlFor={option}>
-              {labelForCheckbox(option)}
-              {isDisabled ? (
-                <span className="resultHelperText">{t("promptToAddWords")}</span>
-              ) : null}
-            </Label>
+        <div className="labelOnTop">
+          <Label className="flex-bottom" title={values.info} htmlFor={option}>
+            {labelForCheckbox(option)}
+            {isDisabled ? <span className="resultHelperText">{t("promptToAddWords")}</span> : null}
+          </Label>
+          <div className="blurFadeIn flex InputWithButton">
             <InputComponent
               ref={inputRef}
               disabled={isDisabled}
@@ -138,8 +136,8 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
                 )
               }}
             />
+            <SaveTextInputButton handleSave={handleSave} />
           </div>
-          <SaveTextInputButton handleSave={handleSave} />
         </div>
       ) : (
         <div key={option} className="flex-center blurFadeIn">
