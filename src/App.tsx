@@ -2,6 +2,7 @@ import React, { Suspense } from "react"
 
 import { Description, ReloadPrompt } from "@/Components"
 import { Header } from "@/Components/Header"
+import { ThemeProvider } from "@/Components/ThemeProvider"
 import { ErrorComponent } from "@/Components/errorComponent"
 import { Loading } from "@/Components/ui"
 import { t } from "@/common/utils"
@@ -13,20 +14,22 @@ const FormComponent = React.lazy(async () => await import("@/Components/form"))
 
 function App() {
   return (
-    <main className="main">
-      <div className="wrapper">
-        <Header />
-        <Suspense fallback={<FormComponentLoader />}>
-          <ErrorBoundary fallbackRender={FormErrorComponent}>
-            <FormComponent />
-          </ErrorBoundary>
-        </Suspense>
-        <Description />
-        {/* <Feedback /> */}
-        {/* <Credits /> */}
-        <ReloadPrompt />
-      </div>
-    </main>
+    <ThemeProvider>
+      <main className="main">
+        <div className="wrapper">
+          <Header />
+          <Suspense fallback={<FormComponentLoader />}>
+            <ErrorBoundary fallbackRender={FormErrorComponent}>
+              <FormComponent />
+            </ErrorBoundary>
+          </Suspense>
+          <Description />
+          {/* <Feedback /> */}
+          {/* <Credits /> */}
+          <ReloadPrompt />
+        </div>
+      </main>
+    </ThemeProvider>
   )
 }
 

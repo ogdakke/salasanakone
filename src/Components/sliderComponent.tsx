@@ -1,4 +1,4 @@
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { FormContext, FormDispatchContext } from "@/Components/FormProvider"
 import {
   maxLengthForChars,
   maxLengthForWords,
@@ -67,3 +67,4 @@ const SliderComponent = () => {
 }
 
 export { SliderComponent }
+
