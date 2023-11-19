@@ -1,4 +1,4 @@
-import { FormContext } from "@/Components/FormContext"
+import { FormContext } from "@/Components/FormProvider"
 import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
 import "@/styles/Island.css"

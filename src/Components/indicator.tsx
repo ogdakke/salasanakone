@@ -1,4 +1,4 @@
-import { FormContext, ResultContext } from "@/Components/providers"
+import { FormContext, ResultContext } from "@/Components/FormProvider"
 import { t, validateLength } from "@/common/utils"
 import { FormState, ResultState } from "@/models"
 import "@/styles/Indicator.css"
@@ -8,7 +8,8 @@ import { useCallback, useContext, useEffect, useState } from "react"
 type StrengthBarProps = {
   strength: number
 }
-const check = await import("@/services/checkStrength").then((r) => r.checkStrength)
+const waitForcheck = await import("../services/checkStrength")
+const check = waitForcheck.checkStrength
 
 const checker = (finalPassword: string) => {
   try {
@@ -23,9 +24,7 @@ const checker = (finalPassword: string) => {
 export function StrengthIndicator(): React.ReactNode {
   const formContext = useContext(FormContext)
   const result = useContext(ResultContext).finalPassword
-  const {
-    formState: { formValues, sliderValue },
-  } = formContext
+  const { formState } = formContext
 
   const [score, setScore] = useState(-1)
   const checkDelay = 800
@@ -57,10 +56,7 @@ export function StrengthIndicator(): React.ReactNode {
   }, [])
 
   useEffect(() => {
-    const checkerTimer = setTimeout(
-      () => checkStrengthOnChange(result, formContext.formState),
-      checkDelay,
-    )
+    const checkerTimer = setTimeout(() => checkStrengthOnChange(result, formState), checkDelay)
 
     return () => clearTimeout(checkerTimer)
   }, [result, checkStrengthOnChange])

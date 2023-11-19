@@ -8,13 +8,14 @@ import {
   ResultContextProps,
   ResultState,
 } from "@/models"
-import { createCryptoKey } from "@/services/createCrypto"
 import reducer, {
   FormActionKind,
   initialFormState,
   setSlidervalue,
 } from "@/services/reducers/formReducer"
 import { ReactNode, createContext, useCallback, useState } from "react"
+const awaitCrypto = await import("@/services/createCrypto")
+const createCryptoKey = awaitCrypto.createCryptoKey
 
 export const FormContext = createContext<FormContextProps>({
   formState: initialFormState,

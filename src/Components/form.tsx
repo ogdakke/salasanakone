@@ -1,5 +1,5 @@
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { FormContext, FormDispatchContext } from "@/Components/FormProvider"
 import { t } from "@/common/utils"
 import { defaultFormValues } from "@/config"
 import { IndexableFormValues, InputLabel } from "@/models"
