@@ -277,4 +277,3 @@ const randomNumberOnString = (stringArr: string[]): string[] => {
   stringArr[indexToSelect] = paddedWithNumber
   return stringArr
 }
-

@@ -202,4 +202,3 @@ describe("Generated passphrase is valid", () => {
     expect(splitterArr).toStrictEqual(["?", "?"])
   })
 })
-

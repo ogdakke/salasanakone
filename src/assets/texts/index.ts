@@ -58,4 +58,3 @@ export const appTranslations: Translations = {
     saveCustomDelimiter: "Tallenna välimerkit",
   },
 }
-

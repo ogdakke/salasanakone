@@ -9,4 +9,3 @@ export const meta = {
   dweDisplayText: "dwe",
   dweUrl: "https://www.dwe.fi",
 }
-

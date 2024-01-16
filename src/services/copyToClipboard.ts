@@ -18,4 +18,3 @@ const writeToClipboard = async (value: string) => {
     throw new Error("No navigator detected")
   }
 }
-

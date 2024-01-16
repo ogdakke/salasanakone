@@ -50,4 +50,3 @@ export type ResultContextProps = {
   finalPassword: ResultState
   setFinalPassword: Dispatch<React.SetStateAction<ResultState>>
 }
-
