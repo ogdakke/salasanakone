@@ -22,4 +22,3 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     </MotionConfig>
   </React.StrictMode>,
 )
-

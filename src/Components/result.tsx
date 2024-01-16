@@ -422,4 +422,3 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
 }
 
 export default Result
-
