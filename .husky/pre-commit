@@ -2,7 +2,7 @@ if pnpm test -- --run --coverage; then
   printf "\nTests ran successfully\n" 
 else
   printf "\nTests FAILED...\n\n"
-fi
+fi;
 
 if pnpm lint; then
   printf "\nLinting ran successfully\n"

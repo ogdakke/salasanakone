@@ -61,8 +61,8 @@ const testData = (config: TestConfig = {}): IndexableFormValues => {
 describe("createCryptoKey creates a random string with correct length", () => {
   it("should return a string with length 10", () => {
     expect(createCryptoKey("10", testData())).toHaveLength(10)
-    expect(createCryptoKey("10", testData({ numbers: true }))).toHaveLength(10)
     expect(createCryptoKey("10", testData({ randomCharactersInString: true }))).toHaveLength(10)
+    expect(createCryptoKey("10", testData({ numbers: true }))).toHaveLength(10)
   })
 
   it("should return a string with length maxLengthForChars", () => {
@@ -115,10 +115,12 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("12jkasfäööä34")).toStrictEqual(false)
     expect(regExp.test("12jkasfä€öö.ä34_*")).toStrictEqual(false)
 
-    expect(createCryptoKey("10", testData({ uppercaseCharacters: true }))).toMatch(regExp)
-    expect(createCryptoKey("3", testData({ word: true, uppercaseCharacters: true }))).toMatch(
-      regExp,
-    )
+    expect(
+      async () => await createCryptoKey("10", testData({ uppercaseCharacters: true })),
+    ).toMatch(regExp)
+    expect(
+      async () => await createCryptoKey("3", testData({ word: true, uppercaseCharacters: true })),
+    ).toMatch(regExp)
   })
 
   it("Should include atleast one number", () => {
@@ -128,8 +130,10 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("tämäontesti")).toStrictEqual(false)
     expect(regExp.test("tämä*ontes-ti")).toStrictEqual(false)
 
-    expect(createCryptoKey("30", testData({ numbers: true }))).toMatch(regExp)
-    expect(createCryptoKey("4", testData({ word: true, numbers: true }))).toMatch(regExp)
+    expect(async () => await createCryptoKey("30", testData({ numbers: true }))).toMatch(regExp)
+    expect(async () => await createCryptoKey("4", testData({ word: true, numbers: true }))).toMatch(
+      regExp,
+    )
   })
 
   it("Should include specials", () => {
@@ -140,7 +144,9 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("thisisates2tstri4ng")).toStrictEqual(false)
     expect(regExp.test("tämäontesti")).toStrictEqual(false)
 
-    expect(createCryptoKey("30", testData({ randomCharactersInString: true }))).toMatch(regExp)
+    expect(
+      async () => await createCryptoKey("30", testData({ randomCharactersInString: true })),
+    ).toMatch(regExp)
   })
 
   it("Should include numbers and specials", () => {
@@ -154,11 +160,12 @@ describe("Generated string includes certain characters based on user input", () 
 
     // Characters
     expect(
-      createCryptoKey("30", testData({ randomCharactersInString: true, numbers: true })),
+      async () =>
+        await createCryptoKey("30", testData({ randomCharactersInString: true, numbers: true })),
     ).toMatch(regExp)
 
     // Words
-    expect(
+    expect(() =>
       createCryptoKey("5", testData({ word: true, randomCharactersInString: true, numbers: true })),
     ).toMatch(regExp)
   })
