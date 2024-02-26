@@ -71,4 +71,3 @@ const LargeScreenIslandLoader = () => (
 )
 
 export default App
-

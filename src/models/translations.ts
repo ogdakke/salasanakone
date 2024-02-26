@@ -8,4 +8,3 @@ export enum Locale {
   fi = "fi",
   en = "en",
 }
-

@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 if ! pnpm build; then
   printf "\nBuild FAILED... Aborting push\n\n"
   exit 1

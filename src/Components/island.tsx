@@ -62,4 +62,3 @@ const PillIsland = () => {
     </motion.button>
   )
 }
-

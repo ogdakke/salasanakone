@@ -1,4 +1,4 @@
-import { fi, en } from "@/assets/texts"
+import { en, fi } from "@/assets/texts"
 import { Locale, TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
 
