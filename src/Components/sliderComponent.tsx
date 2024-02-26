@@ -17,7 +17,7 @@ const { SET_SLIDERVALUE } = FormActionKind
 const SliderComponent = () => {
   const context = useContext(FormContext)
   const { validate, formState } = context
-  const { formValues, sliderValue } = formState
+  const { formValues, sliderValue, isEditing } = formState
   const { dispatch } = useContext(FormDispatchContext)
 
   if (!validate) {
@@ -27,7 +27,10 @@ const SliderComponent = () => {
   const sliderVal = (value: number): number => {
     const validated = validate(value, formState)
 
-    dispatch({ type: SET_SLIDERVALUE, payload: validated })
+    if (!isEditing) {
+      dispatch({ type: SET_SLIDERVALUE, payload: validated })
+    }
+
     return value
   }
 
@@ -67,3 +70,4 @@ const SliderComponent = () => {
 }
 
 export { SliderComponent }
+

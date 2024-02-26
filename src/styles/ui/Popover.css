@@ -1,5 +1,10 @@
 .PopoverTrigger {
   display: flex;
+  border-radius: 2px;
+}
+
+.PopoverTrigger:focus-visible {
+  outline: 1px solid rgba(var(--foreground-rgb), 1);
 }
 
 .PopoverContent {
@@ -161,3 +166,4 @@
     transform: translateX(0);
   }
 }
+

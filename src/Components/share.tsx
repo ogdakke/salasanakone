@@ -22,7 +22,7 @@ export const Share = () => {
           return val
         })
         .catch((err) => {
-          console.log("error sharing", err)
+          console.error("error sharing", err)
         })
     } else {
       await copyToClipboard(meta.url)

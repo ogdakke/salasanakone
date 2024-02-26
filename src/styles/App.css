@@ -126,6 +126,22 @@
   margin-bottom: 0.5rem;
 }
 
+.p-15 {
+  padding: 1.5rem;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+.p-05 {
+  padding: 0.5rem;
+}
+
+.p-025 {
+  padding: 0.25rem;
+}
+
 .pb-15 {
   padding-bottom: 1.5rem;
 }
@@ -148,6 +164,7 @@
     filter: blur(6px);
     -webkit-filter: blur(6px);
   }
+
   to {
     opacity: 1;
     filter: none;
@@ -159,6 +176,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -167,9 +185,11 @@
 .opacity-05 {
   opacity: 0.5;
 }
+
 .opacity-075 {
   opacity: 0.75;
 }
+
 .opacity-1 {
   opacity: 1 !important;
 }
@@ -177,21 +197,27 @@
 .gap-0125 {
   gap: 0.125rem;
 }
+
 .gap-025 {
   gap: 0.25rem;
 }
+
 .gap-05 {
   gap: 0.5rem;
 }
+
 .gap-075 {
   gap: 0.75rem;
 }
+
 .gap-1 {
   gap: 1rem;
 }
+
 .gap-125 {
   gap: 1.25rem;
 }
+
 .gap-15 {
   gap: 1.5rem;
 }

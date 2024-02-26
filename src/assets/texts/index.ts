@@ -1,14 +1,15 @@
 import { Translations } from "@/models/translations"
 
-export const appTranslations: Translations = {
-  en: {
-    salasanakone: "Passphrase Generator",
-    clickToCopyOrEdit: "Copy or edit",
-    hasCopiedPassword: "Password is copied",
-    inputPlaceholder: "eg. '-' or '?'",
-    promptToAddWords: "Add words",
-  },
-  fi: {
+export const en: Translations = {
+  salasanakone: "Passphrase Generator",
+  new: 'new',
+  clickToCopyOrEdit: "Copy or edit",
+  hasCopiedPassword: "Password is copied",
+  inputPlaceholder: "eg. '-' or '?'",
+  promptToAddWords: "Add words",
+}
+
+export const fi = {
     salasanakone: "Salasanakone",
     ok: "Ok",
     update: "Päivitä",
@@ -26,6 +27,7 @@ export const appTranslations: Translations = {
     strengthOk: "Ok",
     strengthGood: "Hyvä",
     strengthGreat: "Loistava",
+    loadingStrength: "Lasketaan...",
     timeToCrack: "Murtamisaika",
     clickToCopyOrEdit: "Kopioi tai muokkaa",
     hasCopiedPassword: "Kopioitu",
@@ -56,5 +58,4 @@ export const appTranslations: Translations = {
     length: "Salasanan pituus",
     delimiterInputLabel: "Välimerkit, jotka erottavat sanat",
     saveCustomDelimiter: "Tallenna välimerkit",
-  },
-}
+} as const

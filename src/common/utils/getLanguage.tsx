@@ -1,8 +1,8 @@
-import { appTranslations } from "@/assets/texts"
+import { fi, en } from "@/assets/texts"
 import { Locale, TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
 
-// const currentLocale: Locale = Locale.fi // You can determine this dynamically based on user preference or browser setting
+// const currentLocale: Locale = Locale.fi
 let currentLocale = Locale.fi
 
 function getLocale() {
@@ -21,7 +21,7 @@ const t = (
   key: TranslationKey,
   placeholders?: Record<PropertyKey, string>,
 ): (string | JSX.Element)[] => {
-  let translation = appTranslations[currentLocale][key] || key
+  let translation = currentLocale === Locale.fi ? fi[key] : en[key] || key
 
   if (placeholders) {
     // Handle interpolation

@@ -2,17 +2,6 @@ function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
   return k in x
 }
 
-function correctType(arg: unknown, desiredType: unknown): boolean {
-  const isType = typeof arg
-  if (isType === desiredType) {
-    // console.log("Type does match", isType, " is ", desiredType);
-    return true
-  } else {
-    console.error("Type does not match", isType, " is not ", desiredType)
-    return false
-  }
-}
-
 /**
  * returns a substring of desired length {length} if str is longer than {length}
  * @param length desired length
@@ -37,4 +26,4 @@ function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
   return rest
 }
 
-export { correctType, filterKey, isKey, validateLength }
+export { filterKey, isKey, validateLength }

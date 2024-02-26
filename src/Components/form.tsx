@@ -29,23 +29,19 @@ export default function FormComponent(): React.ReactNode {
       const updatedValue: IndexableFormValues = formValues
       validate(sliderValue, formState)
       if (value === "selected" && typeof event === "boolean") {
-        updatedValue[option] = { ...updatedValue[option], selected: event }
-
         dispatch({
           type: SET_FORM_FIELD,
           payload: {
             field: option,
-            selected: updatedValue[option].selected,
+            selected: event,
           },
         })
       } else if (typeof event === "string") {
-        updatedValue[option] = { ...updatedValue[option], value: event }
-
         dispatch({
           type: SET_FORM_FIELD,
           payload: {
             field: option,
-            value: updatedValue[option].value,
+            value: event,
           },
         })
       }
@@ -82,3 +78,4 @@ export default function FormComponent(): React.ReactNode {
     </>
   )
 }
+

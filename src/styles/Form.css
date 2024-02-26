@@ -19,7 +19,7 @@
   padding-top: 2rem;
   padding: 1rem;
   background-color: rgba(var(--form-bg-rgb), 1);
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.05);
   border-radius: calc(var(--border-radius) + 1rem);
   box-shadow: 2px 4px 35px 0px #0000001a;
 }
@@ -93,14 +93,6 @@
   font-size: 0.875rem;
   line-height: 1.5;
   max-width: 30ch;
-}
-
-.resultWrapper {
-  -webkit-user-select: none;
-  user-select: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
 }
 
 .resultCard {
@@ -233,3 +225,4 @@
     height: 4.375rem;
   }
 }
+

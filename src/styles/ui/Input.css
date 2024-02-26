@@ -1,5 +1,6 @@
 .TextInput {
   grid-area: input;
+  width: 100%;
   display: flex;
   border: 1px dashed rgba(var(--callout-border-rgb), 0.3);
   border-radius: 0.5rem;
@@ -33,8 +34,23 @@
   gap: 0.5rem;
 }
 
+.InputButtonWrapper {
+  width: 100%;
+  justify-content: space-between;
+}
+
 .SaveInputButton {
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   border-radius: 0.5rem;
-  padding: 0.225rem;
+  padding: 0.225rem 0.175rem 0.225rem 0.225rem;
 }
+
+.SaveInputButton:focus-visible {
+  outline: 1px solid rgba(var(--foreground-rgb), 1);
+}
+
+.SaveInputButton:disabled {
+  cursor: not-allowed;
+  color: var(--helperTextColor);
+}
+

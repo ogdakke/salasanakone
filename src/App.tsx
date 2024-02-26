@@ -3,6 +3,7 @@ import React, { Suspense } from "react"
 import { Description, ReloadPrompt } from "@/Components"
 import { Header } from "@/Components/Header"
 import { ErrorComponent } from "@/Components/errorComponent"
+import { PillLoadingState } from "@/Components/island"
 import { Loading } from "@/Components/ui"
 import { t } from "@/common/utils"
 import "@/styles/App.css"
@@ -36,8 +37,13 @@ const FormComponentLoader = () => {
   return (
     <>
       <Loading height={"var(--formContainerHeight)"} />
-      {!isSmallScreen ? null : <span></span>}
-      {!isSmallScreen ? <LargeScreenIslandLoader /> : null}
+      {!isSmallScreen ? (
+        <LargeScreenIslandLoader />
+      ) : (
+        <div className="flex justify-center">
+          <PillLoadingState />
+        </div>
+      )}
     </>
   )
 }
@@ -65,3 +71,4 @@ const LargeScreenIslandLoader = () => (
 )
 
 export default App
+

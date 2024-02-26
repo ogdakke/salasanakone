@@ -1,46 +1,24 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui";
-import { InfoCircle } from "iconoir-react";
-import { ReactNode } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui"
+import { PropsWithChildren, ReactNode } from "react"
 type SimplePopoverProps = {
-	trigger?: ReactNode;
-	type?: PopoverIconTypes;
-	text: string | ReactNode;
-	size?: 14 | 16 | 18 | 20 | 24 | 28 | 32;
-	side?: "top" | "right" | "bottom" | "left";
-};
+  text: string | ReactNode
+  side?: "top" | "right" | "bottom" | "left"
+}
 
-export type PopoverIconTypes = "info";
+export type PopoverIconTypes = "info"
 
 export const SimplePopover = ({
-	trigger,
-	text,
-	size,
-	side = "top",
-	type,
-}: SimplePopoverProps): JSX.Element => {
-	const icons = new Map<PopoverIconTypes | undefined, ReactNode | null>();
-	/** icon types */
-	icons.set(undefined, null);
-	icons.set(
-		"info",
-		<InfoCircle
-			className="interact"
-			height={size ?? 18}
-			width={size ?? 18}
-			strokeWidth={2}
-			alignmentBaseline="central"
-		/>,
-	);
+  children,
+  text,
+  side = "top",
+}: PropsWithChildren<SimplePopoverProps>): JSX.Element => {
+  return (
+    <Popover>
+      <PopoverTrigger className="PopoverTrigger">{children}</PopoverTrigger>
+      <PopoverContent className="PopoverContent" side={side}>
+        {text}
+      </PopoverContent>
+    </Popover>
+  )
+}
 
-	return (
-		<Popover>
-			<PopoverTrigger className="PopoverTrigger">
-				{trigger ? trigger : undefined}
-				{icons.has(type) ? icons.get(type) : null}
-			</PopoverTrigger>
-			<PopoverContent className="PopoverContent" side={side}>
-				{text}
-			</PopoverContent>
-		</Popover>
-	);
-};

@@ -22,9 +22,7 @@ let variableMaxLength = maxLengthForChars
 export function createCryptoKey(sliderValue: string, data: IndexableFormValues): Promise<string> {
   variableMinLength = data.words.selected ? minLengthForWords : minLengthForChars
   variableMaxLength = data.words.selected ? maxLengthForWords : maxLengthForChars
-
   const length = validateStringToBeNumber(sliderValue)
-
   return handleReturns(length, data)
 }
 
@@ -277,3 +275,4 @@ const randomNumberOnString = (stringArr: string[]): string[] => {
   stringArr[indexToSelect] = paddedWithNumber
   return stringArr
 }
+

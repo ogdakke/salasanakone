@@ -166,7 +166,6 @@ const Result = () => {
     if (!value || value.trim().length < 1) {
       return
     }
-
     setInputValue(value)
     changeToResult()
     setFinalPassword({ passwordValue: value, isEdited: true })
@@ -184,23 +183,6 @@ const Result = () => {
 
   useEventListener("keypress", handleKeyPress, documentRef)
 
-  const resultIconOptions = new Map<EditorState, ReactNode>()
-
-  resultIconOptions.set(EditorState.EDITOR, <SaveEditButton handleSave={handleSave} />)
-  resultIconOptions.set(
-    EditorState.RESULT,
-    !showEditComponents ? (
-      <CopiedButton conditions={conditions} handleCopyClick={handleCopyClick} />
-    ) : (
-      <EditButton handleEditClick={handleEditClick} />
-    ),
-  )
-
-  const tooltipContentOptions = {
-    [EditorState.EDITOR]: t("saveResult"),
-    [EditorState.RESULT]: showEditComponents ? t("editResult") : t("hasCopiedPassword"),
-  }
-
   /** Early return for loading state */
   if (passwordValue === undefined) {
     return (
@@ -214,18 +196,43 @@ const Result = () => {
     )
   }
 
-  const resultOptions = new Map<EditorState, ReactNode>()
-
-  resultOptions.set(
-    EditorState.RESULT,
-    <ResultComponentNoEdit
-      handleCopyClick={handleCopyClick}
-      highlightConditions={highlightConditions}
-      finalPassword={passwordValue}
-      conditions={conditions}
-    />,
-  )
-  resultOptions.set(EditorState.EDITOR, <Editor handleSave={handleSave} />)
+  const resultOptions = new Map<
+    EditorState,
+    {
+      icon: ReactNode
+      iconTooltip: (string | JSX.Element)[]
+      component: ReactNode
+    }
+  >([
+    [
+      EditorState.RESULT,
+      {
+        iconTooltip: showEditComponents ? t("editResult") : t("hasCopiedPassword"),
+        icon: !showEditComponents ? (
+          <CopiedButton conditions={conditions} handleCopyClick={handleCopyClick} />
+        ) : (
+          <EditButton handleEditClick={handleEditClick} />
+        ),
+        component: (
+          <ResultComponentNoEdit
+            key={EditorState.RESULT}
+            handleCopyClick={handleCopyClick}
+            highlightConditions={highlightConditions}
+            finalPassword={passwordValue}
+            conditions={conditions}
+          />
+        ),
+      },
+    ],
+    [
+      EditorState.EDITOR,
+      {
+        iconTooltip: t("saveResult"),
+        icon: <SaveEditButton key={EditorState.EDITOR} handleSave={handleSave} />,
+        component: <Editor key={EditorState.EDITOR} handleSave={handleSave} />,
+      },
+    ],
+  ])
 
   return (
     <InputContext.Provider value={{ inputValue, setInputValue }}>
@@ -233,22 +240,22 @@ const Result = () => {
         <div className="flex space-between">
           <label className="resultHelperText">{t("clickToCopyOrEdit")}</label>
           <span aria-label={t("length").toString()} className="resultHelperText pr-025">
-            {passwordValue.length ?? "-"}
+            {isEditing ? inputValue?.length : passwordValue.length ?? "-"}
           </span>
         </div>
         <div className="relative">
-          {resultOptions.get(editor)}
+          {resultOptions.get(editor)?.component}
           <TooltipProvider delayDuration={600}>
             <Tooltip>
               <TooltipTrigger type="button" asChild>
                 <span className="absolute resultButtonWrapper">
-                  {resultIconOptions.get(editor)}
+                  {resultOptions.get(editor)?.icon}
                 </span>
               </TooltipTrigger>
               <TooltipContent sideOffset={4} className="TooltipContent">
                 <div className="flex-center">
                   <OpenSelectHandGesture width={20} height={20} />
-                  {tooltipContentOptions[editor]}
+                  {resultOptions.get(editor)?.iconTooltip}
                 </div>
               </TooltipContent>
             </Tooltip>
@@ -272,6 +279,8 @@ const ResultComponentNoEdit = ({
 
   return (
     <motion.div
+      // TODO: fix this role stuff and just make this a button
+      role="button"
       transition={{ duration: 0.175 }}
       initial={{ scale: 1 }}
       title={t("clickToCopyOrEdit").toString()}
@@ -279,8 +288,8 @@ const ResultComponentNoEdit = ({
       itemType="button"
       tabIndex={0}
       onClick={() => void handleCopyClick(finalPassword)}
-      onKeyDown={(e) => {
-        if (e.key === "Enter") {
+      onKeyUp={(e) => {
+        if (e.key === "Enter" || e.key === "Space") {
           void handleCopyClick(finalPassword)
         }
       }}
@@ -349,7 +358,7 @@ const EditButton = ({ handleEditClick }: EditButtonProps) => {
       aria-label={t("editResultDesc").toString()}
       data-animate={true}
       onClick={() => handleEditClick()}
-      onKeyDown={(e) => {
+      onKeyUp={(e) => {
         if (e.key === "Enter") {
           handleEditClick()
         }
@@ -405,7 +414,7 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
       aria-label={t("saveAndCheckString").toString()}
       data-animate={true}
       onClick={() => handleSave(inputValue)}
-      onKeyDown={(e) => {
+      onKeyUp={(e) => {
         if (e.key === "Enter") {
           handleSave(inputValue)
         }
@@ -422,3 +431,4 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
 }
 
 export default Result
+

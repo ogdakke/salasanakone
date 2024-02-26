@@ -1,8 +1,11 @@
-export type TranslationKey = string
+import { fi } from "@/assets/texts"
+
+export type TranslationsObject = typeof fi
+export type TranslationKey = keyof TranslationsObject
+export type Translations = Record<TranslationKey, string>
+
 export enum Locale {
   fi = "fi",
   en = "en",
 }
-export type Translations = {
-  [key in Locale]: Record<string, string>
-}
+

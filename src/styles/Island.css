@@ -88,12 +88,6 @@
 }
 
 @media (max-width: 700px) {
-  .IslandMain {
-    padding: 0 1.5rem;
-    position: fixed;
-    bottom: 1.25rem;
-  }
-
   .IslandMobileBackground {
     border-radius: calc(var(--island-border-radius) + 0.5rem);
   }
@@ -129,3 +123,4 @@
     box-shadow: none;
   }
 }
+

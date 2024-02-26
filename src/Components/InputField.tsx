@@ -5,7 +5,7 @@ import { t, validateLength } from "@/common/utils"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
 import { IndexableFormValues, InputLabel, InputValue } from "@/models"
 import { motion } from "framer-motion"
-import { Check } from "iconoir-react"
+import { FloppyDisk, InfoCircle } from "iconoir-react"
 import { ReactNode, useContext, useRef } from "react"
 
 type InputFieldProps = {
@@ -83,14 +83,23 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
       <RadioGroup
         defaultValue={formValues[option].selected.toString()}
         onValueChange={(event) => {
-          const isBool = event === "true" ? true : false
+          const isBool = event === "true"
           valuesToForm(option, isBool, "selected")
         }}
       >
         <div className="flex-center">
           <RadioGroupItem value="true" id="r1" key="r1" />
           <Label htmlFor="r1">{t("useWords")}</Label>
-          <SimplePopover type="info" text={t("passphraseDesc")} />
+          <SimplePopover text={t("passphraseDesc")}>
+            <InfoCircle
+              key={"info"}
+              className="interact SimplePopoverTrigger"
+              height={18}
+              width={18}
+              strokeWidth={2}
+              alignmentBaseline="central"
+            />
+          </SimplePopover>
         </div>
         <div className="flex-center">
           <RadioGroupItem value="false" id="r2" key="r2" />
@@ -122,24 +131,27 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
                 <span className="resultHelperText">{t("promptToAddWords")}</span>
               ) : null}
             </Label>
-            <InputComponent
-              ref={inputRef}
-              disabled={isDisabled}
-              aria-label={t("delimiterInputLabel").toString()}
-              className="TextInput"
-              maxLength={inputFieldMaxLength}
-              defaultValue={formValues[option].value}
-              placeholder={t("inputPlaceholder").toString()}
-              onPointerCancel={(event) => {
-                valuesToForm(
-                  option,
-                  validateLength(event.currentTarget.value, inputFieldMaxLength),
-                  "value",
-                )
-              }}
-            />
+
+            <div className="InputButtonWrapper flex gap-05">
+              <InputComponent
+                ref={inputRef}
+                disabled={isDisabled}
+                aria-label={t("delimiterInputLabel").toString()}
+                className="TextInput"
+                maxLength={inputFieldMaxLength}
+                defaultValue={formValues[option].value}
+                placeholder={t("inputPlaceholder").toString()}
+                onPointerCancel={(event) => {
+                  valuesToForm(
+                    option,
+                    validateLength(event.currentTarget.value, inputFieldMaxLength),
+                    "value",
+                  )
+                }}
+              />
+              <SaveTextInputButton handleSave={handleSave} isDisabled={isDisabled} />
+            </div>
           </div>
-          <SaveTextInputButton handleSave={handleSave} />
         </div>
       ) : (
         <div key={option} className="flex-center blurFadeIn">
@@ -160,22 +172,32 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
   )
 }
 
-const SaveTextInputButton = ({ handleSave }: { handleSave: () => void }) => {
+const SaveTextInputButton = ({
+  handleSave,
+  isDisabled,
+}: {
+  handleSave: () => void
+  isDisabled: boolean
+}) => {
   return (
     <motion.button
       className="SaveInputButton interact"
       aria-label={t("saveCustomDelimiter").toString()}
       data-animate={true}
       onClick={(e) => {
-        e.preventDefault()
-        handleSave()
+        if (!isDisabled) {
+          e.preventDefault()
+          handleSave()
+        }
       }}
       initial={{ scale: 0.4, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: isDisabled ? 1 : 1.05 }}
+      whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+      disabled={isDisabled}
     >
-      <Check alignmentBaseline="central" className="flex-center" />
+      <FloppyDisk width={20} height={20} alignmentBaseline="central" className="flex-center" />
     </motion.button>
   )
 }
+

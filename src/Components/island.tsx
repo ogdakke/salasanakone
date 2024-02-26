@@ -4,7 +4,7 @@ import { Loading } from "@/Components/ui"
 import "@/styles/Island.css"
 import { motion } from "framer-motion"
 import { Plus } from "iconoir-react"
-import { Suspense, useContext } from "react"
+import { useContext } from "react"
 
 enum IslandVariants {
   full = "full",
@@ -13,18 +13,16 @@ enum IslandVariants {
 
 export const SimpleIsland = () => {
   return (
-    <Suspense fallback={<PillLoadingState />}>
-      <motion.div className="IslandMain" data-state={IslandVariants.pill}>
-        <PillIsland />
-      </motion.div>
-    </Suspense>
+    <motion.div className="IslandMain" data-state={IslandVariants.pill}>
+      <PillIsland />
+    </motion.div>
   )
 }
 
-const PillLoadingState = () => {
+export const PillLoadingState = () => {
   return (
     <div className="IslandMain">
-      <Loading className="" height="4rem" radius="4rem" />
+      <Loading className="" height="3.5rem" radius="4rem" />
     </div>
   )
 }
@@ -38,9 +36,8 @@ const PillIsland = () => {
 
   const buttonSize = 32
   return (
-    <motion.div
+    <motion.button
       onClick={() => void generate()}
-      onKeyDown={(e) => (e.key === "Enter" ? void generate() : null)}
       style={{ willChange: "transform" }}
       className="IslandBackground"
       whileFocus={{ scale: 1.05 }}
@@ -62,6 +59,7 @@ const PillIsland = () => {
         <Plus strokeWidth={2} height={buttonSize} width={buttonSize} />
       </motion.span>
       <StrengthIndicator />
-    </motion.div>
+    </motion.button>
   )
 }
+
