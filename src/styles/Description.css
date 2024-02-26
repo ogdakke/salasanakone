@@ -45,12 +45,6 @@ summary::marker {
   white-space: normal;
 }
 
-.imageWrapper {
-  display: flex;
-  justify-content: space-between;
-  height: 100%;
-}
-
 /* || Share button section */
 .shareWrapper {
   display: flex;

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [2.1.2](https://github.com/ogdakke/salasanakone/commits/2.1.2) - 26-02-2024
+
+- Update dependecies, changes in UI, some general cleanup of code
+
+## [2.1.1](https://github.com/ogdakke/salasanakone/commits/2.1.1) - 16-01-2024
+
+- [#10](https://github.com/ogdakke/salasanakone/pull/10): Update dependencies
+
 ## [2.1.0](https://github.com/ogdakke/salasanakone/commits/2.1.0) - 10-11-2023
 
 - [#7](https://github.com/ogdakke/salasanakone/pull/7): UI overhaul, result input for checking user's own string

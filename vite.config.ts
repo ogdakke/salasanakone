@@ -43,6 +43,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
     ],
     orientation: "portrait",
     background_color: "#ffffff",
+    theme_color: "",
     display: "standalone",
     description:
       "Salasanakone - Luo vahva, muistettava ja hyvä salasana tällä salasanageneraattorilla helposti, nopeasti ja automaattisesti käyttämällä Suomen kielen sanoja.",
@@ -82,3 +83,4 @@ export default defineConfig({
     environment: "jsdom",
   },
 })
+

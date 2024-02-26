@@ -4,7 +4,7 @@ import { Description, ReloadPrompt } from "@/Components"
 import { Header } from "@/Components/Header"
 import { ErrorComponent } from "@/Components/errorComponent"
 import { PillLoadingState } from "@/Components/island"
-import { Loading } from "@/Components/ui"
+import { Credits, Loading } from "@/Components/ui"
 import { t } from "@/common/utils"
 import "@/styles/App.css"
 import "@/styles/globals.css"
@@ -23,8 +23,9 @@ function App() {
           </ErrorBoundary>
         </Suspense>
         <Description />
+
         {/* <Feedback /> */}
-        {/* <Credits /> */}
+        <Credits />
         <ReloadPrompt />
       </div>
     </main>

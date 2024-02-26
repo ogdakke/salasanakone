@@ -1,5 +1,6 @@
 {
   "name": "salasanakone",
+  "version": "2.1.2",
   "private": true,
   "type": "module",
   "scripts": {
