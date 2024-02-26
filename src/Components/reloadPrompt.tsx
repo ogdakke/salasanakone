@@ -75,7 +75,7 @@ function ReloadPrompt() {
                 close()
               }}
             >
-              {t("Ok")}
+              {t("ok")}
             </button>
           ) : null}
         </div>
