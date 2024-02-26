@@ -6,7 +6,7 @@ import { t } from "@/common/utils"
 import "@/styles/Credits.css"
 import "@/styles/ui/Tooltip.css"
 
-const version = import.meta.env.VITE_VERSION
+const version = __APP_VERSION__
 
 const Credits = () => {
   return (
@@ -26,14 +26,16 @@ const Credits = () => {
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
-      <a
-        className="versionLink interact opacity-75 hover"
-        href={`https://www.github.com/ogdakke/salasanakone/releases/${version}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        v{version}
-      </a>
+      {version ? (
+        <a
+          className="versionLink interact opacity-75 hover"
+          href={`https://www.github.com/ogdakke/salasanakone/releases/${version}`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          v{version}
+        </a>
+      ) : null}
       <TooltipProvider delayDuration={300}>
         <Tooltip>
           <TooltipTrigger>
