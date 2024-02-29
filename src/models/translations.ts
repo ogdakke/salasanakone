@@ -4,7 +4,7 @@ export type TranslationsObject = typeof fi
 export type TranslationKey = keyof TranslationsObject
 export type Translations = Record<TranslationKey, string>
 
-export enum Locale {
+export enum Language {
   fi = "fi",
   en = "en",
 }

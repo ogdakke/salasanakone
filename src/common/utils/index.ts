@@ -1,2 +1,2 @@
-export { getLocale, setLocale, t } from "./getLanguage"
+export { useLanguage, useTranslation } from "./getLanguage"
 export { filterKey, isKey, validateLength } from "./helpers"

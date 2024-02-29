@@ -1,16 +1,18 @@
-import { InputField, SimpleIsland, SliderComponent } from "@/Components"
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
-import { t } from "@/common/utils"
+import { useTranslation } from "@/common/utils"
 import { defaultFormValues } from "@/config"
-import { IndexableFormValues, InputLabel } from "@/models"
+import { InputLabel, PassCreationRules } from "@/models"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
+import { InputField, SimpleIsland, SliderComponent } from "@components"
+import { FormContext, FormDispatchContext } from "@components/FormContext"
 import React, { useCallback, useContext, useEffect } from "react"
-const Result = React.lazy(async () => await import("@/Components/result"))
+const Result = React.lazy(async () => await import("@components/result"))
+
 const initialInputKeys = Object.entries(defaultFormValues)
 
 export default function FormComponent(): React.ReactNode {
+  const { t } = useTranslation()
   const { formState, generate, validate } = useContext(FormContext)
 
   if (!validate) {
@@ -26,7 +28,7 @@ export default function FormComponent(): React.ReactNode {
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
-      const updatedValue: IndexableFormValues = formValues
+      const updatedValue: PassCreationRules = formValues
       validate(sliderValue, formState)
       if (value === "selected" && typeof event === "boolean") {
         dispatch({
@@ -58,7 +60,7 @@ export default function FormComponent(): React.ReactNode {
 
   return (
     <>
-      <form className="form blurFadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
+      <form className="form blurFadeIn" aria-busy="false" style={{ opacity: "1" }}>
         <Result aria-busy="false" aria-label={t("resultHelperLabel")} />
         <div className="inputGrid">
           {initialInputKeys.map(([item, entry]) => (

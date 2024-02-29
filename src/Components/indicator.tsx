@@ -1,6 +1,6 @@
-import { FormContext, ResultContext } from "@/Components/FormContext"
-import { t, validateLength } from "@/common/utils"
+import { useTranslation, validateLength } from "@/common/utils"
 import "@/styles/Indicator.css"
+import { FormContext, ResultContext } from "@components/FormContext"
 import { motion, useAnimate } from "framer-motion"
 import { useCallback, useContext, useEffect, useState } from "react"
 
@@ -153,6 +153,7 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
 }
 
 function numberToString(value: number) {
+  const { t } = useTranslation()
   switch (value) {
     case 0:
       // To be able to set the state, these need to be strings

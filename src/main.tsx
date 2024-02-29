@@ -1,4 +1,4 @@
-import { FormProvider } from "@/Components/FormContext"
+import { FormProvider } from "@components/FormContext"
 import { MotionConfig } from "framer-motion"
 import React from "react"
 import ReactDOM from "react-dom/client"

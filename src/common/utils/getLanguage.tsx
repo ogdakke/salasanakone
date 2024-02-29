@@ -1,27 +1,43 @@
 import { en, fi } from "@/assets/texts"
-import { Locale, TranslationKey } from "@/models/translations"
+
+import { Language, TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
 
-// const currentLocale: Locale = Locale.fi
-let currentLocale = Locale.fi
+import { FormContext, FormDispatchContext } from "@/components/FormContext"
+import { FormActionKind } from "@/services/reducers/formReducer"
+import { useContext } from "react"
 
-function getLocale() {
-  return currentLocale || Locale.fi
+export const useLanguage = () => {
+  const { language } = useContext(FormContext).formState.formValues
+  return { language, setLanguage }
 }
 
-function setLocale(locale: Locale) {
-  if (locale === currentLocale) {
-    return currentLocale
+function setLanguage(newLanguage: Language) {
+  const { dispatch } = useContext(FormDispatchContext)
+  return dispatch({
+    type: FormActionKind.SET_FORM_FIELD,
+    payload: {
+      field: "language",
+      language: newLanguage,
+    },
+  })
+}
+
+export const useTranslation = () => {
+  const { language } = useLanguage()
+
+  const t = (key: TranslationKey, placeholders?: Record<PropertyKey, string>) => {
+    return translate(language, key, placeholders)
   }
-  currentLocale = locale
-  return currentLocale
+  return { t }
 }
 
-const t = (
+const translate = (
+  language: Language,
   key: TranslationKey,
   placeholders?: Record<PropertyKey, string>,
 ): (string | JSX.Element)[] => {
-  let translation = currentLocale === Locale.fi ? fi[key] : en[key] || key
+  let translation = language === Language.fi ? fi[key] : en[key] || key
 
   if (placeholders) {
     // Handle interpolation
@@ -44,5 +60,3 @@ const t = (
 
   return translatedWithLineBreaks
 }
-
-export { getLocale, setLocale, t }

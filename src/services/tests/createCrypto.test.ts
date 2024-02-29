@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { maxLengthForChars, minLengthForChars } from "../../config"
-import { IndexableFormValues, InputType } from "../../models"
+import { InputType, PassCreationRules } from "../../models"
 import { createCryptoKey } from "../createCrypto"
 
 type TestConfig = {
@@ -21,7 +21,7 @@ const defaultConfig: TestConfig = {
   inputFieldValueFromUser: "-",
 }
 
-const testData = (config: TestConfig = {}): IndexableFormValues => {
+const testData = (config: TestConfig = {}): PassCreationRules => {
   const {
     word,
     randomCharactersInString,

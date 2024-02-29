@@ -1,4 +1,4 @@
-import { t } from "@/common/utils"
+import { useTranslation } from "@/common/utils"
 import "@/styles/ReloadPrompt.css"
 import { Refresh } from "iconoir-react"
 import { useState } from "react"
@@ -18,6 +18,7 @@ const noRefreshNeeded = (registation?: ServiceWorkerRegistration) => {
 }
 
 function ReloadPrompt() {
+  const { t } = useTranslation()
   const [isTrue, setIsTrue] = useState(false)
   const {
     offlineReady: [offlineReady, setOfflineReady],

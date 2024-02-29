@@ -5,6 +5,7 @@ declare const __APP_VERSION__: string
 
 interface ImportMetaEnv {
   readonly VITE_VERSION: string
+  readonly VITE_X_API_KEY: string
   // more env variables...
 }
 

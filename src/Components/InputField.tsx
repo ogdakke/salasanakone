@@ -1,9 +1,9 @@
-import { SimplePopover } from "@/Components"
-import { FormContext } from "@/Components/FormContext"
-import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
-import { t, validateLength } from "@/common/utils"
+import { useTranslation, validateLength } from "@/common/utils"
+import { SimplePopover } from "@/components"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
-import { IndexableFormValues, InputLabel, InputValue } from "@/models"
+import { InputLabel, InputValue, PassCreationRules } from "@/models"
+import { FormContext } from "@components/FormContext"
+import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@components/ui"
 import { motion } from "framer-motion"
 import { FloppyDisk, InfoCircle } from "iconoir-react"
 import { ReactNode, useContext, useRef } from "react"
@@ -15,15 +15,16 @@ type InputFieldProps = {
 }
 
 type SimpleInputProps = {
-  formValues: IndexableFormValues
+  formValues: PassCreationRules
 } & InputFieldProps
 
 type TextInputProps = {
-  formValues: IndexableFormValues
+  formValues: PassCreationRules
   isDisabled: boolean
 } & InputFieldProps
 
 export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesToForm }) => {
+  const { t } = useTranslation()
   const { formValues, isDisabled } = useContext(FormContext).formState
 
   switch (values.inputType) {
@@ -59,10 +60,14 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
 }
 
 const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInputProps) => {
+  if (option === "language") {
+    return null //TODO this is fucked
+  }
+
   return (
     <div key={option} className="checkboxParent flex-center" style={{ gridArea: `${option}` }}>
       <Checkbox
-        aria-label={labelForCheckbox(option)}
+        aria-label={labelForCheckbox(option).toString()}
         checked={formValues[option].selected}
         onCheckedChange={(event) => {
           valuesToForm(option, event as boolean, "selected")
@@ -78,6 +83,8 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
 }
 
 const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): ReactNode => {
+  const { t } = useTranslation()
+
   return (
     <div key={option} className="flex-center radio">
       <RadioGroup
@@ -111,6 +118,7 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
 }
 
 const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: TextInputProps) => {
+  const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
 
   const handleSave = () => {
@@ -179,6 +187,8 @@ const SaveTextInputButton = ({
   handleSave: () => void
   isDisabled: boolean
 }) => {
+  const { t } = useTranslation()
+
   return (
     <motion.button
       className="SaveInputButton interact"
