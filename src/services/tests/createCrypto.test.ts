@@ -49,25 +49,25 @@ const testData = (testConfig: TestConfig = {}): PassCreationRules => {
     language: language || Language.fi,
     words: {
       inputType: "radio",
-      info: "placeholder info",
+      info: "useWordsInfo",
       selected: word || false, //If this is false, it will return a random string of characters
       value: "",
     },
     randomChars: {
       inputType: inputType || "input",
-      info: "placeholder info",
+      info: "useCharactersInfo",
       selected: randomCharactersInString || false,
       value: inputFieldValueFromUser, //this only should apply if word === true
     },
     uppercase: {
       inputType: "checkbox",
-      info: "placeholder info",
+      info: "useUppercaseInfo",
       selected: uppercaseCharacters || false,
       value: "",
     },
     numbers: {
       inputType: "checkbox",
-      info: "placeholder info",
+      info: "useNumbersInfo",
       selected: numbers || false,
       value: "",
     },
