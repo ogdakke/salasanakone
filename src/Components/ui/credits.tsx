@@ -1,6 +1,6 @@
 import { meta } from "@/assets/constants/meta"
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { useTranslation } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { Share } from "@/components"
 import "@/styles/Credits.css"
 import "@/styles/ui/Tooltip.css"

@@ -1,4 +1,4 @@
-import { useTranslation } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { InputLabel, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 

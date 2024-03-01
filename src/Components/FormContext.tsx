@@ -1,5 +1,5 @@
 import { usePersistedReducer } from "@/common/hooks/usePersistedReducer"
-import { useLanguage } from "@/common/utils"
+import { useLanguage } from "@/common/utils/getLanguage"
 import { maxLengthForWords, minLengthForChars } from "@/config"
 import {
   FormContextProps,

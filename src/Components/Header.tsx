@@ -1,5 +1,5 @@
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { useLanguage, useTranslation } from "@/common/utils"
+import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
 import { FormDispatchContext } from "@/components/FormContext"
 import { Language } from "@/models/translations"
 

@@ -1,4 +1,5 @@
-import { useTranslation, validateLength } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
+import { validateLength } from "@/common/utils/helpers"
 import "@/styles/Indicator.css"
 import { FormContext, ResultContext } from "@components/FormContext"
 import { motion, useAnimate } from "framer-motion"

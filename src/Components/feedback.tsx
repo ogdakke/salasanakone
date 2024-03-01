@@ -3,7 +3,7 @@ import "@/styles/ui/Feedback.css"
 import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
 
 import { usePersistedState } from "@/common/hooks/usePersistedState"
-import { useTranslation } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui"
 
 interface clickValueType {

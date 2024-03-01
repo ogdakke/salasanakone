@@ -1,5 +1,5 @@
 import useEventListener from "@/common/hooks/useEventListener"
-import { useTranslation } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { getConfig } from "@/config"
 import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"

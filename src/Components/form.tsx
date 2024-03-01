@@ -1,4 +1,4 @@
-import { useTranslation } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { InputField, SimpleIsland, SliderComponent } from "@/components"
 import { defaultFormValues } from "@/config"
 import { InputLabel, InputValue, PassCreationRules } from "@/models"

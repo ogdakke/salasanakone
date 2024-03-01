@@ -6,7 +6,7 @@ import {
 } from "@/config"
 import { FormContext, FormDispatchContext } from "@components/FormContext"
 
-import { useTranslation } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import { Label, Slider } from "@components/ui"
 import { motion } from "framer-motion"

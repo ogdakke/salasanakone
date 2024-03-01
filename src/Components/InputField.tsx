@@ -1,4 +1,5 @@
-import { useTranslation, validateLength } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
+import { validateLength } from "@/common/utils/helpers"
 import { SimplePopover } from "@/components"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
 import { InputLabel, InputValue, PassCreationRules } from "@/models"

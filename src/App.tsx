@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 
-import { useTranslation } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { Description, ReloadPrompt } from "@/components"
 import { initDB } from "@/services/database/db"
 import "@/styles/App.css"
