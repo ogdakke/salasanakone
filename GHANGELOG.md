@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [3.0.0](https://github.com/ogdakke/salasanakone/commits/3.0.0) - 01-03-2024
+
+- [#11](https://github.com/ogdakke/salasanakone/pull/11): Fetch dataset remotely, add language picker, add translations
+
 ## [2.1.2](https://github.com/ogdakke/salasanakone/commits/2.1.2) - 26-02-2024
 
 - Update dependecies, changes in UI, some general cleanup of code
