@@ -18,12 +18,12 @@ import reducer, {
   setSlidervalue,
 } from "@/services/reducers/formReducer"
 import { ReactNode, createContext, useCallback, useEffect, useState } from "react"
+const { SET_DISABLED, SET_FORM_FIELD } = FormActionKind
 
 const isDev = import.meta.env.DEV
-
 const API_KEY = import.meta.env.VITE_X_API_KEY
-const API_URL = isDev ? "http://localhost:8787" : import.meta.env.VITE_API_URL
-const { SET_DISABLED, SET_FORM_FIELD } = FormActionKind
+const importedApiUrl = import.meta.env.VITE_API_URL
+const API_URL = isDev ? "http://localhost:8787" : importedApiUrl
 
 let temp_dataset: {
   language: Language
@@ -115,7 +115,10 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       // Set the password undefined to trigger loading state on fetch only - preventing a flash on DB lang change
       setFinalPassword({ isEdited: false, passwordValue: undefined })
 
-      const response = await fetch(`${API_URL}/dataset/${lang}`, {
+      const url = `${API_URL}/dataset/${lang}`
+      console.log("fetching dataset from: ", url)
+
+      const response = await fetch(url, {
         headers: {
           "X-API-KEY": API_KEY || "",
         },
