@@ -158,6 +158,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
                 maxLength={inputFieldMaxLength}
                 defaultValue={formValues[option].value}
                 placeholder={t("inputPlaceholder").toString()}
+                onBlur={handleSave}
                 onPointerCancel={(event) => {
                   valuesToForm(
                     option,
