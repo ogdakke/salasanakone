@@ -110,6 +110,10 @@
   position: relative;
 }
 
+.invisible {
+  visibility: hidden;
+}
+
 .bottom-0 {
   bottom: 0 !important;
 }

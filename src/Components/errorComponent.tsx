@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { useInterval } from "@/common/hooks/useInterval"
-import { t } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -12,7 +12,7 @@ interface Props {
 
 export const ErrorComponent = ({ error, resetErrorBoundary }: Props) => {
   const [isRendered, setRendered] = useState(false)
-
+  const { t } = useTranslation()
   window.localStorage.removeItem("formValues")
   // Call resetErrorBoundary() to reset the error boundary and retry the render.
   const tryRender = () => resetErrorBoundary()

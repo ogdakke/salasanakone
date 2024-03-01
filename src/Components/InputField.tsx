@@ -1,9 +1,10 @@
+import { useTranslation } from "@/common/utils/getLanguage"
+import { validateLength } from "@/common/utils/helpers"
 import { SimplePopover } from "@/Components"
 import { FormContext } from "@/Components/FormContext"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
-import { t, validateLength } from "@/common/utils"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
-import { IndexableFormValues, InputLabel, InputValue } from "@/models"
+import { InputLabel, InputValue, PassCreationRules } from "@/models"
 import { motion } from "framer-motion"
 import { FloppyDisk, InfoCircle } from "iconoir-react"
 import { ReactNode, useContext, useRef } from "react"
@@ -15,11 +16,11 @@ type InputFieldProps = {
 }
 
 type SimpleInputProps = {
-  formValues: IndexableFormValues
+  formValues: PassCreationRules
 } & InputFieldProps
 
 type TextInputProps = {
-  formValues: IndexableFormValues
+  formValues: PassCreationRules
   isDisabled: boolean
 } & InputFieldProps
 
@@ -59,10 +60,15 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
 }
 
 const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInputProps) => {
+  const { t } = useTranslation()
+  if (option === "language") {
+    return null //TODO this is fucked
+  }
+
   return (
     <div key={option} className="checkboxParent flex-center" style={{ gridArea: `${option}` }}>
       <Checkbox
-        aria-label={labelForCheckbox(option)}
+        aria-label={labelForCheckbox(option).toString()}
         checked={formValues[option].selected}
         onCheckedChange={(event) => {
           valuesToForm(option, event as boolean, "selected")
@@ -70,7 +76,7 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
         id={option}
         value={values.selected.toString()}
       ></Checkbox>
-      <Label title={values.info} htmlFor={option}>
+      <Label title={t(values.info).toString()} htmlFor={option}>
         {labelForCheckbox(option)}
       </Label>
     </div>
@@ -78,6 +84,12 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
 }
 
 const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): ReactNode => {
+  const { t } = useTranslation()
+
+  if (option === "language") {
+    return null
+  }
+
   return (
     <div key={option} className="flex-center radio">
       <RadioGroup
@@ -111,10 +123,15 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
 }
 
 const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: TextInputProps) => {
+  const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
 
+  if (option === "language") {
+    return null
+  }
+
   const handleSave = () => {
-    if (inputRef.current?.value) {
+    if (inputRef.current) {
       valuesToForm(option, validateLength(inputRef.current?.value, inputFieldMaxLength), "value")
       inputRef.current.blur()
     }
@@ -125,7 +142,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
       {formValues.words.selected ? (
         <div className="blurFadeIn flex InputWithButton">
           <div className="labelOnTop">
-            <Label className="flex-bottom" title={values.info} htmlFor={option}>
+            <Label className="flex-bottom" title={t(values.info).toString()} htmlFor={option}>
               {labelForCheckbox(option)}
               {isDisabled ? (
                 <span className="resultHelperText">{t("promptToAddWords")}</span>
@@ -136,11 +153,12 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
               <InputComponent
                 ref={inputRef}
                 disabled={isDisabled}
-                aria-label={t("delimiterInputLabel").toString()}
+                aria-label={t("separatorInputLabel").toString()}
                 className="TextInput"
                 maxLength={inputFieldMaxLength}
                 defaultValue={formValues[option].value}
                 placeholder={t("inputPlaceholder").toString()}
+                onBlur={handleSave}
                 onPointerCancel={(event) => {
                   valuesToForm(
                     option,
@@ -156,7 +174,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
       ) : (
         <div key={option} className="flex-center blurFadeIn">
           <Checkbox
-            aria-label={labelForCheckbox(option)}
+            aria-label={labelForCheckbox(option).toString()}
             className="checkboxRoot"
             checked={formValues[option].selected}
             onCheckedChange={(event) => {
@@ -179,10 +197,12 @@ const SaveTextInputButton = ({
   handleSave: () => void
   isDisabled: boolean
 }) => {
+  const { t } = useTranslation()
+
   return (
     <motion.button
       className="SaveInputButton interact"
-      aria-label={t("saveCustomDelimiter").toString()}
+      aria-label={t("saveCustomSeparator").toString()}
       data-animate={true}
       onClick={(e) => {
         if (!isDisabled) {

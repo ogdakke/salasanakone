@@ -1,9 +1,31 @@
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
-import { meta } from "@/assets/constants/meta"
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { t } from "@/common/utils"
+import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
+import { FormDispatchContext } from "@/Components/FormContext"
+import { Language } from "@/models/translations"
+
+import { FormActionKind } from "@/services/reducers/formReducer"
+import "@/styles/Header.css"
+import { motion } from "framer-motion"
+import { useContext } from "react"
 
 export const Header = () => {
+  const { dispatch } = useContext(FormDispatchContext)
+  const { t } = useTranslation()
+  const { language } = useLanguage()
+
+  function handleOnClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const name = event.currentTarget.name as Language
+    dispatch({
+      type: FormActionKind.SET_FORM_FIELD,
+      payload: {
+        field: "language",
+        language: name,
+      },
+    })
+  }
+
+  const languages = Object.values(Language)
+  const isActive = (lang: Language) => lang === language
   return (
     // TODO: looks weird on mobile
     <div className="flex-center space-between">
@@ -11,20 +33,29 @@ export const Header = () => {
         <LogoIcon width={40} height={40} />
         <h1>{t("salasanakone")}</h1>
       </div>
-      <TooltipProvider delayDuration={300}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button className="credits">
-              <a href={meta.dweUrl} target="_blank" rel="noreferrer">
-                {meta.dweDisplayText}
-              </a>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent className="TooltipContent" sideOffset={6} asChild>
-            <span>{t("visitMySite")}</span>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <div className="LanguageAndLink">
+        <div className="LanguagePicker">
+          {languages.map((language) => {
+            const active = isActive(language)
+            return (
+              <button
+                key={language}
+                type="button"
+                name={language}
+                className={active ? "ActiveLanguageButton" : "InactiveLanguageButton"}
+                onClick={handleOnClick}
+                data-state={active}
+                disabled={active}
+              >
+                {active ? (
+                  <motion.span layoutId="active-language" className="PickerBackground" />
+                ) : null}
+                <span className="LanguageText relative">{language}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
     </div>
   )
 }

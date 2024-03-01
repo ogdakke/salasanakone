@@ -6,8 +6,8 @@ import {
   minLengthForWords,
 } from "@/config"
 
+import { useTranslation } from "@/common/utils/getLanguage"
 import { Label, Slider } from "@/Components/ui"
-import { t } from "@/common/utils"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import { motion } from "framer-motion"
 import { useContext } from "react"
@@ -15,6 +15,7 @@ import { useContext } from "react"
 const { SET_SLIDERVALUE } = FormActionKind
 
 const SliderComponent = () => {
+  const { t } = useTranslation()
   const context = useContext(FormContext)
   const { validate, formState } = context
   const { formValues, sliderValue, isEditing } = formState

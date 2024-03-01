@@ -1,16 +1,19 @@
+import { useTranslation } from "@/common/utils/getLanguage"
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
 import { FormContext, FormDispatchContext } from "@/Components/FormContext"
-import { t } from "@/common/utils"
 import { defaultFormValues } from "@/config"
-import { IndexableFormValues, InputLabel } from "@/models"
+import { InputLabel, InputValue, PassCreationRules } from "@/models"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
 import React, { useCallback, useContext, useEffect } from "react"
+
 const Result = React.lazy(async () => await import("@/Components/result"))
+
 const initialInputKeys = Object.entries(defaultFormValues)
 
 export default function FormComponent(): React.ReactNode {
+  const { t } = useTranslation()
   const { formState, generate, validate } = useContext(FormContext)
 
   if (!validate) {
@@ -26,7 +29,7 @@ export default function FormComponent(): React.ReactNode {
 
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
-      const updatedValue: IndexableFormValues = formValues
+      const updatedValue: PassCreationRules = formValues
       validate(sliderValue, formState)
       if (value === "selected" && typeof event === "boolean") {
         dispatch({
@@ -58,17 +61,20 @@ export default function FormComponent(): React.ReactNode {
 
   return (
     <>
-      <form className="form blurFadeIn" action="submit" aria-busy="false" style={{ opacity: "1" }}>
+      <form className="form blurFadeIn" aria-busy="false" style={{ opacity: "1" }}>
         <Result aria-busy="false" aria-label={t("resultHelperLabel")} />
         <div className="inputGrid">
-          {initialInputKeys.map(([item, entry]) => (
-            <InputField
-              key={item}
-              option={item as InputLabel}
-              values={entry}
-              valuesToForm={valuesToForm}
-            />
-          ))}
+          {initialInputKeys.map(([item, entry]) => {
+            if (typeof entry !== "object") return null
+            return (
+              <InputField
+                key={item}
+                option={item as InputLabel}
+                values={entry as InputValue}
+                valuesToForm={valuesToForm}
+              />
+            )
+          })}
           <SliderComponent />
         </div>
       </form>

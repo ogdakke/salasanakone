@@ -1,14 +1,15 @@
-import { Share } from "@/Components"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
 import { meta } from "@/assets/constants/meta"
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { t } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
+import { Share } from "@/Components"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
 import "@/styles/Credits.css"
 import "@/styles/ui/Tooltip.css"
 
 const version = __APP_VERSION__
 
 const Credits = () => {
+  const { t } = useTranslation()
   return (
     <div className="creditsWrapper">
       <TooltipProvider delayDuration={300}>

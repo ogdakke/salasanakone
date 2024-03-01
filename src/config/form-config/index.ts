@@ -1,37 +1,43 @@
-import { IndexableFormValues, IndexedLabels, InputLabel } from "@/models"
+import { useTranslation } from "@/common/utils/getLanguage"
+import { InputLabel, PassCreationRules } from "@/models"
+import { Language } from "@/models/translations"
 
 export const inputFieldMaxLength = 8
 export const defaultSliderValue = 3
-export const defaultFormValues: IndexableFormValues = {
+export const defaultFormValues: PassCreationRules = {
+  language: Language.fi,
   words: {
     inputType: "radio",
     selected: true,
-    info: "Luodaanko salalause sanoista?",
+    info: "useWordsInfo",
   },
   uppercase: {
     inputType: "checkbox",
     selected: false,
-    info: "Sisältääkö Salasana isoja kirjaimia.",
+    info: "useUppercaseInfo",
   },
   numbers: {
     inputType: "checkbox",
     selected: true,
-    info: "Sisällytetäänkö salasanaan numeroita",
+    info: "useNumbersInfo",
   },
   randomChars: {
     inputType: "input",
     value: "-",
     selected: false,
-    info: "Välimerkki, joka yhdistää sanat.",
+    info: "useSeparatorInfo",
   },
 }
 
 export function labelForCheckbox(option: InputLabel) {
-  const labels: IndexedLabels = {
-    uppercase: "Isot Kirjaimet",
-    randomChars: "Välimerkit",
-    numbers: "Numerot",
-    words: "Käytä sanoja",
+  const { t } = useTranslation()
+
+  const labels = {
+    uppercase: t("useUppercase"),
+    randomChars: t("useSeparator"),
+    numbers: t("useNumbers"),
+    words: t("useWords"),
+    language: "",
   }
   return labels[option] || labels.words
 }

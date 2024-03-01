@@ -1,20 +1,22 @@
+import { Language, Translations } from "@/models/translations"
 import { FormActions } from "@/services/reducers/formReducer"
 import { Dispatch } from "react"
 
-export type CheckboxLabels = "Isot Kirjaimet" | "Välimerkit" | "Numerot" | "Käytä sanoja"
+export type CheckboxLabels = "Isot Kirjaimet" | "Välimerkit" | "Numerot" | "Käytä sanoja" // TODO fix this to be translated
 
 export type InputType = "checkbox" | "input" | "radio"
-export type InputLabel = "words" | "uppercase" | "numbers" | "randomChars"
+export type InputLabel = "words" | "uppercase" | "numbers" | "randomChars" | "language"
 export type IndexedLabels = Record<InputLabel, CheckboxLabels>
 
 export interface InputValue {
   inputType: InputType
-  value?: string
   selected: boolean
-  info: string
+  info: keyof Translations
+  value?: string
 }
 
-export type IndexableFormValues = {
+export interface PassCreationRules {
+  language: Language
   words: InputValue
   uppercase: InputValue
   numbers: InputValue
@@ -22,7 +24,7 @@ export type IndexableFormValues = {
 }
 
 export type FormState = {
-  formValues: IndexableFormValues
+  formValues: PassCreationRules
   sliderValue: number
   isDisabled: boolean
   isEditing: boolean

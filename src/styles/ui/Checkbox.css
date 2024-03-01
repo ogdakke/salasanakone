@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .checkboxRoot {
   all: unset;
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
@@ -14,7 +15,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* box-shadow: 0 2px 10px rgba(var(--card-rgb), 0.3); */
   transition: background 150ms ease-out;
 }
 
@@ -24,7 +24,6 @@
 
 .checkboxIndicator {
   fill: rgb(var(--foreground-rgb));
-  /* color: rgb(var(--foreground-rgb)); */
 }
 
 @media (hover: hover) and (pointer: fine) {

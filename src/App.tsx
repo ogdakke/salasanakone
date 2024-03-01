@@ -5,12 +5,15 @@ import { Header } from "@/Components/Header"
 import { ErrorComponent } from "@/Components/errorComponent"
 import { PillLoadingState } from "@/Components/island"
 import { Credits, Loading } from "@/Components/ui"
-import { t } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
+import { initDB } from "@/services/database/db"
 import "@/styles/App.css"
 import "@/styles/globals.css"
 import { ErrorBoundary, FallbackProps } from "react-error-boundary"
 
 const FormComponent = React.lazy(async () => await import("@/Components/form"))
+
+await initDB()
 
 function App() {
   return (
@@ -50,6 +53,7 @@ const FormComponentLoader = () => {
 }
 
 const FormErrorComponent = (props: FallbackProps) => {
+  const { t } = useTranslation()
   const error = props.error as Error
   const { resetErrorBoundary } = props
 

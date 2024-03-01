@@ -2,15 +2,16 @@ import "@/styles/ui/Feedback.css"
 
 import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
 
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
 import { usePersistedState } from "@/common/hooks/usePersistedState"
-import { t } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
 
 interface clickValueType {
   value: boolean
 }
 
 export const Feedback = () => {
+  const { t } = useTranslation()
   const initialClickValues: clickValueType = {
     value: false,
   }

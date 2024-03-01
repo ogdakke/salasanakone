@@ -12,9 +12,7 @@ const validateLength = (str: string, length: number): string => {
   let final = str
   if (str.length > length) {
     final = str.substring(0, length)
-    // console.log(`Checked string of length ${final.length}`)
   }
-  // console.log(`Checked string of length ${final.length}`)
   return final
 }
 

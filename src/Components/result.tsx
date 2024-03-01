@@ -1,3 +1,5 @@
+import useEventListener from "@/common/hooks/useEventListener"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import {
   HighlightCondition,
@@ -9,17 +11,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/Components/ui"
-import useEventListener from "@/common/hooks/useEventListener"
-import { t } from "@/common/utils"
-import { numbers, specials } from "@/config"
+import { getConfig } from "@/config"
+import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
-import { Transition, motion } from "framer-motion"
+import { motion, Transition } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
 import {
-  ReactNode,
   createContext,
+  ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -42,7 +43,7 @@ const fade: Transition = {
 }
 
 const highlightNumbers: HighlightCondition = {
-  condition: numbers,
+  condition: getConfig(Language.fi).generationStrings.numbers,
   style: {
     fontWeight: "bold",
     color: "var(--emphasis)",
@@ -50,7 +51,7 @@ const highlightNumbers: HighlightCondition = {
 }
 
 const highlightSpecials: HighlightCondition = {
-  condition: specials,
+  condition: getConfig(Language.fi).generationStrings.specials,
   style: {
     fontWeight: "bold",
     opacity: "0.7",
@@ -93,6 +94,8 @@ export const InputContext = createContext<InputContextProps>({
 })
 
 const Result = () => {
+  const { t } = useTranslation()
+
   const {
     generate,
     formState: { isEditing, formValues },
@@ -207,7 +210,7 @@ const Result = () => {
     [
       EditorState.RESULT,
       {
-        iconTooltip: showEditComponents ? t("editResult") : t("hasCopiedPassword"),
+        iconTooltip: t("editResult"),
         icon: !showEditComponents ? (
           <CopiedButton conditions={conditions} handleCopyClick={handleCopyClick} />
         ) : (
@@ -252,7 +255,14 @@ const Result = () => {
                   {resultOptions.get(editor)?.icon}
                 </span>
               </TooltipTrigger>
-              <TooltipContent sideOffset={4} className="TooltipContent">
+              <TooltipContent
+                sideOffset={4}
+                className={
+                  editor === EditorState.EDITOR || showEditComponents
+                    ? "TooltipContent"
+                    : "invisible"
+                }
+              >
                 <div className="flex-center">
                   <OpenSelectHandGesture width={20} height={20} />
                   {resultOptions.get(editor)?.iconTooltip}
@@ -276,6 +286,7 @@ const ResultComponentNoEdit = ({
   conditions,
 }: ResultNoEditProps) => {
   const { isCopied } = conditions
+  const { t } = useTranslation()
 
   return (
     <motion.div
@@ -311,6 +322,7 @@ const ResultComponentNoEdit = ({
  * Editor component
  */
 const Editor = ({ handleSave }: EditorProps) => {
+  const { t } = useTranslation()
   const { setInputValue } = useContext(InputContext)
   const { passwordValue } = useContext(ResultContext).finalPassword
 
@@ -352,6 +364,7 @@ const Editor = ({ handleSave }: EditorProps) => {
 }
 
 const EditButton = ({ handleEditClick }: EditButtonProps) => {
+  const { t } = useTranslation()
   return (
     <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
@@ -383,6 +396,7 @@ const EditButton = ({ handleEditClick }: EditButtonProps) => {
 const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
   const passwordValue = useContext(ResultContext).finalPassword.passwordValue ?? ""
   const { isCopied, copyIconShouldAnimate } = conditions
+  const { t } = useTranslation()
   return (
     <motion.span
       layout
@@ -406,6 +420,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
 }
 
 const SaveEditButton = ({ handleSave }: EditorProps) => {
+  const { t } = useTranslation()
   const { inputValue } = useContext(InputContext)
 
   return (
