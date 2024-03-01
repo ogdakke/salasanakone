@@ -15,7 +15,7 @@ export const en: Translations = {
   useCharacters: "Password",
   useUppercase: "Uppercase",
   useNumbers: "Numbers",
-  useDenominator: "Denominator",
+  useSeparator: "Separator",
   useSpecials: "Special characters",
   strengthDefault: "",
   strengthAwful: "",
@@ -46,9 +46,15 @@ export const en: Translations = {
   saveAndCheckString: "Save and check strength",
   passphraseDesc:
     "A passphrase is a string of words, usually separated with a special character and includes a number or numbers",
-  delimiterInputLabel: "Delimiter characters",
-  saveCustomDelimiter: "Save characters",
+  separatorInputLabel: "Separator characters",
+  saveCustomSeparator: "Save characters",
   languageInfo: "Change language",
+  useWordsInfo: "Will the password contain words?",
+  useCharactersInfo: "Will the password contain characters?",
+  useUppercaseInfo: "Will the password have uppercase characters?",
+  useNumbersInfo: "Will the password contain numbers?",
+  useSeparatorInfo: "Will the passphrase contain separators?",
+  useSpecialsInfo: "Will the password contain special characters?",
 }
 
 export const fi = {
@@ -61,7 +67,7 @@ export const fi = {
   useCharacters: "Normaali salasana",
   useUppercase: "Isot kirjaimet",
   useNumbers: "Numerot",
-  useDenominator: "Välimerkit",
+  useSeparator: "Välimerkit",
   useSpecials: "Erikoismerkit",
   strengthDefault: "Arvio",
   strengthAwful: "Surkea",
@@ -98,7 +104,13 @@ export const fi = {
   passphraseDesc:
     "Salalause on sanoista koostuva, pidempi salasana. Siinä on usein välimerkkejä sanojen välissä, ja numero jossain kohdassa.",
   length: "Salasanan pituus",
-  delimiterInputLabel: "Välimerkit, jotka erottavat sanat",
-  saveCustomDelimiter: "Tallenna välimerkit",
+  separatorInputLabel: "Välimerkit, jotka erottavat sanat",
+  saveCustomSeparator: "Tallenna välimerkit",
   languageInfo: "Vaihda kieli",
+  useWordsInfo: "Luodaanko salalause sanoista?",
+  useCharactersInfo: "Luodaanko normaali salasana?",
+  useUppercaseInfo: "Sisältääkö salasana isoja kirjaimia?",
+  useNumbersInfo: "Sisältääkö salasana numeroita?",
+  useSeparatorInfo: "Sisältääkö salasana välimerkkejä?",
+  useSpecialsInfo: "Sisältääkö salasana erikoismerkkejä?",
 } as const

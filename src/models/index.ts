@@ -1,4 +1,4 @@
-import { Language } from "@/models/translations"
+import { Language, Translations } from "@/models/translations"
 import { FormActions } from "@/services/reducers/formReducer"
 import { Dispatch } from "react"
 
@@ -11,7 +11,7 @@ export type IndexedLabels = Record<InputLabel, CheckboxLabels>
 export interface InputValue {
   inputType: InputType
   selected: boolean
-  info: string
+  info: keyof Translations
   value?: string
 }
 

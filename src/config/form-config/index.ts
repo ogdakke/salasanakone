@@ -9,23 +9,23 @@ export const defaultFormValues: PassCreationRules = {
   words: {
     inputType: "radio",
     selected: true,
-    info: "Luodaanko salalause sanoista?",
+    info: "useWordsInfo",
   },
   uppercase: {
     inputType: "checkbox",
     selected: false,
-    info: "Sisältääkö Salasana isoja kirjaimia.",
+    info: "useUppercaseInfo",
   },
   numbers: {
     inputType: "checkbox",
     selected: true,
-    info: "Sisällytetäänkö salasanaan numeroita",
+    info: "useNumbersInfo",
   },
   randomChars: {
     inputType: "input",
     value: "-",
     selected: false,
-    info: "Välimerkki, joka yhdistää sanat.",
+    info: "useSeparatorInfo",
   },
 }
 
@@ -34,7 +34,7 @@ export function labelForCheckbox(option: InputLabel) {
 
   const labels = {
     uppercase: t("useUppercase"),
-    randomChars: t("useDenominator"),
+    randomChars: t("useSeparator"),
     numbers: t("useNumbers"),
     words: t("useWords"),
     language: "",

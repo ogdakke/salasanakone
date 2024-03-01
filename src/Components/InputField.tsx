@@ -60,6 +60,7 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
 }
 
 const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInputProps) => {
+  const { t } = useTranslation()
   if (option === "language") {
     return null //TODO this is fucked
   }
@@ -75,7 +76,7 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
         id={option}
         value={values.selected.toString()}
       ></Checkbox>
-      <Label title={values.info} htmlFor={option}>
+      <Label title={t(values.info).toString()} htmlFor={option}>
         {labelForCheckbox(option)}
       </Label>
     </div>
@@ -141,7 +142,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
       {formValues.words.selected ? (
         <div className="blurFadeIn flex InputWithButton">
           <div className="labelOnTop">
-            <Label className="flex-bottom" title={values.info} htmlFor={option}>
+            <Label className="flex-bottom" title={t(values.info).toString()} htmlFor={option}>
               {labelForCheckbox(option)}
               {isDisabled ? (
                 <span className="resultHelperText">{t("promptToAddWords")}</span>
@@ -152,7 +153,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
               <InputComponent
                 ref={inputRef}
                 disabled={isDisabled}
-                aria-label={t("delimiterInputLabel").toString()}
+                aria-label={t("separatorInputLabel").toString()}
                 className="TextInput"
                 maxLength={inputFieldMaxLength}
                 defaultValue={formValues[option].value}
@@ -200,7 +201,7 @@ const SaveTextInputButton = ({
   return (
     <motion.button
       className="SaveInputButton interact"
-      aria-label={t("saveCustomDelimiter").toString()}
+      aria-label={t("saveCustomSeparator").toString()}
       data-animate={true}
       onClick={(e) => {
         if (!isDisabled) {

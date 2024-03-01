@@ -89,7 +89,6 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     const { language, words } = formValues
     if (words.selected) {
       if (temp_dataset && temp_dataset.dataset.length && temp_dataset.language === language) {
-        console.log("temp_dataset hit")
         return createPassphrase({
           passLength: sliderValue,
           inputs: formValues,
@@ -97,8 +96,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
         })
       }
       const dataset = await fetchDataset(language)
-      if (dataset) {
-        console.log("dataset fetched successfully")
+      if (dataset && Array.isArray(dataset)) {
         temp_dataset = { language, dataset }
         return createPassphrase({ passLength: sliderValue, inputs: formValues, dataset })
       }
@@ -109,15 +107,12 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
 
   const fetchDataset = async (lang: Language) => {
     try {
-      console.info("getting data for: ", lang)
       const datasetFromDB = await getDataForKey(Stores.Languages, lang)
       if (datasetFromDB) return datasetFromDB
       // Set the password undefined to trigger loading state on fetch only - preventing a flash on DB lang change
       setFinalPassword({ isEdited: false, passwordValue: undefined })
 
       const url = `${API_URL}/dataset/${lang}`
-      console.log("fetching dataset from: ", url)
-
       const response = await fetch(url, {
         headers: {
           "X-API-KEY": API_KEY || "",
@@ -150,13 +145,11 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       ? dispatch({ type: SET_DISABLED, payload: true })
       : dispatch({ type: SET_DISABLED, payload: false })
     try {
-      console.log("formState", formState)
-
-      const password = await generatePassword(
+      const passwordValue = await generatePassword(
         formState.formValues,
         validate(formState.sliderValue, formState),
       )
-      setFinalPassword({ passwordValue: password, isEdited: false })
+      setFinalPassword({ passwordValue, isEdited: false })
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(error.message)
