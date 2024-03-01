@@ -130,7 +130,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
   }
 
   const handleSave = () => {
-    if (inputRef.current?.value) {
+    if (inputRef.current) {
       valuesToForm(option, validateLength(inputRef.current?.value, inputFieldMaxLength), "value")
       inputRef.current.blur()
     }
