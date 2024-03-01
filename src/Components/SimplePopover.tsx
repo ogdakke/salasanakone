@@ -1,4 +1,4 @@
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui"
+import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui"
 import { PropsWithChildren, ReactNode } from "react"
 type SimplePopoverProps = {
   text: string | ReactNode

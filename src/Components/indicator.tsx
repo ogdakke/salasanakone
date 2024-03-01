@@ -1,6 +1,6 @@
 import { useTranslation } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
-import { FormContext, ResultContext } from "@/components/FormContext"
+import { FormContext, ResultContext } from "@/Components/FormContext"
 import "@/styles/Indicator.css"
 import { motion, useAnimate } from "framer-motion"
 import { useCallback, useContext, useEffect, useState } from "react"

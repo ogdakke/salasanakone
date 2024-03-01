@@ -3,7 +3,7 @@ import { en, fi } from "@/assets/texts"
 import { Language, TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
 
-import { FormContext, FormDispatchContext } from "@/components/FormContext"
+import { FormContext, FormDispatchContext } from "@/Components/FormContext"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import { useContext } from "react"
 

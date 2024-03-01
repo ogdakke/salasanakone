@@ -1,6 +1,6 @@
 import React from "react"
 
-import { Divider, ExternalLink } from "@/components/ui"
+import { Divider, ExternalLink } from "@/Components/ui"
 import "@/styles/Description.css"
 
 const Description: React.FC = () => {

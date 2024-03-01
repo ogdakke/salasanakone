@@ -1,6 +1,6 @@
 import { useTranslation } from "@/common/utils/getLanguage"
-import { InputField, SimpleIsland, SliderComponent } from "@/components"
-import { FormContext, FormDispatchContext } from "@/components/FormContext"
+import { InputField, SimpleIsland, SliderComponent } from "@/Components"
+import { FormContext, FormDispatchContext } from "@/Components/FormContext"
 import { defaultFormValues } from "@/config"
 import { InputLabel, InputValue, PassCreationRules } from "@/models"
 import { FormActionKind } from "@/services/reducers/formReducer"
@@ -8,7 +8,7 @@ import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
 import React, { useCallback, useContext, useEffect } from "react"
 
-const Result = React.lazy(async () => await import("@/components/result"))
+const Result = React.lazy(async () => await import("@/Components/result"))
 
 const initialInputKeys = Object.entries(defaultFormValues)
 
