@@ -14,7 +14,6 @@
     "paths": {
       "@/*": ["./src/*"],
       "@config/*": [".config/*"],
-      "@components/*":["src/components/*"]
     },
     "moduleResolution": "Node",
     "resolveJsonModule": true,

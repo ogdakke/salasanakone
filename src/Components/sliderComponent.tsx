@@ -1,14 +1,14 @@
+import { FormContext, FormDispatchContext } from "@/components/FormContext"
 import {
   maxLengthForChars,
   maxLengthForWords,
   minLengthForChars,
   minLengthForWords,
 } from "@/config"
-import { FormContext, FormDispatchContext } from "@components/FormContext"
 
 import { useTranslation } from "@/common/utils/getLanguage"
+import { Label, Slider } from "@/components/ui"
 import { FormActionKind } from "@/services/reducers/formReducer"
-import { Label, Slider } from "@components/ui"
 import { motion } from "framer-motion"
 import { useContext } from "react"
 

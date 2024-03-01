@@ -4,7 +4,7 @@ import { ChatBubbleEmpty, OpenNewWindow } from "iconoir-react"
 
 import { usePersistedState } from "@/common/hooks/usePersistedState"
 import { useTranslation } from "@/common/utils/getLanguage"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui"
 
 interface clickValueType {
   value: boolean

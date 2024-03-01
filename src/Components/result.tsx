@@ -1,11 +1,6 @@
 import useEventListener from "@/common/hooks/useEventListener"
 import { useTranslation } from "@/common/utils/getLanguage"
-import { getConfig } from "@/config"
-import { Language } from "@/models/translations"
-import copyToClipboard from "@/services/copyToClipboard"
-import { FormActionKind } from "@/services/reducers/formReducer"
-import "@/styles/Result.css"
-import { FormContext, FormDispatchContext, ResultContext } from "@components/FormContext"
+import { FormContext, FormDispatchContext, ResultContext } from "@/components/FormContext"
 import {
   HighlightCondition,
   Highlighter,
@@ -15,7 +10,12 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@components/ui"
+} from "@/components/ui"
+import { getConfig } from "@/config"
+import { Language } from "@/models/translations"
+import copyToClipboard from "@/services/copyToClipboard"
+import { FormActionKind } from "@/services/reducers/formReducer"
+import "@/styles/Result.css"
 import { Transition, motion } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
 import {

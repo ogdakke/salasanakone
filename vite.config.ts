@@ -77,7 +77,6 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src/"),
       "@services": path.resolve(__dirname, "./src/services"),
       "@config": path.resolve(__dirname, "./config"),
-      "@components": path.resolve(__dirname, "./src/components"),
     },
   },
   plugins: [react(), VitePWA(pwaOptions), visualizer(visualizerOptions) as PluginOption],

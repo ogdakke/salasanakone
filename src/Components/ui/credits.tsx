@@ -2,9 +2,9 @@ import { meta } from "@/assets/constants/meta"
 import { LogoIcon } from "@/assets/icons/logoIcon"
 import { useTranslation } from "@/common/utils/getLanguage"
 import { Share } from "@/components"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui"
 import "@/styles/Credits.css"
 import "@/styles/ui/Tooltip.css"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@components/ui"
 
 const version = __APP_VERSION__
 

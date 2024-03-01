@@ -2,16 +2,16 @@ import React, { Suspense } from "react"
 
 import { useTranslation } from "@/common/utils/getLanguage"
 import { Description, ReloadPrompt } from "@/components"
+import { Header } from "@/components/Header"
+import { ErrorComponent } from "@/components/errorComponent"
+import { PillLoadingState } from "@/components/island"
+import { Credits, Loading } from "@/components/ui"
 import { initDB } from "@/services/database/db"
 import "@/styles/App.css"
 import "@/styles/globals.css"
-import { Header } from "@components/Header"
-import { ErrorComponent } from "@components/errorComponent"
-import { PillLoadingState } from "@components/island"
-import { Credits, Loading } from "@components/ui"
 import { ErrorBoundary, FallbackProps } from "react-error-boundary"
 
-const FormComponent = React.lazy(async () => await import("@components/form"))
+const FormComponent = React.lazy(async () => await import("@/components/form"))
 
 await initDB()
 
