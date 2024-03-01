@@ -1,23 +1,4 @@
-type InputKeys =
-  | "words"
-  | "uppercase"
-  | "numbers"
-  | "randomChars"
-  | "language"
-  | "passLength"
-  | "separator"
-
 type PassLength = string | number
-
-interface InputValue {
-  value?: string // used in randomchars
-  selected: boolean
-}
-
-async function loadSanat() {
-  const sanat = (await import("@/sanat.json")).default
-  return sanat
-}
 
 import { generationErrors, getConfig, validationErrorMessages } from "@/config"
 import { PassCreationRules } from "@/models"

@@ -5,7 +5,7 @@ import { Dispatch } from "react"
 export type CheckboxLabels = "Isot Kirjaimet" | "Välimerkit" | "Numerot" | "Käytä sanoja" // TODO fix this to be translated
 
 export type InputType = "checkbox" | "input" | "radio"
-export type InputLabel = "words" | "uppercase" | "numbers" | "randomChars"
+export type InputLabel = "words" | "uppercase" | "numbers" | "randomChars" | "language"
 export type IndexedLabels = Record<InputLabel, CheckboxLabels>
 
 export interface InputValue {

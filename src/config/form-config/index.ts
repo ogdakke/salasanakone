@@ -37,6 +37,7 @@ export function labelForCheckbox(option: InputLabel) {
     randomChars: t("useDenominator"),
     numbers: t("useNumbers"),
     words: t("useWords"),
+    language: "",
   }
   return labels[option] || labels.words
 }

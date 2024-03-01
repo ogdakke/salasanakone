@@ -1,0 +1,57 @@
+.LanguageAndLink {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.LanguagePicker {
+  display: flex;
+  gap: 0.5rem;
+  height: fit-content;
+  min-height: 0;
+}
+
+.LanguagePicker button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.15rem 0.15rem;
+  min-width: 1.3em;
+  min-height: 0;
+  justify-content: center;
+  border-radius: 0.25rem;
+}
+
+.LanguagePicker button:focus-visible {
+  outline: 1px solid rgba(var(--foreground-rgb), 1);
+}
+
+.ActiveLanguageButton {
+  cursor: not-allowed;
+}
+
+.InactiveLanguageButton {
+  cursor: pointer;
+}
+
+.InactiveLanguageButton:hover {
+  opacity: 80%;
+  transition: opacity 150ms ease-out;
+}
+
+.LanguageText {
+  position: relative;
+  z-index: 10;
+  height: min-content;
+}
+
+.PickerBackground {
+  border-radius: 0.25rem;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  position: absolute;
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  background-color: rgba(var(--callout-rgb), 1);
+}

@@ -1,5 +1,3 @@
-let request: IDBOpenDBRequest
-let db: IDBDatabase
 let version = 1
 
 export interface User {
@@ -17,10 +15,10 @@ const dbName = "salaDb" as const
 export const initDB = (): Promise<boolean> => {
   return new Promise((resolve) => {
     // open the connection
-    request = indexedDB.open(dbName)
+    const request = indexedDB.open(dbName)
 
     request.onupgradeneeded = () => {
-      db = request.result
+      const db = request.result
 
       // if the data object store doesn't exist, create it
       if (!db.objectStoreNames.contains(Stores.Languages)) {
@@ -31,7 +29,7 @@ export const initDB = (): Promise<boolean> => {
     }
 
     request.onsuccess = () => {
-      db = request.result
+      const db = request.result
       version = db.version
       console.log("request.onsuccess - initDB", version)
       resolve(true)
@@ -45,11 +43,11 @@ export const initDB = (): Promise<boolean> => {
 
 export const setData = <T>(storeName: Stores, data: T, key: string): Promise<T | string | null> => {
   return new Promise((resolve) => {
-    request = indexedDB.open(dbName, version)
+    const request = indexedDB.open(dbName, version)
 
     request.onsuccess = () => {
-      console.log("request.onsuccess - addData", data)
-      db = request.result
+      console.log("request.onsuccess - addData")
+      const db = request.result
       const tx = db.transaction(storeName, "readwrite")
       const store = tx.objectStore(storeName)
       store.add(data, key)
@@ -72,11 +70,10 @@ export function getDataForKey<T = string[]>(
   key: string,
 ): Promise<T | undefined> {
   return new Promise((resolve) => {
-    request = indexedDB.open(dbName)
-
-    request.onsuccess = () => {
+    const request = indexedDB.open(dbName)
+    request.onsuccess = (event) => {
       console.log("request.onsuccess - getDataForKey")
-      db = request.result
+      const db = request.result
       const tx = db.transaction(storeName, "readonly")
       const store = tx.objectStore(storeName)
       const res = store.get(key) as IDBRequest<T | undefined>
@@ -88,11 +85,11 @@ export function getDataForKey<T = string[]>(
 
 export const getStoreData = <T>(storeName: Stores): Promise<T[]> => {
   return new Promise((resolve) => {
-    request = indexedDB.open(dbName)
+    const request = indexedDB.open(dbName)
 
     request.onsuccess = () => {
-      console.log("request.onsuccess - getAllData")
-      db = request.result
+      console.log("request.onsuccess - getStoreData")
+      const db = request.result
       const tx = db.transaction(storeName, "readonly")
       const store = tx.objectStore(storeName)
       const res = store.getAll()
@@ -102,4 +99,3 @@ export const getStoreData = <T>(storeName: Stores): Promise<T[]> => {
     }
   })
 }
-

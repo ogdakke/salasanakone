@@ -24,7 +24,7 @@ type SetFormFieldAction = {
   type: FormActionKind.SET_FORM_FIELD
   payload: {
     field: keyof PassCreationRules
-    language: Language
+    language?: Language
     selected?: InputValue["selected"]
     value?: InputValue["value"]
   }
@@ -45,13 +45,16 @@ function reducer(state: FormState, action: FormActions): FormState {
     case FormActionKind.SET_FORM_FIELD:
       if (action.payload.selected !== undefined) {
         if (action.payload.field === "language") {
-          return {
-            ...state,
-            formValues: {
-              ...state.formValues,
-              language: action.payload.language,
-            },
+          if (action.payload.language) {
+            return {
+              ...state,
+              formValues: {
+                ...state.formValues,
+                language: action.payload.language,
+              },
+            }
           }
+          return state
         }
 
         return {
@@ -66,13 +69,16 @@ function reducer(state: FormState, action: FormActions): FormState {
         }
       } else {
         if (action.payload.field === "language") {
-          return {
-            ...state,
-            formValues: {
-              ...state.formValues,
-              language: action.payload.language,
-            },
+          if (action.payload.language) {
+            return {
+              ...state,
+              formValues: {
+                ...state.formValues,
+                language: action.payload.language,
+              },
+            }
           }
+          return state
         }
 
         return {

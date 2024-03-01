@@ -1,4 +1,4 @@
-import { Language, PassCreationRules } from "@models"
+import { Language } from "@/models/translations"
 
 export const minLengthForChars = 4
 export const minLengthForWords = 1
@@ -9,7 +9,7 @@ export const specialsAndNums = "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/
 export const charactersAndSpecialCharacters = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!$€=#"
 export const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
 
-export function getConfig(language: Language = "fi") {
+export function getConfig(language: Language = Language.fi) {
   return {
     // Length restrictions
     minLengthForChars: 4,
@@ -21,25 +21,7 @@ export function getConfig(language: Language = "fi") {
   }
 }
 
-export const validLanguages: Language[] = ["fi", "en"]
 export const defaultLengthOfPassphrase = "3"
-
-export const defaultResponse: PassCreationRules = {
-  language: "fi",
-  words: {
-    selected: true,
-  },
-  uppercase: {
-    selected: true,
-  },
-  numbers: {
-    selected: true,
-  },
-  randomChars: {
-    value: "-",
-    selected: true,
-  },
-}
 
 const characters = {
   fi: "abcdefghijklmnopqrstuyäöxz",
@@ -48,9 +30,9 @@ const characters = {
 const numbers = "0123456789"
 const specials = "><,.-_*?+()@%&!$€=#"
 
-function getChars(Language?: Language) {
-  switch (Language) {
-    case "en":
+function getChars(language?: Language) {
+  switch (language) {
+    case Language.en:
       return characters.en
     default:
       return characters.fi

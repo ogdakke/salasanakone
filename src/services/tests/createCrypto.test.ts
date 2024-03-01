@@ -1,18 +1,23 @@
+import { getConfig, validationErrorMessages } from "@/config"
+import { InputType, PassCreationRules } from "@/models"
+import { Language } from "@/models/translations"
+import { createPassphrase } from "@/services/createCrypto"
 import { describe, expect, it } from "vitest"
-import { maxLengthForChars, minLengthForChars } from "../../config"
-import { InputType, PassCreationRules } from "../../models"
-import { createCryptoKey } from "../createCrypto"
+
+const dataset = (await import("@/sanat.json")).default
 
 type TestConfig = {
+  language?: Language
   word?: boolean
+  inputType?: InputType
   randomCharactersInString?: boolean
   numbers?: boolean
   uppercaseCharacters?: boolean
-  inputType?: InputType
   inputFieldValueFromUser?: string
 }
 
 const defaultConfig: TestConfig = {
+  language: Language.fi,
   word: false,
   randomCharactersInString: false,
   numbers: false,
@@ -20,17 +25,28 @@ const defaultConfig: TestConfig = {
   inputType: "checkbox",
   inputFieldValueFromUser: "-",
 }
-
-const testData = (config: TestConfig = {}): PassCreationRules => {
+const config = getConfig(defaultConfig.language)
+const { minLengthForChars, maxLengthForChars, minLengthForWords, maxLengthForWords } = config
+let variableMinLength = minLengthForChars
+let variableMaxLength = maxLengthForChars
+const testData = (testConfig: TestConfig = {}): PassCreationRules => {
   const {
+    language,
     word,
     randomCharactersInString,
     numbers,
+    inputType,
     uppercaseCharacters,
-    inputType: input,
     inputFieldValueFromUser,
-  } = { ...defaultConfig, ...config } // Merge default values with provided ones
+  } = {
+    ...defaultConfig,
+    ...testConfig,
+  } // Merge default values with provided ones
+
+  variableMinLength = word ? minLengthForWords : minLengthForChars
+  variableMaxLength = word ? maxLengthForWords : maxLengthForChars
   return {
+    language: language || Language.fi,
     words: {
       inputType: "radio",
       info: "placeholder info",
@@ -38,7 +54,7 @@ const testData = (config: TestConfig = {}): PassCreationRules => {
       value: "",
     },
     randomChars: {
-      inputType: input || "input",
+      inputType: inputType || "input",
       info: "placeholder info",
       selected: randomCharactersInString || false,
       value: inputFieldValueFromUser, //this only should apply if word === true
@@ -58,41 +74,79 @@ const testData = (config: TestConfig = {}): PassCreationRules => {
   }
 }
 
-describe("createCryptoKey creates a random string with correct length", () => {
-  it("should return a string with length 10", () => {
-    expect(createCryptoKey("10", testData())).toHaveLength(10)
-    expect(createCryptoKey("10", testData({ randomCharactersInString: true }))).toHaveLength(10)
-    expect(createCryptoKey("10", testData({ numbers: true }))).toHaveLength(10)
+const errors = validationErrorMessages(variableMinLength, variableMaxLength)
+describe("createPassphrase() creates a random string with correct length", () => {
+  it("should return a string with correct length", () => {
+    expect(createPassphrase({ dataset, passLength: 10, inputs: testData() })).toHaveLength(10)
+    expect(
+      createPassphrase({ dataset, passLength: "10", inputs: testData({ numbers: true }) }),
+    ).toHaveLength(10)
+    expect(
+      createPassphrase({
+        dataset,
+        passLength: "10",
+        inputs: testData({ randomCharactersInString: true }),
+      }),
+    ).toHaveLength(10)
+
+    /**weird values, but they are number */
+    expect(createPassphrase({ dataset, passLength: "007A", inputs: testData() })).toHaveLength(7)
+    expect(
+      createPassphrase({
+        dataset,
+        passLength: "012whaaat??? its not weird at all that this is valid",
+        inputs: testData({ numbers: true }),
+      }),
+    ).toHaveLength(12)
+    expect(createPassphrase({ dataset, passLength: "10.5", inputs: testData() })).toHaveLength(10)
+  })
+
+  it("should return a random string even if no dataset supplied", () => {
+    expect(createPassphrase({ passLength: 32, inputs: testData({}) })).toHaveLength(32)
+  })
+
+  it("should reject invalid values even if no dataset supplied", () => {
+    expect(() => createPassphrase({ passLength: 400, inputs: testData({ word: false }) })).toThrow(
+      errors.tooLong,
+    )
+
+    expect(() => createPassphrase({ passLength: "huh?", inputs: testData({}) })).toThrowError(
+      errors.notNumericStringOrNumber,
+    )
   })
 
   it("should return a string with length maxLengthForChars", () => {
-    expect(createCryptoKey(maxLengthForChars.toString(), testData())).toHaveLength(64)
+    expect(
+      createPassphrase({ dataset, passLength: maxLengthForChars, inputs: testData({}) }),
+    ).toHaveLength(maxLengthForChars)
   })
 
-  it("should not return a string with weird values", () => {
-    expect(() => createCryptoKey("-1", testData())).toThrowError(
-      "Value must be a positive number larger than 0",
-    )
-    expect(() => createCryptoKey("huh", testData())).toThrowError("Value must be a numeric string")
-    expect(() => createCryptoKey("007A", testData())).toThrowError("Value must be a numeric string")
+  it("should throw errors on a string with weird values", () => {
+    /** Testing parsing of strings */
+    expect(() =>
+      createPassphrase({ dataset, passLength: "huh?", inputs: testData({}) }),
+    ).toThrowError(errors.notNumericStringOrNumber)
 
-    expect(() => createCryptoKey("1200", testData())).toThrowError(
-      `Value must not exceed ${maxLengthForChars}`,
+    expect(() =>
+      createPassphrase({ dataset, passLength: "-1", inputs: testData({}) }),
+    ).toThrowError(errors.smallerThanOne)
+    expect(() =>
+      createPassphrase({ dataset, passLength: "1200", inputs: testData({}) }),
+    ).toThrowError(errors.tooLong)
+
+    expect(() => createPassphrase({ dataset, passLength: "3", inputs: testData({}) })).toThrowError(
+      errors.tooShort,
     )
 
-    expect(() => createCryptoKey("3", testData())).toThrowError(
-      `Value cannot be smaller than ${minLengthForChars}`,
+    /** Testing Numbers */
+    expect(() => createPassphrase({ dataset, passLength: -1, inputs: testData({}) })).toThrowError(
+      errors.smallerThanOne,
     )
-
-    // @ts-expect-error testing non-string value
-    expect(() => createCryptoKey(NaN, testData())).toThrowError("Value must be a numeric string")
-    // @ts-expect-error testing nullish values
-    expect(() => createCryptoKey(null, testData())).toThrowError(
-      "Value cannot be undefined or null",
-    )
-    // @ts-expect-error testing nullish values
-    expect(() => createCryptoKey(undefined, testData())).toThrowError(
-      "Value cannot be undefined or null",
+    expect(() =>
+      createPassphrase({ dataset, passLength: Infinity, inputs: testData({}) }),
+    ).toThrowError(errors.tooLong)
+    expect(() => createPassphrase({ dataset, passLength: NaN, inputs: testData({}) })).toThrowError(
+      errors.notNumericStringOrNumber,
     )
   })
 })
@@ -105,7 +159,7 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("12jkasfäööä34")).toStrictEqual(false)
     expect(regExp.test("12jkasfä€öö.ä34_*")).toStrictEqual(false)
 
-    expect(createCryptoKey("10", testData())).toMatch(regExp)
+    expect(createPassphrase({ dataset, passLength: "10", inputs: testData({}) })).toMatch(regExp)
   })
 
   it("Should include at least one uppercase character", () => {
@@ -116,10 +170,18 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("12jkasfä€öö.ä34_*")).toStrictEqual(false)
 
     expect(
-      async () => await createCryptoKey("10", testData({ uppercaseCharacters: true })),
+      createPassphrase({
+        dataset,
+        passLength: "10",
+        inputs: testData({ uppercaseCharacters: true }),
+      }),
     ).toMatch(regExp)
     expect(
-      async () => await createCryptoKey("3", testData({ word: true, uppercaseCharacters: true })),
+      createPassphrase({
+        dataset,
+        passLength: "10",
+        inputs: testData({ uppercaseCharacters: true }),
+      }),
     ).toMatch(regExp)
   })
 
@@ -130,10 +192,16 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("tämäontesti")).toStrictEqual(false)
     expect(regExp.test("tämä*ontes-ti")).toStrictEqual(false)
 
-    expect(async () => await createCryptoKey("30", testData({ numbers: true }))).toMatch(regExp)
-    expect(async () => await createCryptoKey("4", testData({ word: true, numbers: true }))).toMatch(
-      regExp,
-    )
+    expect(
+      createPassphrase({ dataset, passLength: "30", inputs: testData({ numbers: true }) }),
+    ).toMatch(regExp)
+    expect(
+      createPassphrase({
+        dataset,
+        passLength: "4",
+        inputs: testData({ word: true, numbers: true }),
+      }),
+    ).toMatch(regExp)
   })
 
   it("Should include specials", () => {
@@ -145,7 +213,11 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("tämäontesti")).toStrictEqual(false)
 
     expect(
-      async () => await createCryptoKey("30", testData({ randomCharactersInString: true })),
+      createPassphrase({
+        dataset,
+        passLength: "30",
+        inputs: testData({ randomCharactersInString: true }),
+      }),
     ).toMatch(regExp)
   })
 
@@ -160,13 +232,20 @@ describe("Generated string includes certain characters based on user input", () 
 
     // Characters
     expect(
-      async () =>
-        await createCryptoKey("30", testData({ randomCharactersInString: true, numbers: true })),
+      createPassphrase({
+        dataset,
+        passLength: "30",
+        inputs: testData({ randomCharactersInString: true, numbers: true }),
+      }),
     ).toMatch(regExp)
 
     // Words
-    expect(() =>
-      createCryptoKey("5", testData({ word: true, randomCharactersInString: true, numbers: true })),
+    expect(
+      createPassphrase({
+        dataset,
+        passLength: "5",
+        inputs: testData({ word: true, randomCharactersInString: true, numbers: true }),
+      }),
     ).toMatch(regExp)
   })
 })
@@ -178,31 +257,33 @@ describe("Generated string includes certain characters based on user input", () 
  * - amount of special characters
  */
 describe("Generated passphrase is valid", () => {
-  it("Should have correct amount of words", async () => {
+  it("Should have correct amount of words", () => {
     const splitter = "-"
-    const passphrase = await createCryptoKey(
-      "2",
-      testData({
+    const passphrase = createPassphrase({
+      dataset,
+      passLength: "2",
+      inputs: testData({
         word: true,
         inputFieldValueFromUser: splitter,
       }),
-    )
+    })
     expect(passphrase).toContain(splitter)
 
     const splitStringArr = passphrase.split(splitter)
     expect(splitStringArr).toHaveLength(2)
   })
 
-  it("Should have correct amount of splitter characters", async () => {
+  it("Should have correct amount of splitter characters", () => {
     const splitter = "?"
     const regExp = /[?]/g
-    const passphrase = await createCryptoKey(
-      "3",
-      testData({
+    const passphrase = createPassphrase({
+      dataset,
+      passLength: "3",
+      inputs: testData({
         word: true,
         inputFieldValueFromUser: splitter,
       }),
-    )
+    })
     expect(passphrase).toContain(splitter)
 
     const splitterArr = passphrase.match(regExp)

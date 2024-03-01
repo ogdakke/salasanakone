@@ -24,7 +24,6 @@ type TextInputProps = {
 } & InputFieldProps
 
 export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesToForm }) => {
-  const { t } = useTranslation()
   const { formValues, isDisabled } = useContext(FormContext).formState
 
   switch (values.inputType) {
@@ -85,6 +84,10 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
 const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): ReactNode => {
   const { t } = useTranslation()
 
+  if (option === "language") {
+    return null
+  }
+
   return (
     <div key={option} className="flex-center radio">
       <RadioGroup
@@ -120,6 +123,10 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
 const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: TextInputProps) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
+
+  if (option === "language") {
+    return null
+  }
 
   const handleSave = () => {
     if (inputRef.current?.value) {
@@ -164,7 +171,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
       ) : (
         <div key={option} className="flex-center blurFadeIn">
           <Checkbox
-            aria-label={labelForCheckbox(option)}
+            aria-label={labelForCheckbox(option).toString()}
             className="checkboxRoot"
             checked={formValues[option].selected}
             onCheckedChange={(event) => {

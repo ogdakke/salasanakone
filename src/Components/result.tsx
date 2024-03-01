@@ -1,6 +1,7 @@
 import useEventListener from "@/common/hooks/useEventListener"
 import { useTranslation } from "@/common/utils"
 import { getConfig } from "@/config"
+import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
@@ -42,7 +43,7 @@ const fade: Transition = {
 }
 
 const highlightNumbers: HighlightCondition = {
-  condition: getConfig("fi").generationStrings.numbers,
+  condition: getConfig(Language.fi).generationStrings.numbers,
   style: {
     fontWeight: "bold",
     color: "var(--emphasis)",
@@ -50,7 +51,7 @@ const highlightNumbers: HighlightCondition = {
 }
 
 const highlightSpecials: HighlightCondition = {
-  condition: getConfig("fi").generationStrings.specials,
+  condition: getConfig(Language.fi).generationStrings.specials,
   style: {
     fontWeight: "bold",
     opacity: "0.7",

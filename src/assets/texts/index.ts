@@ -48,6 +48,7 @@ export const en: Translations = {
     "A passphrase is a string of words, usually separated with a special character and includes a number or numbers",
   delimiterInputLabel: "Delimiter characters",
   saveCustomDelimiter: "Save characters",
+  languageInfo: "Change language",
 }
 
 export const fi = {
@@ -99,4 +100,5 @@ export const fi = {
   length: "Salasanan pituus",
   delimiterInputLabel: "Välimerkit, jotka erottavat sanat",
   saveCustomDelimiter: "Tallenna välimerkit",
+  languageInfo: "Vaihda kieli",
 } as const

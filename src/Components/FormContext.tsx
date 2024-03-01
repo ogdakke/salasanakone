@@ -19,7 +19,12 @@ import reducer, {
 } from "@/services/reducers/formReducer"
 import { ReactNode, createContext, useCallback, useEffect, useState } from "react"
 
+const isDev = import.meta.env.DEV
+
 const API_KEY = import.meta.env.VITE_X_API_KEY
+const API_URL = isDev ? "http://localhost:8787" : import.meta.env.VITE_API_URL
+const { SET_DISABLED, SET_FORM_FIELD } = FormActionKind
+
 let temp_dataset: {
   language: Language
   dataset: string[]
@@ -45,7 +50,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
 
   if (!Object.keys(formState.formValues).includes("language")) {
     dispatch({
-      type: FormActionKind.SET_FORM_FIELD,
+      type: SET_FORM_FIELD,
       payload: {
         field: "language",
         language: initialFormState.formValues.language,
@@ -58,7 +63,6 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     isEdited: false,
   })
 
-  const { SET_DISABLED } = FormActionKind
   if (!dispatch) {
     throw new Error("No dispatch found from context")
   }
@@ -85,14 +89,16 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     const { language, words } = formValues
     if (words.selected) {
       if (temp_dataset && temp_dataset.dataset.length && temp_dataset.language === language) {
+        console.log("temp_dataset hit")
         return createPassphrase({
           passLength: sliderValue,
           inputs: formValues,
           dataset: temp_dataset.dataset,
         })
       }
-      const dataset = await getDataForKey(Stores.Languages, language)
+      const dataset = await fetchDataset(language)
       if (dataset) {
+        console.log("dataset fetched successfully")
         temp_dataset = { language, dataset }
         return createPassphrase({ passLength: sliderValue, inputs: formValues, dataset })
       }
@@ -101,40 +107,40 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     return createPassphrase({ passLength: sliderValue, inputs: formValues })
   }
 
-  useEffect(() => {
-    const fetchDataset = async () => {
-      try {
-        console.info("getting data for: ", formState.formValues.language)
-        const datasetFromDB = await getDataForKey(Stores.Languages, language)
-        if (datasetFromDB) {
-          console.log("data from db", language)
-          return true
-        }
+  const fetchDataset = async (lang: Language) => {
+    try {
+      console.info("getting data for: ", lang)
+      const datasetFromDB = await getDataForKey(Stores.Languages, lang)
+      if (datasetFromDB) return datasetFromDB
+      // Set the password undefined to trigger loading state on fetch only - preventing a flash on DB lang change
+      setFinalPassword({ isEdited: false, passwordValue: undefined })
 
-        const response = await fetch(`http://localhost:8787/dataset/${language}`, {
-          headers: {
-            "X-API-KEY": API_KEY || "",
-          },
-        })
-        if (!response.ok) {
-          await response.body?.cancel()
-          throw new Error("Failed to fetch dataset")
-        }
-        const data = (await response.json()) as string[]
-        console.log(data)
-        const setToDb = await setData(Stores.Languages, data, language)
-        if (setToDb === language) {
-          // all OK
-          return true
-        }
-        return false
-      } catch (error) {
-        console.error("Error fetching dataset:", error)
+      const response = await fetch(`${API_URL}/dataset/${lang}`, {
+        headers: {
+          "X-API-KEY": API_KEY || "",
+        },
+      })
+      if (!response.ok) {
+        await response.body?.cancel()
+        throw new Error("Failed to fetch dataset")
       }
+      const data = (await response.json()) as string[]
+      const keySetToDb = await setData(Stores.Languages, data, lang)
+      if (keySetToDb === lang) {
+        // all OK
+        return data
+      }
+      return undefined
+    } catch (error) {
+      console.error("Error fetching dataset:", error)
+      return undefined
     }
+  }
 
-    return async () => await fetchDataset()
-  }, [formState.formValues.language])
+  useEffect(() => {
+    const fetchOnChange = async () => await fetchDataset(language)
+    return () => void fetchOnChange()
+  }, [language])
 
   const generate = useCallback(async () => {
     inputFieldShouldDisable()
