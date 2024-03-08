@@ -59,8 +59,8 @@ export const Header = () => {
               })
             : null}
           {isIOS ? (
-            <select onChange={handleChange}>
-              {languages.map((language, i) => {
+            <select className="SelectDropDown" onChange={handleChange} defaultValue={language}>
+              {languages.map((language) => {
                 return (
                   <option value={language} key={language}>
                     {t(language)}

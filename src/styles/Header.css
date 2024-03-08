@@ -55,3 +55,14 @@
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
   background-color: rgba(var(--callout-rgb), 1);
 }
+
+.SelectDropDown {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  color: rgba(var(--foreground-rgb), 1);
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  background-color: rgba(var(--callout-rgb), 1);
+}
