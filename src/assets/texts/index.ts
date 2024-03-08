@@ -1,4 +1,4 @@
-import { Translations } from "@/models/translations"
+import { Language, Translations } from "@/models/translations"
 
 export const en: Translations = {
   salasanakone: "Passphrase Generator",
@@ -57,6 +57,8 @@ export const en: Translations = {
   useSeparatorInfo: "Will the passphrase contain separators?",
   useSpecialsInfo: "Will the password contain special characters?",
   copied: "Copied to clipboard",
+  [Language.en]: "English",
+  [Language.fi]: "Suomi",
 }
 
 export const fi = {
@@ -117,4 +119,6 @@ export const fi = {
   useSeparatorInfo: "Sisältääkö salasana välimerkkejä?",
   useSpecialsInfo: "Sisältääkö salasana erikoismerkkejä?",
   copied: "Kopioitu leikepöydälle",
+  [Language.en]: "English",
+  [Language.fi]: "Suomi",
 } as const

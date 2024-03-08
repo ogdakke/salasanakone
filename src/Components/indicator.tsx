@@ -2,7 +2,7 @@ import { FormContext, ResultContext } from "@/Components/FormContext"
 import { useTranslation } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
 import "@/styles/Indicator.css"
-import { motion, useAnimate } from "framer-motion"
+import { m, useAnimate } from "framer-motion"
 import { useCallback, useContext, useEffect, useState } from "react"
 
 type StrengthBarProps = {
@@ -129,7 +129,7 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
     )
   }, [])
   return (
-    <motion.span
+    <m.span
       ref={scope}
       key="strengthBar"
       id="StrengthBar"

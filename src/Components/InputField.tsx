@@ -5,7 +5,7 @@ import { useTranslation } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
 import { InputLabel, InputValue, PassCreationRules } from "@/models"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { InfoCircle } from "iconoir-react"
 import { ReactNode, useContext, useRef } from "react"
 
@@ -198,7 +198,7 @@ const SaveTextInputButton = ({
   const { t } = useTranslation()
 
   return (
-    <motion.button
+    <m.button
       className="SaveInputButton interact"
       aria-label={t("saveCustomSeparatorDesc").toString()}
       data-animate={true}
@@ -214,6 +214,6 @@ const SaveTextInputButton = ({
       disabled={isDisabled}
     >
       {t("saveCustomSeparator")}
-    </motion.button>
+    </m.button>
   )
 }
