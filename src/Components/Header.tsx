@@ -31,11 +31,10 @@ export const Header = () => {
   const languages = Object.values(Language)
   const isActive = (lang: Language) => lang === language
   return (
-    // TODO: looks weird on mobile
     <div className="flex-center space-between">
       <div className="flex-center" style={{ gap: "1rem" }}>
         <LogoIcon width={40} height={40} />
-        <h1>{t("salasanakone")}</h1>
+        <h1 className="MainTitle">{t("salasanakone")}</h1>
       </div>
       <div className="LanguageAndLink">
         <div className="LanguagePicker">
