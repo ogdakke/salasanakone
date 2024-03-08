@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [3.0.1](https://github.com/ogdakke/salasanakone/commits/3.0.1) - 08-03-2024
+
+- [#12](https://github.com/ogdakke/salasanakone/pull/12):
+  - improve bundle size, iOS select for language, move language out of formValues, dataset fetching error handling etc.
+  - update dependencies
+
 ## [3.0.0](https://github.com/ogdakke/salasanakone/commits/3.0.0) - 01-03-2024
 
 - [#11](https://github.com/ogdakke/salasanakone/pull/11): Fetch dataset remotely, add language picker, add translations

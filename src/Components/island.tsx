@@ -2,7 +2,7 @@ import { FormContext } from "@/Components/FormContext"
 import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
 import "@/styles/Island.css"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { Plus } from "iconoir-react"
 import { useContext } from "react"
 
@@ -13,9 +13,9 @@ enum IslandVariants {
 
 export const SimpleIsland = () => {
   return (
-    <motion.div className="IslandMain" data-state={IslandVariants.pill}>
+    <m.div className="IslandMain" data-state={IslandVariants.pill}>
       <PillIsland />
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -36,7 +36,7 @@ const PillIsland = () => {
 
   const buttonSize = 32
   return (
-    <motion.button
+    <m.button
       onClick={() => void generate()}
       style={{ willChange: "transform" }}
       className="IslandBackground"
@@ -44,7 +44,7 @@ const PillIsland = () => {
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: isTouchDevice() ? 0.96 : 1 }}
     >
-      <motion.span
+      <m.span
         initial={{
           opacity: 0,
         }}
@@ -57,8 +57,8 @@ const PillIsland = () => {
         className="IslandGenerateButton"
       >
         <Plus strokeWidth={2} height={buttonSize} width={buttonSize} />
-      </motion.span>
+      </m.span>
       <StrengthIndicator />
-    </motion.button>
+    </m.button>
   )
 }

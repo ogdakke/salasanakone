@@ -5,7 +5,6 @@ import {
   FormContextProps,
   FormDispatchContextProps,
   FormState,
-  PassCreationRules,
   ResultContextProps,
   ResultState,
 } from "@/models"
@@ -15,10 +14,13 @@ import { Stores, getDataForKey, setData } from "@/services/database/db"
 import reducer, {
   FormActionKind,
   initialFormState,
+  setDatasetFields,
+  setFormField,
+  setLanguage,
   setSlidervalue,
 } from "@/services/reducers/formReducer"
 import { ReactNode, createContext, useCallback, useEffect, useState } from "react"
-const { SET_DISABLED, SET_FORM_FIELD } = FormActionKind
+const { SET_DISABLED } = FormActionKind
 
 const isDev = import.meta.env.DEV
 const API_KEY = import.meta.env.VITE_X_API_KEY
@@ -45,17 +47,17 @@ export const ResultContext = createContext<ResultContextProps>({
 })
 
 export const FormProvider = ({ children }: { children: ReactNode }) => {
-  const [formState, dispatch] = usePersistedReducer(reducer, initialFormState, "formState")
+  const [formState, dispatch, clearValue] = usePersistedReducer(
+    reducer,
+    initialFormState,
+    "formState",
+  )
   const { language } = useLanguage()
 
-  if (!Object.keys(formState.formValues).includes("language")) {
-    dispatch({
-      type: SET_FORM_FIELD,
-      payload: {
-        field: "language",
-        language: initialFormState.formValues.language,
-      },
-    })
+  // Handle regression of localstorage values
+  if (Object.keys(formState.formValues).includes("language")) {
+    clearValue()
+    dispatch(setLanguage(initialFormState.language))
   }
 
   const [finalPassword, setFinalPassword] = useState<ResultState>({
@@ -76,7 +78,8 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       ) {
         dispatch(setSlidervalue(maxLengthForWords))
         return maxLengthForWords
-      } else if (!selected && sliderValue < minLengthForChars) {
+      }
+      if (!selected && sliderValue < minLengthForChars) {
         dispatch(setSlidervalue(minLengthForChars))
         return minLengthForChars
       }
@@ -85,30 +88,41 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     [formState.formValues],
   )
 
-  async function generatePassword(formValues: PassCreationRules, sliderValue: number) {
-    const { language, words } = formValues
-    if (words.selected) {
-      if (temp_dataset && temp_dataset.dataset.length && temp_dataset.language === language) {
+  async function generatePassword(formState: FormState) {
+    const { formValues, language, sliderValue } = formState
+    const validatedLength = validate(sliderValue, formState)
+
+    if (formValues.words.selected) {
+      if (temp_dataset?.dataset.length && temp_dataset.language === language) {
         return createPassphrase({
-          passLength: sliderValue,
+          passLength: validatedLength,
           inputs: formValues,
           dataset: temp_dataset.dataset,
+          language,
         })
       }
       const dataset = await fetchDataset(language)
       if (dataset && Array.isArray(dataset)) {
         temp_dataset = { language, dataset }
-        return createPassphrase({ passLength: sliderValue, inputs: formValues, dataset })
+        return createPassphrase({
+          passLength: validatedLength,
+          inputs: formValues,
+          language,
+          dataset,
+        })
       }
       console.warn(`got no dataset for language: "${language}", falling back to regular password`)
     }
-    return createPassphrase({ passLength: sliderValue, inputs: formValues })
+    return createPassphrase({ passLength: validatedLength, inputs: formValues, language })
   }
 
   const fetchDataset = async (lang: Language) => {
     try {
       const datasetFromDB = await getDataForKey(Stores.Languages, lang)
-      if (datasetFromDB) return datasetFromDB
+      if (datasetFromDB) {
+        handleFetchSuccess()
+        return datasetFromDB
+      }
       // Set the password undefined to trigger loading state on fetch only - preventing a flash on DB lang change
       setFinalPassword({ isEdited: false, passwordValue: undefined })
 
@@ -120,19 +134,45 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       })
       if (!response.ok) {
         await response.body?.cancel()
+        handleFetchError()
         throw new Error("Failed to fetch dataset")
       }
+
       const data = (await response.json()) as string[]
       const keySetToDb = await setData(Stores.Languages, data, lang)
       if (keySetToDb === lang) {
         // all OK
+        handleFetchSuccess()
         return data
       }
+
+      handleFetchError()
       return undefined
     } catch (error) {
       console.error("Error fetching dataset:", error)
+      handleFetchError()
       return undefined
     }
+  }
+
+  function handleFetchSuccess() {
+    dispatch(
+      setDatasetFields({
+        hasDeletedDatasets: false,
+        noDatasetFetched: false,
+      }),
+    )
+  }
+
+  function handleFetchError() {
+    console.warn("fetch failure, dispatching")
+    dispatch(
+      setDatasetFields({
+        ...formState.dataset,
+        noDatasetFetched: true,
+      }),
+    )
+    dispatch(setFormField({ field: "words", selected: false }))
   }
 
   useEffect(() => {
@@ -145,17 +185,14 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       ? dispatch({ type: SET_DISABLED, payload: true })
       : dispatch({ type: SET_DISABLED, payload: false })
     try {
-      const passwordValue = await generatePassword(
-        formState.formValues,
-        validate(formState.sliderValue, formState),
-      )
+      const passwordValue = await generatePassword(formState)
       setFinalPassword({ passwordValue, isEdited: false })
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(error.message)
       }
     }
-  }, [formState.formValues, formState.sliderValue])
+  }, [formState.formValues, formState.sliderValue, formState.language])
 
   const inputFieldShouldDisable = () => {
     return formState.formValues.words.selected && formState.sliderValue < 2

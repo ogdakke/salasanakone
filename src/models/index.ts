@@ -5,7 +5,7 @@ import { Dispatch } from "react"
 export type CheckboxLabels = "Isot Kirjaimet" | "Välimerkit" | "Numerot" | "Käytä sanoja" // TODO fix this to be translated
 
 export type InputType = "checkbox" | "input" | "radio"
-export type InputLabel = "words" | "uppercase" | "numbers" | "randomChars" | "language"
+export type InputLabel = "words" | "uppercase" | "numbers" | "randomChars"
 export type IndexedLabels = Record<InputLabel, CheckboxLabels>
 
 export interface InputValue {
@@ -16,7 +16,6 @@ export interface InputValue {
 }
 
 export interface PassCreationRules {
-  language: Language
   words: InputValue
   uppercase: InputValue
   numbers: InputValue
@@ -28,6 +27,11 @@ export type FormState = {
   sliderValue: number
   isDisabled: boolean
   isEditing: boolean
+  language: Language
+  dataset: {
+    hasDeletedDatasets: boolean
+    noDatasetFetched: boolean
+  }
 }
 
 export type FormContextProps = {

@@ -1,5 +1,5 @@
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
-import * as React from "react"
+import React from "react"
 
 import "@/styles/ui/RadioGroup.css"
 

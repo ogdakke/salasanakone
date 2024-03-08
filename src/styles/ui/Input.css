@@ -1,7 +1,5 @@
 .TextInput {
-  grid-area: input;
   width: 100%;
-  display: flex;
   border: 1px dashed rgba(var(--callout-border-rgb), 0.3);
   border-radius: 0.5rem;
   padding: 0.325rem 0.5rem;
@@ -18,10 +16,7 @@
 }
 
 .labelOnTop {
-  display: flex;
   width: 100%;
-  flex-direction: column;
-  gap: 0.25rem;
 }
 
 .labelOnTop .LabelRoot {
@@ -34,15 +29,12 @@
   gap: 0.5rem;
 }
 
-.InputButtonWrapper {
-  width: 100%;
-  justify-content: space-between;
-}
-
 .SaveInputButton {
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  display: flex;
+  align-items: center;
   border-radius: 0.5rem;
-  padding: 0.225rem 0.175rem 0.225rem 0.225rem;
+  padding: 0rem 0.5rem;
 }
 
 .SaveInputButton:focus-visible {
@@ -52,4 +44,11 @@
 .SaveInputButton:disabled {
   cursor: not-allowed;
   color: var(--helperTextColor);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .SaveInputButton:hover {
+    transition: background 100ms ease-in;
+    background-color: rgba(var(--callout-border-rgb), 0.1);
+  }
 }

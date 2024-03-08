@@ -1,4 +1,4 @@
-import { Translations } from "@/models/translations"
+import { Language, Translations } from "@/models/translations"
 
 export const en: Translations = {
   salasanakone: "Passphrase Generator",
@@ -47,7 +47,8 @@ export const en: Translations = {
   passphraseDesc:
     "A passphrase is a string of words, usually separated with a special character and includes a number or numbers",
   separatorInputLabel: "Separator characters",
-  saveCustomSeparator: "Save characters",
+  saveCustomSeparatorDesc: "Save separator characters",
+  saveCustomSeparator: "Save",
   languageInfo: "Change language",
   useWordsInfo: "Will the password contain words?",
   useCharactersInfo: "Will the password contain characters?",
@@ -55,6 +56,9 @@ export const en: Translations = {
   useNumbersInfo: "Will the password contain numbers?",
   useSeparatorInfo: "Will the passphrase contain separators?",
   useSpecialsInfo: "Will the password contain special characters?",
+  copied: "Copied to clipboard",
+  [Language.en]: "English",
+  [Language.fi]: "Suomi",
 }
 
 export const fi = {
@@ -105,7 +109,8 @@ export const fi = {
     "Salalause on sanoista koostuva, pidempi salasana. Siinä on usein välimerkkejä sanojen välissä, ja numero jossain kohdassa.",
   length: "Salasanan pituus",
   separatorInputLabel: "Välimerkit, jotka erottavat sanat",
-  saveCustomSeparator: "Tallenna välimerkit",
+  saveCustomSeparator: "Tallenna",
+  saveCustomSeparatorDesc: "Tallenna välimerkit",
   languageInfo: "Vaihda kieli",
   useWordsInfo: "Luodaanko salalause sanoista?",
   useCharactersInfo: "Luodaanko normaali salasana?",
@@ -113,4 +118,7 @@ export const fi = {
   useNumbersInfo: "Sisältääkö salasana numeroita?",
   useSeparatorInfo: "Sisältääkö salasana välimerkkejä?",
   useSpecialsInfo: "Sisältääkö salasana erikoismerkkejä?",
+  copied: "Kopioitu leikepöydälle",
+  [Language.en]: "English",
+  [Language.fi]: "Suomi",
 } as const

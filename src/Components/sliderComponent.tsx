@@ -6,10 +6,10 @@ import {
   minLengthForWords,
 } from "@/config"
 
-import { useTranslation } from "@/common/utils/getLanguage"
 import { Label, Slider } from "@/Components/ui"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { FormActionKind } from "@/services/reducers/formReducer"
-import { motion } from "framer-motion"
+import { m } from "framer-motion"
 import { useContext } from "react"
 
 const { SET_SLIDERVALUE } = FormActionKind
@@ -56,15 +56,7 @@ const SliderComponent = () => {
         min={formValues.words.selected ? minLengthForWords : minLengthForChars}
         step={1}
       >
-        <motion.span
-          initial={{ scale: 1 }}
-          whileTap={{
-            scale: 0.9,
-          }}
-          whileFocus={{
-            scale: 0.9,
-          }}
-        ></motion.span>
+        <m.span initial={{ scale: 1 }} whileTap={{ scale: 0.9 }} whileFocus={{ scale: 0.9 }} />
       </Slider>
     </div>
   )

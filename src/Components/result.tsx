@@ -1,5 +1,3 @@
-import useEventListener from "@/common/hooks/useEventListener"
-import { useTranslation } from "@/common/utils/getLanguage"
 import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import {
   HighlightCondition,
@@ -11,16 +9,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/Components/ui"
+import useEventListener from "@/common/hooks/useEventListener"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { getConfig } from "@/config"
 import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
-import { motion, Transition } from "framer-motion"
+import { Transition, m } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
 import {
-  createContext,
   ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -289,13 +289,13 @@ const ResultComponentNoEdit = ({
   const { t } = useTranslation()
 
   return (
-    <motion.div
+    <m.div
       // TODO: fix this role stuff and just make this a button
       role="button"
       transition={{ duration: 0.175 }}
       initial={{ scale: 1 }}
       title={t("clickToCopyOrEdit").toString()}
-      className="card interact resultCard relative"
+      className="ResultButton interact resultCard relative"
       itemType="button"
       tabIndex={0}
       onClick={() => void handleCopyClick(finalPassword)}
@@ -314,7 +314,7 @@ const ResultComponentNoEdit = ({
           )}
         </span>
       </span>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -332,9 +332,9 @@ const Editor = ({ handleSave }: EditorProps) => {
   }, [])
 
   return (
-    <motion.div
+    <m.div
       title={t("clickToCopyOrEdit").toString()}
-      className="card interact resultCard relative"
+      className="ResultButton interact resultCard relative"
       itemType="button"
       tabIndex={0}
       onClick={handleFocusingInput}
@@ -359,14 +359,14 @@ const Editor = ({ handleSave }: EditorProps) => {
         }}
         autoFocus
       />
-    </motion.div>
+    </m.div>
   )
 }
 
 const EditButton = ({ handleEditClick }: EditButtonProps) => {
   const { t } = useTranslation()
   return (
-    <motion.span
+    <m.span
       className="Shine absoluteCopiedIcon EditButton interact"
       aria-label={t("editResultDesc").toString()}
       data-animate={true}
@@ -389,7 +389,7 @@ const EditButton = ({ handleEditClick }: EditButtonProps) => {
       transition={fade}
     >
       <EditPencil alignmentBaseline="central" className="flex-center" />
-    </motion.span>
+    </m.span>
   )
 }
 
@@ -398,7 +398,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
   const { isCopied, copyIconShouldAnimate } = conditions
   const { t } = useTranslation()
   return (
-    <motion.span
+    <m.span
       layout
       aria-hidden={!isCopied}
       aria-label={t("hasCopiedPassword").toString()}
@@ -415,7 +415,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
       onClick={() => void handleCopyClick(passwordValue)}
     >
       <ClipboardCheck alignmentBaseline="central" className="flex-center" />
-    </motion.span>
+    </m.span>
   )
 }
 
@@ -424,7 +424,7 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
   const { inputValue } = useContext(InputContext)
 
   return (
-    <motion.span
+    <m.span
       className="Shine absoluteCopiedIcon EditButton interact"
       aria-label={t("saveAndCheckString").toString()}
       data-animate={true}
@@ -441,7 +441,7 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
       transition={fade}
     >
       <Check alignmentBaseline="central" className="flex-center" />
-    </motion.span>
+    </m.span>
   )
 }
 

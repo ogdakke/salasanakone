@@ -1,8 +1,8 @@
+import { FormContext, ResultContext } from "@/Components/FormContext"
 import { useTranslation } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
-import { FormContext, ResultContext } from "@/Components/FormContext"
 import "@/styles/Indicator.css"
-import { motion, useAnimate } from "framer-motion"
+import { m, useAnimate } from "framer-motion"
 import { useCallback, useContext, useEffect, useState } from "react"
 
 type StrengthBarProps = {
@@ -31,7 +31,8 @@ export function StrengthIndicator(): React.ReactNode {
     if (!formValues.words.selected && sliderValue > 15) {
       // a rndm string needs not be checked if its longer than 15
       return false
-    } else if (formValues.words.selected && sliderValue > 3) {
+    }
+    if (formValues.words.selected && sliderValue > 3) {
       return false
     }
     return true
@@ -128,7 +129,7 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
     )
   }, [])
   return (
-    <motion.span
+    <m.span
       ref={scope}
       key="strengthBar"
       id="StrengthBar"
@@ -149,7 +150,7 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
           delay: 0.1,
         },
       }}
-    ></motion.span>
+    />
   )
 }
 
