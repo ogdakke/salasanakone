@@ -1,12 +1,12 @@
-import { useTranslation } from "@/common/utils/getLanguage"
-import { validateLength } from "@/common/utils/helpers"
 import { SimplePopover } from "@/Components"
 import { FormContext } from "@/Components/FormContext"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
+import { useTranslation } from "@/common/utils/getLanguage"
+import { validateLength } from "@/common/utils/helpers"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
 import { InputLabel, InputValue, PassCreationRules } from "@/models"
 import { motion } from "framer-motion"
-import { FloppyDisk, InfoCircle } from "iconoir-react"
+import { InfoCircle } from "iconoir-react"
 import { ReactNode, useContext, useRef } from "react"
 
 type InputFieldProps = {
@@ -29,14 +29,7 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
 
   switch (values.inputType) {
     case "radio":
-      return (
-        <RadioInput
-          formValues={formValues}
-          valuesToForm={valuesToForm}
-          option={option}
-          values={values}
-        />
-      )
+      return <RadioInput valuesToForm={valuesToForm} option={option} values={values} />
     case "input":
       return (
         <TextInput
@@ -61,9 +54,6 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
 
 const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInputProps) => {
   const { t } = useTranslation()
-  if (option === "language") {
-    return null //TODO this is fucked
-  }
 
   return (
     <div key={option} className="checkboxParent flex-center" style={{ gridArea: `${option}` }}>
@@ -75,7 +65,7 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
         }}
         id={option}
         value={values.selected.toString()}
-      ></Checkbox>
+      />
       <Label title={t(values.info).toString()} htmlFor={option}>
         {labelForCheckbox(option)}
       </Label>
@@ -83,25 +73,35 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
   )
 }
 
-const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): ReactNode => {
+const RadioInput = ({ option, valuesToForm }: Omit<SimpleInputProps, "formValues">): ReactNode => {
   const { t } = useTranslation()
-
-  if (option === "language") {
-    return null
-  }
+  const { formState } = useContext(FormContext)
+  const { words } = formState.formValues
+  const { noDatasetFetched, hasDeletedDatasets } = formState.dataset
+  const radioStates = {
+    passphrase: "passphrase",
+    password: "password",
+  } as const
+  const isWordsDisabled = noDatasetFetched || hasDeletedDatasets
 
   return (
     <div key={option} className="flex-center radio">
       <RadioGroup
-        defaultValue={formValues[option].selected.toString()}
+        defaultValue={
+          words.selected && !isWordsDisabled ? radioStates.passphrase : radioStates.password
+        }
         onValueChange={(event) => {
-          const isBool = event === "true"
-          valuesToForm(option, isBool, "selected")
+          if (!isWordsDisabled) {
+            const isBool = event === radioStates.passphrase
+            valuesToForm(option, isBool, "selected")
+          }
         }}
       >
         <div className="flex-center">
-          <RadioGroupItem value="true" id="r1" key="r1" />
-          <Label htmlFor="r1">{t("useWords")}</Label>
+          <RadioGroupItem value={radioStates.passphrase} id="r1" key="r1" />
+          <Label aria-disabled={isWordsDisabled} htmlFor="r1">
+            {t("useWords")}
+          </Label>
           <SimplePopover text={t("passphraseDesc")}>
             <InfoCircle
               key={"info"}
@@ -114,7 +114,7 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
           </SimplePopover>
         </div>
         <div className="flex-center">
-          <RadioGroupItem value="false" id="r2" key="r2" />
+          <RadioGroupItem value={radioStates.password} id="r2" key="r2" />
           <Label htmlFor="r2">{t("useCharacters")}</Label>
         </div>
       </RadioGroup>
@@ -125,13 +125,11 @@ const RadioInput = ({ option, formValues, valuesToForm }: SimpleInputProps): Rea
 const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: TextInputProps) => {
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
-
-  if (option === "language") {
-    return null
-  }
+  const { words, randomChars } = formValues
 
   const handleSave = () => {
     if (inputRef.current) {
+      if (randomChars.value === inputRef.current.value) return
       valuesToForm(option, validateLength(inputRef.current?.value, inputFieldMaxLength), "value")
       inputRef.current.blur()
     }
@@ -139,7 +137,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
 
   return (
     <div key={option} className="textInputBox">
-      {formValues.words.selected ? (
+      {words.selected ? (
         <div className="blurFadeIn flex InputWithButton">
           <div className="labelOnTop">
             <Label className="flex-bottom" title={t(values.info).toString()} htmlFor={option}>
@@ -156,7 +154,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
                 aria-label={t("separatorInputLabel").toString()}
                 className="TextInput"
                 maxLength={inputFieldMaxLength}
-                defaultValue={formValues[option].value}
+                defaultValue={randomChars.value}
                 placeholder={t("inputPlaceholder").toString()}
                 onBlur={handleSave}
                 onPointerCancel={(event) => {
@@ -182,7 +180,7 @@ const TextInput = ({ option, values, valuesToForm, formValues, isDisabled }: Tex
             }}
             id={option}
             value={values.selected.toString()}
-          ></Checkbox>
+          />
           <Label htmlFor={option}>{t("useSpecials")}</Label>
         </div>
       )}
@@ -202,7 +200,7 @@ const SaveTextInputButton = ({
   return (
     <motion.button
       className="SaveInputButton interact"
-      aria-label={t("saveCustomSeparator").toString()}
+      aria-label={t("saveCustomSeparatorDesc").toString()}
       data-animate={true}
       onClick={(e) => {
         if (!isDisabled) {
@@ -212,11 +210,10 @@ const SaveTextInputButton = ({
       }}
       initial={{ scale: 0.4, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      whileHover={{ scale: isDisabled ? 1 : 1.05 }}
       whileTap={{ scale: isDisabled ? 1 : 0.98 }}
       disabled={isDisabled}
     >
-      <FloppyDisk width={20} height={20} alignmentBaseline="central" className="flex-center" />
+      {t("saveCustomSeparator")}
     </motion.button>
   )
 }

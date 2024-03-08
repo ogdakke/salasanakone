@@ -1,9 +1,9 @@
+import { FormDispatchContext } from "@/Components/FormContext"
 import { LogoIcon } from "@/assets/icons/logoIcon"
 import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
-import { FormDispatchContext } from "@/Components/FormContext"
 import { Language } from "@/models/translations"
+import { setLanguage } from "@/services/reducers/formReducer"
 
-import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Header.css"
 import { motion } from "framer-motion"
 import { useContext } from "react"
@@ -15,13 +15,7 @@ export const Header = () => {
 
   function handleOnClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const name = event.currentTarget.name as Language
-    dispatch({
-      type: FormActionKind.SET_FORM_FIELD,
-      payload: {
-        field: "language",
-        language: name,
-      },
-    })
+    dispatch(setLanguage(name))
   }
 
   const languages = Object.values(Language)

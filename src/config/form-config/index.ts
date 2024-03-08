@@ -1,11 +1,9 @@
 import { useTranslation } from "@/common/utils/getLanguage"
 import { InputLabel, PassCreationRules } from "@/models"
-import { Language } from "@/models/translations"
 
 export const inputFieldMaxLength = 8
 export const defaultSliderValue = 3
 export const defaultFormValues: PassCreationRules = {
-  language: Language.fi,
   words: {
     inputType: "radio",
     selected: true,
@@ -32,12 +30,11 @@ export const defaultFormValues: PassCreationRules = {
 export function labelForCheckbox(option: InputLabel) {
   const { t } = useTranslation()
 
-  const labels = {
+  const labels: Record<InputLabel, ReturnType<typeof t>> = {
     uppercase: t("useUppercase"),
     randomChars: t("useSeparator"),
     numbers: t("useNumbers"),
     words: t("useWords"),
-    language: "",
   }
   return labels[option] || labels.words
 }

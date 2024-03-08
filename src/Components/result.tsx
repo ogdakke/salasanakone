@@ -1,5 +1,3 @@
-import useEventListener from "@/common/hooks/useEventListener"
-import { useTranslation } from "@/common/utils/getLanguage"
 import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import {
   HighlightCondition,
@@ -11,16 +9,18 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/Components/ui"
+import useEventListener from "@/common/hooks/useEventListener"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { getConfig } from "@/config"
 import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
-import { motion, Transition } from "framer-motion"
+import { Transition, motion } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
 import {
-  createContext,
   ReactNode,
+  createContext,
   useCallback,
   useContext,
   useEffect,
@@ -295,7 +295,7 @@ const ResultComponentNoEdit = ({
       transition={{ duration: 0.175 }}
       initial={{ scale: 1 }}
       title={t("clickToCopyOrEdit").toString()}
-      className="card interact resultCard relative"
+      className="ResultButton interact resultCard relative"
       itemType="button"
       tabIndex={0}
       onClick={() => void handleCopyClick(finalPassword)}
@@ -334,7 +334,7 @@ const Editor = ({ handleSave }: EditorProps) => {
   return (
     <motion.div
       title={t("clickToCopyOrEdit").toString()}
-      className="card interact resultCard relative"
+      className="ResultButton interact resultCard relative"
       itemType="button"
       tabIndex={0}
       onClick={handleFocusingInput}

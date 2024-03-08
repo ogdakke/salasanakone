@@ -60,41 +60,6 @@
   grid-template-columns: 1fr;
 }
 
-.card {
-  /* top right bottom left */
-  padding: 1.5rem 1.2rem 1.5rem 1.2rem;
-  position: relative;
-  border-radius: var(--border-radius);
-  background: rgba(var(--card-rgb), 0);
-  border: 1px dashed rgba(var(--card-border-rgb), 0.2);
-  transition:
-    all 200ms,
-    border 200ms;
-  width: 100%;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  scroll-padding-right: 2.5rem;
-  scroll-margin-right: 1rem;
-}
-
-.card:focus-visible {
-  background: rgba(var(--card-rgb), 0.1);
-  border: 1px solid rgba(var(--card-border-rgb), 0.15);
-}
-
-.card h2 {
-  color: rgba(var(--foreground-rgb), 0.6);
-  font-weight: 500;
-}
-
-.card p {
-  margin: 0;
-  opacity: 0.6;
-  font-size: 0.875rem;
-  line-height: 1.5;
-  max-width: 30ch;
-}
-
 .resultCard {
   position: relative;
   -webkit-user-select: none;

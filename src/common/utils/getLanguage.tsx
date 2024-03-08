@@ -4,23 +4,17 @@ import { Language, TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
 
 import { FormContext, FormDispatchContext } from "@/Components/FormContext"
-import { FormActionKind } from "@/services/reducers/formReducer"
+import { setLanguage } from "@/services/reducers/formReducer"
 import { useContext } from "react"
 
 export const useLanguage = () => {
-  const { language } = useContext(FormContext).formState.formValues
-  return { language, setLanguage }
+  const { language } = useContext(FormContext).formState
+  return { language, setLanguage: setNewLanguage }
 }
 
-function setLanguage(newLanguage: Language) {
+function setNewLanguage(newLanguage: Language) {
   const { dispatch } = useContext(FormDispatchContext)
-  return dispatch({
-    type: FormActionKind.SET_FORM_FIELD,
-    payload: {
-      field: "language",
-      language: newLanguage,
-    },
-  })
+  return dispatch(setLanguage(newLanguage))
 }
 
 export const useTranslation = () => {

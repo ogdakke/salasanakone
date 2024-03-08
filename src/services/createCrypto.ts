@@ -2,6 +2,7 @@ type PassLength = string | number
 
 import { generationErrors, getConfig, validationErrorMessages } from "@/config"
 import { PassCreationRules } from "@/models"
+import { Language } from "@/models/translations"
 
 /**
  * Generates a passphrase/password based on supplied parametres
@@ -10,14 +11,15 @@ export function createPassphrase({
   dataset,
   passLength,
   inputs,
+  language,
 }: {
   dataset?: string[]
   passLength: PassLength
   inputs: PassCreationRules
+  language: Language
 }): string {
-  const { minLengthForChars, maxLengthForChars, minLengthForWords, maxLengthForWords } = getConfig(
-    inputs.language,
-  )
+  const { minLengthForChars, maxLengthForChars, minLengthForWords, maxLengthForWords } =
+    getConfig(language)
   const isUsingWords = inputs.words.selected
 
   const minLength = isUsingWords ? minLengthForWords : minLengthForChars
@@ -25,19 +27,21 @@ export function createPassphrase({
   const len = validateStringToBeValidNumber({ passLength, min: minLength, max: maxLength })
 
   if (isUsingWords && dataset) {
-    return handleReturns({ len, inputs, dataset })
+    return handleReturns({ len, inputs, dataset, language })
   }
 
-  return handleReturns({ len, inputs })
+  return handleReturns({ len, inputs, language })
 }
 
 function handleReturns({
   len,
   inputs,
   dataset,
+  language,
 }: {
   len: number
   inputs: PassCreationRules
+  language: Language
   dataset?: string[]
 }): string {
   const { randomChars, words, uppercase } = inputs
@@ -59,7 +63,7 @@ function handleReturns({
   }
 
   if (!dataset) {
-    const randomCharString = handleRandomCharStrings({ inputs, len })
+    const randomCharString = handleRandomCharStrings({ inputs, len, language })
     return applyUpperCase(randomCharString)
   }
 
@@ -110,9 +114,11 @@ function applyTransformationsToWords(inputs: PassCreationRules, wordString: stri
 function handleRandomCharStrings({
   inputs,
   len,
+  language,
 }: {
   inputs: PassCreationRules
   len: number
+  language: Language
 }): string {
   const {
     generationStrings: {
@@ -121,7 +127,7 @@ function handleRandomCharStrings({
       charsWithNumbers,
       charactersAndSpecialCharacters,
     },
-  } = getConfig(inputs.language)
+  } = getConfig(language)
 
   if (inputs.randomChars.selected && inputs.numbers.selected) {
     return createFromString(specialsAndNums, len)
@@ -181,7 +187,7 @@ const validateStringToBeValidNumber = ({
   }
   const strAsNumber = typeof passLength === "string" ? parseInt(passLength, 10) : passLength
 
-  if (isNaN(strAsNumber)) {
+  if (Number.isNaN(strAsNumber)) {
     throw new Error(errors.notNumericStringOrNumber)
   }
 
@@ -216,6 +222,7 @@ const toUppercase = (stringToUpper: string[] | string): string | string[] => {
         strArr[i] = strArr[i].toUpperCase()
       }
     })
+
     return strArr.join("")
   }
 
@@ -238,7 +245,7 @@ const calculateRequestBytes = (range: number): number => {
 }
 
 function generateRandomValueFromBytes(requestBytes: number): number {
-  const maxNum = Math.pow(256, requestBytes)
+  const maxNum = 256 ** requestBytes
   const arr = new Uint8Array(requestBytes)
   let val = 0
 
@@ -298,7 +305,7 @@ function generateRandomArray({
  */
 function capitalizeFirstLetter(stringArrToConvert: string[] | undefined): string[] {
   if (stringArrToConvert == null) {
-    throw new Error(`Error capitalising string`)
+    throw new Error(`Error capitalising string: ${stringArrToConvert}`)
   }
   const convertedArr = stringArrToConvert.map((word) => {
     return word.charAt(0).toUpperCase() + word.slice(1)
