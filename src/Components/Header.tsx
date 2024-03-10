@@ -23,7 +23,6 @@ export const Header = () => {
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value as Language
-    console.log(value)
 
     dispatch(setLanguage(value))
   }

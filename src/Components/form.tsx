@@ -1,8 +1,8 @@
-import { useTranslation } from "@/common/utils/getLanguage"
 import { InputField, SimpleIsland, SliderComponent } from "@/Components"
 import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { defaultFormValues } from "@/config"
-import { InputLabel, InputValue, PassCreationRules } from "@/models"
+import type { InputLabel, InputValue, PassCreationRules } from "@/models"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Form.css"
 import "@/styles/ui/Checkbox.css"
@@ -27,6 +27,7 @@ export default function FormComponent(): React.ReactNode {
 
   const { formValues, sliderValue } = formState
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const valuesToForm = useCallback(
     (option: InputLabel, event: string | boolean, value: "selected" | "value") => {
       const updatedValue: PassCreationRules = formValues
@@ -52,6 +53,7 @@ export default function FormComponent(): React.ReactNode {
     [],
   )
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const gen = async () => {
       await generate()

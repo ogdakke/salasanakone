@@ -15,6 +15,7 @@ dev-dist
 .env
 coverage/
 bundle-analysis/
+.wrangler
 
 # Editor directories and files
 .vscode/*

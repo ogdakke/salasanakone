@@ -7,7 +7,7 @@ fi;
 if pnpm lint; then
   printf "\nLinting ran successfully\n"
 else
-  printf "\nLinting FAILED, running prettier:format...\n"
-  pnpm prettier:format && printf "\nRan prettier, try commiting again.\n\n"
+  printf "\nLinting FAILED, running format:write...\n"
+  pnpm format:write && printf "\nRan formatter, try commiting again.\n\n"
   exit 1
 fi
