@@ -1,5 +1,5 @@
 import { defaultFormValues, defaultSliderValue } from "@/config"
-import { FormState, InputValue, PassCreationRules } from "@/models"
+import type { FormState, InputValue, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 
 export const initialFormState: FormState = {
@@ -27,7 +27,10 @@ export enum FormActionKind {
 }
 
 /** Actions */
-export type SetSliderValueAction = { type: FormActionKind.SET_SLIDERVALUE; payload: number }
+export type SetSliderValueAction = {
+  type: FormActionKind.SET_SLIDERVALUE
+  payload: number
+}
 type SetFormFieldAction = {
   type: FormActionKind.SET_FORM_FIELD
   payload: {

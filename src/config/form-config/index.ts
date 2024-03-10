@@ -1,5 +1,5 @@
 import { useTranslation } from "@/common/utils/getLanguage"
-import { InputLabel, PassCreationRules } from "@/models"
+import type { InputLabel, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 
 export const supportedLanguages = Object.values(Language)

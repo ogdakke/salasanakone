@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type Dispatch, type SetStateAction } from "react"
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useState } from "react"
 
 import useEventCallback from "./useEventCallback"
 import useEventListener from "./useEventListener"
@@ -60,6 +60,7 @@ export function usePersistedState<T>(key: string, initialValue: T): [T, SetValue
     }
   })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     setStoredValue(readValue())
   }, [])
@@ -89,7 +90,6 @@ function parseJSON<T>(value: string | null): T | undefined {
   try {
     return value === "undefined" ? undefined : (JSON.parse(value ?? "") as T)
   } catch {
-    console.log("parsing error on", { value })
     return undefined
   }
 }

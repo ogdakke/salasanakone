@@ -3,11 +3,11 @@ import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
 import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
 import { supportedLanguages } from "@/config"
-import { Language } from "@/models/translations"
+import type { Language } from "@/models/translations"
 import { Stores, deleteKey } from "@/services/database/db"
 import { setDatasetFields, setFormField, setLanguage } from "@/services/reducers/formReducer"
 import "@/styles/Island.css"
-import { Variants, m, motion } from "framer-motion"
+import { type Variants, m, motion } from "framer-motion"
 import { Download, Plus, Settings, Xmark } from "iconoir-react"
 import { useContext, useEffect, useState } from "react"
 
@@ -47,12 +47,15 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
   const fetchStorage = async () => {
     try {
       const estimate = await navigator.storage.estimate()
-      setUsedSpace((estimate.usage! / 1024 / 1024).toFixed(2))
+      if (estimate.usage) {
+        setUsedSpace((estimate.usage / 1024 / 1024).toFixed(2))
+      }
     } catch (error) {
       console.error(error)
     }
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     void fetchStorage()
   }, [language])
@@ -186,6 +189,7 @@ const SettingsIsland = ({ storage }: SettingsIslandProps) => {
       )
 
       const nextValidLanguage = getNextValidLanguage()
+      // biome-ignore lint/suspicious/noConsoleLog: <explanation>
       console.log("next: ", nextValidLanguage)
       if (nextValidLanguage) {
         dispatch(setLanguage(nextValidLanguage))

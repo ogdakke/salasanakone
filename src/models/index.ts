@@ -1,6 +1,6 @@
-import { Language, Translations } from "@/models/translations"
-import { FormActions } from "@/services/reducers/formReducer"
-import { Dispatch } from "react"
+import type { Language, Translations } from "@/models/translations"
+import type { FormActions } from "@/services/reducers/formReducer"
+import type { Dispatch } from "react"
 
 export type CheckboxLabels = "Isot Kirjaimet" | "Välimerkit" | "Numerot" | "Käytä sanoja" // TODO fix this to be translated
 

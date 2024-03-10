@@ -1,4 +1,4 @@
-import { Language, Translations } from "@/models/translations"
+import { Language, type Translations } from "@/models/translations"
 
 export const en: Translations = {
   salasanakone: "Passphrase Generator",

@@ -2,7 +2,7 @@ import { FormDispatchContext } from "@/Components/FormContext"
 import { LogoIcon } from "@/assets/icons/logoIcon"
 import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
 import { supportedLanguages } from "@/config"
-import { Language } from "@/models/translations"
+import type { Language } from "@/models/translations"
 import { setLanguage } from "@/services/reducers/formReducer"
 
 import "@/styles/Header.css"
@@ -24,7 +24,6 @@ export const Header = () => {
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value as Language
-    console.log(value)
 
     dispatch(setLanguage(value))
   }

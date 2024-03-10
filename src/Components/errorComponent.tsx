@@ -4,9 +4,9 @@ import { useInterval } from "@/common/hooks/useInterval"
 import { useTranslation } from "@/common/utils/getLanguage"
 
 interface Props {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   error: any
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   resetErrorBoundary: (...args: any[]) => void
 }
 
@@ -19,7 +19,6 @@ export const ErrorComponent = ({ error, resetErrorBoundary }: Props) => {
 
   useInterval(
     () => {
-      console.log("Trying to re-render")
       tryRender()
       setRendered(true)
     },

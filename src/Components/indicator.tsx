@@ -77,6 +77,7 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
   const barWidth = 100 + barWidthOver100
   const [scope, animate] = useAnimate()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     animate(
       scope.current,
@@ -95,7 +96,11 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
         width: `${barWidth}%`,
         willChange: "transform, opacity",
       }}
-      initial={{ opacity: 0, filter: "blur(10px)", translateX: `-${70 + widthOffset}%` }}
+      initial={{
+        opacity: 0,
+        filter: "blur(10px)",
+        translateX: `-${70 + widthOffset}%`,
+      }}
       animate={{
         translateX: `-${100 - percentageOfMax + widthOffset}%`,
         backgroundColor: numberToString(strength).color,

@@ -22,7 +22,6 @@ export const initDB = (): Promise<boolean> => {
 
       // if the data object store doesn't exist, create it
       if (!db.objectStoreNames.contains(Stores.Languages)) {
-        console.log("Creating languages store")
         db.createObjectStore(Stores.Languages)
       }
       // no need to resolve here
@@ -31,7 +30,6 @@ export const initDB = (): Promise<boolean> => {
     request.onsuccess = () => {
       const db = request.result
       version = db.version
-      console.log("request.onsuccess - initDB", version)
       resolve(true)
     }
 
@@ -46,7 +44,6 @@ export const setData = <T>(storeName: Stores, data: T, key: string): Promise<T |
     const request = indexedDB.open(dbName, version)
 
     request.onsuccess = () => {
-      console.log("request.onsuccess - addData")
       const db = request.result
       const tx = db.transaction(storeName, "readwrite")
       const store = tx.objectStore(storeName)
@@ -87,7 +84,6 @@ export function getDataForKey<T = string[]>(
   return new Promise((resolve) => {
     const request = indexedDB.open(dbName)
     request.onsuccess = (event) => {
-      console.log("request.onsuccess - getDataForKey")
       const db = request.result
       const tx = db.transaction(storeName, "readonly")
       const store = tx.objectStore(storeName)
@@ -103,7 +99,6 @@ export const getStoreData = <T>(storeName: Stores): Promise<T[]> => {
     const request = indexedDB.open(dbName)
 
     request.onsuccess = () => {
-      console.log("request.onsuccess - getStoreData")
       const db = request.result
       const tx = db.transaction(storeName, "readonly")
       const store = tx.objectStore(storeName)

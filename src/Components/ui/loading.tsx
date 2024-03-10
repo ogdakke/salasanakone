@@ -1,5 +1,6 @@
 import styles from "@/styles/modules/Loading.module.css"
-import React, { CSSProperties } from "react"
+import type React from "react"
+import type { CSSProperties } from "react"
 
 interface LoadingProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string
@@ -33,6 +34,6 @@ export const Loading: React.FC<LoadingProps> = ({
       }}
       className={`${className ?? ""} ${styles.loading}`}
       aria-busy="true"
-    ></div>
+    />
   )
 }

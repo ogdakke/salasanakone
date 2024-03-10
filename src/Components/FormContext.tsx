@@ -1,14 +1,14 @@
 import { usePersistedReducer } from "@/common/hooks/usePersistedReducer"
 import { useLanguage } from "@/common/utils/getLanguage"
 import { maxLengthForWords, minLengthForChars } from "@/config"
-import {
+import type {
   FormContextProps,
   FormDispatchContextProps,
   FormState,
   ResultContextProps,
   ResultState,
 } from "@/models"
-import { Language } from "@/models/translations"
+import type { Language } from "@/models/translations"
 import { createPassphrase } from "@/services/createCrypto"
 import { Stores, getDataForKey, setData } from "@/services/database/db"
 import reducer, {
@@ -20,7 +20,7 @@ import reducer, {
   setLanguage,
   setSlidervalue,
 } from "@/services/reducers/formReducer"
-import { ReactNode, createContext, useCallback, useEffect, useState } from "react"
+import { type ReactNode, createContext, useCallback, useEffect, useState } from "react"
 const { SET_DISABLED } = FormActionKind
 
 const isDev = import.meta.env.DEV
@@ -80,6 +80,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     throw new Error("No dispatch found from context")
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const validate = useCallback(
     (sliderValue: number, state: FormState): number => {
       const { selected } = state.formValues.words
@@ -124,7 +125,11 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       }
       console.warn(`got no dataset for language: "${language}", falling back to regular password`)
     }
-    return createPassphrase({ passLength: validatedLength, inputs: formValues, language })
+    return createPassphrase({
+      passLength: validatedLength,
+      inputs: formValues,
+      language,
+    })
   }
 
   const fetchDataset = async (lang: Language) => {
@@ -185,7 +190,8 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     console.warn("fetch failure, dispatching")
     const langs = formState.dataset.failedToFetchDatasets
     if (langs.includes(lang)) {
-      return dispatch(setFormField({ field: "words", selected: false }))
+      dispatch(setFormField({ field: "words", selected: false }))
+      return
     }
     dispatch(
       setDatasetFields({
@@ -196,11 +202,13 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     dispatch(setFormField({ field: "words", selected: false }))
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const fetchOnChange = async () => await fetchDataset(language)
     return () => void fetchOnChange()
   }, [language])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const generate = useCallback(async () => {
     inputFieldShouldDisable()
       ? dispatch({ type: SET_DISABLED, payload: true })
@@ -213,7 +221,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
         throw new Error(error.message)
       }
     }
-  }, [formState.formValues, formState.sliderValue, formState.language])
+  }, [formState.formValues, formState.sliderValue, formState.dataset])
 
   const inputFieldShouldDisable = () => {
     return formState.formValues.words.selected && formState.sliderValue < 2

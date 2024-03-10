@@ -9,7 +9,7 @@ import { useTranslation } from "@/common/utils/getLanguage"
 import { initDB } from "@/services/database/db"
 import "@/styles/App.css"
 import "@/styles/globals.css"
-import { ErrorBoundary, FallbackProps } from "react-error-boundary"
+import { ErrorBoundary, type FallbackProps } from "react-error-boundary"
 
 const FormComponent = React.lazy(async () => await import("@/Components/form"))
 

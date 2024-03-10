@@ -4,10 +4,10 @@ import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/C
 import { useTranslation } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
 import { inputFieldMaxLength, labelForCheckbox } from "@/config"
-import { InputLabel, InputValue, PassCreationRules } from "@/models"
+import type { InputLabel, InputValue, PassCreationRules } from "@/models"
 import { m } from "framer-motion"
 import { InfoCircle } from "iconoir-react"
-import { ReactNode, useContext, useRef } from "react"
+import { type ReactNode, useContext, useRef } from "react"
 
 type InputFieldProps = {
   option: InputLabel

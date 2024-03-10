@@ -1,5 +1,5 @@
 import { OpenNewWindow } from "iconoir-react"
-import { type PropsWithChildren } from "react"
+import type { PropsWithChildren } from "react"
 
 interface Props {
   link: string
