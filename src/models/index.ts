@@ -29,8 +29,8 @@ export type FormState = {
   isEditing: boolean
   language: Language
   dataset: {
-    hasDeletedDatasets: boolean
-    noDatasetFetched: boolean
+    deletedDatasets: Language[]
+    failedToFetchDatasets: Language[]
   }
 }
 

@@ -76,8 +76,8 @@
 
 .IslandWrapper {
   position: relative;
-  display: flex;
-  justify-content: center;
+  margin: 0 auto;
+  height: 12.5rem;
 }
 
 /* || Enable hover only on non-touch devices */

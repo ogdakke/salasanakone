@@ -1,6 +1,8 @@
 import { useTranslation } from "@/common/utils/getLanguage"
 import { InputLabel, PassCreationRules } from "@/models"
+import { Language } from "@/models/translations"
 
+export const supportedLanguages = Object.values(Language)
 export const inputFieldMaxLength = 8
 export const defaultSliderValue = 3
 export const defaultFormValues: PassCreationRules = {

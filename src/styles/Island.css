@@ -1,3 +1,8 @@
+.IslandAndButton {
+  display: flex;
+  align-items: flex-start;
+}
+
 .IslandContainer {
   position: relative;
   display: flex;
@@ -5,10 +10,15 @@
 }
 
 .IslandMain {
+  margin: auto 0;
   z-index: 2;
   --island-border-radius: 1.75rem;
   --island-content-padding: 1.125rem;
+  --island-bg: #101010;
   width: clamp(300px, 100dvw, 450px);
+  color: rgba(255, 255, 255, 0.87);
+  overflow: clip;
+  /* box-shadow: -10px 0px 15px 0px rgba(var(--skeleton-glow), 1); */
 }
 
 .WithButton {
@@ -20,12 +30,11 @@
   border-radius: var(--island-border-radius);
   padding: var(--island-content-padding);
   color: #636363;
-  border: 1px solid rgba(var(--skeleton-glow), 1);
+  /* border: 1px solid rgba(var(--skeleton-glow), 1); */
   overflow: hidden;
   width: 100%;
   display: flex;
   align-items: center;
-  box-shadow: -10px 0px 15px 0px rgba(var(--skeleton-glow), 0.3);
 }
 
 .IslandBackground {
@@ -35,9 +44,7 @@
   width: 100%;
   overflow: hidden;
   justify-content: space-between;
-  border-radius: calc(var(--island-border-radius));
-  border: 1px solid rgba(var(--skeleton-glow), 1);
-  background-color: rgba(var(--form-bg-rgb), 0.5);
+  background-color: var(--island-bg);
   --back-blur: 10px;
   backdrop-filter: blur(var(--back-blur));
   -webkit-backdrop-filter: blur(var(--back-blur));
@@ -47,6 +54,36 @@
 .IslandBackground:focus-visible {
   outline: none;
   box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
+}
+
+.IslandSettings {
+  width: 100%;
+  border-radius: calc(var(--island-border-radius));
+  background-color: var(--island-bg);
+  --back-blur: 10px;
+  backdrop-filter: blur(var(--back-blur));
+  -webkit-backdrop-filter: blur(var(--back-blur));
+  box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
+}
+
+.SettingsContent {
+  height: 100%;
+  padding: 0.875rem;
+}
+
+.LangaugesContainer {
+  padding-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.LanguageSettingItem {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  border-radius: 9999px;
 }
 
 .IslandGenerateButton {

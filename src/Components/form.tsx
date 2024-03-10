@@ -1,5 +1,5 @@
 import { useTranslation } from "@/common/utils/getLanguage"
-import { InputField, SimpleIsland, SliderComponent } from "@/Components"
+import { InputField, Island, SliderComponent } from "@/Components"
 import { FormContext, FormDispatchContext } from "@/Components/FormContext"
 import { defaultFormValues } from "@/config"
 import { InputLabel, InputValue, PassCreationRules } from "@/models"
@@ -79,7 +79,7 @@ export default function FormComponent(): React.ReactNode {
         </div>
       </form>
       <div className="IslandWrapper blurFadeIn">
-        <SimpleIsland />
+        <Island />
       </div>
     </>
   )

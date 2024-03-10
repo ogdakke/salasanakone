@@ -65,6 +65,21 @@ export const setData = <T>(storeName: Stores, data: T, key: string): Promise<T |
   })
 }
 
+export const deleteKey = (storeName: Stores, key: string): Promise<undefined | "failed"> => {
+  return new Promise((resolve) => {
+    const request = indexedDB.open(dbName, version)
+
+    request.onsuccess = () => {
+      const db = request.result
+      const tx = db.transaction(storeName, "readwrite")
+      const store = tx.objectStore(storeName)
+      const res = store.delete(key)
+      res.onerror = () => resolve("failed")
+      res.onsuccess = () => resolve(res.result)
+    }
+  })
+}
+
 export function getDataForKey<T = string[]>(
   storeName: Stores,
   key: string,

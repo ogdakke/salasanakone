@@ -14,6 +14,7 @@ import { Stores, getDataForKey, setData } from "@/services/database/db"
 import reducer, {
   FormActionKind,
   initialFormState,
+  resetFormState,
   setDatasetFields,
   setFormField,
   setLanguage,
@@ -58,6 +59,16 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
   if (Object.keys(formState.formValues).includes("language")) {
     clearValue()
     dispatch(setLanguage(initialFormState.language))
+  }
+
+  if (!Array.isArray(formState.dataset.deletedDatasets)) {
+    clearValue()
+    dispatch(resetFormState())
+  }
+
+  if (!Array.isArray(formState.dataset.failedToFetchDatasets)) {
+    clearValue()
+    dispatch(resetFormState())
   }
 
   const [finalPassword, setFinalPassword] = useState<ResultState>({
@@ -120,7 +131,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
     try {
       const datasetFromDB = await getDataForKey(Stores.Languages, lang)
       if (datasetFromDB) {
-        handleFetchSuccess()
+        handleFetchSuccess(lang)
         return datasetFromDB
       }
       // Set the password undefined to trigger loading state on fetch only - preventing a flash on DB lang change
@@ -134,7 +145,7 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       })
       if (!response.ok) {
         await response.body?.cancel()
-        handleFetchError()
+        handleFetchError(lang)
         throw new Error("Failed to fetch dataset")
       }
 
@@ -142,34 +153,44 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       const keySetToDb = await setData(Stores.Languages, data, lang)
       if (keySetToDb === lang) {
         // all OK
-        handleFetchSuccess()
+        handleFetchSuccess(lang)
         return data
       }
 
-      handleFetchError()
+      handleFetchError(lang)
       return undefined
     } catch (error) {
       console.error("Error fetching dataset:", error)
-      handleFetchError()
+      handleFetchError(lang)
       return undefined
     }
   }
 
-  function handleFetchSuccess() {
+  function handleFetchSuccess(lang: Language) {
+    const currentDataset = formState.dataset
+    const deletedDatasets = currentDataset.deletedDatasets
+    const updatedDeletedDatasets = deletedDatasets.filter((dataset) => dataset !== lang)
+    const updatedFailedToFetchDatasets = formState.dataset.failedToFetchDatasets.filter(
+      (dataset) => dataset !== lang,
+    )
     dispatch(
       setDatasetFields({
-        hasDeletedDatasets: false,
-        noDatasetFetched: false,
+        deletedDatasets: updatedDeletedDatasets,
+        failedToFetchDatasets: updatedFailedToFetchDatasets,
       }),
     )
   }
 
-  function handleFetchError() {
+  function handleFetchError(lang: Language): void {
     console.warn("fetch failure, dispatching")
+    const langs = formState.dataset.failedToFetchDatasets
+    if (langs.includes(lang)) {
+      return dispatch(setFormField({ field: "words", selected: false }))
+    }
     dispatch(
       setDatasetFields({
         ...formState.dataset,
-        noDatasetFetched: true,
+        failedToFetchDatasets: [...formState.dataset.failedToFetchDatasets, lang],
       }),
     )
     dispatch(setFormField({ field: "words", selected: false }))

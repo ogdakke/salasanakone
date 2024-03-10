@@ -1,6 +1,7 @@
 import { FormDispatchContext } from "@/Components/FormContext"
 import { LogoIcon } from "@/assets/icons/logoIcon"
 import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
+import { supportedLanguages } from "@/config"
 import { Language } from "@/models/translations"
 import { setLanguage } from "@/services/reducers/formReducer"
 
@@ -28,7 +29,6 @@ export const Header = () => {
     dispatch(setLanguage(value))
   }
 
-  const languages = Object.values(Language)
   const isActive = (lang: Language) => lang === language
   return (
     <div className="flex-center space-between">
@@ -39,7 +39,7 @@ export const Header = () => {
       <div className="LanguageAndLink">
         <div className="LanguagePicker">
           {!isIOS
-            ? languages.map((language) => {
+            ? supportedLanguages.map((language) => {
                 const active = isActive(language)
                 return (
                   <button
@@ -59,7 +59,7 @@ export const Header = () => {
             : null}
           {isIOS ? (
             <select className="SelectDropDown" onChange={handleChange} defaultValue={language}>
-              {languages.map((language) => {
+              {supportedLanguages.map((language) => {
                 return (
                   <option value={language} key={language}>
                     {t(language)}

@@ -9,12 +9,13 @@ export const initialFormState: FormState = {
   isDisabled: false,
   isEditing: false,
   dataset: {
-    hasDeletedDatasets: false,
-    noDatasetFetched: false,
+    deletedDatasets: [],
+    failedToFetchDatasets: [],
   },
 }
 
 export enum FormActionKind {
+  SET_FORM_STATE = "setFormState",
   SET_FORM_VALUES = "setFormValues",
   SET_FORM_FIELD = "setFormField",
   SET_SLIDERVALUE = "setSlidervalue",
@@ -36,13 +37,16 @@ type SetFormFieldAction = {
     value?: InputValue["value"]
   }
 }
+
 type SetDatasetFieldsAction = {
   type: FormActionKind.SET_DATASET_FIELDS
   payload: FormState["dataset"]
 }
-type SetLanguageAction = { type: FormActionKind.SET_LANGUAGE; payload: Language }
 
+type SetLanguageAction = { type: FormActionKind.SET_LANGUAGE; payload: Language }
+type SetFormStateAction = { type: FormActionKind.SET_FORM_STATE; payload: FormState }
 export type FormActions =
+  | SetFormStateAction
   | { type: FormActionKind.SET_FORM_VALUES; payload: PassCreationRules }
   | SetFormFieldAction
   | SetSliderValueAction
@@ -54,6 +58,8 @@ export type FormActions =
 
 export default function reducer(state: FormState, action: FormActions): FormState {
   switch (action.type) {
+    case FormActionKind.SET_FORM_STATE:
+      return action.payload
     case FormActionKind.SET_FORM_VALUES:
       return { ...state, formValues: action.payload }
     case FormActionKind.SET_FORM_FIELD:
@@ -130,3 +136,10 @@ export const setDatasetFields = (payload: FormState["dataset"]): SetDatasetField
   type: FormActionKind.SET_DATASET_FIELDS,
   payload,
 })
+
+export const resetFormState = (): SetFormStateAction => ({
+  type: FormActionKind.SET_FORM_STATE,
+  payload: initialFormState,
+})
+
+export const toggleDataset = () => ({})

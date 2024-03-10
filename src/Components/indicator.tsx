@@ -14,9 +14,6 @@ const checker = async (finalPassword: string) => {
   return check(finalPassword.toString())
 }
 
-let didInit = false
-let didCheckTime = false
-
 export function StrengthIndicator(): React.ReactNode {
   const formContext = useContext(FormContext)
   const { finalPassword } = useContext(ResultContext)
@@ -36,73 +33,32 @@ export function StrengthIndicator(): React.ReactNode {
       return false
     }
     return true
-  }, [formValues, sliderValue])
-
-  // runs excactly once when mounting/initializing. -- so runs on page load.
-  /**
-   * 4.4.2023
-   * Not sure how this actually works, it does not seem to get used, since I've tried to make it wait for a non null finalPassword
-   */
-  useEffect(() => {
-    if (!didInit) {
-      if (passwordValue && passwordValue.length > 0) {
-        didInit = true
-        checker(validateLength(passwordValue, 70))
-          .then((r) => {
-            console.info("Mounted and checking...")
-            setScore(r.score)
-          })
-          .catch((err) => {
-            if (err instanceof Error) throw new Error(err.message)
-            console.error("Error in checking", err)
-          })
-          .finally(() => {
-            console.info("Mounted and checked successfully.")
-          })
-      }
-    }
-    // eslint-disable react-hooks/exhaustive-deps
-  }, [])
+  }, [formValues.words.selected, sliderValue])
 
   useEffect(() => {
-    // THis is run each time the dep array gets a hit, so set time check to false initially
-    didCheckTime = false
-
-    // hop out early to check user inputted string without all the perf optimizations
     if (isEdited && passwordValue) {
-      return checkUserInputtedString(passwordValue)
+      ;async () => await checkUserInputtedString(passwordValue)
     }
 
-    // fake checking for better perf
     if (!validateString()) {
       setScore(4)
-    } else {
-      if (passwordValue && passwordValue.length > 0) {
-        checker(passwordValue)
-          .then((r) => {
-            setScore(r.score)
-            console.log("Checked strength succesfully")
-          })
-          .catch((err) => {
-            if (err instanceof Error) {
-              throw new Error(err.message)
-            }
-            console.error(err)
-          })
-      }
+    } else if (passwordValue && passwordValue.length > 0) {
+      ;(async () => {
+        try {
+          const result = await checker(passwordValue)
+          setScore(result.score)
+        } catch (error) {
+          console.error("Error checking password strength:", error)
+          setScore(-1)
+        }
+      })()
     }
-    return () => {
-      didCheckTime = true
-    }
-  }, [finalPassword])
+  }, [passwordValue, isEdited, validateString])
 
-  function checkUserInputtedString(str: string) {
+  async function checkUserInputtedString(str: string) {
     const validatedLengthString = validateLength(str, 128)
-    checker(validatedLengthString)
-      .then((r) => {
-        setScore(r.score)
-      })
-      .catch(console.error)
+    const r = await checker(validatedLengthString)
+    setScore(r.score)
   }
 
   return (
@@ -122,7 +78,7 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
   const [scope, animate] = useAnimate()
 
   useEffect(() => {
-    void animate(
+    animate(
       scope.current,
       { filter: "blur(0px)", opacity: 1, translateX: `-${widthOffset}%` },
       { delay: 0.3, duration: 0.85 },

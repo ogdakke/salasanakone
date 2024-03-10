@@ -29,7 +29,14 @@ export const InputField: React.FC<InputFieldProps> = ({ option, values, valuesTo
 
   switch (values.inputType) {
     case "radio":
-      return <RadioInput valuesToForm={valuesToForm} option={option} values={values} />
+      return (
+        <RadioInput
+          formValues={formValues}
+          valuesToForm={valuesToForm}
+          option={option}
+          values={values}
+        />
+      )
     case "input":
       return (
         <TextInput
@@ -73,35 +80,28 @@ const CheckboxInput = ({ option, values, formValues, valuesToForm }: SimpleInput
   )
 }
 
-const RadioInput = ({ option, valuesToForm }: Omit<SimpleInputProps, "formValues">): ReactNode => {
+const RadioInput = ({ option, valuesToForm, formValues }: SimpleInputProps): ReactNode => {
   const { t } = useTranslation()
-  const { formState } = useContext(FormContext)
-  const { words } = formState.formValues
-  const { noDatasetFetched, hasDeletedDatasets } = formState.dataset
+
   const radioStates = {
     passphrase: "passphrase",
     password: "password",
   } as const
-  const isWordsDisabled = noDatasetFetched || hasDeletedDatasets
 
   return (
     <div key={option} className="flex-center radio">
       <RadioGroup
-        defaultValue={
-          words.selected && !isWordsDisabled ? radioStates.passphrase : radioStates.password
-        }
+        // defaultValue={
+        //   words.selected && !isWordsDisabled ? radioStates.passphrase : radioStates.password
+        // }
         onValueChange={(event) => {
-          if (!isWordsDisabled) {
-            const isBool = event === radioStates.passphrase
-            valuesToForm(option, isBool, "selected")
-          }
+          const isBool = event === radioStates.passphrase
+          valuesToForm(option, isBool, "selected")
         }}
       >
         <div className="flex-center">
           <RadioGroupItem value={radioStates.passphrase} id="r1" key="r1" />
-          <Label aria-disabled={isWordsDisabled} htmlFor="r1">
-            {t("useWords")}
-          </Label>
+          <Label htmlFor="r1">{t("useWords")}</Label>
           <SimplePopover text={t("passphraseDesc")}>
             <InfoCircle
               key={"info"}
