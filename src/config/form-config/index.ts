@@ -1,5 +1,5 @@
 import { useTranslation } from "@/common/utils/getLanguage"
-import { InputLabel, PassCreationRules } from "@/models"
+import type { InputLabel, PassCreationRules } from "@/models"
 
 export const inputFieldMaxLength = 8
 export const defaultSliderValue = 3

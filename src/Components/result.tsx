@@ -1,6 +1,6 @@
 import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import {
-  HighlightCondition,
+  type HighlightCondition,
   Highlighter,
   InputComponent,
   Loading,
@@ -16,10 +16,10 @@ import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
 import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
-import { Transition, m } from "framer-motion"
+import { type Transition, m } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
 import {
-  ReactNode,
+  type ReactNode,
   createContext,
   useCallback,
   useContext,
@@ -144,6 +144,7 @@ const Result = () => {
     setEditor(EditorState.RESULT)
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const hideCopyIcon = () => setConditions((s) => ({ ...s, copyIconIsHidden: true }))
     const hiderTimeout = setTimeout(hideCopyIcon, 3000)
@@ -151,12 +152,18 @@ const Result = () => {
     return () => clearTimeout(hiderTimeout)
   }, [conditions.copyIconIsHidden])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     changeToResult()
   }, [formValues, passwordValue])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    setConditions({ isCopied: false, copyIconShouldAnimate: false, copyIconIsHidden: true })
+    setConditions({
+      isCopied: false,
+      copyIconShouldAnimate: false,
+      copyIconIsHidden: true,
+    })
   }, [passwordValue])
 
   const highlightConditions = [highlightNumbers, highlightSpecials]
@@ -403,7 +410,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
       aria-hidden={!isCopied}
       aria-label={t("hasCopiedPassword").toString()}
       className="Shine absoluteCopiedIcon interact"
-      data-animate={copyIconShouldAnimate ? true : false}
+      data-animate={!!copyIconShouldAnimate}
       initial={{ scale: 0.4 }}
       animate={{
         opacity: isCopied ? 1 : 0,

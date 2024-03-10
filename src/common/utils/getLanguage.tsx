@@ -1,6 +1,6 @@
 import { en, fi } from "@/assets/texts"
 
-import { Language, TranslationKey } from "@/models/translations"
+import { Language, type TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
 
 import { FormContext, FormDispatchContext } from "@/Components/FormContext"
@@ -45,8 +45,10 @@ const translate = (
     return i === arr.length - 1 ? (
       str
     ) : (
+      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
       <Fragment key={i}>
         {str}
+        {/* biome-ignore lint/suspicious/noArrayIndexKey: <explanation> */}
         <br key={i} />
       </Fragment>
     )

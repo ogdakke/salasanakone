@@ -1,4 +1,4 @@
-import { Dispatch, Reducer, useCallback, useEffect, useReducer } from "react"
+import { type Dispatch, type Reducer, useCallback, useEffect, useReducer } from "react"
 
 const initializer =
   (key: string) =>
@@ -16,6 +16,7 @@ export const usePersistedReducer = <T extends Record<PropertyKey, unknown>, A>(
   const [state, dispatch] = useReducer(reducer, initialState, initializer(key))
   const clearValue = useCallback(() => localStorage.removeItem(key), [key])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     localStorage.setItem(key, JSON.stringify(state))
   }, [state])

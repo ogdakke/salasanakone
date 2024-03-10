@@ -10,8 +10,9 @@
     "preview": "vite preview",
     "test": "vitest",
     "bp": "pnpm run build && pnpm run preview",
-    "lint": "eslint src/ && prettier -c src/",
-    "prettier:format": "prettier src/ --write",
+    "lint": "pnpm dlx @biomejs/biome check ./src",
+    "lint:fix-unsafe": "pnpm dlx @biomejs/biome lint --apply-unsafe ./src",
+    "format:write": "pnpm dlx @biomejs/biome format --write ./src",
     "prepare": "husky"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "react-error-boundary": "^4.0.13"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.6.0",
     "@eslint/js": "^8.57.0",
     "@types/react": "^18.2.64",
     "@types/react-dom": "^18.2.21",
@@ -61,4 +63,3 @@
     "workbox-window": "^7.0.0"
   }
 }
-

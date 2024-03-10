@@ -1,4 +1,4 @@
-import { useEffect, useRef, type RefObject } from "react"
+import { type RefObject, useEffect, useRef } from "react"
 
 import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect"
 
@@ -41,6 +41,7 @@ function useEventListener<
   KW extends keyof WindowEventMap,
   KH extends keyof HTMLElementEventMap,
   KM extends keyof MediaQueryListEventMap,
+  // biome-ignore lint/suspicious/noConfusingVoidType: <explanation>
   T extends HTMLElement | MediaQueryList | void = void,
 >(
   eventName: KW | KH | KM,
@@ -61,7 +62,7 @@ function useEventListener<
     // Define the listening target
     const targetElement: T | Window = element?.current ?? window
 
-    if (!(targetElement != null && targetElement.addEventListener)) return
+    if (!targetElement?.addEventListener) return
 
     // Create event listener that calls handler function stored in ref
     const listener: typeof handler = (event) => {

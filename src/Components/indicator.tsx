@@ -43,6 +43,8 @@ export function StrengthIndicator(): React.ReactNode {
    * 4.4.2023
    * Not sure how this actually works, it does not seem to get used, since I've tried to make it wait for a non null finalPassword
    */
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!didInit) {
       if (passwordValue && passwordValue.length > 0) {
@@ -61,9 +63,9 @@ export function StrengthIndicator(): React.ReactNode {
           })
       }
     }
-    // eslint-disable react-hooks/exhaustive-deps
   }, [])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     // THis is run each time the dep array gets a hit, so set time check to false initially
     didCheckTime = false
@@ -81,7 +83,6 @@ export function StrengthIndicator(): React.ReactNode {
         checker(passwordValue)
           .then((r) => {
             setScore(r.score)
-            console.log("Checked strength succesfully")
           })
           .catch((err) => {
             if (err instanceof Error) {
@@ -121,6 +122,7 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
   const barWidth = 100 + barWidthOver100
   const [scope, animate] = useAnimate()
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     void animate(
       scope.current,
@@ -139,7 +141,11 @@ const StrengthBar = ({ strength }: StrengthBarProps) => {
         width: `${barWidth}%`,
         willChange: "transform, opacity",
       }}
-      initial={{ opacity: 0, filter: "blur(10px)", translateX: `-${70 + widthOffset}%` }}
+      initial={{
+        opacity: 0,
+        filter: "blur(10px)",
+        translateX: `-${70 + widthOffset}%`,
+      }}
       animate={{
         translateX: `-${100 - percentageOfMax + widthOffset}%`,
         backgroundColor: numberToString(strength).color,

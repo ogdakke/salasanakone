@@ -1,4 +1,4 @@
-import React from "react"
+import type React from "react"
 
 import { Divider, ExternalLink } from "@/Components/ui"
 import "@/styles/Description.css"

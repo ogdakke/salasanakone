@@ -1,19 +1,16 @@
+import { useRegisterSW } from "virtual:pwa-register/react"
 import { useTranslation } from "@/common/utils/getLanguage"
 import "@/styles/ReloadPrompt.css"
 import { Refresh } from "iconoir-react"
 import { useState } from "react"
-import { useRegisterSW } from "virtual:pwa-register/react"
 
 const refreshSW = (registration?: ServiceWorkerRegistration) => {
-  console.log(`Needs refresh, clearing localstorage...`)
   window.localStorage.clear()
-  console.log("localStorage cleared successfully.")
   const error = new Error("No registation passed")
   return registration ? registration : error
 }
 
 const noRefreshNeeded = (registation?: ServiceWorkerRegistration) => {
-  console.log("No refresh needed.")
   return registation
 }
 
@@ -30,7 +27,6 @@ function ReloadPrompt() {
         refreshSW(r)
       }
       noRefreshNeeded(r)
-      console.log("Registered worker successfully.")
     },
     onRegisterError(error) {
       console.error(error, "Failed to register worker.")
@@ -58,7 +54,6 @@ function ReloadPrompt() {
               type="button"
               className="ToastButton inputButton"
               onClick={() => {
-                console.log("Click: => updateServiceWorker()")
                 updateServiceWorker(true).catch(console.error)
               }}
             >
@@ -71,7 +66,6 @@ function ReloadPrompt() {
               type="button"
               className={"ToastButton inputButton"}
               onClick={() => {
-                console.log("Click: => close()")
                 setIsTrue(true)
                 close()
               }}

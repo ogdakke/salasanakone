@@ -1,4 +1,4 @@
-import { CSSProperties } from "react"
+import type { CSSProperties } from "react"
 
 export interface HighlightCondition {
   condition: string
@@ -14,15 +14,12 @@ export const Highlighter = ({ text, highlightConditions }: HighlightProps) => {
   // Create an object to hold styles for each character in the text
   const stylesForCharacters: Record<string, CSSProperties> = {}
 
-  // Process each highlight condition
-  highlightConditions.forEach(({ condition, style }) => {
-    // Convert the condition string into an array for iteration
+  for (const { condition, style } of highlightConditions) {
     const conditionChars = condition.split("")
-    // Apply the style to all characters that match the condition
-    conditionChars.forEach((char) => {
+    for (const char of conditionChars) {
       stylesForCharacters[char] = style
-    })
-  })
+    }
+  }
 
   // Split the text into an array of individual characters
   const characters = text.split("")
@@ -32,6 +29,7 @@ export const Highlighter = ({ text, highlightConditions }: HighlightProps) => {
       {characters.map((char, index) =>
         // Apply the style if there is one for this character
         stylesForCharacters[char] ? (
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           <span key={index} style={stylesForCharacters[char]}>
             {char}
           </span>

@@ -1,5 +1,5 @@
 import { Popover, PopoverContent, PopoverTrigger } from "@/Components/ui"
-import { PropsWithChildren, ReactNode } from "react"
+import type { PropsWithChildren, ReactNode } from "react"
 type SimplePopoverProps = {
   text: string | ReactNode
   side?: "top" | "right" | "bottom" | "left"
