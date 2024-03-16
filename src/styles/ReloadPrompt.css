@@ -22,6 +22,7 @@
   z-index: 1;
   text-align: left;
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   transition: all 200ms ease-in;
 
   /* color-scheme dependent values */
