@@ -3,7 +3,6 @@ import { LogoIcon } from "@/assets/icons/logoIcon"
 import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
 import { supportedLanguages } from "@/config"
 import type { Language } from "@/models/translations"
-import { setLanguage } from "@/services/reducers/formReducer"
 
 import "@/styles/Header.css"
 import { useContext } from "react"
@@ -26,7 +25,8 @@ export const Header = () => {
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value as Language
-    dispatch(setLanguage(value))
+    formState.language = value
+    generate(formState)
   }
 
   const isActive = (lang: Language) => lang === language

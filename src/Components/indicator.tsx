@@ -1,62 +1,46 @@
 import { useTranslation } from "@/common/utils/getLanguage"
-import { m, useAnimate } from "framer-motion"
-import { useEffect } from "react"
+import { m } from "framer-motion"
 
 type StrengthBarProps = {
   strength: number
 }
 
 export function StrengthIndicator({ score }: { score: number }): React.ReactNode {
-  return (
-    <div className="IslandContent PillIsland">
-      <StrengthBar strength={score} />
-    </div>
-  )
-}
-
-const StrengthBar = ({ strength }: StrengthBarProps) => {
-  // If percentage is 0, it would move the bar too much left, so 10 is the minimum
-  const percentageOfMax = Math.max(15, (strength / 4) * 100)
+  // If percentage is 0, it would move the bar too much left, so 15 is the minimum
+  const percentageOfMax = Math.max(15, (score / 4) * 100)
   const widthOffset = 15
   const barWidthOver100 = widthOffset * 2
   const barWidth = 100 + barWidthOver100
-  const [scope, animate] = useAnimate()
+  const move = 100 - percentageOfMax + widthOffset
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-  useEffect(() => {
-    animate(
-      scope.current,
-      { filter: "blur(0px)", opacity: 1, translateX: `-${widthOffset}%` },
-      { delay: 0.3, duration: 0.45 },
-    )
-  }, [])
   return (
-    <m.span
-      ref={scope}
-      key="strengthBar"
-      id="StrengthBar"
-      className="StrengthBar"
-      style={{
-        left: "10%",
-        width: `${barWidth}%`,
-        willChange: "transform, opacity",
-      }}
-      initial={{
-        opacity: 0,
-        filter: "blur(16px)",
-        translateX: `-${70 + widthOffset}%`,
-      }}
-      animate={{
-        translateX: `-${100 - percentageOfMax + widthOffset}%`,
-        backgroundColor: numberToString(strength).color,
-        transition: {
-          type: "spring",
-          damping: 15,
-          duration: 0.2,
-          delay: 0.1,
-        },
-      }}
-    />
+    <div className="IslandContent PillIsland">
+      <m.span
+        className="StrengthBar"
+        style={{
+          left: "6%",
+          width: `${barWidth}%`,
+          willChange: "transform, opacity",
+        }}
+        initial={{
+          opacity: 0,
+          filter: "blur(16px)",
+          translateX: `-${70 + widthOffset}%`,
+        }}
+        animate={{
+          translateX: `-${move}%`,
+          backgroundColor: numberToString(score).color,
+          opacity: 1,
+          filter: "blur(0px)",
+          transition: {
+            type: "spring",
+            damping: 15,
+            duration: 0.2,
+            delay: 0.1,
+          },
+        }}
+      />
+    </div>
   )
 }
 
