@@ -1,4 +1,4 @@
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import { m } from "framer-motion"
 
 export function StrengthIndicator({ score }: { score: number }): React.ReactNode {

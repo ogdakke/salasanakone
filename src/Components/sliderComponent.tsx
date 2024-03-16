@@ -7,7 +7,7 @@ import {
 } from "@/config"
 
 import { Label, Slider } from "@/Components/ui"
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import { validatePasswordLength } from "@/common/utils/validations"
 import { m } from "framer-motion"
 import { useContext } from "react"

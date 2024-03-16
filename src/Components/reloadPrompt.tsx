@@ -1,5 +1,5 @@
 import { useRegisterSW } from "virtual:pwa-register/react"
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import "@/styles/ReloadPrompt.css"
 import { Xmark } from "iconoir-react"
 import { useState } from "react"

@@ -69,7 +69,7 @@ export const fi = {
   new: "Uusi",
   tryAgain: "Yritä uudelleen",
   useWords: "Salalause",
-  useCharacters: "Normaali salasana",
+  useCharacters: "Salasana",
   useUppercase: "Isot kirjaimet",
   useNumbers: "Numerot",
   useSeparator: "Välimerkit",

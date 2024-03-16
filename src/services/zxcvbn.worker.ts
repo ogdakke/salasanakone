@@ -53,9 +53,8 @@ function checkStrength(password: string): ZxcvbnResult {
 /** Initialize the worker with zxcvbn options for the given language */
 async function initWorker(): Promise<void> {
   const formState = await get<FormState>("formState")
-  console.info("formState from worker", formState)
-
-  isDev && console.debug("loading zxcvbn options")
+  isDev && console.info("formState from worker", formState)
+  isDev && console.info("loading zxcvbn options")
   await setZxcvbnOptions(formState?.language)
 }
 

@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { useInterval } from "@/common/hooks/useInterval"
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 
 interface Props {
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>

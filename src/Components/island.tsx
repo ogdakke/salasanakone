@@ -1,13 +1,14 @@
 import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext, FormDispatchContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
 import { debounce } from "@/common/utils/debounce"
-import { useTranslation } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
 import { supportedLanguages } from "@/config"
 import type { Language } from "@/models/translations"
 import { Stores, deleteKey } from "@/services/database/db"
+import { worker } from "@/services/initWorker"
 import { setDatasetFields, setFormField, setLanguage } from "@/services/reducers/formReducer"
 import "@/styles/Island.css"
 import type { ZxcvbnResult } from "@zxcvbn-ts/core"
@@ -19,10 +20,7 @@ enum IslandVariants {
   full = "full",
   pill = "pill",
 }
-
-export const worker = new Worker(new URL("@/services/worker.ts", import.meta.url), {
-  type: "module",
-})
+const isDev = import.meta.env.DEV
 
 export const Island = () => {
   const [islandVariant, setIslandVariant] = useState(IslandVariants.pill)
@@ -92,7 +90,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
 
   const workerCallback = useCallback((e: MessageEvent<ZxcvbnResult>) => {
     const result: ZxcvbnResult = e.data
-    console.info("result from worker", result)
+    isDev && console.debug("result from worker", result)
     setResult(result)
     setScore(result.score)
   }, [])

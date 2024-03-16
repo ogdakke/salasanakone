@@ -222,8 +222,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   }
   useEffectOnce(() => {
     if (!isInit) {
-      console.info("generating initial password with: ", formState)
-
+      isDev && console.debug("generating initial password with: ", formState)
       generate(formState)
     }
   })

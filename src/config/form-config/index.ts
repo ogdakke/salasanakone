@@ -1,4 +1,4 @@
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import type { InputLabel, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 

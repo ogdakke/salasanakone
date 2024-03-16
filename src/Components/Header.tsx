@@ -1,10 +1,10 @@
-import { worker } from "@/Components/island"
 import { LogoIcon } from "@/assets/icons/logoIcon"
+import { useLanguage, useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
-import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
 import { isIOS } from "@/common/utils/helpers"
 import { supportedLanguages } from "@/config"
 import type { Language } from "@/models/translations"
+import { worker } from "@/services/initWorker"
 
 import "@/styles/Header.css"
 import { motion } from "framer-motion"

@@ -8,9 +8,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/Components/ui"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
-import { useTranslation } from "@/common/utils/getLanguage"
 import { getConfig } from "@/config"
 import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"

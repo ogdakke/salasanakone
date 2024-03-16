@@ -1,7 +1,7 @@
 import { Island, SimplePopover, SliderComponent } from "@/Components"
 import { Checkbox, InputComponent, Label, RadioGroup, RadioGroupItem } from "@/Components/ui"
+import { useLanguage, useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
-import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
 import { validateLength } from "@/common/utils/helpers"
 import { validatePasswordLength } from "@/common/utils/validations"
 import { inputFieldMaxLength } from "@/config"
