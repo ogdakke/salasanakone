@@ -3,7 +3,7 @@
   --island-content-padding: 1.125rem;
   --island-bg: #101010;
   --island-button-width: 2.25rem;
-  --island-button-icon-size: 1.5rem;
+  --island-button-icon-size: 1.75rem;
   --island-button-gap: 0.5rem;
   --island-safe-zone-button: calc(
     100vw - var(--island-button-width) - var(--island-button-gap)

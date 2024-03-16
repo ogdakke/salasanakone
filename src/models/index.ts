@@ -56,6 +56,8 @@ export type ResultContextProps = {
   setFinalPassword: Dispatch<React.SetStateAction<ResultState>>
 }
 
-export type CheckerWorkerData = {
-  strValue: string
-}
+export type CheckerWorkerPostMessageData =
+  | {
+      strValue: string
+    }
+  | Language

@@ -1,8 +1,10 @@
-import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
-import { debounce, validateLength } from "@/common/utils"
+import { FormContext, FormDispatchContext } from "@/common/providers/FormProvider"
+import { ResultContext } from "@/common/providers/ResultProvider"
+import { debounce } from "@/common/utils/debounce"
 import { useTranslation } from "@/common/utils/getLanguage"
+import { validateLength } from "@/common/utils/helpers"
 import { supportedLanguages } from "@/config"
 import type { Language } from "@/models/translations"
 import { Stores, deleteKey } from "@/services/database/db"
@@ -34,7 +36,7 @@ export const Island = () => {
   const isPill = islandVariant === IslandVariants.pill
   const isFull = islandVariant === IslandVariants.full
   return (
-    <motion.div className="IslandAndButton" data-variant={islandVariant}>
+    <div className="IslandAndButton" data-variant={islandVariant}>
       <SimpleIsland variant={islandVariant} />
       <motion.button
         layoutId="settings-button"
@@ -42,10 +44,10 @@ export const Island = () => {
         type="button"
         onClick={handleIslandChange}
       >
-        <Settings className="Icon" style={{ opacity: isPill ? 1 : 0 }} />
+        <Settings strokeWidth={1} className="Icon" style={{ opacity: isPill ? 1 : 0 }} />
         <Xmark className="Icon" style={{ opacity: isFull ? 1 : 0 }} />
       </motion.button>
-    </motion.div>
+    </div>
   )
 }
 
@@ -56,6 +58,7 @@ type SimpleIslandProps = {
 const SimpleIsland = ({ variant }: SimpleIslandProps) => {
   const [usedSpace, setUsedSpace] = useState<string>()
   const [result, setResult] = useState<ZxcvbnResult>()
+  // Initial loading state is -1
   const [score, setScore] = useState(-1) // TODO this can probably be derived, so fix
 
   const { finalPassword } = useContext(ResultContext)
@@ -63,7 +66,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
   const { formValues, sliderValue } = formState
   const { passwordValue, isEdited } = finalPassword
 
-  const CHECK_DEBOUNCE_TIME = 400
+  const CHECK_DEBOUNCE_TIME = 300
 
   const fetchStorage = async () => {
     try {

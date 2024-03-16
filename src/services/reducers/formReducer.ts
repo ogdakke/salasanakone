@@ -1,5 +1,5 @@
-import { debounce } from "@/common/utils"
-import { defaultFormValues, defaultSliderValue } from "@/config"
+import { debounce } from "@/common/utils/debounce"
+import { STORE_VERSION, defaultFormValues, defaultSliderValue } from "@/config"
 import type { FormState, InputValue, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 import { set } from "idb-keyval"
@@ -154,12 +154,12 @@ export const resetFormState = (): SetFormStateAction => ({
  * @param payload state to set
  */
 export const setFormState = async (payload: FormState): Promise<void> => {
-  localStorage.setItem("formState", JSON.stringify(payload))
+  localStorage.setItem(`formState-V${STORE_VERSION}`, JSON.stringify(payload))
   debouncedSetFormState(payload)
 }
 
 const debouncedSetFormState = debounce(async (payload: FormState) => {
   isDev && console.time("set-formState")
-  await set("formState", payload)
+  await set(`formState-V${STORE_VERSION}`, payload)
   isDev && console.timeEnd("set-formState")
 }, 300)

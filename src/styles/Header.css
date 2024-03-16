@@ -67,7 +67,13 @@
 .SelectDropDown {
   font-size: 1rem;
   border-radius: 0.5rem;
-  color: rgb(200, 200, 200);
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
+  color: rgb(80, 80, 80);
   background-color: rgba(var(--callout-rgb), 1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .SelectDropDown {
+    color: rgb(200, 200, 200);
+  }
 }

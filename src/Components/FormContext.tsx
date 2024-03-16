@@ -1,15 +1,11 @@
 import { useEffectOnce } from "@/common/hooks/useEffectOnce"
 import { usePersistedReducer } from "@/common/hooks/usePersistedReducer"
-import { isKey } from "@/common/utils"
-import { useLanguage } from "@/common/utils/getLanguage"
+import { FormContext, FormDispatchContext } from "@/common/providers/FormProvider"
+import { ResultContext } from "@/common/providers/ResultProvider"
+import { isKey } from "@/common/utils/helpers"
 import { validatePasswordLength } from "@/common/utils/validations"
-import type {
-  FormContextProps,
-  FormDispatchContextProps,
-  FormState,
-  ResultContextProps,
-  ResultState,
-} from "@/models"
+import { STORE_VERSION } from "@/config"
+import type { FormState, ResultState } from "@/models"
 import type { Language } from "@/models/translations"
 import { createPassphrase } from "@/services/createCrypto"
 import { Stores, getDataForKey, setData } from "@/services/database/db"
@@ -19,7 +15,8 @@ import reducer, {
   setFormState,
   setLanguage,
 } from "@/services/reducers/formReducer"
-import { type ReactNode, createContext, useState } from "react"
+import { del } from "idb-keyval"
+import { type ReactNode, useState } from "react"
 
 const isDev = import.meta.env.DEV
 const API_KEY = import.meta.env.VITE_X_API_KEY
@@ -31,39 +28,27 @@ let temp_dataset: {
   dataset: string[]
 }
 
-export const FormContext = createContext<FormContextProps>({
-  formState: initialFormState,
-  generate: async () => {},
-})
-
-export const FormDispatchContext = createContext<FormDispatchContextProps>({
-  dispatch: () => undefined,
-})
-
-export const ResultContext = createContext<ResultContextProps>({
-  finalPassword: { isEdited: false },
-  setFinalPassword: () => undefined,
-})
-
 let hasCheckedRegressions = false
 let isInit = false
 
-export const FormProvider = ({ children }: { children: ReactNode }) => {
+export const FormProvider = ({ children }: { children: ReactNode }): ReactNode => {
   const [formState, dispatch, clearValue] = usePersistedReducer(
     reducer,
     initialFormState,
-    "formState",
+    `formState-V${STORE_VERSION}`,
   )
   const [finalPassword, setFinalPassword] = useState<ResultState>({
     passwordValue: undefined,
     isEdited: false,
   })
-  const { language } = useLanguage()
 
   // Handle regression of localstorage values
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Here we check for regressions, eg. values in localStorage that need to be removed
   function handleRegresion() {
     let regressed = []
+    localStorage.removeItem("formState")
+    del("formState")
+
     const hasLanguageInFormValues = Object.keys(formState.formValues).includes("language")
     if (hasLanguageInFormValues) {
       regressed.push("language")

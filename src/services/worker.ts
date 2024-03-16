@@ -1,48 +1,75 @@
-import type { CheckerWorkerData } from "@/models"
-import type { Language } from "@/models/translations"
+import type { CheckerWorkerPostMessageData, FormState } from "@/models"
+import { Language } from "@/models/translations"
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core"
 import type { OptionsType, ZxcvbnResult } from "@zxcvbn-ts/core"
 import { get } from "idb-keyval"
+
 const isDev = import.meta.env.DEV
 
-const formState = await get("formState")
-console.info("formState from worker", formState)
-
-/**
- * Load the needed settings for zxcvbn - called upon first load and on language change
- * @param language language to switch dictionaries to
- * @returns
- */
-async function loadOptions(language?: Language): Promise<OptionsType> {
-  isDev && console.time("load-dictionaries")
-  const [zxcvbnFiPackage, zxcvbnEnPackage] = await Promise.all([
-    import("@zxcvbn-ts/language-fi"),
-    import("@zxcvbn-ts/language-en"),
-  ])
-  isDev && console.timeEnd("load-dictionaries")
-
-  return {
-    dictionary: {
-      ...zxcvbnFiPackage.dictionary,
-      ...zxcvbnEnPackage.dictionary,
-      // userInputs: sanat.default, // todo fix this
-    },
-    translations: zxcvbnFiPackage.translations,
+/** gets the correct dictionaries for supplied language */
+async function getDic(lang: Language): Promise<OptionsType | undefined> {
+  switch (lang) {
+    case Language.fi: {
+      return isDev
+        ? await import("@zxcvbn-ts/language-fi")
+        : // @ts-expect-error import from cdn
+          await import("https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-fi@3.0.2/+esm")
+    }
+    case Language.en: {
+      return isDev
+        ? await import("@zxcvbn-ts/language-en")
+        : // @ts-expect-error import from cdn
+          await import("https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-en@3.0.2/+esm")
+    }
+    default:
+      console.error("no language found to import zxcvbn options for", lang)
+      return undefined
   }
 }
 
-function checkStrength(password: string) {
+/**
+ * Load the needed dictionaries and options for zxcvbn -
+ * called upon first load and on language change
+ * @param language language to switch dictionaries to
+ * @returns
+ */
+async function loadOptions(lang: Language): Promise<OptionsType> {
+  isDev && console.time(`load-dictionaries-${lang}`)
+  const fetchedPackage = await getDic(lang)
+  isDev && console.timeEnd(`load-dictionaries-${lang}`)
+
+  return {
+    dictionary: {
+      ...fetchedPackage?.dictionary,
+    },
+    translations: fetchedPackage?.translations,
+  }
+}
+
+function checkStrength(password: string): ZxcvbnResult {
   return zxcvbn(password)
 }
-;(async () => {
+
+/** Initialize the worker with zxcvbn options for the given language */
+async function initWorker(): Promise<void> {
+  const formState = await get<FormState>("formState")
+  console.info("formState from worker", formState)
+
   isDev && console.debug("loading zxcvbn options")
-  isDev && console.time("zxcvbn-set-options")
-  zxcvbnOptions.setOptions(await loadOptions())
-  isDev && console.timeEnd("zxcvbn-set-options")
-})()
+  await setZxcvbnOptions(formState?.language)
+}
+
+initWorker()
 
 let prev: ZxcvbnResult | undefined
-self.onmessage = async (e: MessageEvent<CheckerWorkerData>) => {
+
+self.onmessage = async function handleOnMessage(
+  e: MessageEvent<CheckerWorkerPostMessageData>,
+): Promise<void> {
+  if (typeof e.data === "string") {
+    return await handleLanguageChange(e.data)
+  }
+
   if (prev && prev.password === e.data.strValue) {
     // Previous calculation was done on same string as supplied
     isDev &&
@@ -59,4 +86,14 @@ self.onmessage = async (e: MessageEvent<CheckerWorkerData>) => {
   const result = checkStrength(e.data.strValue)
   prev = result
   return self.postMessage(result)
+}
+
+async function setZxcvbnOptions(lang = Language.fi): Promise<void> {
+  isDev && console.time(`zxcvbn-set-options-${lang}`)
+  zxcvbnOptions.setOptions(await loadOptions(lang))
+  isDev && console.timeEnd(`zxcvbn-set-options-${lang}`)
+}
+
+async function handleLanguageChange(lang: Language): Promise<void> {
+  await setZxcvbnOptions(lang)
 }

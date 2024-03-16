@@ -1,4 +1,4 @@
-import { FormContext } from "@/Components/FormContext"
+import { FormContext } from "@/common/providers/FormProvider"
 import {
   maxLengthForChars,
   maxLengthForWords,
@@ -12,10 +12,9 @@ import { validatePasswordLength } from "@/common/utils/validations"
 import { m } from "framer-motion"
 import { useContext } from "react"
 
-const SliderComponent = () => {
+export const SliderComponent = () => {
   const { t } = useTranslation()
-  const context = useContext(FormContext)
-  const { formState, generate } = context
+  const { formState, generate } = useContext(FormContext)
   const { formValues, sliderValue, isEditing } = formState
 
   const handleValueChange = (value: number): number => {
@@ -51,5 +50,3 @@ const SliderComponent = () => {
     </Label>
   )
 }
-
-export { SliderComponent }

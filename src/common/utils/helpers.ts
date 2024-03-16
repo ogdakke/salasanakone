@@ -1,4 +1,4 @@
-function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
+export function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
   return k in x
 }
 
@@ -8,7 +8,7 @@ function isKey<T extends object>(x: T, k: PropertyKey): k is keyof T {
  * @param str string to check
  * @returns string, mutated or not
  */
-const validateLength = (str: string, length: number): string => {
+export function validateLength(str: string, length: number): string {
   let final = str
   if (str.length > length) {
     final = str.substring(0, length)
@@ -16,7 +16,7 @@ const validateLength = (str: string, length: number): string => {
   return final
 }
 
-function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
+export function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
   obj: T,
   key: K,
 ): Omit<T, K> {
@@ -24,4 +24,6 @@ function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
   return rest
 }
 
-export { filterKey, isKey, validateLength }
+export const isIOS =
+  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+  (navigator.userAgent === "MacIntel" && navigator.maxTouchPoints > 1)

@@ -2,6 +2,8 @@ import { useTranslation } from "@/common/utils/getLanguage"
 import type { InputLabel, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 
+/** The version number for IDB stores to allow for sunsetting KV pairs */
+export const STORE_VERSION = 1 as const
 export const supportedLanguages = Object.values(Language)
 export const inputFieldMaxLength = 8
 export const defaultSliderValue = 3

@@ -3,7 +3,7 @@ import { en, fi } from "@/assets/texts"
 import { Language, type TranslationKey } from "@/models/translations"
 import { Fragment } from "react"
 
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { FormContext, FormDispatchContext } from "@/common/providers/FormProvider"
 import { setLanguage } from "@/services/reducers/formReducer"
 import { useContext } from "react"
 
@@ -30,7 +30,7 @@ const translate = (
   language: Language,
   key: TranslationKey,
   placeholders?: Record<PropertyKey, string>,
-): (string | JSX.Element)[] => {
+): (string | React.ReactNode)[] => {
   let translation = language === Language.fi ? fi[key] : en[key] || key
 
   if (placeholders) {

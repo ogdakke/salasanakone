@@ -1,4 +1,3 @@
-import { FormContext, ResultContext } from "@/Components/FormContext"
 import {
   type HighlightCondition,
   Highlighter,
@@ -9,6 +8,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/Components/ui"
+import { FormContext } from "@/common/providers/FormProvider"
+import { ResultContext } from "@/common/providers/ResultProvider"
 import { useTranslation } from "@/common/utils/getLanguage"
 import { getConfig } from "@/config"
 import { Language } from "@/models/translations"
@@ -79,7 +80,7 @@ type InputContextProps = {
   setInputValue: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-export const InputContext = createContext<InputContextProps>({
+const InputContext = createContext<InputContextProps>({
   setInputValue: () => undefined,
 })
 
@@ -184,7 +185,7 @@ const Result = () => {
     EditorState,
     {
       icon: ReactNode
-      iconTooltip: (string | JSX.Element)[]
+      iconTooltip: (string | ReactNode)[]
       component: ReactNode
     }
   >([

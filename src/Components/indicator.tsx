@@ -1,10 +1,6 @@
 import { useTranslation } from "@/common/utils/getLanguage"
 import { m } from "framer-motion"
 
-type StrengthBarProps = {
-  strength: number
-}
-
 export function StrengthIndicator({ score }: { score: number }): React.ReactNode {
   // If percentage is 0, it would move the bar too much left, so 15 is the minimum
   const percentageOfMax = Math.max(15, (score / 4) * 100)
@@ -12,6 +8,7 @@ export function StrengthIndicator({ score }: { score: number }): React.ReactNode
   const barWidthOver100 = widthOffset * 2
   const barWidth = 100 + barWidthOver100
   const move = 100 - percentageOfMax + widthOffset
+  const color = numberToString(score).color
 
   return (
     <div className="IslandContent PillIsland">
@@ -29,14 +26,15 @@ export function StrengthIndicator({ score }: { score: number }): React.ReactNode
         }}
         animate={{
           translateX: `-${move}%`,
-          backgroundColor: numberToString(score).color,
+          backgroundColor: color,
           opacity: 1,
-          filter: "blur(0px)",
+          filter: "blur(0)",
           transition: {
             type: "spring",
             damping: 15,
             duration: 0.2,
             delay: 0.1,
+            filter: { type: "tween" },
           },
         }}
       />
