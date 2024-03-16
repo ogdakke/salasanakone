@@ -1,4 +1,4 @@
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { FormContext } from "@/Components/FormContext"
 import {
   maxLengthForChars,
   maxLengthForWords,
@@ -8,57 +8,47 @@ import {
 
 import { Label, Slider } from "@/Components/ui"
 import { useTranslation } from "@/common/utils/getLanguage"
-import { FormActionKind } from "@/services/reducers/formReducer"
+import { validatePasswordLength } from "@/common/utils/validations"
 import { m } from "framer-motion"
 import { useContext } from "react"
-
-const { SET_SLIDERVALUE } = FormActionKind
 
 const SliderComponent = () => {
   const { t } = useTranslation()
   const context = useContext(FormContext)
-  const { validate, formState } = context
+  const { formState, generate } = context
   const { formValues, sliderValue, isEditing } = formState
-  const { dispatch } = useContext(FormDispatchContext)
 
-  if (!validate) {
-    throw new Error("No validate found in sliderComponent")
-  }
-
-  const sliderVal = (value: number): number => {
-    const validated = validate(value, formState)
+  const handleValueChange = (value: number): number => {
+    const validated = validatePasswordLength(value, formValues.words.selected)
 
     if (!isEditing) {
-      dispatch({ type: SET_SLIDERVALUE, payload: validated })
+      formState.sliderValue = validated
+      generate(formState)
     }
 
     return value
   }
 
   return (
-    <div className="sliderWrapper">
-      <Label htmlFor="slider">
-        {formValues.words.selected
-          ? t("lengthOfPassPhrase", {
-              passLength: sliderValue.toString(),
-            })
-          : t("lengthOfPassWord", {
-              passLength: sliderValue.toString(),
-            })}
-      </Label>
+    <Label>
+      {formValues.words.selected
+        ? t("lengthOfPassPhrase", {
+            passLength: sliderValue.toString(),
+          })
+        : t("lengthOfPassWord", {
+            passLength: sliderValue.toString(),
+          })}
       <Slider
-        id="slider"
-        name="slider"
-        aria-label="Salasanan pituus"
+        defaultValue={[sliderValue]}
         value={[sliderValue]}
-        onValueChange={([val]) => sliderVal(val)}
+        onValueChange={([val]) => handleValueChange(val)}
         max={formValues.words.selected ? maxLengthForWords : maxLengthForChars}
         min={formValues.words.selected ? minLengthForWords : minLengthForChars}
         step={1}
       >
         <m.span initial={{ scale: 1 }} whileTap={{ scale: 0.9 }} whileFocus={{ scale: 0.9 }} />
       </Slider>
-    </div>
+    </Label>
   )
 }
 

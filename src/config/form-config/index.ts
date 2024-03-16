@@ -9,23 +9,19 @@ export const defaultFormValues: PassCreationRules = {
   words: {
     inputType: "radio",
     selected: true,
-    info: "useWordsInfo",
   },
   uppercase: {
     inputType: "checkbox",
     selected: false,
-    info: "useUppercaseInfo",
   },
   numbers: {
     inputType: "checkbox",
     selected: true,
-    info: "useNumbersInfo",
   },
   randomChars: {
     inputType: "input",
     value: "-",
     selected: false,
-    info: "useSeparatorInfo",
   },
 }
 

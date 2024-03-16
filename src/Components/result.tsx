@@ -1,4 +1,4 @@
-import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
+import { FormContext, ResultContext } from "@/Components/FormContext"
 import {
   type HighlightCondition,
   Highlighter,
@@ -9,24 +9,14 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/Components/ui"
-import useEventListener from "@/common/hooks/useEventListener"
 import { useTranslation } from "@/common/utils/getLanguage"
 import { getConfig } from "@/config"
 import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
-import { FormActionKind } from "@/services/reducers/formReducer"
 import "@/styles/Result.css"
 import { type Transition, m } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
-import {
-  type ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-} from "react"
+import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 
 enum EditorState {
   EDITOR = "editor",
@@ -96,17 +86,13 @@ export const InputContext = createContext<InputContextProps>({
 const Result = () => {
   const { t } = useTranslation()
 
-  const {
-    generate,
-    formState: { isEditing, formValues },
-  } = useContext(FormContext)
+  const { generate, formState } = useContext(FormContext)
+  const { isEditing, formValues } = formState
 
   const {
     finalPassword: { passwordValue },
     setFinalPassword,
   } = useContext(ResultContext)
-
-  const { dispatch } = useContext(FormDispatchContext)
 
   const [inputValue, setInputValue] = useState<string | undefined>(undefined)
   const [conditions, setConditions] = useState<CopyConditions>({
@@ -135,12 +121,12 @@ const Result = () => {
   }
 
   function changeToEditor() {
-    dispatch({ type: FormActionKind.SET_EDITING, payload: true })
+    formState.isEditing = true
     setEditor(EditorState.EDITOR)
   }
 
   function changeToResult() {
-    dispatch({ type: FormActionKind.SET_EDITING, payload: false })
+    formState.isEditing = false
     setEditor(EditorState.RESULT)
   }
 
@@ -180,18 +166,6 @@ const Result = () => {
     changeToResult()
     setFinalPassword({ passwordValue: value, isEdited: true })
   }
-  const documentRef = useRef<Document>(document)
-
-  function handleKeyPress(e: KeyboardEvent) {
-    if (!isEditing && e.ctrlKey && e.key === "e") {
-      return handleEditClick()
-    }
-    if (e.ctrlKey && e.key === "Enter") {
-      return void generate()
-    }
-  }
-
-  useEventListener("keypress", handleKeyPress, documentRef)
 
   /** Early return for loading state */
   if (passwordValue === undefined) {
@@ -333,10 +307,10 @@ const Editor = ({ handleSave }: EditorProps) => {
   const { setInputValue } = useContext(InputContext)
   const { passwordValue } = useContext(ResultContext).finalPassword
 
-  const handleFocusingInput = useCallback(() => {
+  const handleFocusingInput = () => {
     document.getElementById("resultInput")?.focus()
     return () => {}
-  }, [])
+  }
 
   return (
     <m.div
@@ -356,9 +330,8 @@ const Editor = ({ handleSave }: EditorProps) => {
         onFocus={(e) => {
           setInputValue(e.target.value)
         }}
-        onChange={(e) => {
-          setInputValue(e.target.value)
-        }}
+        onBlur={(e) => handleSave(e.target.value)}
+        onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             handleSave(e.currentTarget.value)

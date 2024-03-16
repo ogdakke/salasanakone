@@ -123,6 +123,10 @@
   font-weight: 500;
 }
 
+.SimplePopoverTrigger[data-state="error"] {
+  color: var(--orange-bad-rgb);
+}
+
 @keyframes slideUpAndFade {
   from {
     opacity: 0;

@@ -1,8 +1,6 @@
-export { InputField } from "./InputField"
 export { SimplePopover } from "./SimplePopover"
 export { Description } from "./description"
 export { ErrorComponent } from "./errorComponent"
-export { Feedback } from "./feedback"
 export { StrengthIndicator } from "./indicator"
 export { Island } from "./island"
 export { ReloadPrompt } from "./reloadPrompt"

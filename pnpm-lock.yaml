@@ -44,6 +44,9 @@ dependencies:
   iconoir-react:
     specifier: ^7.5.0
     version: 7.5.0(react@18.2.0)
+  idb-keyval:
+    specifier: ^6.2.1
+    version: 6.2.1
   react:
     specifier: ^18.2.0
     version: 18.2.0
@@ -3613,6 +3616,10 @@ packages:
     dependencies:
       safer-buffer: 2.1.2
     dev: true
+
+  /idb-keyval@6.2.1:
+    resolution: {integrity: sha512-8Sb3veuYCyrZL+VBt9LJfZjLUPWVvqn8tG28VqYNFCo43KHcKuq+b4EiXGeuaLAQWL2YmyDgMp2aSpH9JHsEQg==}
+    dev: false
 
   /idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}

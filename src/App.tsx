@@ -5,7 +5,6 @@ import { Header } from "@/Components/Header"
 import { ErrorComponent } from "@/Components/errorComponent"
 import { PillLoadingState } from "@/Components/island"
 import { Credits, Loading } from "@/Components/ui"
-import { useTranslation } from "@/common/utils/getLanguage"
 import { initDB } from "@/services/database/db"
 import "@/styles/App.css"
 import "@/styles/globals.css"
@@ -53,7 +52,6 @@ const FormComponentLoader = () => {
 }
 
 const FormErrorComponent = (props: FallbackProps) => {
-  const { t } = useTranslation()
   const error = props.error as Error
   const { resetErrorBoundary } = props
 
@@ -61,7 +59,7 @@ const FormErrorComponent = (props: FallbackProps) => {
     <>
       <ErrorComponent error={error} resetErrorBoundary={resetErrorBoundary} />
       <button type="button" className="inputButton" onClick={resetErrorBoundary}>
-        {t("tryAgain")}
+        Reload
       </button>
     </>
   )

@@ -1,4 +1,4 @@
-import { FormDispatchContext } from "@/Components/FormContext"
+import { FormContext, FormDispatchContext } from "@/Components/FormContext"
 import { LogoIcon } from "@/assets/icons/logoIcon"
 import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
 import { supportedLanguages } from "@/config"
@@ -14,17 +14,18 @@ const isIOS =
 
 export const Header = () => {
   const { dispatch } = useContext(FormDispatchContext)
+  const { formState, generate } = useContext(FormContext)
   const { t } = useTranslation()
   const { language } = useLanguage()
 
   function handleOnClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const name = event.currentTarget.name as Language
-    dispatch(setLanguage(name))
+    formState.language = name
+    generate(formState)
   }
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value as Language
-
     dispatch(setLanguage(value))
   }
 

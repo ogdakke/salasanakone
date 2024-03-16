@@ -59,6 +59,7 @@ export const en: Translations = {
   copied: "Copied to clipboard",
   [Language.en]: "English",
   [Language.fi]: "Suomi",
+  errorInFetchingDataset: "Error in fetching wordlist, try again later.",
 }
 
 export const fi = {
@@ -121,4 +122,5 @@ export const fi = {
   copied: "Kopioitu leikepöydälle",
   [Language.en]: "English",
   [Language.fi]: "Suomi",
+  errorInFetchingDataset: "Virhe haettaessa sanalistaa, yritä myöhemmin uudelleen.",
 } as const

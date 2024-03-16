@@ -1,20 +1,26 @@
-import { FormContext, FormDispatchContext } from "@/Components/FormContext"
+import { FormContext, FormDispatchContext, ResultContext } from "@/Components/FormContext"
 import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
-import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
+import { debounce, validateLength } from "@/common/utils"
+import { useTranslation } from "@/common/utils/getLanguage"
 import { supportedLanguages } from "@/config"
 import type { Language } from "@/models/translations"
 import { Stores, deleteKey } from "@/services/database/db"
 import { setDatasetFields, setFormField, setLanguage } from "@/services/reducers/formReducer"
 import "@/styles/Island.css"
+import type { ZxcvbnResult } from "@zxcvbn-ts/core"
 import { type Variants, m, motion } from "framer-motion"
-import { Download, Plus, Settings, Xmark } from "iconoir-react"
-import { useContext, useEffect, useState } from "react"
+import { Plus, Settings, Xmark } from "iconoir-react"
+import { useCallback, useContext, useEffect, useState } from "react"
 
 enum IslandVariants {
   full = "full",
   pill = "pill",
 }
+
+export const worker = new Worker(new URL("@/services/worker.ts", import.meta.url), {
+  type: "module",
+})
 
 export const Island = () => {
   const [islandVariant, setIslandVariant] = useState(IslandVariants.pill)
@@ -25,14 +31,21 @@ export const Island = () => {
     }
     setIslandVariant(IslandVariants.pill)
   }
-
+  const isPill = islandVariant === IslandVariants.pill
+  const isFull = islandVariant === IslandVariants.full
   return (
-    <div className="IslandAndButton">
+    <motion.div className="IslandAndButton" data-variant={islandVariant}>
       <SimpleIsland variant={islandVariant} />
-      <button type="button" onClick={handleIslandChange}>
-        <Settings />
-      </button>
-    </div>
+      <motion.button
+        layoutId="settings-button"
+        className="SettingsButton"
+        type="button"
+        onClick={handleIslandChange}
+      >
+        <Settings className="Icon" style={{ opacity: isPill ? 1 : 0 }} />
+        <Xmark className="Icon" style={{ opacity: isFull ? 1 : 0 }} />
+      </motion.button>
+    </motion.div>
   )
 }
 
@@ -42,7 +55,15 @@ type SimpleIslandProps = {
 
 const SimpleIsland = ({ variant }: SimpleIslandProps) => {
   const [usedSpace, setUsedSpace] = useState<string>()
-  const { language } = useLanguage()
+  const [result, setResult] = useState<ZxcvbnResult>()
+  const [score, setScore] = useState(-1) // TODO this can probably be derived, so fix
+
+  const { finalPassword } = useContext(ResultContext)
+  const { formState } = useContext(FormContext)
+  const { formValues, sliderValue } = formState
+  const { passwordValue, isEdited } = finalPassword
+
+  const CHECK_DEBOUNCE_TIME = 400
 
   const fetchStorage = async () => {
     try {
@@ -55,14 +76,70 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
     }
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  const validateString = useCallback(() => {
+    if (!formValues.words.selected && sliderValue > 25) {
+      // a rndm string needs not be checked if its longer than 15
+      return false
+    }
+    if (formValues.words.selected && sliderValue > 6) {
+      return false
+    }
+    return true
+  }, [formValues, sliderValue])
+
+  const workerCallback = useCallback((e: MessageEvent<ZxcvbnResult>) => {
+    const result: ZxcvbnResult = e.data
+    console.info("result from worker", result)
+    setResult(result)
+    setScore(result.score)
+  }, [])
+
+  useEffect(() => {
+    worker.onmessage = workerCallback
+  }, [workerCallback])
+
+  const debounceCheck = useCallback(
+    debounce((str: string) => {
+      checkStrengthInWorker(str)
+    }, CHECK_DEBOUNCE_TIME),
+    [],
+  )
+
+  useEffect(() => {
+    if (isEdited && passwordValue) {
+      checkUserInputtedString(passwordValue)
+      return
+    }
+
+    if (!validateString()) {
+      setScore(4)
+      return
+    }
+
+    if (passwordValue) {
+      debounceCheck(passwordValue)
+    }
+  }, [passwordValue, isEdited, validateString, debounceCheck])
+
+  function checkUserInputtedString(str: string) {
+    const validatedLengthString = validateLength(str, 128)
+    checkStrengthInWorker(validatedLengthString)
+  }
+
+  function checkStrengthInWorker(str: string) {
+    worker.postMessage({ strValue: str })
+  }
+
   useEffect(() => {
     void fetchStorage()
-  }, [language])
+  }, [fetchStorage])
 
   const variantMap = new Map([
-    [IslandVariants.pill, <PillIsland key={IslandVariants.pill} />],
-    [IslandVariants.full, <SettingsIsland storage={usedSpace} key={IslandVariants.full} />],
+    [IslandVariants.pill, <PillIsland score={score} key={IslandVariants.pill} />],
+    [
+      IslandVariants.full,
+      <SettingsIsland result={result} storage={usedSpace} key={IslandVariants.full} />,
+    ],
   ])
 
   return (
@@ -106,14 +183,14 @@ const pillVariants: Variants = {
 /**
  * Pill island
  */
-const PillIsland = () => {
-  const { generate } = useContext(FormContext)
+const PillIsland = ({ score }: { score: number }) => {
+  const { generate, formState } = useContext(FormContext)
   const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
 
   const buttonSize = 32
   return (
     <motion.button
-      onClick={() => void generate()}
+      onClick={() => void generate(formState)}
       className="IslandBackground"
       variants={pillVariants}
       whileHover="hover"
@@ -141,15 +218,16 @@ const PillIsland = () => {
       >
         <Plus strokeWidth={2} height={buttonSize} width={buttonSize} />
       </m.span>
-      <StrengthIndicator />
+      <StrengthIndicator score={score} />
     </motion.button>
   )
 }
 
 type SettingsIslandProps = {
   storage: string | undefined
+  result?: ZxcvbnResult
 }
-const SettingsIsland = ({ storage }: SettingsIslandProps) => {
+const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
   const { t } = useTranslation()
   const { formState } = useContext(FormContext)
   const { dispatch } = useContext(FormDispatchContext)
@@ -161,9 +239,9 @@ const SettingsIsland = ({ storage }: SettingsIslandProps) => {
     return true
   }
 
-  const getNextValidLanguage = (): Language | undefined => {
+  const getNextValidLanguage = (langToToggle: Language): Language | undefined => {
     const validLanguages = supportedLanguages.filter(
-      (lang) => !formState.dataset.deletedDatasets.includes(lang),
+      () => !formState.dataset.deletedDatasets.includes(langToToggle),
     )
 
     if (validLanguages.length > 0) {
@@ -174,9 +252,20 @@ const SettingsIsland = ({ storage }: SettingsIslandProps) => {
     return undefined
   }
 
+  function removeLangFromArr(arr: Language[], langToRemove: Language): Language[] {
+    const filtered = arr.filter((lang) => lang !== langToRemove)
+
+    return filtered
+  }
+
   async function handleTogglingDataset(lang: Language): Promise<void> {
     if (formState.dataset.deletedDatasets.includes(lang)) {
-      return
+      dispatch(
+        setDatasetFields({
+          ...formState.dataset,
+          deletedDatasets: removeLangFromArr(supportedLanguages, lang),
+        }),
+      )
     }
 
     const del = await deleteKey(Stores.Languages, lang)
@@ -188,7 +277,7 @@ const SettingsIsland = ({ storage }: SettingsIslandProps) => {
         }),
       )
 
-      const nextValidLanguage = getNextValidLanguage()
+      const nextValidLanguage = getNextValidLanguage(lang)
       // biome-ignore lint/suspicious/noConsoleLog: <explanation>
       console.log("next: ", nextValidLanguage)
       if (nextValidLanguage) {
@@ -218,36 +307,16 @@ const SettingsIsland = ({ storage }: SettingsIslandProps) => {
         transition={{ duration: 0.6 }}
         className="SettingsContent"
       >
-        <div className="flex space-between pb-025">
-          <h3>Settings</h3>
+        <div className="">
+          <h3>Settings and strength</h3>
           <p className="SecondaryText" title={"Storage usage estimation"}>
             Storage: <output>{storage ? storage : "--"}</output> Mb
           </p>
         </div>
         <div>
-          <h5>Manage your languages</h5>
-          <div className="LangaugesContainer">
-            {supportedLanguages.map((lang) => {
-              return (
-                <motion.button
-                  key={lang}
-                  type="button"
-                  className="LanguageSettingItem interact"
-                  whileHover={{ scale: 1.05 }}
-                  whileFocus={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => handleTogglingDataset(lang)}
-                >
-                  <span className="SecondaryText">{t(lang)}</span>
-                  {isLanguageDownloaded(lang) ? (
-                    <Xmark width={16} height={16} />
-                  ) : (
-                    <Download width={16} height={16} />
-                  )}
-                </motion.button>
-              )
-            })}
-          </div>
+          {result ? (
+            <p>Time to crack: {result.crackTimesDisplay.offlineFastHashing1e10PerSecond}</p>
+          ) : null}
         </div>
       </motion.div>
     </motion.div>

@@ -1,14 +1,13 @@
+import path from "node:path"
 import react from "@vitejs/plugin-react"
-import path from "path"
-import { PluginVisualizerOptions, visualizer } from "rollup-plugin-visualizer"
-import { type PluginOption } from "vite"
-import { VitePWA, VitePWAOptions } from "vite-plugin-pwa"
+import { type PluginVisualizerOptions, visualizer } from "rollup-plugin-visualizer"
+import type { PluginOption } from "vite"
+import { VitePWA, type VitePWAOptions } from "vite-plugin-pwa"
 import { defineConfig } from "vitest/config"
 
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: "production",
   base: "/",
-
   registerType: "prompt",
   manifest: {
     start_url: "/",
@@ -72,6 +71,9 @@ export default defineConfig({
     minify: "esbuild",
     assetsDir: "./src/assets",
   },
+  worker: {
+    format: "es",
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -87,4 +89,3 @@ export default defineConfig({
     environment: "jsdom",
   },
 })
-
