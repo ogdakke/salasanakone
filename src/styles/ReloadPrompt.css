@@ -13,6 +13,7 @@
   position: relative;
 
   max-width: 360px;
+  min-width: 280px;
   position: fixed;
   right: 0;
   bottom: 0;

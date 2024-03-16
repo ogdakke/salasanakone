@@ -37,7 +37,7 @@ export const en: Translations = {
   errorNoGeneration: "Something went wrong... No password was generated",
   tryToRefresh: "Try to refresh the site",
   updateToNewVersion: "A new version is available! Please click to refresh",
-  worksOffline: "The app now works offline",
+  worksOffline: "The app now also works offline.",
   somethingWentWrong: "Something went wrong",
   editResult: "Edit",
   editResultDesc: "Edit and check a custom passphrase",

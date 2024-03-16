@@ -14,7 +14,7 @@ export const defaultFormValues: PassCreationRules = {
   },
   uppercase: {
     inputType: "checkbox",
-    selected: false,
+    selected: true,
   },
   numbers: {
     inputType: "checkbox",
@@ -23,7 +23,7 @@ export const defaultFormValues: PassCreationRules = {
   randomChars: {
     inputType: "input",
     value: "-",
-    selected: false,
+    selected: true,
   },
 }
 

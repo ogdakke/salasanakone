@@ -154,7 +154,6 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
       // TODO handle aborting the fetch when language changes or something idfk
       if (!response.ok) {
         await response.body?.cancel()
-        handleFetchError(lang)
         throw new Error("Failed to fetch dataset")
       }
 
