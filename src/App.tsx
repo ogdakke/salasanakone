@@ -25,8 +25,6 @@ function App() {
           </ErrorBoundary>
         </Suspense>
         <Description />
-
-        {/* <Feedback /> */}
         <Credits />
         <ReloadPrompt />
       </div>
