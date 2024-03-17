@@ -5,12 +5,15 @@ import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
 import { debounce } from "@/common/utils/debounce"
 import { strengthToColorAndLabel, validateLength } from "@/common/utils/helpers"
+import { supportedLanguages } from "@/config"
+import type { Language } from "@/models/translations"
+import { Stores, deleteKey } from "@/services/database/db"
 import { worker } from "@/services/initWorker"
 import "@/styles/Island.css"
 import type { Score, ZxcvbnResult } from "@zxcvbn-ts/core"
-import { type Variants, m, motion, useAnimate, useAnimation } from "framer-motion"
-import { Plus, Settings, Xmark } from "iconoir-react"
-import { useCallback, useContext, useEffect, useState } from "react"
+import { type Variants, animate, m, motion, useAnimate, useAnimation } from "framer-motion"
+import { DownloadCircle, FloppyDisk, Plus, SystemRestart, Trash, Xmark } from "iconoir-react"
+import { useCallback, useContext, useEffect, useRef, useState } from "react"
 
 enum IslandVariants {
   full = "full",
@@ -29,6 +32,7 @@ export const Island = () => {
   }
   const isPill = islandVariant === IslandVariants.pill
   const isFull = islandVariant === IslandVariants.full
+
   return (
     <div className="IslandAndButton" data-variant={islandVariant}>
       <SimpleIsland variant={islandVariant} />
@@ -38,7 +42,7 @@ export const Island = () => {
         type="button"
         onClick={handleIslandChange}
       >
-        <Settings strokeWidth={1} className="Icon" style={{ opacity: isPill ? 1 : 0 }} />
+        <SystemRestart strokeWidth={1} className="Icon" style={{ opacity: isPill ? 1 : 0 }} />
         <Xmark className="Icon" style={{ opacity: isFull ? 1 : 0 }} />
       </motion.button>
     </div>
@@ -54,6 +58,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
   const [result, setResult] = useState<ZxcvbnResult>()
   // Initial loading state is -1
   const [score, setScore] = useState(-1) // TODO this can probably be derived, so fix
+  const islandRef = useRef<HTMLDivElement>(null)
 
   const { finalPassword } = useContext(ResultContext)
   const { formState } = useContext(FormContext)
@@ -102,7 +107,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
     [],
   )
 
-  /** validates on: variant change, passwordValue change, if isEdited by user */
+  /** validates on: language change, variant change, passwordValue change, if isEdited by user */
   useEffect(() => {
     if (isEdited && passwordValue) {
       checkUserInputtedString(passwordValue)
@@ -136,14 +141,43 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
     [IslandVariants.pill, <PillIsland score={score} key={IslandVariants.pill} />],
     [
       IslandVariants.full,
-      <SettingsIsland result={result} storage={usedSpace} key={IslandVariants.full} />,
+      <SettingsIsland
+        fetchStorage={fetchStorage}
+        result={result}
+        storage={usedSpace}
+        key={IslandVariants.full}
+      />,
     ],
   ])
 
+  const isPill = variant === IslandVariants.pill
+  const borderRgb = getComputedStyle(document.documentElement).getPropertyValue(
+    "--callout-border-rgb",
+  )
+  const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
+
   return (
     <motion.div
-      style={{ borderRadius: 32 }}
+      ref={islandRef}
+      style={{ borderRadius: 40, border: `1px solid rgba(${borderRgb}, 0.12)` }}
+      tabIndex={-1}
       className="IslandMain"
+      whileHover={{ scale: isPill ? 1.02 : 1 }}
+      whileTap={{ scale: isTouchDevice() ? 0.96 : 1 }}
+      onLayoutAnimationStart={() => {
+        if (islandRef.current) {
+          animate(islandRef.current, { borderColor: `rgba(${borderRgb}, 0)` }, { duration: 0.1 })
+        }
+      }}
+      onLayoutAnimationComplete={() => {
+        if (islandRef.current) {
+          animate(
+            islandRef.current,
+            { borderColor: `rgba(${borderRgb}, 0.12)` },
+            { duration: 1.25 },
+          )
+        }
+      }}
       data-state={IslandVariants.pill}
       layout
     >
@@ -188,7 +222,9 @@ const PillIsland = ({ score }: { score: number }) => {
   const buttonSize = 32
   return (
     <motion.button
-      onClick={() => void generate(formState)}
+      onClick={() => {
+        generate(formState)
+      }}
       className="IslandBackground"
       variants={pillVariants}
       whileHover="hover"
@@ -196,11 +232,10 @@ const PillIsland = ({ score }: { score: number }) => {
       animate="animate"
     >
       <m.span
-        tabIndex={0}
+        tabIndex={-1}
         style={{ filter: "blur(4px)" }}
         initial={{ opacity: 0, scale: 0.16 }}
-        whileHover={{ scale: 1.25 }}
-        whileFocus={{ scale: 1.25 }}
+        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: isTouchDevice() ? 0.9 : 1 }}
         animate={{
           opacity: 1,
@@ -223,72 +258,73 @@ const PillIsland = ({ score }: { score: number }) => {
 
 type SettingsIslandProps = {
   storage: string | undefined
+  fetchStorage: () => void
   result?: ZxcvbnResult
 }
-const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
+const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) => {
   const { t } = useTranslation()
   const score = result?.score !== undefined ? result.score : 4
+  const { formState, generate } = useContext(FormContext)
 
-  // function isLanguageDownloaded(lang: Language) {
-  //   if (formState.dataset.deletedDatasets.includes(lang)) {
-  //     return false
-  //   }
-  //   return true
-  // }
+  function isLanguageDeleted(lang: Language) {
+    if (formState.dataset.deletedDatasets.includes(lang)) {
+      return true
+    }
+    return false
+  }
 
-  // const getNextValidLanguage = (langToToggle: Language): Language | undefined => {
-  //   const validLanguages = supportedLanguages.filter(
-  //     () => !formState.dataset.deletedDatasets.includes(langToToggle),
-  //   )
+  function isLanguageFailed(lang: Language) {
+    if (formState.dataset.failedToFetchDatasets.includes(lang)) {
+      return true
+    }
+    return false
+  }
 
-  //   if (validLanguages.length > 0) {
-  //     return validLanguages[0]
-  //   }
+  async function handleDeletingDataset(lang: Language) {
+    if (!formState.dataset.deletedDatasets.includes(lang)) {
+      formState.dataset.deletedDatasets.push(lang)
+      // If current language is the one being deleted, switch words to false
+      if (formState.language === lang) {
+        formState.formValues.words.selected = false
+      }
+      const deleted = await deleteKey(Stores.Languages, lang)
+      if (deleted === "failed") {
+        // if deletion failes, eg. the key was not for some reason found, pop the latest language off
+        formState.dataset.deletedDatasets.pop()
+      }
+      // deletion success
+      await generate(formState, "invalidate")
+      fetchStorage()
+    }
+  }
 
-  //   // no valid languages were found
-  //   return undefined
-  // }
+  async function handleReDownLoadingDataset(lang: Language) {
+    if (formState.dataset.failedToFetchDatasets.includes(lang)) {
+      const updatedFailedDatasets = formState.dataset.failedToFetchDatasets.filter(
+        (l) => l !== lang,
+      )
+      // Remove language from failed to fetch datasets to allow retrying fetching
+      formState.dataset.failedToFetchDatasets = updatedFailedDatasets
+      // set words to true and languge to the one being downloaded to trigger fetching dataset
+      formState.formValues.words.selected = true
+      formState.language = lang
+      await generate(formState, "invalidate")
+      fetchStorage()
+    }
 
-  // function removeLangFromArr(arr: Language[], langToRemove: Language): Language[] {
-  //   const filtered = arr.filter((lang) => lang !== langToRemove)
+    if (formState.dataset.deletedDatasets.includes(lang)) {
+      const updatedDeletedLanguges = formState.dataset.deletedDatasets.filter(
+        (language) => language !== lang,
+      )
+      formState.dataset.deletedDatasets = updatedDeletedLanguges
 
-  //   return filtered
-  // }
-
-  // async function handleTogglingDataset(lang: Language): Promise<void> {
-  //   if (formState.dataset.deletedDatasets.includes(lang)) {
-  //     dispatch(
-  //       setDatasetFields({
-  //         ...formState.dataset,
-  //         deletedDatasets: removeLangFromArr(supportedLanguages, lang),
-  //       }),
-  //     )
-  //   }
-
-  //   const del = await deleteKey(Stores.Languages, lang)
-  //   if (!del) {
-  //     dispatch(
-  //       setDatasetFields({
-  //         ...formState.dataset,
-  //         deletedDatasets: [...formState.dataset.deletedDatasets, lang],
-  //       }),
-  //     )
-
-  //     const nextValidLanguage = getNextValidLanguage(lang)
-  //     // biome-ignore lint/suspicious/noConsoleLog: <explanation>
-  //     console.log("next: ", nextValidLanguage)
-  //     if (nextValidLanguage) {
-  //       dispatch(setLanguage(nextValidLanguage))
-  //     } else if (!nextValidLanguage) {
-  //       dispatch(
-  //         setFormField({
-  //           field: "words",
-  //           selected: false,
-  //         }),
-  //       )
-  //     }
-  //   }
-  // }
+      // set words to true and languge to the one being downloaded to trigger fetching dataset
+      formState.formValues.words.selected = true
+      formState.language = lang
+      await generate(formState, "invalidate")
+      fetchStorage()
+    }
+  }
 
   return (
     <motion.div
@@ -306,28 +342,17 @@ const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
       >
         <div className="SettingsTitleContainer">
           <h3>{t("settingsTitle")}</h3>
-          <p className="SecondaryText">
-            {/* {t("storageUsed")}  */}
-            {storage ? (
-              <output
-                title={t("storageUsedDesc", { storage: storage }).toString()}
-                className="StorageUsed"
-              >
-                {storage}&nbsp;{t("megaByte")}
-              </output>
-            ) : (
-              "--"
-            )}
-          </p>
+          <p className="SecondaryText">{/* {t("storageUsed")}  */}</p>
         </div>
         <div>
-          {result ? (
+          {/* TODO iconoir system restart is a good icon */}
+          {/* {result ? (
             <p>
               {t("timeToCrack")}: {result.crackTimesDisplay.offlineFastHashing1e10PerSecond}
               <br />
               {t("guessesNeeded")}: {result.guesses.toExponential(2)}
             </p>
-          ) : null}
+          ) : null} */}
         </div>
         <motion.div className="flex space-around">
           <div className="ScoreCircleContainer">
@@ -337,8 +362,47 @@ const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
             </div>
           </div>
         </motion.div>
+        <div className="SettingsFooter">
+          <div className="flex gap-05">
+            {supportedLanguages.map((language) => (
+              <button
+                key={language}
+                className="LanguageSettingItem"
+                type="button"
+                onClick={async (e) => {
+                  isLanguageDeleted(language) || isLanguageFailed(language)
+                    ? await handleReDownLoadingDataset(language)
+                    : await handleDeletingDataset(language)
+                }}
+                value={language}
+              >
+                {t(language)}{" "}
+                {isLanguageDeleted(language) || isLanguageFailed(language) ? (
+                  <DownloadCircle width={18} height={18} />
+                ) : (
+                  <Trash width={18} height={18} />
+                )}
+              </button>
+            ))}
+          </div>
+          {storage ? <StorageIndicator storage={storage} /> : null}
+        </div>
       </motion.div>
     </motion.div>
+  )
+}
+
+function StorageIndicator({ storage }: { storage: string }) {
+  const { t } = useTranslation()
+
+  return (
+    <output title={t("storageUsedDesc", { storage: storage }).toString()} className="StorageUsed">
+      <span className="CircleBackground">
+        <FloppyDisk color="" strokeWidth={2} width={14} height={14} />
+      </span>
+      {storage}
+      {t("megaByte")}
+    </output>
   )
 }
 

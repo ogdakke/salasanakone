@@ -191,7 +191,15 @@ const WordsRadioGroup = ({
           <RadioGroupItem value={radioStates.passphrase} aria-disabled={isWordsDisabled} />
           {t("useWords")}
         </Label>
-        <SimplePopover text={isErrorInLanguage ? t("errorInFetchingDataset") : t("passphraseDesc")}>
+        <SimplePopover
+          text={
+            isErrorInLanguage
+              ? t("errorInFetchingDataset")
+              : isDatasetDeleted
+                ? t("fetchDatasetTooltip")
+                : t("passphraseDesc")
+          }
+        >
           {isErrorInLanguage ? (
             <WarningTriangle
               className="interact SimplePopoverTrigger"
@@ -205,6 +213,7 @@ const WordsRadioGroup = ({
             <InfoCircle
               key={"info"}
               className="interact SimplePopoverTrigger"
+              data-state={isDatasetDeleted && "warn"}
               height={18}
               width={18}
               strokeWidth={2}

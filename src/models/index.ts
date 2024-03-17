@@ -35,7 +35,7 @@ export type FormState = {
 
 export type FormContextProps = {
   formState: FormState
-  generate: (state: FormState) => Promise<void>
+  generate: (state: FormState, cache?: "invalidate") => Promise<void>
   validate?: (value: number, state: FormState) => number
 }
 

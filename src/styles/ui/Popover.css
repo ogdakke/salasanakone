@@ -27,6 +27,15 @@
   backdrop-filter: blur(4px);
 }
 
+.PopoverContent {
+  p {
+    margin: 0;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    white-space: normal;
+  }
+}
+
 .PopoverContent[data-state="open"][data-side="top"] {
   animation-name: slideDownAndFade;
 }
@@ -125,6 +134,10 @@
 
 .SimplePopoverTrigger[data-state="error"] {
   color: var(--orange-bad-rgb);
+}
+
+.SimplePopoverTrigger[data-state="warn"] {
+  color: var(--yellow-ok-rgb);
 }
 
 @keyframes slideUpAndFade {

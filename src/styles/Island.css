@@ -15,10 +15,14 @@
 }
 
 .IslandAndButton[data-variant="pill"] {
+  .SettingsButton {
+    border: 1px solid rgba(var(--callout-border-rgb), 0.1);
+  }
 }
 
 .IslandAndButton[data-variant="full"] {
   .SettingsButton {
+    border: 1px solid rgba(var(--callout-border-rgb), 0);
     translate: -140% 20%;
   }
 }
@@ -48,6 +52,10 @@
 
 .SettingsButton:active:hover {
   scale: 0.96;
+}
+
+.SettingsButton:focus-visible {
+  box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
 }
 
 .IslandMain {
@@ -86,6 +94,7 @@
   overflow: hidden;
   justify-content: space-between;
   background-color: var(--island-bg);
+
   --back-blur: 10px;
   backdrop-filter: blur(var(--back-blur));
   -webkit-backdrop-filter: blur(var(--back-blur));
@@ -94,12 +103,16 @@
 
 .IslandBackground:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
+  border-radius: var(--island-border-radius);
+  box-shadow: 0 0 0 1px rgba(var(--foreground-rgb), 0.75) inset;
+
+  .IslandGenerateButton {
+    scale: 1.2;
+  }
 }
 
 .IslandSettings {
   width: 100%;
-  border-radius: calc(var(--island-border-radius));
   background-color: var(--island-bg);
   --back-blur: 10px;
   backdrop-filter: blur(var(--back-blur));
@@ -110,6 +123,14 @@
 .SettingsContent {
   height: 100%;
   padding: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.SettingsFooter {
+  display: flex;
+  justify-content: space-between;
 }
 
 .SettingsTitleContainer {
@@ -125,12 +146,18 @@
 }
 
 .LanguageSettingItem {
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem;
-  border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-  border-radius: 9999px;
+  border: 1px solid rgba(var(--callout-border-rgb), 0.2);
+  border-radius: 999px;
+  transition: all 150ms ease-out;
+}
+
+.LanguageSettingItem:hover {
+  opacity: 0.8;
 }
 
 .IslandGenerateButton {
@@ -157,10 +184,26 @@
   justify-content: center;
   align-items: center;
   font-variant-numeric: tabular-nums;
-  background-color: black;
+  /* background-color: black; */
+  background-color: var(--yellow-better-rgb);
+  color: #000;
   cursor: help;
-  padding: 0.15rem 0.5rem;
+  padding: 0.15rem 0.5rem 0.15rem 0.3rem;
   border-radius: 99px;
+  gap: 0.25rem;
+  font-weight: 700;
+}
+
+.CircleBackground {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: var(--green-go-rgb); */
+  color: var(--yellow-better-rgb);
+  background-color: #000;
+  border-radius: 99px;
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .SettingsStrength {
@@ -219,6 +262,12 @@
   .IslandAndButton[data-variant="full"] {
     .SettingsButton {
       translate: 0% 0%;
+    }
+  }
+
+  .SettingsButton {
+    .Icon {
+      scale: 1.35;
     }
   }
 

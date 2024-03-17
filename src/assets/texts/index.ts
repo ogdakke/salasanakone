@@ -60,6 +60,8 @@ export const en: Translations = {
   [Language.en]: "English",
   [Language.fi]: "Suomi",
   errorInFetchingDataset: "Error in fetching wordlist, try again later.",
+  fetchDatasetTooltip:
+    "You have deleted this languages wordlist. Download it from the settings or change language.",
   settingsTitle: "Settings and strength",
   storageUsed: "Storage",
   storageUsedDesc: "Site's estimated storage usage is {storage} Megabytes",
@@ -129,6 +131,8 @@ export const fi = {
   [Language.en]: "English",
   [Language.fi]: "Suomi",
   errorInFetchingDataset: "Virhe haettaessa sanalistaa, yritä myöhemmin uudelleen.",
+  fetchDatasetTooltip:
+    "Olet poistanut tämän kielen sanalistan, lataa se uudelleen asetuksista tai vaihda kieltä.",
   settingsTitle: "Vahvuus ja asetukset",
   storageUsed: "Käytössä",
   storageUsedDesc: "Sivuston arvioitu tallennustilan käyttö on {storage} Megatavua",

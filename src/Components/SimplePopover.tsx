@@ -16,7 +16,7 @@ export const SimplePopover = ({
     <Popover>
       <PopoverTrigger className="PopoverTrigger">{children}</PopoverTrigger>
       <PopoverContent className="PopoverContent" side={side}>
-        {text}
+        <p>{text}</p>
       </PopoverContent>
     </Popover>
   )
