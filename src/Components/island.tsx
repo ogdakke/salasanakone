@@ -4,11 +4,11 @@ import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
 import { debounce } from "@/common/utils/debounce"
-import { validateLength } from "@/common/utils/helpers"
+import { strengthToColorAndLabel, validateLength } from "@/common/utils/helpers"
 import { worker } from "@/services/initWorker"
 import "@/styles/Island.css"
-import type { ZxcvbnResult } from "@zxcvbn-ts/core"
-import { type Variants, m, motion } from "framer-motion"
+import type { Score, ZxcvbnResult } from "@zxcvbn-ts/core"
+import { type Variants, m, motion, useAnimate, useAnimation } from "framer-motion"
 import { Plus, Settings, Xmark } from "iconoir-react"
 import { useCallback, useContext, useEffect, useState } from "react"
 
@@ -102,13 +102,14 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
     [],
   )
 
+  /** validates on: variant change, passwordValue change, if isEdited by user */
   useEffect(() => {
     if (isEdited && passwordValue) {
       checkUserInputtedString(passwordValue)
       return
     }
 
-    if (!validateString()) {
+    if (!validateString() && variant !== IslandVariants.full) {
       setScore(4)
       return
     }
@@ -116,7 +117,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
     if (passwordValue) {
       debounceCheck(passwordValue)
     }
-  }, [passwordValue, isEdited, validateString, debounceCheck])
+  }, [passwordValue, isEdited, validateString, debounceCheck, variant])
 
   function checkUserInputtedString(str: string) {
     const validatedLengthString = validateLength(str, 128)
@@ -226,6 +227,7 @@ type SettingsIslandProps = {
 }
 const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
   const { t } = useTranslation()
+  const score = result?.score !== undefined ? result.score : 4
 
   // function isLanguageDownloaded(lang: Language) {
   //   if (formState.dataset.deletedDatasets.includes(lang)) {
@@ -327,8 +329,109 @@ const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
             </p>
           ) : null}
         </div>
+        <motion.div className="flex space-around">
+          <div className="ScoreCircleContainer">
+            <StrengthCircle score={score} />
+            <div className="NumberListOuterBox">
+              <NumberListScrollWheel selectedNumber={score} />
+            </div>
+          </div>
+        </motion.div>
       </motion.div>
     </motion.div>
+  )
+}
+
+function StrengthCircle({ score }: { score: number }) {
+  const { t } = useTranslation()
+  const { color } = strengthToColorAndLabel(score)
+  const percentageOfMax = Math.max(6, (score / 4) * 100)
+
+  return (
+    <motion.svg className="SettingsStrength" viewBox="0 0 36 36" initial="hidden" animate="animate">
+      <title>{t("scoreDescription", { score: score.toString() })}</title>
+      <path
+        style={{ color: "#000" }}
+        className=""
+        d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
+        fill="none"
+        stroke="currentColor"
+        strokeDasharray="100, 100"
+        strokeWidth="4"
+      />
+      <motion.path
+        animate={{ stroke: color, strokeDasharray: `${percentageOfMax}, 100` }}
+        transition={{
+          type: "spring",
+          stiffness: 60,
+          damping: 12,
+        }}
+        d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
+        fill="none"
+        strokeLinecap="round"
+        strokeWidth="4"
+      />
+    </motion.svg>
+  )
+}
+
+function NumberListScrollWheel({ selectedNumber }: { selectedNumber: number }) {
+  const controls = useAnimation()
+  const [scope, animate] = useAnimate()
+  const listHeight = 60 // Height of each number in the list
+  const numbers: Score[] = [0, 1, 2, 3, 4] // The numbers in the scrollwheel
+
+  // Calculate the Y offset to center the selected number
+  const centerY = -(selectedNumber * listHeight) + listHeight / 2
+
+  useEffect(() => {
+    controls.start({
+      y: centerY - listHeight,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 16,
+      },
+    })
+  }, [centerY, controls])
+
+  return (
+    <div
+      className="NumberListContainer"
+      style={{
+        height: "calc(100% - 4px)",
+      }}
+    >
+      <motion.div
+        ref={scope}
+        animate={controls}
+        onAnimationStart={async () => {
+          await animate(scope.current, { filter: "blur(2px)", opacity: 0.7 })
+          await animate(scope.current, { filter: "blur(0px)", opacity: 1 })
+        }}
+        className="NumberList"
+        style={{
+          position: "absolute",
+          top: "44%",
+          left: "0",
+          right: "0",
+        }}
+      >
+        {numbers.map((score) => (
+          <span
+            key={score}
+            style={{
+              height: `${listHeight}px`,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            {score}
+          </span>
+        ))}
+      </motion.div>
+    </div>
   )
 }
 

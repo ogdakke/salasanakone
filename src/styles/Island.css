@@ -163,6 +163,38 @@
   border-radius: 99px;
 }
 
+.SettingsStrength {
+  position: relative;
+  z-index: 10;
+}
+
+.ScoreCircleContainer {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+}
+
+.NumberListOuterBox {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+}
+
+.NumberListContainer {
+  /* margin: auto; */
+  width: 100%;
+  overflow: clip;
+  position: relative;
+}
+
+.NumberList {
+  font-size: 1.75rem;
+  padding-top: 2px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .IslandGenerateButton:focus-visible {
     border: 1px solid rgba(var(--skeleton-glow), 0.1);

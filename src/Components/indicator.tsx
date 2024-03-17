@@ -1,4 +1,4 @@
-import { useTranslation } from "@/common/hooks/useLanguage"
+import { strengthToColorAndLabel } from "@/common/utils/helpers"
 import { m } from "framer-motion"
 
 export function StrengthIndicator({ score }: { score: number }): React.ReactNode {
@@ -8,7 +8,7 @@ export function StrengthIndicator({ score }: { score: number }): React.ReactNode
   const barWidthOver100 = widthOffset * 2
   const barWidth = 100 + barWidthOver100
   const move = 100 - percentageOfMax + widthOffset
-  const color = numberToString(score).color
+  const { color } = strengthToColorAndLabel(score)
 
   return (
     <div className="IslandContent PillIsland">
@@ -40,46 +40,4 @@ export function StrengthIndicator({ score }: { score: number }): React.ReactNode
       />
     </div>
   )
-}
-
-function numberToString(value: number) {
-  const { t } = useTranslation()
-  switch (value) {
-    case 0:
-      // To be able to set the state, these need to be strings
-      return {
-        label: t("strengthAwful").toString(),
-        color: "rgb(180, 0, 10)",
-      }
-    case 1:
-      return {
-        label: t("strengthBad").toString(),
-        color: "rgb(220, 60, 60)",
-      }
-    case 2:
-      return {
-        label: t("strengthOk").toString(),
-        color: "rgb(240, 173, 78)",
-      }
-    case 3:
-      return {
-        label: t("strengthGood").toString(),
-        color: "rgb(117, 215, 93)",
-      }
-    case 4:
-      return {
-        label: t("strengthGreat").toString(),
-        color: "rgb(108, 241, 109)",
-      }
-    case -1:
-      return {
-        label: t("loadingStrength").toString(),
-        color: "var(--background-hex)",
-      }
-    default:
-      return {
-        label: t("strengthDefault").toString(),
-        color: "",
-      }
-  }
 }

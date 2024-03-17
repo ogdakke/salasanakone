@@ -65,6 +65,7 @@ export const en: Translations = {
   storageUsedDesc: "Site's estimated storage usage is {storage} Megabytes",
   megaByte: "Mb",
   guessesNeeded: "Guesses needed",
+  scoreDescription: "The password's strength on a scale of 0 to 4 is now {score}",
 }
 
 export const fi = {
@@ -133,4 +134,5 @@ export const fi = {
   storageUsedDesc: "Sivuston arvioitu tallennustilan käyttö on {storage} Megatavua",
   megaByte: "Mt",
   guessesNeeded: "Arvauksia tarvitaan",
+  scoreDescription: "Salasanan vahvuus asteikolla 0-4 on nyt {score}",
 } as const
