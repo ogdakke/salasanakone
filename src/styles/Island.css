@@ -112,6 +112,12 @@
   padding: 0.875rem;
 }
 
+.SettingsTitleContainer {
+  display: flex;
+  gap: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
 .LangaugesContainer {
   padding-top: 0.75rem;
   display: flex;
@@ -144,6 +150,17 @@
   top: 0;
   height: 100%;
   border-radius: 32px;
+}
+
+.StorageUsed {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-variant-numeric: tabular-nums;
+  background-color: black;
+  cursor: help;
+  padding: 0.15rem 0.5rem;
+  border-radius: 99px;
 }
 
 @media (hover: hover) and (pointer: fine) {

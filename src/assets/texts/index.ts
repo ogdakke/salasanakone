@@ -24,7 +24,7 @@ export const en: Translations = {
   strengthGood: "",
   strengthGreat: "",
   loadingStrength: "Calculating...",
-  timeToCrack: "Estimated time to crack",
+  timeToCrack: "Time to crack",
   lengthOfPassPhrase: "{passLength} words",
   lengthOfPassWord: "{passLength} characters",
   leaveFeedback: "",
@@ -60,6 +60,11 @@ export const en: Translations = {
   [Language.en]: "English",
   [Language.fi]: "Suomi",
   errorInFetchingDataset: "Error in fetching wordlist, try again later.",
+  settingsTitle: "Settings and strength",
+  storageUsed: "Storage",
+  storageUsedDesc: "Site's estimated storage usage is {storage} Megabytes",
+  megaByte: "Mb",
+  guessesNeeded: "Guesses needed",
 }
 
 export const fi = {
@@ -123,4 +128,9 @@ export const fi = {
   [Language.en]: "English",
   [Language.fi]: "Suomi",
   errorInFetchingDataset: "Virhe haettaessa sanalistaa, yritä myöhemmin uudelleen.",
+  settingsTitle: "Vahvuus ja asetukset",
+  storageUsed: "Käytössä",
+  storageUsedDesc: "Sivuston arvioitu tallennustilan käyttö on {storage} Megatavua",
+  megaByte: "Mt",
+  guessesNeeded: "Arvauksia tarvitaan",
 } as const

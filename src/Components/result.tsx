@@ -87,7 +87,7 @@ const InputContext = createContext<InputContextProps>({
 const Result = () => {
   const { t } = useTranslation()
 
-  const { generate, formState } = useContext(FormContext)
+  const { formState } = useContext(FormContext)
   const { isEditing, formValues } = formState
 
   const {

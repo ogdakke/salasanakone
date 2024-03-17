@@ -16,7 +16,9 @@
   position: relative;
   padding: 0.625rem 0.825rem;
   /* margin: 1rem 0.75rem 1rem 0rem; */
-  border-radius: calc(var(--island-border-radius) - var(--island-content-padding));
+  border-radius: calc(
+    var(--island-border-radius) - var(--island-content-padding)
+  );
   color: rgba(var(--black-text-rgb), 0.95);
   /* font-size: 0.8rem; */
   /* font-weight: 600; */
@@ -40,25 +42,14 @@
 }
 
 .strengthIndicator::before {
-  transition:
-    border,
-    box-shadow,
-    200ms ease-in;
-}
-
-.monospace {
-  font-size: 1rem;
-  font-family: monospace;
+  transition: border, box-shadow, 200ms ease-in;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .strengthIndicator:hover {
     /* border: 1px solid rgba(var(--helperTextColor), 0.4); */
     box-shadow: 1px 1px 10px rgba(var(--gray-shadow), 0.5);
-    transition:
-      border,
-      box-shadow,
-      200ms ease-out;
+    transition: border, box-shadow, 200ms ease-out;
   }
 }
 

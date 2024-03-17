@@ -1,15 +1,11 @@
 import { StrengthIndicator } from "@/Components/indicator"
 import { Loading } from "@/Components/ui"
 import { useTranslation } from "@/common/hooks/useLanguage"
-import { FormContext, FormDispatchContext } from "@/common/providers/FormProvider"
+import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
 import { debounce } from "@/common/utils/debounce"
 import { validateLength } from "@/common/utils/helpers"
-import { supportedLanguages } from "@/config"
-import type { Language } from "@/models/translations"
-import { Stores, deleteKey } from "@/services/database/db"
 import { worker } from "@/services/initWorker"
-import { setDatasetFields, setFormField, setLanguage } from "@/services/reducers/formReducer"
 import "@/styles/Island.css"
 import type { ZxcvbnResult } from "@zxcvbn-ts/core"
 import { type Variants, m, motion } from "framer-motion"
@@ -70,7 +66,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
     try {
       const estimate = await navigator.storage.estimate()
       if (estimate.usage) {
-        setUsedSpace((estimate.usage / 1024 / 1024).toFixed(2))
+        setUsedSpace((estimate.usage / 1024 / 1024).toFixed(1))
       }
     } catch (error) {
       console.error(error)
@@ -230,69 +226,67 @@ type SettingsIslandProps = {
 }
 const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
   const { t } = useTranslation()
-  const { formState } = useContext(FormContext)
-  const { dispatch } = useContext(FormDispatchContext)
 
-  function isLanguageDownloaded(lang: Language) {
-    if (formState.dataset.deletedDatasets.includes(lang)) {
-      return false
-    }
-    return true
-  }
+  // function isLanguageDownloaded(lang: Language) {
+  //   if (formState.dataset.deletedDatasets.includes(lang)) {
+  //     return false
+  //   }
+  //   return true
+  // }
 
-  const getNextValidLanguage = (langToToggle: Language): Language | undefined => {
-    const validLanguages = supportedLanguages.filter(
-      () => !formState.dataset.deletedDatasets.includes(langToToggle),
-    )
+  // const getNextValidLanguage = (langToToggle: Language): Language | undefined => {
+  //   const validLanguages = supportedLanguages.filter(
+  //     () => !formState.dataset.deletedDatasets.includes(langToToggle),
+  //   )
 
-    if (validLanguages.length > 0) {
-      return validLanguages[0]
-    }
+  //   if (validLanguages.length > 0) {
+  //     return validLanguages[0]
+  //   }
 
-    // no valid languages were found
-    return undefined
-  }
+  //   // no valid languages were found
+  //   return undefined
+  // }
 
-  function removeLangFromArr(arr: Language[], langToRemove: Language): Language[] {
-    const filtered = arr.filter((lang) => lang !== langToRemove)
+  // function removeLangFromArr(arr: Language[], langToRemove: Language): Language[] {
+  //   const filtered = arr.filter((lang) => lang !== langToRemove)
 
-    return filtered
-  }
+  //   return filtered
+  // }
 
-  async function handleTogglingDataset(lang: Language): Promise<void> {
-    if (formState.dataset.deletedDatasets.includes(lang)) {
-      dispatch(
-        setDatasetFields({
-          ...formState.dataset,
-          deletedDatasets: removeLangFromArr(supportedLanguages, lang),
-        }),
-      )
-    }
+  // async function handleTogglingDataset(lang: Language): Promise<void> {
+  //   if (formState.dataset.deletedDatasets.includes(lang)) {
+  //     dispatch(
+  //       setDatasetFields({
+  //         ...formState.dataset,
+  //         deletedDatasets: removeLangFromArr(supportedLanguages, lang),
+  //       }),
+  //     )
+  //   }
 
-    const del = await deleteKey(Stores.Languages, lang)
-    if (!del) {
-      dispatch(
-        setDatasetFields({
-          ...formState.dataset,
-          deletedDatasets: [...formState.dataset.deletedDatasets, lang],
-        }),
-      )
+  //   const del = await deleteKey(Stores.Languages, lang)
+  //   if (!del) {
+  //     dispatch(
+  //       setDatasetFields({
+  //         ...formState.dataset,
+  //         deletedDatasets: [...formState.dataset.deletedDatasets, lang],
+  //       }),
+  //     )
 
-      const nextValidLanguage = getNextValidLanguage(lang)
-      // biome-ignore lint/suspicious/noConsoleLog: <explanation>
-      console.log("next: ", nextValidLanguage)
-      if (nextValidLanguage) {
-        dispatch(setLanguage(nextValidLanguage))
-      } else if (!nextValidLanguage) {
-        dispatch(
-          setFormField({
-            field: "words",
-            selected: false,
-          }),
-        )
-      }
-    }
-  }
+  //     const nextValidLanguage = getNextValidLanguage(lang)
+  //     // biome-ignore lint/suspicious/noConsoleLog: <explanation>
+  //     console.log("next: ", nextValidLanguage)
+  //     if (nextValidLanguage) {
+  //       dispatch(setLanguage(nextValidLanguage))
+  //     } else if (!nextValidLanguage) {
+  //       dispatch(
+  //         setFormField({
+  //           field: "words",
+  //           selected: false,
+  //         }),
+  //       )
+  //     }
+  //   }
+  // }
 
   return (
     <motion.div
@@ -308,15 +302,29 @@ const SettingsIsland = ({ storage, result }: SettingsIslandProps) => {
         transition={{ duration: 0.6 }}
         className="SettingsContent"
       >
-        <div className="">
-          <h3>Settings and strength</h3>
-          <p className="SecondaryText" title={"Storage usage estimation"}>
-            Storage: <output>{storage ? storage : "--"}</output> Mb
+        <div className="SettingsTitleContainer">
+          <h3>{t("settingsTitle")}</h3>
+          <p className="SecondaryText">
+            {/* {t("storageUsed")}  */}
+            {storage ? (
+              <output
+                title={t("storageUsedDesc", { storage: storage }).toString()}
+                className="StorageUsed"
+              >
+                {storage}&nbsp;{t("megaByte")}
+              </output>
+            ) : (
+              "--"
+            )}
           </p>
         </div>
         <div>
           {result ? (
-            <p>Time to crack: {result.crackTimesDisplay.offlineFastHashing1e10PerSecond}</p>
+            <p>
+              {t("timeToCrack")}: {result.crackTimesDisplay.offlineFastHashing1e10PerSecond}
+              <br />
+              {t("guessesNeeded")}: {result.guesses.toExponential(2)}
+            </p>
           ) : null}
         </div>
       </motion.div>

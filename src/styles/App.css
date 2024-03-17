@@ -9,8 +9,7 @@
   background-clip: padding-box;
   background-color: rgba(224, 224, 224, 0.2);
   -webkit-border-radius: 10px;
-  -webkit-box-shadow:
-    inset -1px -1px 0px rgba(0, 0, 0, 0.05),
+  -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05),
     inset 1px 1px 0px rgba(0, 0, 0, 0.05);
   transition: color 900ms ease-in-out;
 }
@@ -18,8 +17,7 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(224, 224, 224, 0.4);
   -webkit-border-radius: 7px;
-  -webkit-box-shadow:
-    inset -1px -1px 0px rgba(0, 0, 0, 0.05),
+  -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05),
     inset 1px 1px 0px rgba(0, 0, 0, 0.05);
   transition: color 900ms ease-in-out;
 }
@@ -281,6 +279,11 @@
 
 .gap-15 {
   gap: 1.5rem;
+}
+
+.monospace {
+  font-size: 1rem;
+  font-family: monospace;
 }
 
 /* ----------------- */

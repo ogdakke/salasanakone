@@ -83,7 +83,7 @@ export function getDataForKey<T = string[]>(
 ): Promise<T | undefined> {
   return new Promise((resolve) => {
     const request = indexedDB.open(dbName)
-    request.onsuccess = (event) => {
+    request.onsuccess = () => {
       const db = request.result
       const tx = db.transaction(storeName, "readonly")
       const store = tx.objectStore(storeName)
