@@ -217,6 +217,14 @@
   padding-right: 0.5rem;
 }
 
+.-mx-0875 {
+  margin: 0 -0.875rem 0 -0.875rem;
+}
+
+.divider {
+  border-color: rgba(var(--callout-border-rgb), 1);
+}
+
 @keyframes blurIn {
   from {
     opacity: 0;

@@ -78,16 +78,18 @@
 
 .FormCheckBox[data-state="visible"] {
 }
+
 .FormCheckBox[data-state="hidden"] {
   grid-column: 0;
   visibility: hidden;
 }
+
 .TextInputBox[data-state="visible"] {
   padding-left: 1rem;
 }
+
 .TextInputBox[data-state="hidden"] {
   grid-column: 0;
-  display: none;
   visibility: hidden;
 }
 
@@ -129,10 +131,6 @@
       transform: rotate(360deg);
     }
   }
-
-  /* .buttonWrapper button[type=button]:hover {
-    background-color: rgba(205, 0,1, 0.8);
-  } */
 
   /* scrollbar  on firefox*/
   html,

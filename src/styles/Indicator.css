@@ -15,21 +15,15 @@
   animation: fadeIn 0.2s ease-in;
   position: relative;
   padding: 0.625rem 0.825rem;
-  /* margin: 1rem 0.75rem 1rem 0rem; */
   border-radius: calc(
     var(--island-border-radius) - var(--island-content-padding)
   );
   color: rgba(var(--black-text-rgb), 0.95);
-  /* font-size: 0.8rem; */
-  /* font-weight: 600; */
-  /* min-width: clamp(15%, 4rem, 100%); */
   max-width: -moz-fit-content;
   max-width: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* box-shadow: 0 2px 8px rgba(var(--foreground-rgb), 0.4); */
-  /* border: 1px solid rgba(var(--card-rgb), 0.4); */
 
   box-shadow: -2px 1px 8px rgba(var(--gray-shadow), 0.1);
   -webkit-user-select: none;

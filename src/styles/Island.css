@@ -1,34 +1,41 @@
 .IslandAndButton {
   --island-border-radius: 1.75rem;
-  --island-content-padding: 1.125rem;
+  --island-content-padding: 1rem;
   --island-bg: #101010;
-  --island-button-width: 2.25rem;
-  --island-button-icon-size: 1.75rem;
+  --island-button-width: 2rem;
+  --island-button-icon-size: 1.65rem;
   --island-button-gap: 0.5rem;
   --island-safe-zone-button: calc(
     100vw - var(--island-button-width) - var(--island-button-gap)
   );
   position: relative;
-  display: flex;
-  width: clamp(300px, calc(100vw - 1.5rem), 450px);
-  gap: 0.5rem;
+  width: clamp(300px, calc(100vw - 1.5rem), 420px);
+
+  /* Move the island for visual balance */
+  margin-right: 1rem;
 }
 
 .IslandAndButton[data-variant="pill"] {
   .SettingsButton {
     border: 1px solid rgba(var(--callout-border-rgb), 0.1);
   }
+
+  .IslandMain {
+    width: 55%;
+  }
 }
 
 .IslandAndButton[data-variant="full"] {
   .SettingsButton {
     border: 1px solid rgba(var(--callout-border-rgb), 0);
-    translate: -140% 20%;
+    translate: 120% 30%;
   }
 }
 
 .SettingsButton {
-  /* position: absolute; */
+  position: absolute;
+  top: 0;
+  margin-left: -20%;
   z-index: 10;
   left: 100%;
   background-color: var(--island-bg);
@@ -59,13 +66,14 @@
 }
 
 .IslandMain {
-  margin: auto 0;
+  margin: auto;
   min-width: 0;
   z-index: 2;
   width: 100%;
   color: rgba(255, 255, 255, 0.87);
   flex: 1; /* allows this flex child to grow, while other child is fixed size */
   overflow: clip;
+  display: flex;
 }
 
 .IslandContainer {
@@ -78,8 +86,7 @@
   position: relative;
   border-radius: var(--island-border-radius);
   padding: var(--island-content-padding);
-  color: #636363;
-  overflow: hidden;
+  overflow: clip;
   width: 100%;
   display: flex;
   align-items: center;
@@ -94,10 +101,6 @@
   overflow: hidden;
   justify-content: space-between;
   background-color: var(--island-bg);
-
-  --back-blur: 10px;
-  backdrop-filter: blur(var(--back-blur));
-  -webkit-backdrop-filter: blur(var(--back-blur));
   box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
 }
 
@@ -131,6 +134,8 @@
 .SettingsFooter {
   display: flex;
   justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 0.3rem;
 }
 
 .SettingsTitleContainer {
@@ -149,8 +154,11 @@
   cursor: pointer;
   display: flex;
   align-items: center;
+  min-width: 0;
+  width: fit-content;
+  height: fit-content;
   gap: 0.25rem;
-  padding: 0.25rem 0.5rem;
+  padding: 0.15rem 0.2rem 0.15rem 0.6rem;
   border: 1px solid rgba(var(--callout-border-rgb), 0.2);
   border-radius: 999px;
   transition: all 150ms ease-out;
@@ -165,7 +173,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0rem 1rem;
+  padding: 0rem 0.5rem 0rem 0.75rem;
 }
 
 .IslandPillButton {
@@ -184,6 +192,7 @@
   justify-content: center;
   align-items: center;
   font-variant-numeric: tabular-nums;
+  height: fit-content;
   /* background-color: black; */
   background-color: var(--yellow-better-rgb);
   color: #000;
@@ -199,6 +208,7 @@
   align-items: center;
   justify-content: center;
   /* background-color: var(--green-go-rgb); */
+  /* color: #000; */
   color: var(--yellow-better-rgb);
   background-color: #000;
   border-radius: 99px;
@@ -209,6 +219,20 @@
 .SettingsStrength {
   position: relative;
   z-index: 10;
+}
+
+.SettingsTopRowElement p:nth-child(1) {
+  opacity: 0.8;
+  font-size: 0.875rem;
+}
+
+.SettingsTopRowElement p:nth-child(2) {
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.IslandDivider {
+  border-color: rgba(var(--callout-border-rgb), 0.3);
 }
 
 .ScoreCircleContainer {
@@ -227,7 +251,6 @@
 }
 
 .NumberListContainer {
-  /* margin: auto; */
   width: 100%;
   overflow: clip;
   position: relative;
@@ -288,5 +311,9 @@
 @media (prefers-color-scheme: dark) {
   .IslandBackground {
     box-shadow: none;
+  }
+
+  .IslandDivider {
+    border-color: rgba(var(--callout-border-rgb), 1);
   }
 }

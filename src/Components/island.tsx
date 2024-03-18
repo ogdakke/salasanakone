@@ -1,5 +1,5 @@
 import { StrengthIndicator } from "@/Components/indicator"
-import { Loading } from "@/Components/ui"
+import { Divider, Loading } from "@/Components/ui"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
@@ -12,7 +12,7 @@ import { worker } from "@/services/initWorker"
 import "@/styles/Island.css"
 import type { Score, ZxcvbnResult } from "@zxcvbn-ts/core"
 import { type Variants, animate, m, motion, useAnimate, useAnimation } from "framer-motion"
-import { DownloadCircle, FloppyDisk, Plus, SystemRestart, Trash, Xmark } from "iconoir-react"
+import { Download, FloppyDisk, Plus, SystemRestart, Xmark } from "iconoir-react"
 import { useCallback, useContext, useEffect, useRef, useState } from "react"
 
 enum IslandVariants {
@@ -166,7 +166,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
       whileTap={{ scale: isTouchDevice() ? 0.96 : 1 }}
       onLayoutAnimationStart={() => {
         if (islandRef.current) {
-          animate(islandRef.current, { borderColor: `rgba(${borderRgb}, 0)` }, { duration: 0.1 })
+          animate(islandRef.current, { borderColor: `rgba(${borderRgb}, 0.05)` }, { duration: 0.1 })
         }
       }}
       onLayoutAnimationComplete={() => {
@@ -219,7 +219,7 @@ const PillIsland = ({ score }: { score: number }) => {
   const { generate, formState } = useContext(FormContext)
   const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
 
-  const buttonSize = 32
+  const buttonSize = 26
   return (
     <motion.button
       onClick={() => {
@@ -292,7 +292,7 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
         // if deletion failes, eg. the key was not for some reason found, pop the latest language off
         formState.dataset.deletedDatasets.pop()
       }
-      // deletion success
+      // on deletion success, invalidate cache and generate
       await generate(formState, "invalidate")
       fetchStorage()
     }
@@ -325,7 +325,9 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
       fetchStorage()
     }
   }
-
+  const offlineSlowHashing = result?.crackTimesDisplay.offlineSlowHashing1e4PerSecond
+  const online10PerSec = result?.crackTimesDisplay.onlineNoThrottling10PerSecond
+  const crackTimeIdentical = offlineSlowHashing === online10PerSec
   return (
     <motion.div
       className="IslandSettings flex flex-column"
@@ -340,52 +342,56 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
         transition={{ duration: 0.6 }}
         className="SettingsContent"
       >
-        <div className="SettingsTitleContainer">
-          <h3>{t("settingsTitle")}</h3>
-          <p className="SecondaryText">{/* {t("storageUsed")}  */}</p>
-        </div>
-        <div>
-          {/* TODO iconoir system restart is a good icon */}
-          {/* {result ? (
-            <p>
-              {t("timeToCrack")}: {result.crackTimesDisplay.offlineFastHashing1e10PerSecond}
-              <br />
-              {t("guessesNeeded")}: {result.guesses.toExponential(2)}
-            </p>
-          ) : null} */}
-        </div>
-        <motion.div className="flex space-around">
+        <div className="flex gap-1">
           <div className="ScoreCircleContainer">
             <StrengthCircle score={score} />
             <div className="NumberListOuterBox">
               <NumberListScrollWheel selectedNumber={score} />
             </div>
           </div>
-        </motion.div>
-        <div className="SettingsFooter">
-          <div className="flex gap-05">
-            {supportedLanguages.map((language) => (
-              <button
-                key={language}
-                className="LanguageSettingItem"
-                type="button"
-                onClick={async (e) => {
-                  isLanguageDeleted(language) || isLanguageFailed(language)
-                    ? await handleReDownLoadingDataset(language)
-                    : await handleDeletingDataset(language)
-                }}
-                value={language}
-              >
-                {t(language)}{" "}
-                {isLanguageDeleted(language) || isLanguageFailed(language) ? (
-                  <DownloadCircle width={18} height={18} />
-                ) : (
-                  <Trash width={18} height={18} />
-                )}
-              </button>
-            ))}
+          <div className="SettingsTopRowElement">
+            <p>{t("timeToCrack")}</p>
+            <p>
+              {!crackTimeIdentical
+                ? `${offlineSlowHashing} - ${online10PerSec}`
+                : offlineSlowHashing}
+            </p>
           </div>
-          {storage ? <StorageIndicator storage={storage} /> : null}
+        </div>
+
+        <div>
+          <Divider className="IslandDivider" margin="0 -0.875rem" />
+          <div className="SettingsFooter">
+            <div className="flex flex-column gap-025">
+              <span className="SecondaryText">{t("storageUsed")}</span>
+              {storage ? <StorageIndicator storage={storage} /> : null}
+            </div>
+            <div className="flex flex-column gap-025">
+              <span className="SecondaryText">{t("manageLanguages")}</span>
+              <div className="flex gap-05">
+                {supportedLanguages.map((language) => (
+                  <button
+                    key={language}
+                    className="LanguageSettingItem"
+                    type="button"
+                    onClick={async () => {
+                      isLanguageDeleted(language) || isLanguageFailed(language)
+                        ? await handleReDownLoadingDataset(language)
+                        : await handleDeletingDataset(language)
+                    }}
+                    value={language}
+                  >
+                    <span>{t(language)}</span>{" "}
+                    {isLanguageDeleted(language) || isLanguageFailed(language) ? (
+                      <Download width={18} height={18} />
+                    ) : (
+                      <Xmark style={{ marginTop: "1px" }} width={18} height={18} />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </motion.div>
     </motion.div>

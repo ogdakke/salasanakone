@@ -17,7 +17,7 @@ export function StrengthIndicator({ score }: { score: number }): React.ReactNode
         style={{
           left: "6%",
           width: `${barWidth}%`,
-          willChange: "transform, opacity",
+          willChange: "transform",
         }}
         initial={{
           opacity: 0,

@@ -68,6 +68,7 @@ export const en: Translations = {
   megaByte: "Mb",
   guessesNeeded: "Guesses needed",
   scoreDescription: "The password's strength on a scale of 0 to 4 is now {score}",
+  manageLanguages: "Manage languages",
 }
 
 export const fi = {
@@ -139,4 +140,5 @@ export const fi = {
   megaByte: "Mt",
   guessesNeeded: "Arvauksia tarvitaan",
   scoreDescription: "Salasanan vahvuus asteikolla 0-4 on nyt {score}",
+  manageLanguages: "Hallitse kieliä",
 } as const
