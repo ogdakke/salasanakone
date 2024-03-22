@@ -61,7 +61,7 @@ export const en: Translations = {
   [Language.fi]: "Suomi",
   errorInFetchingDataset: "Error in fetching wordlist, try again later.",
   fetchDatasetTooltip:
-    "You have deleted this languages wordlist. Download it from the settings or change language.",
+    "You have deleted the wordlist for this language. Download it from the settings or change language",
   settingsTitle: "Settings and strength",
   storageUsed: "Storage",
   storageUsedDesc: "Site's estimated storage usage is {storage} Megabytes",
@@ -69,6 +69,8 @@ export const en: Translations = {
   guessesNeeded: "Guesses needed",
   scoreDescription: "The password's strength on a scale of 0 to 4 is now {score}",
   manageLanguages: "Manage languages",
+  deleteDataset: "Delete wordlist: {language}",
+  downloadDataset: "Download wordlist for {language}",
 }
 
 export const fi = {
@@ -135,10 +137,12 @@ export const fi = {
   fetchDatasetTooltip:
     "Olet poistanut tämän kielen sanalistan, lataa se uudelleen asetuksista tai vaihda kieltä.",
   settingsTitle: "Vahvuus ja asetukset",
-  storageUsed: "Käytössä",
+  storageUsed: "Tallennustila",
   storageUsedDesc: "Sivuston arvioitu tallennustilan käyttö on {storage} Megatavua",
   megaByte: "Mt",
   guessesNeeded: "Arvauksia tarvitaan",
   scoreDescription: "Salasanan vahvuus asteikolla 0-4 on nyt {score}",
   manageLanguages: "Hallitse kieliä",
+  deleteDataset: "Poista sanalista kielelle {language}",
+  downloadDataset: "Lataa sanalista kielelle {language}",
 } as const

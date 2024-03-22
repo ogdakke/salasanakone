@@ -56,10 +56,6 @@
   }
 }
 
-.SettingsButton:active:hover {
-  scale: 0.96;
-}
-
 .SettingsButton:focus-visible {
   box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
 }
@@ -268,6 +264,7 @@
 .SettingsStrength {
   position: relative;
   z-index: 10;
+  cursor: help;
 }
 
 .SettingsTopRowElement p:nth-child(1) {

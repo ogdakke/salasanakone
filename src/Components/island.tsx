@@ -40,6 +40,7 @@ export const Island = () => {
         layoutId="settings-button"
         className="SettingsButton"
         type="button"
+        whileTap={{ scale: 0.96 }}
         whileHover={{ scale: 1.06 }}
         onClick={handleIslandChange}
       >
@@ -396,6 +397,11 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
                           : await handleDeletingDataset(language)
                       }}
                       data-state={isDeleted ? "download" : "delete"}
+                      title={
+                        isDeleted
+                          ? t("downloadDataset", { language: t(language).toString() }).toString()
+                          : t("deleteDataset", { language: t(language).toString() }).toString()
+                      }
                       value={language}
                     >
                       {isDeleted ? (
