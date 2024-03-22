@@ -185,7 +185,7 @@ describe("createPassphrase() creates a random string with correct length", () =>
       createPassphrase({
         dataset,
         language,
-        passLength: "3",
+        passLength: "2",
         inputs: testData({}),
       }),
     ).toThrowError(errors.tooShort)
