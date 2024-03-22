@@ -65,7 +65,7 @@ export const en: Translations = {
   settingsTitle: "Settings and strength",
   storageUsed: "Storage",
   storageUsedDesc: "Site's estimated storage usage is {storage} Megabytes",
-  megaByte: "Mb",
+  megaByte: "MB",
   guessesNeeded: "Guesses needed",
   scoreDescription: "The password's strength on a scale of 0 to 4 is now {score}",
   manageLanguages: "Manage languages",

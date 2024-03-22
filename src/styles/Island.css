@@ -187,32 +187,43 @@
 }
 
 .StorageUsed {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   font-variant-numeric: tabular-nums;
   height: fit-content;
-  /* background-color: black; */
-  background-color: var(--yellow-better-rgb);
-  color: #000;
+  background-color: rgba(40, 77, 40, 0.87);
+  border: 1px solid rgb(61, 114, 61);
+  /* background-color: var(--yellow-better-rgb); */
+  color: rgba(188, 243, 188, 0.925);
   cursor: help;
-  padding: 0.15rem 0.5rem 0.15rem 0.3rem;
+  padding: 0.15rem 0.5rem 0.15rem 1.25rem;
   border-radius: 99px;
   gap: 0.25rem;
-  font-weight: 700;
+  font-weight: 300;
+  box-shadow: rgb(103 168 108 / 10%) 0px -4px 9px 3px inset;
+
+  transition: background-color, box-shadow 200ms ease-out;
+}
+
+.StorageUsed:hover {
+  /* background-color: rgba(27, 65, 27, 0.87); */
+  box-shadow: rgb(103 168 108 / 40%) 0px -4px 9px 3px inset;
+  .CircleBackground {
+    background-color: rgba(55, 207, 55, 1);
+  }
 }
 
 .CircleBackground {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* background-color: var(--green-go-rgb); */
-  /* color: #000; */
-  color: var(--yellow-better-rgb);
-  background-color: #000;
+  position: absolute;
+  left: 0.4rem;
+  top: 0.5rem;
+  background-color: rgba(111, 230, 111, 0.87);
   border-radius: 99px;
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+
+  transition: transform 200ms ease-in-out;
 }
 
 .SettingsStrength {

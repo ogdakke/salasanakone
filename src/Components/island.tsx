@@ -12,7 +12,7 @@ import { worker } from "@/services/initWorker"
 import "@/styles/Island.css"
 import type { Score, ZxcvbnResult } from "@zxcvbn-ts/core"
 import { type Variants, animate, m, motion, useAnimate, useAnimation } from "framer-motion"
-import { ArrowDown, FloppyDisk, Plus, SystemRestart, Xmark } from "iconoir-react"
+import { ArrowDown, Plus, SystemRestart, Xmark } from "iconoir-react"
 import { useCallback, useContext, useEffect, useRef, useState } from "react"
 
 enum IslandVariants {
@@ -404,11 +404,8 @@ function StorageIndicator({ storage }: { storage: string }) {
 
   return (
     <output title={t("storageUsedDesc", { storage: storage }).toString()} className="StorageUsed">
-      <span className="CircleBackground">
-        <FloppyDisk color="" strokeWidth={2} width={14} height={14} />
-      </span>
-      {storage}
-      {t("megaByte")}
+      <span className="CircleBackground" />
+      {storage} {t("megaByte")}
     </output>
   )
 }
@@ -477,8 +474,8 @@ function NumberListScrollWheel({ selectedNumber }: { selectedNumber: number }) {
         ref={scope}
         animate={controls}
         onAnimationStart={async () => {
-          await animate(scope.current, { filter: "blur(2px)", opacity: 0.7 })
-          await animate(scope.current, { filter: "blur(0px)", opacity: 1 })
+          await animate(scope.current, { filter: "blur(2px)", opacity: 0.5 })
+          await animate(scope.current, { filter: "blur(0px)", opacity: 1 }, { duration: 0.4 })
         }}
         className="NumberList"
         style={{

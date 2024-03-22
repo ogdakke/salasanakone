@@ -148,7 +148,7 @@ export const setFormState = async (payload: FormState): Promise<void> => {
 }
 
 const debouncedSetFormState = debounce(async (payload: FormState) => {
-  isDev && console.time("set-formState")
+  isDev && console.time("set-formState-to-iDB")
   await set(FORM_STATE_KEY, payload)
-  isDev && console.timeEnd("set-formState")
+  isDev && console.timeEnd("set-formState-to-iDB")
 }, 300)
