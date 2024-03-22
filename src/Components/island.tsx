@@ -281,21 +281,29 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
     return false
   }
 
-  async function handleDeletingDataset(lang: Language) {
+  async function handleDeletingDataset(lang: Language): Promise<void> {
     if (!formState.dataset.deletedDatasets.includes(lang)) {
       formState.dataset.deletedDatasets.push(lang)
       // If current language is the one being deleted, switch words to false
       if (formState.language === lang) {
         formState.formValues.words.selected = false
       }
+
       const deleted = await deleteKey(Stores.Languages, lang)
+
       if (deleted === "failed") {
         // if deletion failes, eg. the key was not for some reason found, pop the latest language off
         formState.dataset.deletedDatasets.pop()
       }
-      // on deletion success, invalidate cache and generate
-      await generate(formState, "invalidate")
+
       fetchStorage()
+
+      // If the current language is the one being deleted, dataset cache needs to be invalidated
+      if (formState.language === lang) {
+        // on deletion success, invalidate cache and generate
+        return await generate(formState, "invalidate")
+      }
+      await generate(formState)
     }
   }
 
@@ -309,6 +317,8 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
       // set words to true and languge to the one being downloaded to trigger fetching dataset
       formState.formValues.words.selected = true
       formState.language = lang
+      // Inform worker of language change
+      worker.postMessage(lang)
       await generate(formState, "invalidate")
       fetchStorage()
     }
@@ -322,6 +332,7 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
       // set words to true and languge to the one being downloaded to trigger fetching dataset
       formState.formValues.words.selected = true
       formState.language = lang
+      worker.postMessage(lang)
       await generate(formState, "invalidate")
       fetchStorage()
     }
@@ -329,6 +340,8 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
   const offlineSlowHashing = result?.crackTimesDisplay.offlineSlowHashing1e4PerSecond
   const online10PerSec = result?.crackTimesDisplay.onlineNoThrottling10PerSecond
   const crackTimeIdentical = offlineSlowHashing === online10PerSec
+  const langCanBeDownLoaded = (lang: Language) => isLanguageDeleted(lang) || isLanguageFailed(lang)
+
   return (
     <motion.div
       className="IslandSettings flex flex-column"
@@ -370,26 +383,35 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
             <div className="flex flex-column gap-025">
               <span className="SecondaryText">{t("manageLanguages")}</span>
               <div className="flex gap-05">
-                {supportedLanguages.map((language) => (
-                  <button
-                    key={language}
-                    className="LanguageSettingItem"
-                    type="button"
-                    onClick={async () => {
-                      isLanguageDeleted(language) || isLanguageFailed(language)
-                        ? await handleReDownLoadingDataset(language)
-                        : await handleDeletingDataset(language)
-                    }}
-                    value={language}
-                  >
-                    <span>{t(language)}</span>{" "}
-                    {isLanguageDeleted(language) || isLanguageFailed(language) ? (
-                      <ArrowDown strokeWidth={2} width={14} height={14} />
-                    ) : (
-                      <Xmark style={{ marginTop: "1px" }} width={18} height={18} />
-                    )}
-                  </button>
-                ))}
+                {supportedLanguages.map((language) => {
+                  const isDeleted = langCanBeDownLoaded(language)
+                  return (
+                    <button
+                      key={language}
+                      className="LanguageSettingItem"
+                      type="button"
+                      onClick={async () => {
+                        isDeleted
+                          ? await handleReDownLoadingDataset(language)
+                          : await handleDeletingDataset(language)
+                      }}
+                      data-state={isDeleted ? "download" : "delete"}
+                      value={language}
+                    >
+                      {isDeleted ? (
+                        <ArrowDown
+                          style={{ margin: "1px 2px" }}
+                          className="Icon"
+                          width={14}
+                          height={14}
+                        />
+                      ) : (
+                        <Xmark className="Icon" width={18} height={18} />
+                      )}
+                      <span>{t(language)}</span>{" "}
+                    </button>
+                  )
+                })}
               </div>
             </div>
           </div>

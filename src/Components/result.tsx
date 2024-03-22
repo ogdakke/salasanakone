@@ -173,8 +173,8 @@ const Result = () => {
     return (
       <div className="resultWrapper">
         <div className="flex space-between">
-          <Loading height="1.0625rem" width="7.5rem" radius="0.5rem" />
-          <Loading height="1.0625rem" width="1.5rem" radius="0.5rem" />
+          <Loading height="1.1875rem" width="7.5rem" radius="0.5rem" />
+          <Loading height="1.1875rem" width="1.5rem" radius="0.5rem" />
         </div>
         <Loading height="68px" radius="12px" />
       </div>

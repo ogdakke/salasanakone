@@ -86,13 +86,13 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   }
 
   async function generatePassword(state: FormState, cache?: "invalidate") {
-    const { formValues, sliderValue } = state
-    const validatedLength = validatePasswordLength(sliderValue, formValues.words.selected)
-
     if (cache === "invalidate") {
       temp_dataset = { dataset: [], language: state.language }
       isDev && console.debug("invalidated dataset cache with flag")
     }
+
+    const { formValues, sliderValue } = state
+    const validatedLength = validatePasswordLength(sliderValue, formValues.words.selected)
 
     if (formValues.words.selected) {
       if (temp_dataset?.dataset.length && temp_dataset.language === state.language) {
@@ -106,7 +106,6 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
       const dataset = await fetchDataset(state.language)
 
       if (dataset && Array.isArray(dataset)) {
-        // console.log("got dataset", dataset[0])
         temp_dataset = { language: state.language, dataset }
         return createPassphrase({
           passLength: validatedLength,
