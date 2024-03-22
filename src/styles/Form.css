@@ -21,7 +21,7 @@
   background-color: rgba(var(--form-bg-rgb), 1);
   border: 1px solid rgba(var(--callout-border-rgb), 0.05);
   border-radius: calc(var(--border-radius) + 1rem);
-  box-shadow: 2px 4px 35px 0px #0000001a;
+  box-shadow: 2px 4px 35px 0px oklch(0% 0 0 / 0.102);
 }
 
 /* || Grid ---------------------------------------------- */
@@ -74,9 +74,6 @@
   position: relative;
   margin: 0 auto;
   height: 12.5rem;
-}
-
-.FormCheckBox[data-state="visible"] {
 }
 
 .FormCheckBox[data-state="hidden"] {

@@ -68,12 +68,12 @@
   font-size: 1rem;
   border-radius: 0.5rem;
   border: 1px solid rgba(var(--callout-border-rgb), 0.3);
-  color: rgb(80, 80, 80);
+  color: oklch(43.1% 0 0);
   background-color: rgba(var(--callout-rgb), 1);
 }
 
 @media (prefers-color-scheme: dark) {
   .SelectDropDown {
-    color: rgb(200, 200, 200);
+    color: oklch(83.3% 0 0);
   }
 }

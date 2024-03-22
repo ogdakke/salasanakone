@@ -1,7 +1,7 @@
 .IslandAndButton {
   --island-border-radius: 1.75rem;
   --island-content-padding: 1rem;
-  --island-bg: #101010;
+  --island-bg: oklch(17.3% 0 0);
   --island-button-width: 2rem;
   --island-button-icon-size: 1.65rem;
   --island-button-gap: 0.5rem;
@@ -39,7 +39,7 @@
   z-index: 10;
   left: 100%;
   background-color: var(--island-bg);
-  color: rgba(255, 255, 255, 1);
+  color: oklch(100% 0 0);
   height: var(--island-button-width);
   width: var(--island-button-width);
   border-radius: 99px;
@@ -69,7 +69,7 @@
   min-width: 0;
   z-index: 2;
   width: 100%;
-  color: rgba(255, 255, 255, 0.87);
+  color: oklch(100% 0 0 / 0.87);
   flex: 1; /* allows this flex child to grow, while other child is fixed size */
   overflow: clip;
   display: flex;
@@ -150,21 +150,61 @@
 }
 
 .LanguageSettingItem {
+  position: relative;
   cursor: pointer;
-  display: flex;
-  align-items: center;
   min-width: 0;
   width: fit-content;
   height: fit-content;
-  gap: 0.25rem;
-  padding: 0.15rem 0.2rem 0.15rem 0.6rem;
+  padding: 0.15rem 0.6rem 0.15rem 1.35rem;
   border: 1px solid rgba(var(--callout-border-rgb), 0.2);
   border-radius: 999px;
   transition: all 150ms ease-out;
+  background-color: oklch(38% 0.1 140.25 / 0.79);
+  border: 1px solid oklch(42% 0.047 144.7);
+  color: oklch(85.8% 0.057 145.1 / 0.93);
+  box-shadow: oklch(62.1% 0.101 146.2 / 0.23) 0px -4px 9px 3px inset;
+
+  transition: all 200ms ease-in-out;
+
+  .Icon {
+    position: absolute;
+    left: 0.125rem;
+    top: 0.25rem;
+  }
+}
+
+.LanguageSettingItem::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: 0.425rem;
+  top: 0.5rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: oklch(53.5% 0.124 143.6 / 0.87);
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+
+  transition: all 200ms ease-in-out;
 }
 
 .LanguageSettingItem:hover {
-  opacity: 0.8;
+  box-shadow: oklch(67.2% 0.11 146 / 0.4) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"] {
+  background-color: oklch(0.31 0.12 32.26 / 0.87);
+  border: 1px solid oklch(0.35 0.14 34.44);
+  color: oklch(0.82 0.04 16.68 / 0.93);
+  box-shadow: oklch(0.57 0.08 18.14 / 0.23) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"]:hover {
+  box-shadow: oklch(0.71 0.23 23.03 / 0.23) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"]::before {
+  background-color: oklch(0.57 0.26 29.35 / 0.87);
 }
 
 .IslandGenerateButton {
@@ -190,25 +230,24 @@
   position: relative;
   font-variant-numeric: tabular-nums;
   height: fit-content;
-  background-color: rgba(40, 77, 40, 0.87);
-  border: 1px solid rgb(61, 114, 61);
-  /* background-color: var(--yellow-better-rgb); */
-  color: rgba(188, 243, 188, 0.925);
+  background-color: var(--green-1);
+  border: 1px solid oklch(50.1% 0.1 143.9 / 0.5);
+  color: oklch(91.2% 0.093 144.8 / 0.925);
+  box-shadow: oklch(67.2% 0.11 146 / 0.1) 0px -4px 9px 3px inset;
   cursor: help;
   padding: 0.15rem 0.5rem 0.15rem 1.25rem;
   border-radius: 99px;
   gap: 0.25rem;
   font-weight: 300;
-  box-shadow: rgb(103 168 108 / 10%) 0px -4px 9px 3px inset;
 
   transition: background-color, box-shadow 200ms ease-out;
 }
 
 .StorageUsed:hover {
   /* background-color: rgba(27, 65, 27, 0.87); */
-  box-shadow: rgb(103 168 108 / 40%) 0px -4px 9px 3px inset;
+  box-shadow: oklch(67.2% 0.11 146 / 0.4) 0px -4px 9px 3px inset;
   .CircleBackground {
-    background-color: rgba(55, 207, 55, 1);
+    background-color: oklch(74.8% 0.227 142.9);
   }
 }
 
@@ -216,7 +255,7 @@
   position: absolute;
   left: 0.4rem;
   top: 0.5rem;
-  background-color: rgba(111, 230, 111, 0.87);
+  background-color: oklch(82.9% 0.192 143.6 / 0.87);
   border-radius: 99px;
   width: 0.6rem;
   height: 0.6rem;
