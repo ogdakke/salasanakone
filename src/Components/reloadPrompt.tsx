@@ -5,7 +5,6 @@ import { Xmark } from "iconoir-react"
 import { useState } from "react"
 
 const refreshSW = (registration?: ServiceWorkerRegistration) => {
-  window.localStorage.clear()
   const error = new Error("No registation passed")
   return registration ? registration : error
 }

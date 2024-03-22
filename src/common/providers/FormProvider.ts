@@ -1,5 +1,5 @@
+import { initialFormState } from "@/config/form-config/form-state.config"
 import type { FormContextProps, FormDispatchContextProps } from "@/models"
-import { initialFormState } from "@/services/reducers/formReducer"
 import { createContext } from "react"
 
 export const FormContext = createContext<FormContextProps>({

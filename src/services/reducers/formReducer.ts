@@ -1,22 +1,11 @@
 import { debounce } from "@/common/utils/debounce"
-import { STORE_VERSION, defaultFormValues, defaultSliderValue } from "@/config"
+import { FORM_STATE_KEY } from "@/config"
+import { initialFormState } from "@/config/form-config/form-state.config"
 import type { FormState, InputValue, PassCreationRules } from "@/models"
-import { Language } from "@/models/translations"
+import type { Language } from "@/models/translations"
 import { set } from "idb-keyval"
 
 const isDev = import.meta.env.DEV
-
-export const initialFormState: FormState = {
-  formValues: defaultFormValues,
-  sliderValue: defaultSliderValue,
-  language: Language.fi,
-  isDisabled: false,
-  isEditing: false,
-  dataset: {
-    deletedDatasets: [],
-    failedToFetchDatasets: [],
-  },
-}
 
 export enum FormActionKind {
   SET_FORM_STATE = "setFormState",
@@ -154,12 +143,12 @@ export const resetFormState = (): SetFormStateAction => ({
  * @param payload state to set
  */
 export const setFormState = async (payload: FormState): Promise<void> => {
-  localStorage.setItem(`formState-V${STORE_VERSION}`, JSON.stringify(payload))
+  localStorage.setItem(FORM_STATE_KEY, JSON.stringify(payload))
   debouncedSetFormState(payload)
 }
 
 const debouncedSetFormState = debounce(async (payload: FormState) => {
   isDev && console.time("set-formState")
-  await set(`formState-V${STORE_VERSION}`, payload)
+  await set(FORM_STATE_KEY, payload)
   isDev && console.timeEnd("set-formState")
 }, 300)

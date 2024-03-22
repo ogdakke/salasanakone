@@ -5,16 +5,12 @@ import { ResultContext } from "@/common/providers/ResultProvider"
 import { isKey } from "@/common/utils/helpers"
 import { validatePasswordLength } from "@/common/utils/validations"
 import { STORE_VERSION } from "@/config"
+import { initialFormState } from "@/config/form-config/form-state.config"
 import type { FormState, ResultState } from "@/models"
 import type { Language } from "@/models/translations"
 import { createPassphrase } from "@/services/createCrypto"
 import { Stores, getDataForKey, setData } from "@/services/database/db"
-import reducer, {
-  initialFormState,
-  resetFormState,
-  setFormState,
-  setLanguage,
-} from "@/services/reducers/formReducer"
+import reducer, { resetFormState, setFormState, setLanguage } from "@/services/reducers/formReducer"
 import { del } from "idb-keyval"
 import { type ReactNode, useState } from "react"
 

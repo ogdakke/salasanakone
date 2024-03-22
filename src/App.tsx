@@ -16,19 +16,21 @@ await initDB()
 
 function App() {
   return (
-    <main className="main">
-      <div className="wrapper">
-        <Header />
-        <Suspense fallback={<FormComponentLoader />}>
-          <ErrorBoundary fallbackRender={FormErrorComponent}>
-            <FormComponent />
-          </ErrorBoundary>
-        </Suspense>
-        <Description />
+    <>
+      <main className="main">
+        <div className="wrapper">
+          <Header />
+          <Suspense fallback={<FormComponentLoader />}>
+            <ErrorBoundary fallbackRender={FormErrorComponent}>
+              <FormComponent />
+            </ErrorBoundary>
+          </Suspense>
+          <Description />
+        </div>
         <Credits />
-        <ReloadPrompt />
-      </div>
-    </main>
+      </main>
+      <ReloadPrompt />
+    </>
   )
 }
 

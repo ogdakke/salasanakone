@@ -1,31 +1,25 @@
 .creditsWrapper {
+  margin: 0 auto;
+  width: 100%;
+  max-width: var(--max-width);
   display: flex;
   justify-content: space-between;
-  height: 100%;
+  height: fit-content;
+  font-size: 0.875rem;
+  padding-top: 3rem;
 }
 
-.credits {
-  display: flex;
-  width: min-content;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin: 0rem 0rem;
+.CreditsLink {
+  margin: auto 0 auto -0.5rem;
   justify-items: end;
-
-  font-weight: 600;
-}
-
-.credits:hover {
-  opacity: 0.8;
-  transition: all 200ms ease-in-out;
-  text-decoration: underline;
-}
-
-.credits a {
-  align-items: center;
+  padding: 0.5rem;
   text-decoration: none;
-  padding: 0.5rem 0rem;
+  opacity: 0.75;
+  transition: all 200ms ease-in-out;
+}
+
+.CreditsLink:hover {
+  opacity: 1;
 }
 
 .credits #svgProfileImage {
@@ -39,4 +33,11 @@
 .versionLink {
   text-decoration: none;
   margin: auto 0;
+  padding: 0.5rem;
+}
+
+@media (max-width: 700px) {
+  .CreditsLink {
+    margin: auto 0;
+  }
 }

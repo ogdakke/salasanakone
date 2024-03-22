@@ -1,3 +1,4 @@
+import { FORM_STATE_KEY } from "@/config"
 import type { CheckerWorkerPostMessageData, FormState } from "@/models"
 import { Language } from "@/models/translations"
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core"
@@ -12,14 +13,18 @@ async function getDic(lang: Language): Promise<OptionsType | undefined> {
     case Language.fi: {
       return isDev
         ? await import("@zxcvbn-ts/language-fi")
-        : // @ts-expect-error import from cdn
-          await import("https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-fi@3.0.2/+esm")
+        : await import(
+            // @ts-expect-error import from cdn
+            "https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-fi@3.0.2/+esm"
+          )
     }
     case Language.en: {
       return isDev
         ? await import("@zxcvbn-ts/language-en")
-        : // @ts-expect-error import from cdn
-          await import("https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-en@3.0.2/+esm")
+        : await import(
+            // @ts-expect-error import from cdn
+            "https://cdn.jsdelivr.net/npm/@zxcvbn-ts/language-en@3.0.2/+esm"
+          )
     }
     default:
       console.error("no language found to import zxcvbn options for", lang)
@@ -52,7 +57,7 @@ function checkStrength(password: string): ZxcvbnResult {
 
 /** Initialize the worker with zxcvbn options for the given language */
 async function initWorker(): Promise<void> {
-  const formState = await get<FormState>("formState")
+  const formState = await get<FormState>(FORM_STATE_KEY)
   isDev && console.info("formState from worker", formState)
   isDev && console.info("loading zxcvbn options")
   await setZxcvbnOptions(formState?.language)

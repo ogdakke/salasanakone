@@ -12,7 +12,7 @@ import { worker } from "@/services/initWorker"
 import "@/styles/Island.css"
 import type { Score, ZxcvbnResult } from "@zxcvbn-ts/core"
 import { type Variants, animate, m, motion, useAnimate, useAnimation } from "framer-motion"
-import { Download, FloppyDisk, Plus, SystemRestart, Xmark } from "iconoir-react"
+import { ArrowDown, FloppyDisk, Plus, SystemRestart, Xmark } from "iconoir-react"
 import { useCallback, useContext, useEffect, useRef, useState } from "react"
 
 enum IslandVariants {
@@ -40,6 +40,7 @@ export const Island = () => {
         layoutId="settings-button"
         className="SettingsButton"
         type="button"
+        whileHover={{ scale: 1.06 }}
         onClick={handleIslandChange}
       >
         <SystemRestart strokeWidth={1} className="Icon" style={{ opacity: isPill ? 1 : 0 }} />
@@ -383,7 +384,7 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
                   >
                     <span>{t(language)}</span>{" "}
                     {isLanguageDeleted(language) || isLanguageFailed(language) ? (
-                      <Download width={18} height={18} />
+                      <ArrowDown strokeWidth={2} width={14} height={14} />
                     ) : (
                       <Xmark style={{ marginTop: "1px" }} width={18} height={18} />
                     )}
