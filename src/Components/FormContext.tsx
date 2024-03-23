@@ -12,11 +12,10 @@ import { createPassphrase } from "@/services/createCrypto"
 import { Stores, getDataForKey, setData } from "@/services/database/db"
 import { setFormState } from "@/services/database/state"
 import reducer, { resetFormState, setLanguage } from "@/services/reducers/formReducer"
-import { del } from "idb-keyval"
+import { del, get } from "idb-keyval"
 import { type ReactNode, useState } from "react"
 
 const isDev = import.meta.env.DEV
-const API_KEY = import.meta.env.VITE_X_API_KEY
 const importedApiUrl = import.meta.env.VITE_API_URL
 const API_URL = isDev ? "http://localhost:8787" : importedApiUrl
 
@@ -41,8 +40,20 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
 
   // Handle regression of stored values
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Here we check for regressions, eg. values in localStorage that need to be removed
-  function handleRegresion() {
+  async function handleRegresion() {
     let regressed = []
+    console.debug("running regressions...")
+
+    if (localStorage.getItem("formState")) {
+      localStorage.removeItem("formState")
+      regressed.push("formState")
+    }
+
+    if (await get("formState")) {
+      await del("formState")
+      regressed.push("idb-formState")
+    }
+
     if (formState.dataset.fetchedDatasets === undefined) {
       formState.dataset.fetchedDatasets = []
       regressed.push("fetchedDatasets")
@@ -70,14 +81,14 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
     if (!Array.isArray(formState.dataset.deletedDatasets)) {
       regressed.push("deletedDatasets")
       clearValue()
-      del(FORM_STATE_KEY)
+      await del(FORM_STATE_KEY)
       dispatch(resetFormState())
     }
 
     if (!Array.isArray(formState.dataset.failedToFetchDatasets)) {
       regressed.push("failedToFetchDatasets")
       clearValue()
-      del(FORM_STATE_KEY)
+      await del(FORM_STATE_KEY)
       dispatch(resetFormState())
     }
 
@@ -87,7 +98,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   }
 
   if (!hasCheckedRegressions) {
-    handleRegresion()
+    ;(async () => handleRegresion())()
     hasCheckedRegressions = true
   }
 
@@ -151,11 +162,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
       setFinalPassword({ isEdited: false, passwordValue: undefined })
 
       const url = `${API_URL}/dataset/${lang}`
-      const response = await fetch(url, {
-        headers: {
-          "X-API-KEY": API_KEY || "",
-        },
-      })
+      const response = await fetch(url)
 
       // TODO handle aborting the fetch when language changes or something idfk
       if (!response.ok) {
