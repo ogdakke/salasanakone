@@ -1,6 +1,6 @@
 import { Language } from "@/models/translations"
 
-export const minLengthForChars = 4
+export const minLengthForChars = 3
 export const minLengthForWords = 1
 export const maxLengthForChars = 64
 export const maxLengthForWords = 12
@@ -12,7 +12,7 @@ export const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
 export function getConfig(language: Language = Language.fi) {
   return {
     // Length restrictions
-    minLengthForChars: 4,
+    minLengthForChars: 3,
     minLengthForWords: 1,
     maxLengthForChars: 128,
     maxLengthForWords: 28,

@@ -1,20 +1,14 @@
-import { defaultFormValues, defaultSliderValue } from "@/config"
+import { debounce } from "@/common/utils/debounce"
+import { FORM_STATE_KEY } from "@/config"
+import { initialFormState } from "@/config/form-config/form-state.config"
 import type { FormState, InputValue, PassCreationRules } from "@/models"
-import { Language } from "@/models/translations"
+import type { Language } from "@/models/translations"
+import { set } from "idb-keyval"
 
-export const initialFormState: FormState = {
-  formValues: defaultFormValues,
-  sliderValue: defaultSliderValue,
-  language: Language.fi,
-  isDisabled: false,
-  isEditing: false,
-  dataset: {
-    hasDeletedDatasets: false,
-    noDatasetFetched: false,
-  },
-}
+const isDev = import.meta.env.DEV
 
 export enum FormActionKind {
+  SET_FORM_STATE = "setFormState",
   SET_FORM_VALUES = "setFormValues",
   SET_FORM_FIELD = "setFormField",
   SET_SLIDERVALUE = "setSlidervalue",
@@ -39,16 +33,16 @@ type SetFormFieldAction = {
     value?: InputValue["value"]
   }
 }
+
 type SetDatasetFieldsAction = {
   type: FormActionKind.SET_DATASET_FIELDS
   payload: FormState["dataset"]
 }
-type SetLanguageAction = {
-  type: FormActionKind.SET_LANGUAGE
-  payload: Language
-}
 
+type SetLanguageAction = { type: FormActionKind.SET_LANGUAGE; payload: Language }
+type SetFormStateAction = { type: FormActionKind.SET_FORM_STATE; payload: FormState }
 export type FormActions =
+  | SetFormStateAction
   | { type: FormActionKind.SET_FORM_VALUES; payload: PassCreationRules }
   | SetFormFieldAction
   | SetSliderValueAction
@@ -60,6 +54,8 @@ export type FormActions =
 
 export default function reducer(state: FormState, action: FormActions): FormState {
   switch (action.type) {
+    case FormActionKind.SET_FORM_STATE:
+      return action.payload
     case FormActionKind.SET_FORM_VALUES:
       return { ...state, formValues: action.payload }
     case FormActionKind.SET_FORM_FIELD:
@@ -136,3 +132,23 @@ export const setDatasetFields = (payload: FormState["dataset"]): SetDatasetField
   type: FormActionKind.SET_DATASET_FIELDS,
   payload,
 })
+
+export const resetFormState = (): SetFormStateAction => ({
+  type: FormActionKind.SET_FORM_STATE,
+  payload: initialFormState,
+})
+
+/**
+ * Sets the given state directly to localStorage & indexedDB
+ * @param payload state to set
+ */
+export const setFormState = async (payload: FormState): Promise<void> => {
+  localStorage.setItem(FORM_STATE_KEY, JSON.stringify(payload))
+  debouncedSetFormState(payload)
+}
+
+const debouncedSetFormState = debounce(async (payload: FormState) => {
+  isDev && console.time("set-formState-to-iDB")
+  await set(FORM_STATE_KEY, payload)
+  isDev && console.timeEnd("set-formState-to-iDB")
+}, 300)

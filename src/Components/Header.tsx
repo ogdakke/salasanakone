@@ -1,33 +1,42 @@
-import { FormDispatchContext } from "@/Components/FormContext"
 import { LogoIcon } from "@/assets/icons/logoIcon"
-import { useLanguage, useTranslation } from "@/common/utils/getLanguage"
-import { Language } from "@/models/translations"
-import { setLanguage } from "@/services/reducers/formReducer"
+import { useLanguage, useTranslation } from "@/common/hooks/useLanguage"
+import { FormContext } from "@/common/providers/FormProvider"
+import { isIOS } from "@/common/utils/helpers"
+import { supportedLanguages } from "@/config"
+import type { Language } from "@/models/translations"
+import { worker } from "@/services/initWorker"
 
 import "@/styles/Header.css"
+import { motion } from "framer-motion"
 import { useContext } from "react"
 
-const isIOS =
-  /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-  (navigator.userAgent === "MacIntel" && navigator.maxTouchPoints > 1)
+function dispatchLanguageEvent(lang: Language) {
+  worker.postMessage(lang)
+}
 
 export const Header = () => {
-  const { dispatch } = useContext(FormDispatchContext)
+  const { formState, generate } = useContext(FormContext)
   const { t } = useTranslation()
   const { language } = useLanguage()
 
   function handleOnClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const name = event.currentTarget.name as Language
-    dispatch(setLanguage(name))
+    changeLanguage(name)
   }
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value as Language
-
-    dispatch(setLanguage(value))
+    changeLanguage(value)
   }
 
-  const languages = Object.values(Language)
+  function changeLanguage(lang: Language) {
+    if (supportedLanguages.includes(lang)) {
+      formState.language = lang
+      dispatchLanguageEvent(formState.language)
+      generate(formState)
+    }
+  }
+
   const isActive = (lang: Language) => lang === language
   return (
     <div className="flex-center space-between">
@@ -38,7 +47,7 @@ export const Header = () => {
       <div className="LanguageAndLink">
         <div className="LanguagePicker">
           {!isIOS
-            ? languages.map((language) => {
+            ? supportedLanguages.map((language) => {
                 const active = isActive(language)
                 return (
                   <button
@@ -50,15 +59,18 @@ export const Header = () => {
                     data-state={active}
                     disabled={active}
                   >
-                    {active ? <span className="PickerBackground" /> : null}
+                    {active ? (
+                      <motion.span layoutId="PickerBackground" className="PickerBackground" />
+                    ) : null}
                     <span className="LanguageText relative">{language}</span>
                   </button>
                 )
               })
             : null}
+          {/* iOS has a great native select element, so that's used here */}
           {isIOS ? (
-            <select className="SelectDropDown" onChange={handleChange} defaultValue={language}>
-              {languages.map((language) => {
+            <select className="SelectDropDown" onChange={handleChange} value={language}>
+              {supportedLanguages.map((language) => {
                 return (
                   <option value={language} key={language}>
                     {t(language)}

@@ -13,9 +13,7 @@
   border-radius: var(--border-radius);
   background: rgba(var(--card-rgb), 0);
   border: 1px dashed rgba(var(--card-border-rgb), 0.2);
-  transition:
-    all 200ms,
-    border 200ms;
+  transition: all 200ms, border 200ms;
   width: 100%;
   overflow-x: scroll;
   overflow-y: hidden;
@@ -122,8 +120,8 @@
     135deg,
     transparent 20%,
     transparent 10%,
-    hsla(0, 0%, 5%, 0.2) 50%,
-    hsla(0, 0%, 13%, 0.3) 50%,
+    oklch(15.8% 0 0 / 0.2) 50%,
+    oklch(24.8% 0 0 / 0.3) 50%,
     transparent 70%,
     transparent
   );
@@ -147,8 +145,8 @@
       135deg,
       transparent 20%,
       transparent 10%,
-      hsla(0, 0%, 100%, 0.2) 50%,
-      hsla(0, 0%, 100%, 0.3) 50%,
+      oklch(100% 0 0 / 0.2) 50%,
+      oklch(100% 0 0 / 0.3) 50%,
       transparent 70%,
       transparent
     );

@@ -1,31 +1,91 @@
+.IslandAndButton {
+  --island-border-radius: 1.75rem;
+  --island-content-padding: 1rem;
+  --island-bg: oklch(17.3% 0 0);
+  --island-button-width: 2rem;
+  --island-button-icon-size: 1.65rem;
+  --island-button-gap: 0.5rem;
+  --island-safe-zone-button: calc(
+    100vw - var(--island-button-width) - var(--island-button-gap)
+  );
+  position: relative;
+  width: clamp(300px, calc(100vw - 1.5rem), 420px);
+
+  /* Move the island for visual balance */
+  margin-right: 1rem;
+}
+
+.IslandAndButton[data-variant="pill"] {
+  .SettingsButton {
+    border: 1px solid rgba(var(--callout-border-rgb), 0.1);
+  }
+
+  .IslandMain {
+    width: 55%;
+  }
+}
+
+.IslandAndButton[data-variant="full"] {
+  .SettingsButton {
+    border: 1px solid rgba(var(--callout-border-rgb), 0);
+    translate: 120% 30%;
+  }
+}
+
+.SettingsButton {
+  position: absolute;
+  top: 0;
+  margin-left: -20%;
+  z-index: 10;
+  left: 100%;
+  background-color: var(--island-bg);
+  color: oklch(100% 0 0);
+  height: var(--island-button-width);
+  width: var(--island-button-width);
+  border-radius: 99px;
+  transition: all 200ms ease-out;
+  cursor: pointer;
+
+  .Icon {
+    position: absolute;
+    top: 0.2rem;
+    left: 0.2rem;
+    width: var(--island-button-icon-size);
+    height: var(--island-button-icon-size);
+    transition: all 300ms ease-out;
+  }
+}
+
+.SettingsButton:focus-visible {
+  box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
+}
+
+.IslandMain {
+  margin: auto;
+  min-width: 0;
+  z-index: 2;
+  width: 100%;
+  color: oklch(100% 0 0 / 0.87);
+  flex: 1; /* allows this flex child to grow, while other child is fixed size */
+  overflow: clip;
+  display: flex;
+}
+
 .IslandContainer {
   position: relative;
   display: flex;
   justify-content: center;
 }
 
-.IslandMain {
-  z-index: 2;
-  --island-border-radius: 1.75rem;
-  --island-content-padding: 1.125rem;
-  width: clamp(300px, 100dvw, 450px);
-}
-
-.WithButton {
-  gap: 1rem;
-}
-
 .IslandContent {
   position: relative;
   border-radius: var(--island-border-radius);
   padding: var(--island-content-padding);
-  color: #636363;
-  border: 1px solid rgba(var(--skeleton-glow), 1);
-  overflow: hidden;
+  overflow: clip;
   width: 100%;
   display: flex;
   align-items: center;
-  box-shadow: -10px 0px 15px 0px rgba(var(--skeleton-glow), 0.3);
+  transition: all 200ms ease-out;
 }
 
 .IslandBackground {
@@ -35,18 +95,112 @@
   width: 100%;
   overflow: hidden;
   justify-content: space-between;
-  border-radius: calc(var(--island-border-radius));
-  border: 1px solid rgba(var(--skeleton-glow), 1);
-  background-color: rgba(var(--form-bg-rgb), 0.5);
+  background-color: var(--island-bg);
+  box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
+}
+
+.IslandBackground:focus-visible {
+  outline: none;
+  border-radius: var(--island-border-radius);
+  box-shadow: 0 0 0 1px rgba(var(--foreground-rgb), 0.75) inset;
+
+  .IslandGenerateButton {
+    scale: 1.2;
+  }
+}
+
+.IslandSettings {
+  width: 100%;
+  background-color: var(--island-bg);
   --back-blur: 10px;
   backdrop-filter: blur(var(--back-blur));
   -webkit-backdrop-filter: blur(var(--back-blur));
   box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
 }
 
-.IslandBackground:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
+.SettingsContent {
+  height: 100%;
+  padding: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.SettingsFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 0.3rem;
+}
+
+.SettingsTitleContainer {
+  display: flex;
+  gap: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.LangaugesContainer {
+  padding-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.LanguageSettingItem {
+  position: relative;
+  cursor: pointer;
+  min-width: 0;
+  width: fit-content;
+  height: fit-content;
+  padding: 0.15rem 0.6rem 0.15rem 1.35rem;
+  border: 1px solid rgba(var(--callout-border-rgb), 0.2);
+  border-radius: 999px;
+  transition: all 150ms ease-out;
+  background-color: oklch(38% 0.1 140.25 / 0.79);
+  border: 1px solid oklch(42% 0.047 144.7);
+  color: oklch(85.8% 0.057 145.1 / 0.93);
+  box-shadow: oklch(62.1% 0.101 146.2 / 0.23) 0px -4px 9px 3px inset;
+
+  transition: all 200ms ease-in-out;
+
+  .Icon {
+    position: absolute;
+    left: 0.125rem;
+    top: 0.25rem;
+  }
+}
+
+.LanguageSettingItem::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: 0.425rem;
+  top: 0.5rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: oklch(53.5% 0.124 143.6 / 0.87);
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+
+  transition: all 200ms ease-in-out;
+}
+
+.LanguageSettingItem:hover {
+  box-shadow: oklch(67.2% 0.11 146 / 0.4) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"] {
+  background-color: oklch(0.31 0.12 32.26 / 0.87);
+  border: 1px solid oklch(0.35 0.14 34.44);
+  color: oklch(0.82 0.04 16.68 / 0.93);
+  box-shadow: oklch(0.57 0.08 18.14 / 0.23) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"]:hover {
+  box-shadow: oklch(0.71 0.23 23.03 / 0.23) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"]::before {
+  background-color: oklch(0.57 0.26 29.35 / 0.87);
 }
 
 .IslandGenerateButton {
@@ -54,24 +208,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0rem 1rem;
+  padding: 0rem 0.5rem 0rem 0.75rem;
 }
 
 .IslandPillButton {
   cursor: pointer;
-}
-
-.PillIsland {
-  max-height: 0;
-}
-
-.FullIsland {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.Refresh {
-  color: rgb(180, 180, 180);
 }
 
 .StrengthBar {
@@ -81,6 +222,91 @@
   border-radius: 32px;
 }
 
+.StorageUsed {
+  position: relative;
+  font-variant-numeric: tabular-nums;
+  height: fit-content;
+  background-color: var(--green-1);
+  border: 1px solid oklch(50.1% 0.1 143.9 / 0.5);
+  color: oklch(91.2% 0.093 144.8 / 0.925);
+  box-shadow: oklch(67.2% 0.11 146 / 0.1) 0px -4px 9px 3px inset;
+  cursor: help;
+  padding: 0.15rem 0.5rem 0.15rem 1.25rem;
+  border-radius: 99px;
+  gap: 0.25rem;
+  font-weight: 300;
+
+  transition: background-color, box-shadow 200ms ease-out;
+}
+
+.StorageUsed:hover {
+  /* background-color: rgba(27, 65, 27, 0.87); */
+  box-shadow: oklch(67.2% 0.11 146 / 0.4) 0px -4px 9px 3px inset;
+  .CircleBackground {
+    background-color: oklch(74.8% 0.227 142.9);
+  }
+}
+
+.CircleBackground {
+  position: absolute;
+  left: 0.4rem;
+  top: 0.5rem;
+  background-color: oklch(82.9% 0.192 143.6 / 0.87);
+  border-radius: 99px;
+  width: 0.6rem;
+  height: 0.6rem;
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+
+  transition: transform 200ms ease-in-out;
+}
+
+.SettingsStrength {
+  position: relative;
+  z-index: 10;
+  cursor: help;
+}
+
+.SettingsTopRowElement p:nth-child(1) {
+  opacity: 0.8;
+  font-size: 0.875rem;
+}
+
+.SettingsTopRowElement p:nth-child(2) {
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.IslandDivider {
+  border-color: rgba(var(--callout-border-rgb), 0.3);
+}
+
+.ScoreCircleContainer {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+}
+
+.NumberListOuterBox {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+}
+
+.NumberListContainer {
+  width: 100%;
+  overflow: clip;
+  position: relative;
+}
+
+.NumberList {
+  font-size: 1.75rem;
+  padding-top: 2px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .IslandGenerateButton:focus-visible {
     border: 1px solid rgba(var(--skeleton-glow), 0.1);
@@ -88,6 +314,22 @@
 }
 
 @media (max-width: 700px) {
+  .IslandAndButton {
+    --island-button-width: 3.25rem;
+    --island-button-icon-size: 1.75rem;
+    margin-right: 0;
+  }
+
+  .SettingsButton {
+    margin-left: -3rem;
+
+    .Icon {
+      scale: 1.35;
+      top: 0.75rem;
+      left: 0.75rem;
+    }
+  }
+
   .IslandMobileBackground {
     border-radius: calc(var(--island-border-radius) + 0.5rem);
   }
@@ -101,25 +343,35 @@
     padding: calc(var(--island-content-padding) + 0.5rem);
   }
 
-  .PillIsland {
-    background-color: rgba(var(--form-bg-rgb), 0.5);
+  .IslandAndButton[data-variant="pill"] {
+    .SettingsButton {
+      border: 1px solid rgba(var(--callout-border-rgb), 0.1);
+    }
+
+    .IslandMain {
+      width: 86%;
+    }
   }
 
-  .IslandPillButton {
-    user-select: none;
-    -webkit-user-select: none;
-    border-radius: 1rem;
-    padding: 1rem 1.5rem;
-    background-color: rgba(var(--form-bg-rgb), 0.9);
+  .IslandAndButton[data-variant="full"] {
+    .SettingsButton {
+      border: 1px solid rgba(var(--callout-border-rgb), 0);
+      background-color: transparent;
+      translate: -20% 20%;
+    }
+  }
+
+  .IslandMain {
+    margin: 0;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  .IslandContent {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-
   .IslandBackground {
     box-shadow: none;
+  }
+
+  .IslandDivider {
+    border-color: rgba(var(--callout-border-rgb), 1);
   }
 }

@@ -1,4 +1,4 @@
-import type { Language, Translations } from "@/models/translations"
+import type { Language } from "@/models/translations"
 import type { FormActions } from "@/services/reducers/formReducer"
 import type { Dispatch } from "react"
 
@@ -11,7 +11,6 @@ export type IndexedLabels = Record<InputLabel, CheckboxLabels>
 export interface InputValue {
   inputType: InputType
   selected: boolean
-  info: keyof Translations
   value?: string
 }
 
@@ -29,14 +28,14 @@ export type FormState = {
   isEditing: boolean
   language: Language
   dataset: {
-    hasDeletedDatasets: boolean
-    noDatasetFetched: boolean
+    deletedDatasets: Language[]
+    failedToFetchDatasets: Language[]
   }
 }
 
 export type FormContextProps = {
   formState: FormState
-  generate: () => Promise<void>
+  generate: (state: FormState, cache?: "invalidate") => Promise<void>
   validate?: (value: number, state: FormState) => number
 }
 
@@ -56,3 +55,9 @@ export type ResultContextProps = {
   finalPassword: ResultState
   setFinalPassword: Dispatch<React.SetStateAction<ResultState>>
 }
+
+export type CheckerWorkerPostMessageData =
+  | {
+      strValue: string
+    }
+  | Language

@@ -11,9 +11,10 @@ const writeToClipboard = async (value: string) => {
       return value
     } catch (err) {
       console.error(err)
-      throw err
+      return value
     }
   } else {
-    throw new Error("No navigator detected")
+    new Error("No navigator detected")
+    return undefined
   }
 }

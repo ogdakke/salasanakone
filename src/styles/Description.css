@@ -1,5 +1,4 @@
 .description {
-  margin-top: 10rem;
   font-size: 1rem;
   max-width: var(--max-width);
   width: 100%;
@@ -39,6 +38,7 @@ summary::marker {
   margin: 0.25rem 0.5rem;
 }
 .description p {
+  text-wrap: pretty;
   margin: 0;
   -webkit-hyphens: auto;
   hyphens: auto;

@@ -1,11 +1,10 @@
 import { useRegisterSW } from "virtual:pwa-register/react"
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import "@/styles/ReloadPrompt.css"
-import { Refresh } from "iconoir-react"
+import { Xmark } from "iconoir-react"
 import { useState } from "react"
 
 const refreshSW = (registration?: ServiceWorkerRegistration) => {
-  window.localStorage.clear()
   const error = new Error("No registation passed")
   return registration ? registration : error
 }
@@ -52,25 +51,24 @@ function ReloadPrompt() {
           {needRefresh ? (
             <button
               type="button"
-              className="ToastButton inputButton"
+              className="ToastButton"
               onClick={() => {
                 updateServiceWorker(true).catch(console.error)
               }}
             >
-              <Refresh width={20} height={20} />
               {t("update")}
             </button>
           ) : null}
           {offlineReady && !needRefresh ? (
             <button
               type="button"
-              className={"ToastButton inputButton"}
+              className="DismissToast"
               onClick={() => {
                 setIsTrue(true)
                 close()
               }}
             >
-              {t("ok")}
+              <Xmark className="Icon" width={20} height={20} />
             </button>
           ) : null}
         </div>

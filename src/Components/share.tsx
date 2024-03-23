@@ -2,7 +2,7 @@ import { CheckCircle, ShareAndroid, ShareIos } from "iconoir-react"
 import { useState } from "react"
 
 import { meta } from "@/assets/constants/meta"
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import copyToClipboard from "@/services/copyToClipboard"
 
 export const isAndroid = navigator.userAgent.match(/Android/i)

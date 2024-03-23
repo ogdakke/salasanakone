@@ -1,31 +1,14 @@
-import { useTranslation } from "@/common/utils/getLanguage"
-import type { InputLabel, PassCreationRules } from "@/models"
+import { useTranslation } from "@/common/hooks/useLanguage"
+import type { InputLabel } from "@/models"
+import { Language } from "@/models/translations"
 
+/** The version number for IDB stores to allow for sunsetting KV pairs */
+export const STORE_VERSION = 1 as const
+/** Form state's key in localStorage and IDB */
+export const FORM_STATE_KEY = `formState-V${STORE_VERSION}`
+
+export const supportedLanguages = Object.values(Language)
 export const inputFieldMaxLength = 8
-export const defaultSliderValue = 3
-export const defaultFormValues: PassCreationRules = {
-  words: {
-    inputType: "radio",
-    selected: true,
-    info: "useWordsInfo",
-  },
-  uppercase: {
-    inputType: "checkbox",
-    selected: false,
-    info: "useUppercaseInfo",
-  },
-  numbers: {
-    inputType: "checkbox",
-    selected: true,
-    info: "useNumbersInfo",
-  },
-  randomChars: {
-    inputType: "input",
-    value: "-",
-    selected: false,
-    info: "useSeparatorInfo",
-  },
-}
 
 export function labelForCheckbox(option: InputLabel) {
   const { t } = useTranslation()

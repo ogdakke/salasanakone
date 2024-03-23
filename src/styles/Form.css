@@ -21,25 +21,37 @@
   background-color: rgba(var(--form-bg-rgb), 1);
   border: 1px solid rgba(var(--callout-border-rgb), 0.05);
   border-radius: calc(var(--border-radius) + 1rem);
-  box-shadow: 2px 4px 35px 0px #0000001a;
+  box-shadow: 2px 4px 35px 0px oklch(0% 0 0 / 0.102);
 }
 
 /* || Grid ---------------------------------------------- */
-.inputGrid {
-  display: grid;
+.FormLayout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0;
+}
+.FormCheckBoxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 50%;
+}
+.FormCheckBox {
+  width: fit-content;
+}
 
-  grid-template-areas:
-    "radio uppercase"
-    "radio numbers"
-    "slider input"
-    "slider input";
-  gap: 1rem;
+.TextInputBox {
+  width: 40%;
 }
-.textInputBox {
-  grid-area: input;
+
+.TwoRadioGroup {
+  width: 50%;
+  padding-right: 0.5rem;
 }
-.radio {
-  grid-area: radio;
+
+.SliderWrapper {
+  max-width: clamp(60%, 1vw, 80%);
+  flex-grow: 1;
 }
 
 /* ----------------------------------Grid */
@@ -50,16 +62,6 @@
   justify-content: space-between;
 }
 
-.LabelRoot {
-  cursor: pointer;
-  padding-left: 0.3rem;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
 .resultCard {
   position: relative;
   -webkit-user-select: none;
@@ -68,16 +70,34 @@
   height: 4.25rem;
 }
 
-.inputWrapper {
-  display: flex;
-  gap: 0.25rem;
-  align-items: center;
-}
-
 .IslandWrapper {
   position: relative;
+  margin: 0 auto;
+  height: 12.5rem;
+}
+
+.FormCheckBox[data-state="hidden"] {
+  grid-column: 0;
+  visibility: hidden;
+}
+
+.TextInputBox[data-state="visible"] {
+  padding-left: 1rem;
+}
+
+.TextInputBox[data-state="hidden"] {
+  grid-column: 0;
+  visibility: hidden;
+}
+
+.TextInputBox label {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.TextInputBox input {
+  color: rgba(var(--foreground-rgb), 0.87);
 }
 
 /* || Enable hover only on non-touch devices */
@@ -108,10 +128,6 @@
       transform: rotate(360deg);
     }
   }
-
-  /* .buttonWrapper button[type=button]:hover {
-    background-color: rgba(205, 0,1, 0.8);
-  } */
 
   /* scrollbar  on firefox*/
   html,
@@ -168,12 +184,17 @@
 
 /* || Mobile */
 @media (max-width: 700px) {
-  .inputGrid {
-    grid-template-areas:
-      "radio uppercase uppercase"
-      "radio numbers numbers"
-      "input input input"
-      "slider slider slider";
+  .SliderWrapper {
+    max-width: 100%;
+    flex-grow: 1;
+  }
+
+  .TextInputBox {
+    width: 100%;
+  }
+
+  .TextInputBox[data-state="visible"] {
+    padding: 0;
   }
 
   .header {

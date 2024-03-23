@@ -36,7 +36,8 @@
         "noConsoleLog": "warn"
       },
       "correctness": {
-        "noUnusedImports": "error"
+        "noUnusedImports": "error",
+        "noUnusedVariables": "warn"
       },
       "nursery": {
         "noUselessTernary": "warn"
