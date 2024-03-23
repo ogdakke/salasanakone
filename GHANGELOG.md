@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- [#14](https://github.com/ogdakke/salasanakone/pull/14): Allow removing datasets, remove state management from reducer, improve island by adding additional data in it, move zxcvbn to a web worker
+- [#13](https://github.com/ogdakke/salasanakone/pull/13): move linting and formatting to biomejs
+
 ## [3.0.1](https://github.com/ogdakke/salasanakone/commits/3.0.1) - 08-03-2024
 
 - [#12](https://github.com/ogdakke/salasanakone/pull/12):
@@ -72,4 +75,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 -
-
