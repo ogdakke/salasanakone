@@ -10,9 +10,10 @@
     "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
     "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
 
+  --foreground: oklch(0% 0 0);
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
-  --background-hex: #fff;
+  --background-hex: #ffffff;
   --background-rgb: 255, 255, 255;
   --helperTextColor: oklch(28.5% 0 0);
   --form-bg-rgb: 254, 254, 254;
@@ -77,6 +78,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
+    --foreground: oklch(100% 0 0);
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-hex: #000000;

@@ -1,19 +1,20 @@
 import { StrengthIndicator } from "@/Components/indicator"
-import { Divider, Loading } from "@/Components/ui"
+import { NumberListScrollWheel, StrengthCircle } from "@/Components/strengthCircle"
+import { Loading } from "@/Components/ui"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
 import { debounce } from "@/common/utils/debounce"
-import { strengthToColorAndLabel, validateLength } from "@/common/utils/helpers"
+import { validateLength } from "@/common/utils/helpers"
 import { supportedLanguages } from "@/config"
 import type { Language } from "@/models/translations"
 import { Stores, deleteKey } from "@/services/database/db"
 import { worker } from "@/services/initWorker"
 import "@/styles/Island.css"
-import type { Score, ZxcvbnResult } from "@zxcvbn-ts/core"
-import { type Variants, animate, m, motion, useAnimate, useAnimation } from "framer-motion"
+import type { ZxcvbnResult } from "@zxcvbn-ts/core"
+import { type Variants, animate, m, motion } from "framer-motion"
 import { ArrowDown, Plus, SystemRestart, Xmark } from "iconoir-react"
-import { useCallback, useContext, useEffect, useRef, useState } from "react"
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 
 enum IslandVariants {
   full = "full",
@@ -44,8 +45,12 @@ export const Island = () => {
         whileHover={{ scale: 1.06 }}
         onClick={handleIslandChange}
       >
-        <SystemRestart strokeWidth={1} className="Icon" style={{ opacity: isPill ? 1 : 0 }} />
-        <Xmark className="Icon" style={{ opacity: isFull ? 1 : 0 }} />
+        <SystemRestart
+          strokeWidth={1}
+          className="Icon blurFadeIn"
+          style={{ display: isPill ? "block" : "none" }}
+        />
+        <Xmark className="Icon blurFadeIn" style={{ display: isFull ? "block" : "none" }} />
       </motion.button>
     </div>
   )
@@ -143,12 +148,16 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
     [IslandVariants.pill, <PillIsland score={score} key={IslandVariants.pill} />],
     [
       IslandVariants.full,
-      <SettingsIsland
-        fetchStorage={fetchStorage}
-        result={result}
-        storage={usedSpace}
-        key={IslandVariants.full}
-      />,
+      result ? (
+        <SettingsIsland
+          fetchStorage={fetchStorage}
+          result={result}
+          storage={usedSpace}
+          key={IslandVariants.full}
+        />
+      ) : (
+        <PillLoadingState />
+      ),
     ],
   ])
 
@@ -190,17 +199,17 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
 
 export const PillLoadingState = () => {
   return (
-    <div className="IslandMain">
-      <Loading className="" height="3.5rem" radius="4rem" />
+    <div className="IslandAndButton" style={{ marginRight: 0 }}>
+      <Loading className="" height="10rem" radius="1rem" />
     </div>
   )
 }
 
 const pillVariants: Variants = {
-  initial: { borderColor: "transparent" },
+  initial: { borderColor: "rgba(0,0,0,0)" },
   animate: {
     opacity: 1,
-    borderColor: "rgba(var(--skeleton-glow), 1)",
+    borderColor: "rgba(22, 22, 22, 1)",
     transition: {
       type: "spring",
       damping: 1,
@@ -261,11 +270,12 @@ const PillIsland = ({ score }: { score: number }) => {
 type SettingsIslandProps = {
   storage: string | undefined
   fetchStorage: () => void
-  result?: ZxcvbnResult
+  result: ZxcvbnResult
 }
 const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) => {
   const { t } = useTranslation()
-  const score = result?.score !== undefined ? result.score : 4
+  const { score, crackTimesDisplay } = result
+  const { offlineSlowHashing1e4PerSecond, onlineNoThrottling10PerSecond } = crackTimesDisplay
   const { formState, generate } = useContext(FormContext)
 
   function isLanguageDeleted(lang: Language) {
@@ -277,6 +287,13 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
 
   function isLanguageFailed(lang: Language) {
     if (formState.dataset.failedToFetchDatasets.includes(lang)) {
+      return true
+    }
+    return false
+  }
+
+  function isLanguageFetched(lang: Language) {
+    if (formState.dataset.fetchedDatasets.includes(lang)) {
       return true
     }
     return false
@@ -338,16 +355,16 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
       fetchStorage()
     }
   }
-  const offlineSlowHashing = result?.crackTimesDisplay.offlineSlowHashing1e4PerSecond
-  const online10PerSec = result?.crackTimesDisplay.onlineNoThrottling10PerSecond
-  const crackTimeIdentical = offlineSlowHashing === online10PerSec
-  const langCanBeDownLoaded = (lang: Language) => isLanguageDeleted(lang) || isLanguageFailed(lang)
+
+  const langCanBeDownLoaded = (lang: Language) =>
+    isLanguageDeleted(lang) || isLanguageFailed(lang) || !isLanguageFetched(lang)
+
+  const crackTimeIdentical = offlineSlowHashing1e4PerSecond === onlineNoThrottling10PerSecond
 
   return (
     <motion.div
-      className="IslandSettings flex flex-column"
-      style={{ height: 200 }}
-      variants={settingsVariants}
+      className="IslandSettings flex flex-column blurFadeIn"
+      style={{ height: 160 }}
       initial="initial"
       animate="animate"
     >
@@ -367,22 +384,25 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
           <div className="SettingsTopRowElement">
             <p>{t("timeToCrack")}</p>
             <p>
-              {!crackTimeIdentical
-                ? `${offlineSlowHashing} - ${online10PerSec}`
-                : offlineSlowHashing}
+              <StaggerWords
+                str={
+                  !crackTimeIdentical
+                    ? `${offlineSlowHashing1e4PerSecond} - ${onlineNoThrottling10PerSecond}`
+                    : `${offlineSlowHashing1e4PerSecond}`
+                }
+              />
             </p>
           </div>
         </div>
 
         <div>
-          <Divider className="IslandDivider" margin="0 -0.875rem" />
           <div className="SettingsFooter">
             <div className="flex flex-column gap-025">
-              <span className="SecondaryText">{t("storageUsed")}</span>
+              <span className="SecondaryText opacity-75">{t("storageUsed")}</span>
               {storage ? <StorageIndicator storage={storage} /> : null}
             </div>
             <div className="flex flex-column gap-025">
-              <span className="SecondaryText">{t("manageLanguages")}</span>
+              <span className="SecondaryText opacity-75">{t("manageLanguages")}</span>
               <div className="flex gap-05">
                 {supportedLanguages.map((language) => {
                   const isDeleted = langCanBeDownLoaded(language)
@@ -438,100 +458,36 @@ function StorageIndicator({ storage }: { storage: string }) {
   )
 }
 
-function StrengthCircle({ score }: { score: number }) {
-  const { t } = useTranslation()
-  const { color } = strengthToColorAndLabel(score)
-  const percentageOfMax = Math.max(6, (score / 4) * 100)
+function StaggerWords({ str }: { str: string }) {
+  const splitString = str.split(" ")
 
-  return (
-    <motion.svg className="SettingsStrength" viewBox="0 0 36 36" initial="hidden" animate="animate">
-      <title>{t("scoreDescription", { score: score.toString() })}</title>
-      <path
-        style={{ color: "#000" }}
-        className=""
-        d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
-        fill="none"
-        stroke="currentColor"
-        strokeDasharray="100, 100"
-        strokeWidth="4"
-      />
-      <motion.path
-        animate={{ stroke: color, strokeDasharray: `${percentageOfMax}, 100` }}
+  /** Trick to get a new key for each string to trigger reanimating */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: animation
+  const randomKey = useMemo(() => {
+    return Math.random().toFixed(3)
+  }, [str])
+
+  return splitString.map((word, i) => {
+    return (
+      <motion.span
+        initial={{
+          opacity: 0.05,
+          WebkitFilter: "blur(3px)",
+          filter: "blur(3px)",
+        }}
+        animate={{
+          opacity: 1,
+          WebkitFilter: "blur(0px)",
+          filter: "blur(0px)",
+        }}
         transition={{
-          type: "spring",
-          stiffness: 60,
-          damping: 12,
+          duration: 0.6,
+          delay: i / 15,
         }}
-        d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
-        fill="none"
-        strokeLinecap="round"
-        strokeWidth="4"
-      />
-    </motion.svg>
-  )
-}
-
-function NumberListScrollWheel({ selectedNumber }: { selectedNumber: number }) {
-  const controls = useAnimation()
-  const [scope, animate] = useAnimate()
-  const listHeight = 60 // Height of each number in the list
-  const numbers: Score[] = [0, 1, 2, 3, 4] // The numbers in the scrollwheel
-
-  // Calculate the Y offset to center the selected number
-  const centerY = -(selectedNumber * listHeight) + listHeight / 2
-
-  useEffect(() => {
-    controls.start({
-      y: centerY - listHeight,
-      transition: {
-        type: "spring",
-        stiffness: 300,
-        damping: 16,
-      },
-    })
-  }, [centerY, controls])
-
-  return (
-    <div
-      className="NumberListContainer"
-      style={{
-        height: "calc(100% - 4px)",
-      }}
-    >
-      <motion.div
-        ref={scope}
-        animate={controls}
-        onAnimationStart={async () => {
-          await animate(scope.current, { filter: "blur(2px)", opacity: 0.5 })
-          await animate(scope.current, { filter: "blur(0px)", opacity: 1 }, { duration: 0.4 })
-        }}
-        className="NumberList"
-        style={{
-          position: "absolute",
-          top: "44%",
-          left: "0",
-          right: "0",
-        }}
+        key={`${word}-${i}-${randomKey}`}
       >
-        {numbers.map((score) => (
-          <span
-            key={score}
-            style={{
-              height: `${listHeight}px`,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {score}
-          </span>
-        ))}
-      </motion.div>
-    </div>
-  )
-}
-
-const settingsVariants: Variants = {
-  initial: {},
-  animate: {},
+        {word}{" "}
+      </motion.span>
+    )
+  })
 }
