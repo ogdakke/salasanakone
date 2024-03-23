@@ -1,8 +1,10 @@
 import { FORM_STATE_KEY } from "@/config"
 import type { CheckerWorkerPostMessageData, FormState } from "@/models"
 import { Language } from "@/models/translations"
+import { Stores, getDataForKey } from "@/services/database/db"
 import { zxcvbn, zxcvbnOptions } from "@zxcvbn-ts/core"
 import type { OptionsType, ZxcvbnResult } from "@zxcvbn-ts/core"
+import { adjacencyGraphs, dictionary } from "@zxcvbn-ts/language-common"
 import { get } from "idb-keyval"
 
 const isDev = import.meta.env.DEV
@@ -36,18 +38,38 @@ async function getDic(lang: Language): Promise<OptionsType | undefined> {
  * Load the needed dictionaries and options for zxcvbn -
  * called upon first load and on language change
  * @param language language to switch dictionaries to
- * @returns
+ * @returns zxcvbn options object to be set
  */
 async function loadOptions(lang: Language): Promise<OptionsType> {
   isDev && console.time(`load-dictionaries-${lang}`)
   const fetchedPackage = await getDic(lang)
+  const customDic = await getDataForKey(Stores.Languages, lang)
   isDev && console.timeEnd(`load-dictionaries-${lang}`)
+
+  isDev && console.debug("loaded custom dictionary of length: ", customDic?.length)
+
+  if (!fetchedPackage) {
+    throw new Error(`Failed to fetch zxcvbn package for ${lang}`)
+  }
 
   return {
     dictionary: {
-      ...fetchedPackage?.dictionary,
+      ...dictionary,
+      ...fetchedPackage.dictionary,
+      userInputs: customDic || [],
     },
-    translations: fetchedPackage?.translations,
+    translations: {
+      ...fetchedPackage.translations,
+      timeEstimation: {
+        ...fetchedPackage.translations?.timeEstimation,
+        // @ts-ignore it just needs to complain huh?
+        centuries:
+          lang === Language.fi
+            ? "vuosisatoja"
+            : fetchedPackage.translations?.timeEstimation.centuries,
+      },
+    },
+    graphs: adjacencyGraphs,
   }
 }
 
