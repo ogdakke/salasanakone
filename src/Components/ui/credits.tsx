@@ -1,5 +1,5 @@
-import { Share } from "@/Components"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
+import { Share } from "@/Components/share"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui/tooltip"
 import { meta } from "@/assets/constants/meta"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import "@/styles/Credits.css"

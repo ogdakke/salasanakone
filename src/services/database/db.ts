@@ -1,11 +1,5 @@
 let version = 1
 
-export interface User {
-  id: string
-  name: string
-  email: string
-}
-
 export enum Stores {
   Languages = "languages",
 }
@@ -90,22 +84,6 @@ export function getDataForKey<T = string[]>(
       const res = store.get(key) as IDBRequest<T | undefined>
 
       res.onsuccess = () => resolve(res.result)
-    }
-  })
-}
-
-export const getStoreData = <T>(storeName: Stores): Promise<T[]> => {
-  return new Promise((resolve) => {
-    const request = indexedDB.open(dbName)
-
-    request.onsuccess = () => {
-      const db = request.result
-      const tx = db.transaction(storeName, "readonly")
-      const store = tx.objectStore(storeName)
-      const res = store.getAll()
-      res.onsuccess = () => {
-        resolve(res.result)
-      }
     }
   })
 }

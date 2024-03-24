@@ -1,13 +1,7 @@
-import {
-  type HighlightCondition,
-  Highlighter,
-  InputComponent,
-  Loading,
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/Components/ui"
+import { InputComponent } from "@/Components/ui/input"
+import { Loading } from "@/Components/ui/loading"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui/tooltip"
+import { type HighlightCondition, Highlighter } from "@/Components/ui/utils/highlight"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"

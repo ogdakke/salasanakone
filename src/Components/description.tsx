@@ -1,6 +1,7 @@
 import type React from "react"
 
-import { Divider, ExternalLink } from "@/Components/ui"
+import { Divider } from "@/Components/ui/divider"
+import { ExternalLink } from "@/Components/ui/externalLink"
 import "@/styles/Description.css"
 
 const Description: React.FC = () => {

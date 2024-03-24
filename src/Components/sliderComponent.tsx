@@ -6,7 +6,8 @@ import {
   minLengthForWords,
 } from "@/config"
 
-import { Label, Slider } from "@/Components/ui"
+import { Label } from "@/Components/ui/label"
+import { Slider } from "@/Components/ui/slider"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import { validatePasswordLength } from "@/common/utils/validations"
 import { m } from "framer-motion"

@@ -1,5 +1,5 @@
 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export type Procedure = (...args: any[]) => void
+type Procedure = (...args: any[]) => void
 
 /**
  * @link https://github.com/zxcvbn-ts/zxcvbn/blob/master/packages/libraries/main/src/utils/debounce.ts

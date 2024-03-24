@@ -18,17 +18,11 @@ export function validateLength(str: string, length: number): string {
   return final
 }
 
-export function filterKey<T extends Record<PropertyKey, unknown>, K extends keyof T>(
-  obj: T,
-  key: K,
-): Omit<T, K> {
-  const { [key]: _, ...rest } = obj
-  return rest
-}
-
 export const isIOS =
   /iPad|iPhone|iPod/.test(navigator.userAgent) ||
   (navigator.userAgent === "MacIntel" && navigator.maxTouchPoints > 1)
+
+export const isAndroid = navigator.userAgent.match(/Android/i)
 
 export function strengthToColorAndLabel(value: number) {
   const { t } = useTranslation()

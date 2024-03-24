@@ -2,7 +2,7 @@ import { initialFormState } from "@/config/form-config/form-state.config"
 import type { FormState, InputValue, PassCreationRules } from "@/models"
 import type { Language } from "@/models/translations"
 
-export enum FormActionKind {
+enum FormActionKind {
   SET_FORM_STATE = "setFormState",
   SET_FORM_VALUES = "setFormValues",
   SET_FORM_FIELD = "setFormField",
@@ -15,7 +15,7 @@ export enum FormActionKind {
 }
 
 /** Actions */
-export type SetSliderValueAction = {
+type SetSliderValueAction = {
   type: FormActionKind.SET_SLIDERVALUE
   payload: number
 }
@@ -102,29 +102,8 @@ export default function reducer(state: FormState, action: FormActions): FormStat
       return state
   }
 }
-
-export const setSlidervalue = (value: number): SetSliderValueAction => ({
-  type: FormActionKind.SET_SLIDERVALUE,
-  payload: value,
-})
-
-export const setFormField = (payload: SetFormFieldAction["payload"]): SetFormFieldAction => ({
-  type: FormActionKind.SET_FORM_FIELD,
-  payload,
-})
-
-export const setEditing = (payload: boolean) => ({
-  type: FormActionKind.SET_EDITING,
-  payload,
-})
-
 export const setLanguage = (payload: Language): SetLanguageAction => ({
   type: FormActionKind.SET_LANGUAGE,
-  payload,
-})
-
-export const setDatasetFields = (payload: FormState["dataset"]): SetDatasetFieldsAction => ({
-  type: FormActionKind.SET_DATASET_FIELDS,
   payload,
 })
 

@@ -1,8 +1,0 @@
-export { SimplePopover } from "./SimplePopover"
-export { Description } from "./description"
-export { ErrorComponent } from "./errorComponent"
-export { StrengthIndicator } from "./indicator"
-export { Island } from "./island"
-export { ReloadPrompt } from "./reloadPrompt"
-export { Share } from "./share"
-export { SliderComponent } from "./sliderComponent"

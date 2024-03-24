@@ -5,10 +5,6 @@ export const minLengthForWords = 1
 export const maxLengthForChars = 64
 export const maxLengthForWords = 12
 
-export const specialsAndNums = "abcdefghijklmnopqrstuyäöxz1234567890><,.-_*?+/()@%&!$€=#"
-export const charactersAndSpecialCharacters = "abcdefghijklmnopqrstuyäöxz><,.-_*?+/()@%&!$€=#"
-export const charsWithNumbers = "abcdefghijklmnopqrstuyäöxz1234567890"
-
 export function getConfig(language: Language = Language.fi) {
   return {
     // Length restrictions
@@ -20,8 +16,6 @@ export function getConfig(language: Language = Language.fi) {
     generationStrings: getGenerationStrings(language),
   }
 }
-
-export const defaultLengthOfPassphrase = "3"
 
 const characters = {
   fi: "abcdefghijklmnopqrstuyäöxz",

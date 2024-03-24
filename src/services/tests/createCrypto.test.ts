@@ -30,6 +30,7 @@ const config = getConfig(defaultConfig.language)
 const { minLengthForChars, maxLengthForChars, minLengthForWords, maxLengthForWords } = config
 let variableMinLength = minLengthForChars
 let variableMaxLength = maxLengthForChars
+
 const testData = (testConfig: TestConfig = {}): PassCreationRules => {
   const {
     word,

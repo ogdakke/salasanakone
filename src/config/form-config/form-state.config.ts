@@ -1,8 +1,8 @@
 import type { FormState, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 
-export const defaultSliderValue = 3
-export const defaultFormValues: PassCreationRules = {
+const defaultSliderValue = 3
+const defaultFormValues: PassCreationRules = {
   words: {
     inputType: "radio",
     selected: true,
