@@ -26,37 +26,38 @@ export const isAndroid = navigator.userAgent.match(/Android/i)
 
 export function strengthToColorAndLabel(value: number) {
   const { t } = useTranslation()
-  switch (value) {
-    case 0:
+
+  switch (value.toString()) {
+    case "0":
       // To be able to set the state, these need to be strings
       return {
         label: t("strengthAwful").toString(),
         color: "rgb(180, 0, 10)",
       }
-    case 1:
+    case "1":
       return {
         label: t("strengthBad").toString(),
         color: "rgb(220, 60, 60)",
       }
-    case 2:
+    case "2":
       return {
         label: t("strengthOk").toString(),
         color: "rgb(240, 173, 78)",
       }
-    case 3:
+    case "3":
       return {
         label: t("strengthGood").toString(),
         color: "rgb(117, 215, 93)",
       }
-    case 4:
+    case "4":
       return {
         label: t("strengthGreat").toString(),
         color: "rgb(108, 241, 109)",
       }
-    case -1:
+    case "-1":
       return {
         label: t("loadingStrength").toString(),
-        color: "var(--background-hex)",
+        color: "rgb(108, 241, 109, 0)",
       }
     default:
       return {

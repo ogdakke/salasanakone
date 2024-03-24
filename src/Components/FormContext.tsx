@@ -53,7 +53,10 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
       regressed.push("idb-formState")
     }
 
-    if (formState.dataset.fetchedDatasets === undefined) {
+    if (
+      !("fetchedDatasets" in formState.dataset) ||
+      formState.dataset?.fetchedDatasets === undefined
+    ) {
       formState.dataset.fetchedDatasets = []
       regressed.push("fetchedDatasets")
     }
