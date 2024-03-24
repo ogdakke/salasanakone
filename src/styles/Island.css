@@ -61,10 +61,8 @@
 .IslandMain {
   margin: auto;
   min-width: 0;
-  z-index: 2;
   width: 100%;
   color: oklch(100% 0 0 / 0.87);
-  flex: 1; /* allows this flex child to grow, while other child is fixed size */
   /* overflow: clip; */
   display: flex;
 }

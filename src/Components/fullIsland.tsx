@@ -213,7 +213,7 @@ export const FullIsland = ({ storage, result, fetchStorage }: SettingsIslandProp
 export const FullIslandLoading = () => {
   return (
     <div className="IslandAndButton" style={{ marginRight: 0 }}>
-      <Loading className="" height="10rem" radius="1rem" />
+      <Loading className="" height="10rem" radius="40px" />
     </div>
   )
 }

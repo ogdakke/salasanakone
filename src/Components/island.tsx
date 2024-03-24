@@ -61,6 +61,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
   // Initial loading state is -1
   const [score, setScore] = useState(-1) // TODO this can probably be derived, so fix
   const islandRef = useRef<HTMLDivElement>(null)
+  const pillRef = useRef<HTMLButtonElement>(null)
 
   const { finalPassword } = useContext(ResultContext)
   const { formState } = useContext(FormContext)
@@ -140,7 +141,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
   }, [fetchStorage])
 
   const variantMap = new Map([
-    [IslandVariants.pill, <PillIsland score={score} key={IslandVariants.pill} />],
+    [IslandVariants.pill, <PillIsland pillRef={pillRef} score={score} key={IslandVariants.pill} />],
     [
       IslandVariants.full,
       result ? (
@@ -168,6 +169,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
       style={{ borderRadius: 40, border: `1px solid rgba(${borderRgb}, 0.12)` }}
       tabIndex={-1}
       className="IslandMain"
+      data-score={score}
       whileHover={{ scale: isPill ? 1.02 : 1 }}
       whileTap={{ scale: isTouchDevice() ? 0.96 : 1 }}
       onLayoutAnimationStart={() => {
@@ -184,7 +186,6 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
           )
         }
       }}
-      data-state={IslandVariants.pill}
       layout
     >
       {variantMap.get(variant)}
