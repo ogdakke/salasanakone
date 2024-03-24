@@ -4,7 +4,7 @@
   --back-blur: 10px;
   backdrop-filter: blur(var(--back-blur));
   -webkit-backdrop-filter: blur(var(--back-blur));
-  box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
+  border-radius: inherit;
 }
 
 .SettingsContent {
@@ -113,4 +113,50 @@
   top: 0;
   display: flex;
   align-items: center;
+}
+
+.ScoreCircleContainer {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  transition: all 2000ms ease-in;
+  --transition: 300ms
+}
+
+.StrengthCircleBackground {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  border-radius: 99px;
+  opacity: 0;
+  box-shadow: oklch(0.73 0.25 145.24 / 0.25) 0px 0px 14px 1px;
+  transition: all var(--transition) ease-in-out;
+}
+
+.ScoreCircleContainer[data-score="4"] .StrengthCircleBackground {
+  opacity: 1;
+  background: radial-gradient(circle, rgba(92, 205, 93, 0.77) 0%, rgba(7, 34, 13, 0.4) 100%);
+  transition: all var(--transition) ease-in;
+}
+
+.ScoreCircleContainer[data-score="3"] .StrengthCircleBackground {
+  opacity: 1;
+  box-shadow: oklch(67.2% 0.11 146 / 0.2) 0px 0px 9px 3px;
+  background: radial-gradient(circle, rgba(92, 205, 93, 0.2) 0%, rgba(7, 34, 13, 0.4) 100%);
+  transition: all var(--transition) ease-in;
+}
+.ScoreCircleContainer[data-score="2"] .StrengthCircleBackground {
+  opacity: 0;
+  transition: all var(--transition) ease-in;
+}
+.ScoreCircleContainer[data-score="1"] .StrengthCircleBackground {
+  opacity: 0;
+  transition: all var(--transition) ease-in;
+}
+.ScoreCircleContainer[data-score="0"] .StrengthCircleBackground {
+  opacity: 0;
+  transition: all var(--transition) ease-in;
 }

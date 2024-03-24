@@ -142,7 +142,8 @@ export const FullIsland = ({ storage, result, fetchStorage }: SettingsIslandProp
         className="SettingsContent"
       >
         <div className="flex gap-1">
-          <div className="ScoreCircleContainer">
+          <div className="ScoreCircleContainer" data-score={score}>
+            <span className="StrengthCircleBackground" />
             <StrengthCircle score={score} />
             <div className="NumberListOuterBox">
               <NumberListScrollWheel selectedNumber={score} />

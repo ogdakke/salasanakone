@@ -54,6 +54,8 @@ export function NumberListScrollWheel({ selectedNumber }: { selectedNumber: numb
               justifyContent: "center",
               alignItems: "center",
             }}
+            className="NumberListChar"
+            data-score={score}
           >
             {score}
           </span>

@@ -65,7 +65,7 @@
   width: 100%;
   color: oklch(100% 0 0 / 0.87);
   flex: 1; /* allows this flex child to grow, while other child is fixed size */
-  overflow: clip;
+  /* overflow: clip; */
   display: flex;
 }
 
@@ -86,35 +86,6 @@
   transition: all 200ms ease-out;
 }
 
-.IslandBackground {
-  display: flex;
-  user-select: none;
-  -webkit-user-select: none;
-  width: 100%;
-  overflow: hidden;
-  justify-content: space-between;
-  background-color: var(--island-bg);
-  box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
-}
-
-.IslandBackground:focus-visible {
-  outline: none;
-  border-radius: var(--island-border-radius);
-  box-shadow: 0 0 0 1px rgba(var(--foreground-rgb), 0.75) inset;
-
-  .IslandGenerateButton {
-    scale: 1.2;
-  }
-}
-
-.IslandGenerateButton {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0rem 0.5rem 0rem 0.75rem;
-}
-
 .IslandPillButton {
   cursor: pointer;
 }
@@ -124,18 +95,6 @@
   top: 0;
   height: 100%;
   border-radius: 32px;
-}
-
-.ScoreCircleContainer {
-  position: relative;
-  width: 4rem;
-  height: 4rem;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .IslandGenerateButton:focus-visible {
-    border: 1px solid rgba(var(--skeleton-glow), 0.1);
-  }
 }
 
 @media (max-width: 700px) {
@@ -157,10 +116,6 @@
 
   .IslandMobileBackground {
     border-radius: calc(var(--island-border-radius) + 0.5rem);
-  }
-
-  .IslandGenerateButton {
-    padding: 0.5rem 1.25rem;
   }
 
   .IslandContent {
