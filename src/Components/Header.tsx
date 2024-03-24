@@ -30,16 +30,16 @@ export const Header = () => {
     debounceChange(value)
   }
 
-  function changeLanguage(lang: Language) {
+  async function changeLanguage(lang: Language) {
     if (supportedLanguages.includes(lang)) {
       formState.language = lang
       dispatchLanguageEvent(formState.language)
-      ;(async () => generate(formState))()
+      await generate(formState)
     }
   }
 
   const debounceChange = useCallback(
-    (lang: Language) => debounce(() => changeLanguage(lang), 150)(),
+    (lang: Language) => debounce(async () => await changeLanguage(lang), 150)(),
     [],
   )
 

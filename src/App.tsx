@@ -3,7 +3,6 @@ import React, { Suspense } from "react"
 import { Description, ReloadPrompt } from "@/Components"
 import { Header } from "@/Components/Header"
 import { ErrorComponent } from "@/Components/errorComponent"
-import { PillLoadingState } from "@/Components/island"
 import { Credits, Loading } from "@/Components/ui"
 import { initDB } from "@/services/database/db"
 import "@/styles/App.css"
@@ -43,9 +42,7 @@ const FormComponentLoader = () => {
       {!isSmallScreen ? (
         <LargeScreenIslandLoader />
       ) : (
-        <div className="flex justify-center">
-          <PillLoadingState />
-        </div>
+        <div className="flex justify-center">{/* <PillLoadingState /> */}</div>
       )}
     </>
   )

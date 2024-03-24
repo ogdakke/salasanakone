@@ -1,0 +1,116 @@
+.IslandSettings {
+  width: 100%;
+  background-color: var(--island-bg);
+  --back-blur: 10px;
+  backdrop-filter: blur(var(--back-blur));
+  -webkit-backdrop-filter: blur(var(--back-blur));
+  box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
+}
+
+.SettingsContent {
+  height: 100%;
+  padding: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.SettingsFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-top: 0.3rem;
+}
+
+.SettingsTitleContainer {
+  display: flex;
+  gap: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+.LangaugesContainer {
+  padding-top: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.LanguageSettingItem {
+  position: relative;
+  cursor: pointer;
+  min-width: 0;
+  width: fit-content;
+  height: fit-content;
+  padding: 0.15rem 0.6rem 0.15rem 1.35rem;
+  border: 1px solid rgba(var(--callout-border-rgb), 0.2);
+  border-radius: 999px;
+  transition: all 150ms ease-out;
+  background-color: oklch(38% 0.1 140.25 / 0.79);
+  border: 1px solid oklch(42% 0.047 144.7);
+  color: oklch(85.8% 0.057 145.1 / 0.93);
+  box-shadow: oklch(62.1% 0.101 146.2 / 0.23) 0px -4px 9px 3px inset;
+
+  transition: all 200ms ease-in-out;
+
+  .Icon {
+    position: absolute;
+    left: 0.125rem;
+    top: 0.25rem;
+  }
+}
+
+.LanguageSettingItem::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  left: 0.425rem;
+  top: 0.5rem;
+  width: 0.6rem;
+  height: 0.6rem;
+  background-color: oklch(53.5% 0.124 143.6 / 0.87);
+  filter: blur(4px);
+  -webkit-filter: blur(4px);
+
+  transition: all 200ms ease-in-out;
+}
+
+.LanguageSettingItem:hover {
+  box-shadow: oklch(67.2% 0.11 146 / 0.4) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem:focus-visible {
+  outline: solid #ffffff 1px;
+}
+
+.LanguageSettingItem[data-state="delete"] {
+  background-color: oklch(0.31 0.12 32.26 / 0.87);
+  border: 1px solid oklch(0.35 0.14 34.44);
+  color: oklch(0.82 0.04 16.68 / 0.93);
+  box-shadow: oklch(0.57 0.08 18.14 / 0.23) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"]:hover {
+  box-shadow: oklch(0.71 0.23 23.03 / 0.23) 0px -4px 9px 3px inset;
+}
+
+.LanguageSettingItem[data-state="delete"]::before {
+  background-color: oklch(0.57 0.26 29.35 / 0.87);
+}
+
+.SettingsTopRowElement p:nth-child(1) {
+  opacity: 0.8;
+  font-size: 0.875rem;
+}
+
+.SettingsTopRowElement p:nth-child(2) {
+  opacity: 0.9;
+  font-weight: 600;
+}
+
+.NumberListOuterBox {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  display: flex;
+  align-items: center;
+}

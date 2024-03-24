@@ -1,0 +1,10 @@
+.NumberListContainer {
+  width: 100%;
+  overflow: clip;
+  position: relative;
+}
+
+.NumberList {
+  font-size: 1.75rem;
+  padding-top: 2px;
+}

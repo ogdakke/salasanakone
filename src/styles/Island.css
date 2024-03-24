@@ -107,104 +107,6 @@
   }
 }
 
-.IslandSettings {
-  width: 100%;
-  background-color: var(--island-bg);
-  --back-blur: 10px;
-  backdrop-filter: blur(var(--back-blur));
-  -webkit-backdrop-filter: blur(var(--back-blur));
-  box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
-}
-
-.SettingsContent {
-  height: 100%;
-  padding: 0.875rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.SettingsFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-top: 0.3rem;
-}
-
-.SettingsTitleContainer {
-  display: flex;
-  gap: 0.5rem;
-  padding-bottom: 0.25rem;
-}
-
-.LangaugesContainer {
-  padding-top: 0.75rem;
-  display: flex;
-  gap: 0.5rem;
-}
-
-.LanguageSettingItem {
-  position: relative;
-  cursor: pointer;
-  min-width: 0;
-  width: fit-content;
-  height: fit-content;
-  padding: 0.15rem 0.6rem 0.15rem 1.35rem;
-  border: 1px solid rgba(var(--callout-border-rgb), 0.2);
-  border-radius: 999px;
-  transition: all 150ms ease-out;
-  background-color: oklch(38% 0.1 140.25 / 0.79);
-  border: 1px solid oklch(42% 0.047 144.7);
-  color: oklch(85.8% 0.057 145.1 / 0.93);
-  box-shadow: oklch(62.1% 0.101 146.2 / 0.23) 0px -4px 9px 3px inset;
-
-  transition: all 200ms ease-in-out;
-
-  .Icon {
-    position: absolute;
-    left: 0.125rem;
-    top: 0.25rem;
-  }
-}
-
-.LanguageSettingItem::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  left: 0.425rem;
-  top: 0.5rem;
-  width: 0.6rem;
-  height: 0.6rem;
-  background-color: oklch(53.5% 0.124 143.6 / 0.87);
-  filter: blur(4px);
-  -webkit-filter: blur(4px);
-
-  transition: all 200ms ease-in-out;
-}
-
-.LanguageSettingItem:hover {
-  box-shadow: oklch(67.2% 0.11 146 / 0.4) 0px -4px 9px 3px inset;
-}
-
-.LanguageSettingItem:focus-visible {
-  outline: solid #ffffff 1px;
-}
-
-.LanguageSettingItem[data-state="delete"] {
-  background-color: oklch(0.31 0.12 32.26 / 0.87);
-  border: 1px solid oklch(0.35 0.14 34.44);
-  color: oklch(0.82 0.04 16.68 / 0.93);
-  box-shadow: oklch(0.57 0.08 18.14 / 0.23) 0px -4px 9px 3px inset;
-}
-
-.LanguageSettingItem[data-state="delete"]:hover {
-  box-shadow: oklch(0.71 0.23 23.03 / 0.23) 0px -4px 9px 3px inset;
-}
-
-.LanguageSettingItem[data-state="delete"]::before {
-  background-color: oklch(0.57 0.26 29.35 / 0.87);
-}
-
 .IslandGenerateButton {
   cursor: pointer;
   display: flex;
@@ -224,89 +126,10 @@
   border-radius: 32px;
 }
 
-.StorageUsed {
-  position: relative;
-  font-variant-numeric: tabular-nums;
-  height: fit-content;
-  background-color: var(--green-1);
-  border: 1px solid oklch(50.1% 0.1 143.9 / 0.5);
-  color: oklch(91.2% 0.093 144.8 / 0.925);
-  box-shadow: oklch(67.2% 0.11 146 / 0.1) 0px -4px 9px 3px inset;
-  cursor: help;
-  padding: 0.15rem 0.5rem 0.15rem 1.25rem;
-  border-radius: 99px;
-  gap: 0.25rem;
-  font-weight: 300;
-
-  transition: background-color, box-shadow 200ms ease-out;
-}
-
-.StorageUsed:hover {
-  /* background-color: rgba(27, 65, 27, 0.87); */
-  box-shadow: oklch(67.2% 0.11 146 / 0.4) 0px -4px 9px 3px inset;
-  .CircleBackground {
-    background-color: oklch(74.8% 0.227 142.9);
-  }
-}
-
-.CircleBackground {
-  position: absolute;
-  left: 0.4rem;
-  top: 0.5rem;
-  background-color: oklch(82.9% 0.192 143.6 / 0.87);
-  border-radius: 99px;
-  width: 0.6rem;
-  height: 0.6rem;
-  filter: blur(4px);
-  -webkit-filter: blur(4px);
-
-  transition: transform 200ms ease-in-out;
-}
-
-.SettingsStrength {
-  position: relative;
-  z-index: 10;
-  cursor: help;
-}
-
-.SettingsTopRowElement p:nth-child(1) {
-  opacity: 0.8;
-  font-size: 0.875rem;
-}
-
-.SettingsTopRowElement p:nth-child(2) {
-  opacity: 0.9;
-  font-weight: 600;
-}
-
-.IslandDivider {
-  border-color: rgba(var(--callout-border-rgb), 0.3);
-}
-
 .ScoreCircleContainer {
   position: relative;
   width: 4rem;
   height: 4rem;
-}
-
-.NumberListOuterBox {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  display: flex;
-  align-items: center;
-}
-
-.NumberListContainer {
-  width: 100%;
-  overflow: clip;
-  position: relative;
-}
-
-.NumberList {
-  font-size: 1.75rem;
-  padding-top: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -371,9 +194,5 @@
 @media (prefers-color-scheme: dark) {
   .IslandBackground {
     box-shadow: none;
-  }
-
-  .IslandDivider {
-    border-color: rgba(var(--callout-border-rgb), 1);
   }
 }

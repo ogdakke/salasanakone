@@ -67,7 +67,7 @@ export function strengthToColorAndLabel(value: number) {
     default:
       return {
         label: t("strengthDefault").toString(),
-        color: "",
+        color: "rgb(0,0,0)",
       }
   }
 }

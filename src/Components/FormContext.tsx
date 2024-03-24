@@ -225,7 +225,6 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   }
 
   const generate = async (state: FormState, cache?: "invalidate") => {
-    // isDev && console.log("generate", state)
     await setFormState(state)
     try {
       const passwordValue = await generatePassword(state, cache)
