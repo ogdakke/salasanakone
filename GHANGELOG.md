@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- [#15](https://github.com/ogdakke/salasanakone/pull/15): Add adjacency graphs and common pkg to zxcvbn, UI improvements, create state.ts, add fetchedDatasets field in state, update dependencies
 - [#14](https://github.com/ogdakke/salasanakone/pull/14): Allow removing datasets, remove state management from reducer, improve island by adding additional data in it, move zxcvbn to a web worker
 - [#13](https://github.com/ogdakke/salasanakone/pull/13): move linting and formatting to biomejs
 
