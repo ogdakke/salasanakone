@@ -4,20 +4,19 @@ import { FormContext, FormDispatchContext } from "@/common/providers/FormProvide
 import { ResultContext } from "@/common/providers/ResultProvider"
 import { isKey } from "@/common/utils/helpers"
 import { validatePasswordLength } from "@/common/utils/validations"
-import { STORE_VERSION } from "@/config"
+import { FORM_STATE_KEY } from "@/config"
 import { initialFormState } from "@/config/form-config/form-state.config"
 import type { FormState, ResultState } from "@/models"
 import type { Language } from "@/models/translations"
 import { createPassphrase } from "@/services/createCrypto"
 import { Stores, getDataForKey, setData } from "@/services/database/db"
-import reducer, { resetFormState, setFormState, setLanguage } from "@/services/reducers/formReducer"
-import { del } from "idb-keyval"
+import { setFormState } from "@/services/database/state"
+import reducer, { resetFormState, setLanguage } from "@/services/reducers/formReducer"
+import { del, get } from "idb-keyval"
 import { type ReactNode, useState } from "react"
 
 const isDev = import.meta.env.DEV
-const API_KEY = import.meta.env.VITE_X_API_KEY
-const importedApiUrl = import.meta.env.VITE_API_URL
-const API_URL = isDev ? "http://localhost:8787" : importedApiUrl
+const API_URL = isDev ? "http://localhost:8787" : import.meta.env.VITE_API_URL
 
 let temp_dataset: {
   language: Language
@@ -31,19 +30,33 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   const [formState, dispatch, clearValue] = usePersistedReducer(
     reducer,
     initialFormState,
-    `formState-V${STORE_VERSION}`,
+    FORM_STATE_KEY,
   )
   const [finalPassword, setFinalPassword] = useState<ResultState>({
     passwordValue: undefined,
     isEdited: false,
   })
 
-  // Handle regression of localstorage values
+  // Handle regression of stored values
   // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Here we check for regressions, eg. values in localStorage that need to be removed
-  function handleRegresion() {
+  async function handleRegresion() {
     let regressed = []
-    localStorage.removeItem("formState")
-    del("formState")
+    console.debug("running regressions...")
+
+    if (localStorage.getItem("formState")) {
+      localStorage.removeItem("formState")
+      regressed.push("formState")
+    }
+
+    if (await get("formState")) {
+      await del("formState")
+      regressed.push("idb-formState")
+    }
+
+    if (formState.dataset.fetchedDatasets === undefined) {
+      formState.dataset.fetchedDatasets = []
+      regressed.push("fetchedDatasets")
+    }
 
     const hasLanguageInFormValues = Object.keys(formState.formValues).includes("language")
     if (hasLanguageInFormValues) {
@@ -58,6 +71,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
         if (keysOfKey.includes("info")) {
           regressed.push({ [key]: "info" })
           clearValue()
+          del(FORM_STATE_KEY)
           return dispatch(resetFormState())
         }
       }
@@ -66,12 +80,14 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
     if (!Array.isArray(formState.dataset.deletedDatasets)) {
       regressed.push("deletedDatasets")
       clearValue()
+      await del(FORM_STATE_KEY)
       dispatch(resetFormState())
     }
 
     if (!Array.isArray(formState.dataset.failedToFetchDatasets)) {
       regressed.push("failedToFetchDatasets")
       clearValue()
+      await del(FORM_STATE_KEY)
       dispatch(resetFormState())
     }
 
@@ -81,7 +97,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   }
 
   if (!hasCheckedRegressions) {
-    handleRegresion()
+    ;(async () => handleRegresion())()
     hasCheckedRegressions = true
   }
 
@@ -145,11 +161,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
       setFinalPassword({ isEdited: false, passwordValue: undefined })
 
       const url = `${API_URL}/dataset/${lang}`
-      const response = await fetch(url, {
-        headers: {
-          "X-API-KEY": API_KEY || "",
-        },
-      })
+      const response = await fetch(url)
 
       // TODO handle aborting the fetch when language changes or something idfk
       if (!response.ok) {
@@ -181,6 +193,12 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
     const updatedFailedToFetchDatasets = formState.dataset.failedToFetchDatasets.filter(
       (dataset) => dataset !== lang,
     )
+
+    const { fetchedDatasets } = formState.dataset
+    if (!fetchedDatasets.includes(lang)) {
+      formState.dataset.fetchedDatasets.push(lang)
+    }
+
     formState.dataset.deletedDatasets = updatedDeletedDatasets
     formState.dataset.failedToFetchDatasets = updatedFailedToFetchDatasets
   }

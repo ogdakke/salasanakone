@@ -31,5 +31,6 @@ export const initialFormState: FormState = {
   dataset: {
     deletedDatasets: [],
     failedToFetchDatasets: [],
+    fetchedDatasets: [],
   },
 }

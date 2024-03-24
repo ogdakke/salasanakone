@@ -30,6 +30,7 @@ export type FormState = {
   dataset: {
     deletedDatasets: Language[]
     failedToFetchDatasets: Language[]
+    fetchedDatasets: Language[]
   }
 }
 

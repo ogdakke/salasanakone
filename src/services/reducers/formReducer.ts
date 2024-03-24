@@ -1,11 +1,6 @@
-import { debounce } from "@/common/utils/debounce"
-import { FORM_STATE_KEY } from "@/config"
 import { initialFormState } from "@/config/form-config/form-state.config"
 import type { FormState, InputValue, PassCreationRules } from "@/models"
 import type { Language } from "@/models/translations"
-import { set } from "idb-keyval"
-
-const isDev = import.meta.env.DEV
 
 export enum FormActionKind {
   SET_FORM_STATE = "setFormState",
@@ -137,18 +132,3 @@ export const resetFormState = (): SetFormStateAction => ({
   type: FormActionKind.SET_FORM_STATE,
   payload: initialFormState,
 })
-
-/**
- * Sets the given state directly to localStorage & indexedDB
- * @param payload state to set
- */
-export const setFormState = async (payload: FormState): Promise<void> => {
-  localStorage.setItem(FORM_STATE_KEY, JSON.stringify(payload))
-  debouncedSetFormState(payload)
-}
-
-const debouncedSetFormState = debounce(async (payload: FormState) => {
-  isDev && console.time("set-formState-to-iDB")
-  await set(FORM_STATE_KEY, payload)
-  isDev && console.timeEnd("set-formState-to-iDB")
-}, 300)
