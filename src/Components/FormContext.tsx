@@ -16,8 +16,7 @@ import { del, get } from "idb-keyval"
 import { type ReactNode, useState } from "react"
 
 const isDev = import.meta.env.DEV
-const importedApiUrl = import.meta.env.VITE_API_URL
-const API_URL = isDev ? "http://localhost:8787" : importedApiUrl
+const API_URL = isDev ? "http://localhost:8787" : import.meta.env.VITE_API_URL
 
 let temp_dataset: {
   language: Language
