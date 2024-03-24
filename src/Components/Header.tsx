@@ -1,6 +1,7 @@
 import { LogoIcon } from "@/assets/icons/logoIcon"
 import { useLanguage, useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
+import { debounce } from "@/common/utils/debounce"
 import { isIOS } from "@/common/utils/helpers"
 import { supportedLanguages } from "@/config"
 import type { Language } from "@/models/translations"
@@ -8,7 +9,7 @@ import { worker } from "@/services/initWorker"
 
 import "@/styles/Header.css"
 import { motion } from "framer-motion"
-import { useContext } from "react"
+import { useCallback, useContext } from "react"
 
 function dispatchLanguageEvent(lang: Language) {
   worker.postMessage(lang)
@@ -21,21 +22,26 @@ export const Header = () => {
 
   function handleOnClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const name = event.currentTarget.name as Language
-    changeLanguage(name)
+    debounceChange(name)
   }
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const value = event.currentTarget.value as Language
-    changeLanguage(value)
+    debounceChange(value)
   }
 
   function changeLanguage(lang: Language) {
     if (supportedLanguages.includes(lang)) {
       formState.language = lang
       dispatchLanguageEvent(formState.language)
-      generate(formState)
+      ;(async () => generate(formState))()
     }
   }
+
+  const debounceChange = useCallback(
+    (lang: Language) => debounce(() => changeLanguage(lang), 150)(),
+    [],
+  )
 
   const isActive = (lang: Language) => lang === language
   return (

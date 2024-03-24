@@ -325,7 +325,7 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
     }
   }
 
-  async function handleReDownLoadingDataset(lang: Language) {
+  const handleReDownLoadingDataset = async (lang: Language) => {
     if (formState.dataset.failedToFetchDatasets.includes(lang)) {
       const updatedFailedDatasets = formState.dataset.failedToFetchDatasets.filter(
         (l) => l !== lang,
@@ -355,6 +355,24 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
       fetchStorage()
     }
   }
+
+  const debounceDownloading = useCallback(
+    debounce(
+      (lang: Language) => {
+        handleReDownLoadingDataset(lang)
+      },
+      600,
+      true,
+    ),
+    [],
+  )
+
+  const debounceClick = useCallback(
+    debounce(async (language: Language, isDeleted: boolean) => {
+      isDeleted ? debounceDownloading(language) : await handleDeletingDataset(language)
+    }, 160),
+    [],
+  )
 
   const langCanBeDownLoaded = (lang: Language) =>
     isLanguageDeleted(lang) || isLanguageFailed(lang) || !isLanguageFetched(lang)
@@ -394,7 +412,6 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
             </p>
           </div>
         </div>
-
         <div>
           <div className="SettingsFooter">
             <div className="flex flex-column gap-025">
@@ -411,11 +428,7 @@ const SettingsIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) 
                       key={language}
                       className="LanguageSettingItem"
                       type="button"
-                      onClick={async () => {
-                        isDeleted
-                          ? await handleReDownLoadingDataset(language)
-                          : await handleDeletingDataset(language)
-                      }}
+                      onClick={() => debounceClick(language, isDeleted)}
                       data-state={isDeleted ? "download" : "delete"}
                       title={
                         isDeleted
