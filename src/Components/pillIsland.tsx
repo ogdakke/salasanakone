@@ -1,23 +1,29 @@
 import { StrengthIndicator } from "@/Components/indicator"
+import { useMediaQuery } from "@/common/hooks/useMediaQuery"
 import { FormContext } from "@/common/providers/FormProvider"
 import "@/styles/PillIsland.css"
 import { type Variants, motion } from "framer-motion"
 import { Plus } from "iconoir-react"
 import { type LegacyRef, useContext } from "react"
 
+const darkModeBoxShadow = "rgba(0 200 59 0.2) 0px 0px 30px 0px"
+const lightModeBoxShadow = "rgba(0 200 59 0.8) 0px 0px 30px 0px"
+
 const pillVariants: Variants = {
   initial: { borderColor: "rgba(0,0,0,0)" },
-  animate: (score: number) => ({
-    opacity: 1,
-    borderColor: "rgba(22, 22, 22, 1)",
-    boxShadow:
-      score === 4 ? "rgba(0 200 59 0.2) 0px 0px 30px 0px" : "rgba(0 200 59 0) 0px 0px 30px 0px",
-    transition: {
-      boxShadow: { type: "tween", duration: 1, delay: score === 4 ? 0.3 : 0 },
-      borderColor: { duration: 2 },
-      opacity: { duration: 2 },
-    },
-  }),
+  animate: (props: { score: number; darkMode: boolean }) => {
+    let boxShadow = props.darkMode ? darkModeBoxShadow : lightModeBoxShadow
+    return {
+      opacity: 1,
+      borderColor: "rgba(22, 22, 22, 1)",
+      boxShadow: props.score === 4 ? boxShadow : "rgba(0 200 59 0) 0px 0px 30px 0px",
+      transition: {
+        boxShadow: { type: "tween", duration: 1, delay: props.score === 4 ? 0.3 : 0 },
+        borderColor: { duration: 2 },
+        opacity: { duration: 2 },
+      },
+    }
+  },
   hover: {
     // scale: 1.05,
   },
@@ -32,6 +38,8 @@ export const PillIsland = ({
 }: { score: number; pillRef: LegacyRef<HTMLButtonElement> }) => {
   const { generate, formState } = useContext(FormContext)
   const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
+  const darkMode = useMediaQuery("(prefers-color-scheme: dark)")
+  console.log("isDarkMode", darkMode)
 
   const buttonSize = 26
   return (
@@ -45,7 +53,7 @@ export const PillIsland = ({
       whileHover="hover"
       initial="initial"
       animate="animate"
-      custom={score}
+      custom={{ score, darkMode }}
       data-score={score}
     >
       <motion.span
