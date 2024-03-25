@@ -39,7 +39,6 @@ export const PillIsland = ({
   const { generate, formState } = useContext(FormContext)
   const isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0
   const darkMode = useMediaQuery("(prefers-color-scheme: dark)")
-  console.log("isDarkMode", darkMode)
 
   const buttonSize = 26
   return (
