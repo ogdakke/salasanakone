@@ -52,7 +52,7 @@ export function strengthToColorAndLabel(value: number) {
     case "4":
       return {
         label: t("strengthGreat").toString(),
-        color: "rgb(108, 241, 109)",
+        color: "rgb(60, 232, 61)",
       }
     case "-1":
       return {

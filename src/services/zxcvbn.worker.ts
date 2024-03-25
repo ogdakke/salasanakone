@@ -48,7 +48,7 @@ async function loadOptions(lang: Language): Promise<OptionsType> {
 
   isDev && console.debug("loaded custom dictionary of length: ", customDic?.length)
 
-  if (!fetchedPackage) {
+  if (!fetchedPackage?.translations) {
     throw new Error(`Failed to fetch zxcvbn package for ${lang}`)
   }
 
@@ -61,12 +61,15 @@ async function loadOptions(lang: Language): Promise<OptionsType> {
     translations: {
       ...fetchedPackage.translations,
       timeEstimation: {
-        ...fetchedPackage.translations?.timeEstimation,
-        // @ts-ignore it just needs to complain huh?
+        ...fetchedPackage.translations.timeEstimation,
+        ltSecond:
+          lang === Language.en
+            ? "under a second"
+            : fetchedPackage.translations.timeEstimation.ltSecond,
         centuries:
           lang === Language.fi
             ? "vuosisatoja"
-            : fetchedPackage.translations?.timeEstimation.centuries,
+            : fetchedPackage.translations.timeEstimation.centuries,
       },
     },
     graphs: adjacencyGraphs,

@@ -27,13 +27,11 @@ export function StrengthIndicator({ score }: { score: number }): React.ReactNode
         }}
         animate={{
           translateX: `-${move}%`,
-          // bugfix
           backgroundColor: color,
           opacity: 1,
           transition: {
             type: "spring",
             damping: 13,
-            duration: 0.2,
           },
         }}
       />

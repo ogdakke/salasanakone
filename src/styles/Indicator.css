@@ -1,5 +1,5 @@
 .StrengthBar {
-  transition: box-shadow 300ms ease-in-out;
+  transition: box-shadow 300ms ease-out;
 }
 
 .StrengthBar[data-score="4"] {
@@ -21,7 +21,7 @@
 
 @media (prefers-color-scheme: dark) {
   .StrengthBar[data-score="4"] {
-    box-shadow: rgb(33, 94, 37) -13px -4px 13px 6px inset;
+    box-shadow: rgb(33, 94, 37) -11px -4px 13px 6px inset;
   }
 
   .StrengthBar[data-score="3"] {
