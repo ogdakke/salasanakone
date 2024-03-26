@@ -18,15 +18,13 @@ export const SliderComponent = () => {
   const { formState, generate } = useContext(FormContext)
   const { formValues, sliderValue, isEditing } = formState
 
-  const handleValueChange = (value: number): number => {
-    const validated = validatePasswordLength(value, formValues.words.selected)
+  const handleValueChange = (value: number | undefined): void => {
+    const validated = validatePasswordLength(value ?? 0, formValues.words.selected)
 
     if (!isEditing) {
       formState.sliderValue = validated
       generate(formState)
     }
-
-    return value
   }
 
   return (

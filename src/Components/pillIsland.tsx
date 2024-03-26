@@ -11,7 +11,7 @@ const darkModeBoxShadow = "rgba(0 200 59 0.3) 0px 0px 36px 1px"
 const lightModeBoxShadow = "rgba(0 200 59 0.66) 9px 12px 60px 13px"
 function splitColor(color: `rgb(${string}, ${string}, ${string})`, opacity = 0.08) {
   const parts = color.split("(")
-  let RGB = parts[1].slice(0, -1)
+  let RGB = parts[1]?.slice(0, -1)
   return `${parts[0]}a(${RGB}, ${opacity})`
 }
 const pillVariants: Variants = {

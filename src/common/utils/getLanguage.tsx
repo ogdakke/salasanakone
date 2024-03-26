@@ -14,7 +14,11 @@ export const translate = (
     // Handle interpolation
     translation = Object.keys(placeholders).reduce((str, placeholderKey) => {
       const regex = new RegExp(`{${placeholderKey}}`, "g")
-      return str.replace(regex, placeholders[placeholderKey])
+      let replacement = placeholders[placeholderKey]
+      if (replacement) {
+        return str.replace(regex, replacement)
+      }
+      return str
     }, translation)
   }
 
