@@ -10,7 +10,7 @@ import { Label } from "@/Components/ui/label"
 import { Slider } from "@/Components/ui/slider"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import { validatePasswordLength } from "@/common/utils/validations"
-import { m } from "framer-motion"
+import { motion } from "framer-motion"
 import { useContext } from "react"
 
 export const SliderComponent = () => {
@@ -46,7 +46,7 @@ export const SliderComponent = () => {
         min={formValues.words.selected ? minLengthForWords : minLengthForChars}
         step={1}
       >
-        <m.span initial={{ scale: 1 }} whileTap={{ scale: 0.9 }} whileFocus={{ scale: 0.9 }} />
+        <motion.span initial={{ scale: 1 }} whileTap={{ scale: 0.9 }} whileFocus={{ scale: 0.9 }} />
       </Slider>
     </Label>
   )

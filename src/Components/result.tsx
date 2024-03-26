@@ -9,7 +9,7 @@ import { getConfig } from "@/config"
 import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
 import "@/styles/Result.css"
-import { type Transition, m } from "framer-motion"
+import { type Transition, motion } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
 import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
 
@@ -265,7 +265,7 @@ const ResultComponentNoEdit = ({
   const { t } = useTranslation()
 
   return (
-    <m.div
+    <motion.div
       // TODO: fix this role stuff and just make this a button
       role="button"
       transition={{ duration: 0.175 }}
@@ -290,7 +290,7 @@ const ResultComponentNoEdit = ({
           )}
         </span>
       </span>
-    </m.div>
+    </motion.div>
   )
 }
 
@@ -308,7 +308,7 @@ const Editor = ({ handleSave }: EditorProps) => {
   }
 
   return (
-    <m.div
+    <motion.div
       title={t("clickToCopyOrEdit").toString()}
       className="ResultButton interact resultCard relative"
       itemType="button"
@@ -334,14 +334,14 @@ const Editor = ({ handleSave }: EditorProps) => {
         }}
         autoFocus
       />
-    </m.div>
+    </motion.div>
   )
 }
 
 const EditButton = ({ handleEditClick }: EditButtonProps) => {
   const { t } = useTranslation()
   return (
-    <m.span
+    <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
       aria-label={t("editResultDesc").toString()}
       data-animate={true}
@@ -364,7 +364,7 @@ const EditButton = ({ handleEditClick }: EditButtonProps) => {
       transition={fade}
     >
       <EditPencil alignmentBaseline="central" className="flex-center" />
-    </m.span>
+    </motion.span>
   )
 }
 
@@ -373,7 +373,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
   const { isCopied, copyIconShouldAnimate } = conditions
   const { t } = useTranslation()
   return (
-    <m.span
+    <motion.span
       layout
       aria-hidden={!isCopied}
       aria-label={t("hasCopiedPassword").toString()}
@@ -390,7 +390,7 @@ const CopiedButton = ({ conditions, handleCopyClick }: CopiedButtonProps) => {
       onClick={() => void handleCopyClick(passwordValue)}
     >
       <ClipboardCheck alignmentBaseline="central" className="flex-center" />
-    </m.span>
+    </motion.span>
   )
 }
 
@@ -399,7 +399,7 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
   const { inputValue } = useContext(InputContext)
 
   return (
-    <m.span
+    <motion.span
       className="Shine absoluteCopiedIcon EditButton interact"
       aria-label={t("saveAndCheckString").toString()}
       data-animate={true}
@@ -416,7 +416,7 @@ const SaveEditButton = ({ handleSave }: EditorProps) => {
       transition={fade}
     >
       <Check alignmentBaseline="central" className="flex-center" />
-    </m.span>
+    </motion.span>
   )
 }
 
