@@ -41,8 +41,8 @@ const pwaOptions: Partial<VitePWAOptions> = {
       },
     ],
     orientation: "portrait",
-    background_color: "#ffffff",
-    theme_color: "",
+    background_color: "#0a0a0a",
+    theme_color: "#0a0a0a",
     display: "standalone",
     description:
       "Salasanakone - Luo vahva, muistettava ja hyvä salasana tällä salasanageneraattorilla helposti, nopeasti ja automaattisesti käyttämällä Suomen kielen sanoja.",
@@ -51,7 +51,6 @@ const pwaOptions: Partial<VitePWAOptions> = {
     enabled: true,
     /* when using generateSW the PWA plugin will switch to classic */
     type: "module",
-    navigateFallback: "index.html",
   },
 }
 
