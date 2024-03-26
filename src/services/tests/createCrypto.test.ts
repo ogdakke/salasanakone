@@ -133,6 +133,24 @@ describe("createPassphrase() creates a random string with correct length", () =>
     expect(() =>
       createPassphrase({
         language,
+        // @ts-expect-error testing
+        passLength: undefined,
+        inputs: testData({ word: false }),
+      }),
+    ).toThrow(errors.nullOrUndefined)
+
+    expect(() =>
+      createPassphrase({
+        language,
+        // @ts-expect-error testing
+        passLength: null,
+        inputs: testData({ word: false }),
+      }),
+    ).toThrow(errors.nullOrUndefined)
+
+    expect(() =>
+      createPassphrase({
+        language,
         passLength: 400,
         inputs: testData({ word: false }),
       }),
