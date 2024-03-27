@@ -9,7 +9,7 @@
     100vw - var(--island-button-width) - var(--island-button-gap)
   );
   position: relative;
-  width: clamp(300px, calc(100vw - 1.5rem), 420px);
+  width: var(--island-container-width);
 
   /* Move the island for visual balance */
   margin-right: 1rem;
@@ -127,7 +127,7 @@
     }
 
     .IslandMain {
-      width: 86%;
+      width: calc(100% - var(--island-button-width) * 1.1);
     }
   }
 

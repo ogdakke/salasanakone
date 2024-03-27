@@ -73,7 +73,7 @@
 .IslandWrapper {
   position: relative;
   margin: 0 auto;
-  height: 12.5rem;
+  height: var(--island-container-height);
 }
 
 .FormCheckBox[data-state="hidden"] {

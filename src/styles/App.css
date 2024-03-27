@@ -102,12 +102,34 @@
   opacity: 0.92;
 }
 
+.IslandLoadingStateWrapper {
+  margin: 0 auto;
+  height: var(--island-container-height);
+}
+
+.IslandLoadingState {
+  display: flex;
+  justify-content: center;
+  width: var(--island-container-width);
+
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
 @media (max-width: 700px) {
   .main {
     /* justify-content: left; */
     padding-top: 2.5rem;
     padding-left: 0rem;
     padding-right: 0rem;
+  }
+
+  .IslandLoadingState {
+    margin-left: 0;
+  }
+
+  .IslandSettingsButtonLoader {
+    flex-shrink: 0;
   }
 }
 

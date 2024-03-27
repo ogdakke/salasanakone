@@ -43,7 +43,9 @@ const FormComponentLoader = () => {
       {!isSmallScreen ? (
         <LargeScreenIslandLoader />
       ) : (
-        <div className="flex justify-center">{/* <PillLoadingState /> */}</div>
+        <div className="flex justify-center">
+          <SmallScreenIslandLoader />
+        </div>
       )}
     </>
   )
@@ -64,9 +66,24 @@ const FormErrorComponent = (props: FallbackProps) => {
 }
 
 const LargeScreenIslandLoader = () => (
-  <div className="flex justify-center">
-    <div className="IslandMain LoadingStateIsland">
-      <Loading height="2.5rem" radius="4rem" />
+  <div className="IslandLoadingStateWrapper">
+    <div className="IslandLoadingState">
+      <Loading width="55%" height="2.125rem" radius="4rem" />
+      <Loading width="2.125rem" height="2.125rem" radius="4rem" />
+    </div>
+  </div>
+)
+
+const SmallScreenIslandLoader = () => (
+  <div className="IslandLoadingStateWrapper">
+    <div className="IslandLoadingState">
+      <Loading width="100%" height="3.375rem" radius="4rem" />
+      <Loading
+        className="IslandSettingsButtonLoader"
+        width="3.375rem"
+        height="3.375rem"
+        radius="4rem"
+      />
     </div>
   </div>
 )
