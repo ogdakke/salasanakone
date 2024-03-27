@@ -13,7 +13,7 @@ import { Stores, getDataForKey, setData } from "@/services/database/db"
 import { setFormState } from "@/services/database/state"
 import reducer, { resetFormState, setLanguage } from "@/services/reducers/formReducer"
 import { del, get } from "idb-keyval"
-import { type ReactNode, useState } from "react"
+import { type ReactNode, useCallback, useState } from "react"
 
 const isDev = import.meta.env.DEV
 const API_URL = isDev ? "http://localhost:8787" : import.meta.env.VITE_API_URL
@@ -100,7 +100,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   }
 
   if (!hasCheckedRegressions) {
-    ;(async () => handleRegresion())()
+    ;(async () => await handleRegresion())()
     hasCheckedRegressions = true
   }
 
@@ -133,7 +133,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
           language: state.language,
         })
       }
-      console.warn(
+      console.info(
         `got no dataset for language: "${state.language}", falling back to regular password`,
       )
     }
@@ -227,7 +227,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
     generate(formState)
   }
 
-  const generate = async (state: FormState, cache?: "invalidate") => {
+  const generate = useCallback(async (state: FormState, cache?: "invalidate") => {
     await setFormState(state)
     try {
       const passwordValue = await generatePassword(state, cache)
@@ -238,7 +238,8 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
         throw new Error(error.message)
       }
     }
-  }
+  }, [])
+
   useEffectOnce(() => {
     if (!isInit) {
       isDev && console.debug("generating initial password with: ", formState)

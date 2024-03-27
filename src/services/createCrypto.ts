@@ -7,17 +7,14 @@ type StringsConfig = ReturnType<typeof getConfig>["generationStrings"]
 /**
  * Generates a passphrase/password based on supplied parametres
  */
-export function createPassphrase({
-  dataset,
-  passLength,
-  inputs,
-  language,
-}: {
-  dataset?: string[]
+export function createPassphrase(args: {
   passLength: PassLength
   inputs: PassCreationRules
   language: Language
+  dataset?: string[]
 }): string {
+  const { passLength, inputs, language } = args
+
   const {
     minLengthForChars,
     maxLengthForChars,
@@ -25,34 +22,26 @@ export function createPassphrase({
     maxLengthForWords,
     generationStrings,
   } = getConfig(language)
+
   const isUsingWords = inputs.words.selected
 
   const minLength = isUsingWords ? minLengthForWords : minLengthForChars
   const maxLength = isUsingWords ? maxLengthForWords : maxLengthForChars
-  const len = validateStringToBeValidNumber({
-    passLength,
-    min: minLength,
-    max: maxLength,
-  })
+  const len = validateStringToBeValidNumber(passLength, minLength, maxLength)
 
-  if (isUsingWords && dataset) {
-    return handleReturns({ len, inputs, dataset, config: generationStrings })
+  if (isUsingWords && args.dataset) {
+    return handleReturns(len, inputs, generationStrings, args.dataset)
   }
 
-  return handleReturns({ len, inputs, config: generationStrings })
+  return handleReturns(len, inputs, generationStrings)
 }
 
-function handleReturns({
-  len,
-  inputs,
-  dataset,
-  config,
-}: {
-  len: number
-  inputs: PassCreationRules
-  config: StringsConfig
-  dataset?: string[]
-}): string {
+function handleReturns(
+  len: number,
+  inputs: PassCreationRules,
+  config: StringsConfig,
+  dataset?: string[],
+): string {
   const { randomChars, words, uppercase } = inputs
   const USER_SPECIALS = randomChars.value || ""
 
@@ -129,8 +118,6 @@ function handleRandomCharStrings({
   len: number
   config: StringsConfig
 }): string {
-  console.count()
-
   const { specialsAndNums, characters, charsWithNumbers, charactersAndSpecialCharacters } = config
 
   if (inputs.randomChars.selected && inputs.numbers.selected) {
@@ -155,11 +142,7 @@ function handleRandomCharStrings({
  * Creates a randomised string of characters from an input string
  */
 const createFromString = (stringToUse: string, len: number): string => {
-  const numArr = generateRandomArray({
-    len,
-    min: 0,
-    max: stringToUse.length - 1,
-  })
+  const numArr = generateRandomArray(len, 0, stringToUse.length - 1)
   const stringArr: string[] = new Array(numArr.length)
 
   for (let i = 0; i < numArr.length; i++) {
@@ -170,15 +153,11 @@ const createFromString = (stringToUse: string, len: number): string => {
   return stringArr.join("")
 }
 
-const validateStringToBeValidNumber = ({
-  passLength,
-  min,
-  max,
-}: {
-  passLength: PassLength
-  min: number
-  max: number
-}): number => {
+const validateStringToBeValidNumber = (
+  passLength: PassLength,
+  min: number,
+  max: number,
+): number => {
   const errors = validationErrorMessages(min, max)
 
   if (passLength === undefined || passLength === null) {
@@ -216,7 +195,7 @@ const validateStringToBeValidNumber = ({
 
 const someCharToUpper = (someStr: string): string => {
   const len = someStr.length
-  const arr = generateRandomArray({ len: len - 1, min: 0, max: len })
+  const arr = generateRandomArray(len - 1, 0, len)
 
   const strArr = someStr.split("")
   // biome-ignore lint/complexity/noForEach: <explanation>
@@ -297,15 +276,7 @@ function generateRandomNumberInRange(min: number, max: number): number {
 /**
  * generates an array of random numbers between min and max, with length 'len'
  */
-function generateRandomArray({
-  len,
-  min,
-  max,
-}: {
-  len: number
-  min: number
-  max: number
-}): number[] {
+function generateRandomArray(len: number, min: number, max: number): number[] {
   const arr = new Array<number>(len)
   for (let i = 0; i < len; i++) {
     arr[i] = generateRandomNumberInRange(min, max)
@@ -332,11 +303,7 @@ function capitalizeFirstLetter(stringArrToConvert: string[] | undefined): string
 function getRandomWordsFromDataset(length: number, stringDataset: string[]): string[] {
   const maxCount = stringDataset.length - 1 // the max word count in [language].json
 
-  const randomNumsArray = generateRandomArray({
-    len: length,
-    min: 0,
-    max: maxCount,
-  })
+  const randomNumsArray = generateRandomArray(length, 0, maxCount)
 
   const sanaArray: string[] = new Array(length)
 
