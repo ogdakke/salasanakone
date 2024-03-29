@@ -1,17 +1,13 @@
-import { Language, Translations } from "@/models/translations"
-import { FormActions } from "@/services/reducers/formReducer"
-import { Dispatch } from "react"
-
-export type CheckboxLabels = "Isot Kirjaimet" | "Välimerkit" | "Numerot" | "Käytä sanoja" // TODO fix this to be translated
+import type { HighlightCondition } from "@/Components/ui/utils/highlight"
+import type { Language } from "@/models/translations"
+import type { FormActions } from "@/services/reducers/formReducer"
+import type { Dispatch } from "react"
 
 export type InputType = "checkbox" | "input" | "radio"
-export type InputLabel = "words" | "uppercase" | "numbers" | "randomChars"
-export type IndexedLabels = Record<InputLabel, CheckboxLabels>
 
 export interface InputValue {
   inputType: InputType
   selected: boolean
-  info: keyof Translations
   value?: string
 }
 
@@ -29,14 +25,15 @@ export type FormState = {
   isEditing: boolean
   language: Language
   dataset: {
-    hasDeletedDatasets: boolean
-    noDatasetFetched: boolean
+    deletedDatasets: Language[]
+    failedToFetchDatasets: Language[]
+    fetchedDatasets: Language[]
   }
 }
 
 export type FormContextProps = {
   formState: FormState
-  generate: () => Promise<void>
+  generate: (state: FormState, cache?: "invalidate") => Promise<void>
   validate?: (value: number, state: FormState) => number
 }
 
@@ -55,4 +52,41 @@ export type ResultState = {
 export type ResultContextProps = {
   finalPassword: ResultState
   setFinalPassword: Dispatch<React.SetStateAction<ResultState>>
+}
+
+export type CheckerWorkerPostMessageData =
+  | {
+      strValue: string
+    }
+  | Language
+
+export type CopyConditions = {
+  isCopied: boolean
+  copyIconShouldAnimate: boolean
+  copyIconIsHidden: boolean
+}
+
+export type EditorProps = {
+  handleSave: (stringToSave?: string) => void
+}
+
+export type ResultNoEditProps = {
+  handleCopyClick: (finalPassword: string) => Promise<void>
+  finalPassword: string
+  highlightConditions: HighlightCondition[]
+  conditions: CopyConditions
+}
+
+export type CopiedButtonProps = {
+  conditions: CopyConditions
+  handleCopyClick: (finalPassword: string) => Promise<void>
+}
+
+export type EditButtonProps = {
+  handleEditClick: () => void
+}
+
+export type InputContextProps = {
+  inputValue?: string
+  setInputValue: React.Dispatch<React.SetStateAction<string | undefined>>
 }

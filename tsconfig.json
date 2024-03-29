@@ -8,12 +8,13 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
+    "noUncheckedIndexedAccess": true,
     "forceConsistentCasingInFileNames": true,
     "module": "ESNext",
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@config/*": [".config/*"],
+      "@config/*": [".config/*"]
     },
     "moduleResolution": "Node",
     "resolveJsonModule": true,

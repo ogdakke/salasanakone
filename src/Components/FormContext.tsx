@@ -1,140 +1,184 @@
+import { useEffectOnce } from "@/common/hooks/useEffectOnce"
 import { usePersistedReducer } from "@/common/hooks/usePersistedReducer"
-import { useLanguage } from "@/common/utils/getLanguage"
-import { maxLengthForWords, minLengthForChars } from "@/config"
-import {
-  FormContextProps,
-  FormDispatchContextProps,
-  FormState,
-  ResultContextProps,
-  ResultState,
-} from "@/models"
-import { Language } from "@/models/translations"
+import { FormContext, FormDispatchContext } from "@/common/providers/FormProvider"
+import { ResultContext } from "@/common/providers/ResultProvider"
+import { isKey } from "@/common/utils/helpers"
+import { validatePasswordLength } from "@/common/utils/validations"
+import { FORM_STATE_KEY } from "@/config"
+import { initialFormState } from "@/config/form-config/form-state.config"
+import type { FormState, ResultState } from "@/models"
+import type { Language } from "@/models/translations"
 import { createPassphrase } from "@/services/createCrypto"
 import { Stores, getDataForKey, setData } from "@/services/database/db"
-import reducer, {
-  FormActionKind,
-  initialFormState,
-  setDatasetFields,
-  setFormField,
-  setLanguage,
-  setSlidervalue,
-} from "@/services/reducers/formReducer"
-import { ReactNode, createContext, useCallback, useEffect, useState } from "react"
-const { SET_DISABLED } = FormActionKind
+import { setFormState } from "@/services/database/state"
+import reducer, { resetFormState, setLanguage } from "@/services/reducers/formReducer"
+import { del, get } from "idb-keyval"
+import { type ReactNode, useCallback, useRef, useState } from "react"
 
 const isDev = import.meta.env.DEV
-const API_KEY = import.meta.env.VITE_X_API_KEY
-const importedApiUrl = import.meta.env.VITE_API_URL
-const API_URL = isDev ? "http://localhost:8787" : importedApiUrl
+const API_URL = isDev ? "http://localhost:8787" : import.meta.env.VITE_API_URL
 
 let temp_dataset: {
   language: Language
   dataset: string[]
 }
 
-export const FormContext = createContext<FormContextProps>({
-  formState: initialFormState,
-  generate: async () => {},
-})
+let hasCheckedRegressions = false
+let isInit = false
 
-export const FormDispatchContext = createContext<FormDispatchContextProps>({
-  dispatch: () => undefined,
-})
-
-export const ResultContext = createContext<ResultContextProps>({
-  finalPassword: { isEdited: false },
-  setFinalPassword: () => undefined,
-})
-
-export const FormProvider = ({ children }: { children: ReactNode }) => {
+export const FormProvider = ({ children }: { children: ReactNode }): ReactNode => {
   const [formState, dispatch, clearValue] = usePersistedReducer(
     reducer,
     initialFormState,
-    "formState",
+    FORM_STATE_KEY,
   )
-  const { language } = useLanguage()
-
-  // Handle regression of localstorage values
-  if (Object.keys(formState.formValues).includes("language")) {
-    clearValue()
-    dispatch(setLanguage(initialFormState.language))
-  }
-
   const [finalPassword, setFinalPassword] = useState<ResultState>({
     passwordValue: undefined,
     isEdited: false,
   })
 
-  if (!dispatch) {
-    throw new Error("No dispatch found from context")
+  // Handle regression of stored values
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: Here we check for regressions, eg. values in localStorage that need to be removed
+  async function handleRegresion() {
+    let regressed = []
+    console.debug("running regressions...")
+
+    if (localStorage.getItem("formState")) {
+      localStorage.removeItem("formState")
+      regressed.push("formState")
+    }
+
+    if (await get("formState")) {
+      await del("formState")
+      regressed.push("idb-formState")
+    }
+
+    if (
+      !("fetchedDatasets" in formState.dataset) ||
+      formState.dataset?.fetchedDatasets === undefined
+    ) {
+      formState.dataset.fetchedDatasets = []
+      regressed.push("fetchedDatasets")
+    }
+
+    const hasLanguageInFormValues = Object.keys(formState.formValues).includes("language")
+    if (hasLanguageInFormValues) {
+      regressed.push("language")
+      clearValue()
+      dispatch(setLanguage(initialFormState.language))
+    }
+
+    for (const key in formState.formValues) {
+      if (isKey(formState.formValues, key)) {
+        let keysOfKey = Object.keys(formState.formValues[key])
+        if (keysOfKey.includes("info")) {
+          regressed.push({ [key]: "info" })
+          clearValue()
+          del(FORM_STATE_KEY)
+          return dispatch(resetFormState())
+        }
+      }
+    }
+
+    if (!Array.isArray(formState.dataset.deletedDatasets)) {
+      regressed.push("deletedDatasets")
+      clearValue()
+      await del(FORM_STATE_KEY)
+      dispatch(resetFormState())
+    }
+
+    if (!Array.isArray(formState.dataset.failedToFetchDatasets)) {
+      regressed.push("failedToFetchDatasets")
+      clearValue()
+      await del(FORM_STATE_KEY)
+      dispatch(resetFormState())
+    }
+
+    if (regressed.length) {
+      console.info("regressed", regressed)
+    }
   }
 
-  const validate = useCallback(
-    (sliderValue: number, state: FormState): number => {
-      const { selected } = state.formValues.words
-      if (
-        selected &&
-        (sliderValue > maxLengthForWords || sliderValue < 1) // should return false
-      ) {
-        dispatch(setSlidervalue(maxLengthForWords))
-        return maxLengthForWords
-      }
-      if (!selected && sliderValue < minLengthForChars) {
-        dispatch(setSlidervalue(minLengthForChars))
-        return minLengthForChars
-      }
-      return sliderValue
-    },
-    [formState.formValues],
-  )
+  if (!hasCheckedRegressions) {
+    ;(async () => await handleRegresion())()
+    hasCheckedRegressions = true
+  }
 
-  async function generatePassword(formState: FormState) {
-    const { formValues, language, sliderValue } = formState
-    const validatedLength = validate(sliderValue, formState)
+  async function generatePassword(state: FormState, cache?: "invalidate") {
+    if (cache === "invalidate") {
+      temp_dataset = { dataset: [], language: state.language }
+      isDev && console.debug("invalidated dataset cache with flag")
+    }
+
+    const { formValues, sliderValue } = state
+    const validatedLength = validatePasswordLength(sliderValue, formValues.words.selected)
 
     if (formValues.words.selected) {
-      if (temp_dataset?.dataset.length && temp_dataset.language === language) {
+      if (temp_dataset?.dataset.length && temp_dataset.language === state.language) {
         return createPassphrase({
           passLength: validatedLength,
           inputs: formValues,
           dataset: temp_dataset.dataset,
-          language,
+          language: state.language,
         })
       }
-      const dataset = await fetchDataset(language)
-      if (dataset && Array.isArray(dataset)) {
-        temp_dataset = { language, dataset }
+      const dataset = await fetchDataset(state.language)
+
+      if (dataset) {
+        temp_dataset = { language: state.language, dataset }
         return createPassphrase({
           passLength: validatedLength,
           inputs: formValues,
-          language,
           dataset,
+          language: state.language,
         })
       }
-      console.warn(`got no dataset for language: "${language}", falling back to regular password`)
+      console.info(
+        `got no dataset for language: "${state.language}", falling back to regular password`,
+      )
     }
-    return createPassphrase({ passLength: validatedLength, inputs: formValues, language })
+    return createPassphrase({
+      passLength: validatedLength,
+      inputs: formValues,
+      language: state.language,
+    })
   }
 
-  const fetchDataset = async (lang: Language) => {
+  const lastAbortController = useRef<AbortController>()
+
+  const fetchDataset = async (lang: Language): Promise<string[] | undefined> => {
+    if (lastAbortController.current) {
+      lastAbortController.current.abort()
+    }
+
+    const currentAbortController = new AbortController()
+    lastAbortController.current = currentAbortController
+
     try {
       const datasetFromDB = await getDataForKey(Stores.Languages, lang)
       if (datasetFromDB) {
-        handleFetchSuccess()
+        handleFetchSuccess(lang)
         return datasetFromDB
+      }
+
+      if (formState.dataset.failedToFetchDatasets.includes(lang)) {
+        isDev && console.log("dataset for language has failed before: ", lang)
+
+        // Dataset has failed fetching before, so don't refetch it
+        // TODO: some more logic to handle retries of fetching after some time
+        handleFetchError(lang)
+        currentAbortController.abort()
+        return undefined
       }
       // Set the password undefined to trigger loading state on fetch only - preventing a flash on DB lang change
       setFinalPassword({ isEdited: false, passwordValue: undefined })
 
       const url = `${API_URL}/dataset/${lang}`
-      const response = await fetch(url, {
-        headers: {
-          "X-API-KEY": API_KEY || "",
-        },
-      })
+      const response = await fetch(url, { signal: currentAbortController.signal })
+
+      // TODO handle aborting the fetch when language changes or something idfk
       if (!response.ok) {
         await response.body?.cancel()
-        handleFetchError()
         throw new Error("Failed to fetch dataset")
       }
 
@@ -142,64 +186,79 @@ export const FormProvider = ({ children }: { children: ReactNode }) => {
       const keySetToDb = await setData(Stores.Languages, data, lang)
       if (keySetToDb === lang) {
         // all OK
-        handleFetchSuccess()
+        handleFetchSuccess(lang)
         return data
       }
 
-      handleFetchError()
+      handleFetchError(lang)
       return undefined
     } catch (error) {
       console.error("Error fetching dataset:", error)
-      handleFetchError()
+      handleFetchError(lang)
       return undefined
     }
   }
 
-  function handleFetchSuccess() {
-    dispatch(
-      setDatasetFields({
-        hasDeletedDatasets: false,
-        noDatasetFetched: false,
-      }),
+  function handleFetchSuccess(lang: Language) {
+    const currentDataset = formState.dataset
+    const deletedDatasets = currentDataset.deletedDatasets
+    const updatedDeletedDatasets = deletedDatasets.filter((dataset) => dataset !== lang)
+    const updatedFailedToFetchDatasets = formState.dataset.failedToFetchDatasets.filter(
+      (dataset) => dataset !== lang,
     )
+
+    const { fetchedDatasets } = formState.dataset
+    if (!fetchedDatasets.includes(lang)) {
+      formState.dataset.fetchedDatasets.push(lang)
+    }
+
+    formState.dataset.deletedDatasets = updatedDeletedDatasets
+    formState.dataset.failedToFetchDatasets = updatedFailedToFetchDatasets
   }
 
-  function handleFetchError() {
+  function handleFetchError(lang: Language): void {
     console.warn("fetch failure, dispatching")
-    dispatch(
-      setDatasetFields({
-        ...formState.dataset,
-        noDatasetFetched: true,
-      }),
+
+    /** Prepare the formState for switching to words: false by setting it, and validating the sliderValue */
+    formState.formValues.words.selected = false
+    formState.sliderValue = validatePasswordLength(
+      formState.sliderValue,
+      formState.formValues.words.selected,
     )
-    dispatch(setFormField({ field: "words", selected: false }))
+
+    const langs = formState.dataset.failedToFetchDatasets
+    if (langs.includes(lang)) {
+      /** Since the failed language is in the array already, just generate with that state */
+      generate(formState)
+      return
+    }
+    /** Otherwise push the lang to the array and generate */
+    formState.dataset.failedToFetchDatasets.push(lang)
+    generate(formState)
   }
 
-  useEffect(() => {
-    const fetchOnChange = async () => await fetchDataset(language)
-    return () => void fetchOnChange()
-  }, [language])
-
-  const generate = useCallback(async () => {
-    inputFieldShouldDisable()
-      ? dispatch({ type: SET_DISABLED, payload: true })
-      : dispatch({ type: SET_DISABLED, payload: false })
+  const generate = useCallback(async (state: FormState, cache?: "invalidate") => {
+    await setFormState(state)
     try {
-      const passwordValue = await generatePassword(formState)
+      const passwordValue = await generatePassword(state, cache)
       setFinalPassword({ passwordValue, isEdited: false })
     } catch (error) {
       if (error instanceof Error) {
+        // TODO handle the error
         throw new Error(error.message)
       }
     }
-  }, [formState.formValues, formState.sliderValue, formState.language])
+  }, [])
 
-  const inputFieldShouldDisable = () => {
-    return formState.formValues.words.selected && formState.sliderValue < 2
-  }
+  useEffectOnce(() => {
+    if (!isInit) {
+      isDev && console.debug("generating initial password with: ", formState)
+      generate(formState)
+    }
+  })
 
   return (
-    <FormContext.Provider value={{ formState, generate, validate }}>
+    <FormContext.Provider value={{ formState, generate }}>
       <FormDispatchContext.Provider value={{ dispatch }}>
         <ResultContext.Provider value={{ finalPassword, setFinalPassword }}>
           {children}

@@ -1,49 +1,47 @@
-type PassLength = string | number
-
 import { generationErrors, getConfig, validationErrorMessages } from "@/config"
-import { PassCreationRules } from "@/models"
-import { Language } from "@/models/translations"
+import type { PassCreationRules } from "@/models"
+import type { Language } from "@/models/translations"
 
+type PassLength = string | number
+type StringsConfig = ReturnType<typeof getConfig>["generationStrings"]
 /**
  * Generates a passphrase/password based on supplied parametres
  */
-export function createPassphrase({
-  dataset,
-  passLength,
-  inputs,
-  language,
-}: {
-  dataset?: string[]
+export function createPassphrase(args: {
   passLength: PassLength
   inputs: PassCreationRules
   language: Language
+  dataset?: string[]
 }): string {
-  const { minLengthForChars, maxLengthForChars, minLengthForWords, maxLengthForWords } =
-    getConfig(language)
+  const { passLength, inputs, language } = args
+
+  const {
+    minLengthForChars,
+    maxLengthForChars,
+    minLengthForWords,
+    maxLengthForWords,
+    generationStrings,
+  } = getConfig(language)
+
   const isUsingWords = inputs.words.selected
 
   const minLength = isUsingWords ? minLengthForWords : minLengthForChars
   const maxLength = isUsingWords ? maxLengthForWords : maxLengthForChars
-  const len = validateStringToBeValidNumber({ passLength, min: minLength, max: maxLength })
+  const len = validateStringToBeValidNumber(passLength, minLength, maxLength)
 
-  if (isUsingWords && dataset) {
-    return handleReturns({ len, inputs, dataset, language })
+  if (isUsingWords && args.dataset) {
+    return handleReturns(len, inputs, generationStrings, args.dataset)
   }
 
-  return handleReturns({ len, inputs, language })
+  return handleReturns(len, inputs, generationStrings)
 }
 
-function handleReturns({
-  len,
-  inputs,
-  dataset,
-  language,
-}: {
-  len: number
-  inputs: PassCreationRules
-  language: Language
-  dataset?: string[]
-}): string {
+function handleReturns(
+  len: number,
+  inputs: PassCreationRules,
+  config: StringsConfig,
+  dataset?: string[],
+): string {
   const { randomChars, words, uppercase } = inputs
   const USER_SPECIALS = randomChars.value || ""
 
@@ -56,14 +54,14 @@ function handleReturns({
     const isNotWordString = !words.selected
 
     if (shouldBeUppercase && isNotWordString) {
-      return toUppercase(str).toString()
+      return toUppercase(str)
     }
 
     return str
   }
 
   if (!dataset) {
-    const randomCharString = handleRandomCharStrings({ inputs, len, language })
+    const randomCharString = handleRandomCharStrings({ inputs, len, config })
     return applyUpperCase(randomCharString)
   }
 
@@ -114,20 +112,13 @@ function applyTransformationsToWords(inputs: PassCreationRules, wordString: stri
 function handleRandomCharStrings({
   inputs,
   len,
-  language,
+  config,
 }: {
   inputs: PassCreationRules
   len: number
-  language: Language
+  config: StringsConfig
 }): string {
-  const {
-    generationStrings: {
-      specialsAndNums,
-      characters,
-      charsWithNumbers,
-      charactersAndSpecialCharacters,
-    },
-  } = getConfig(language)
+  const { specialsAndNums, characters, charsWithNumbers, charactersAndSpecialCharacters } = config
 
   if (inputs.randomChars.selected && inputs.numbers.selected) {
     return createFromString(specialsAndNums, len)
@@ -151,41 +142,37 @@ function handleRandomCharStrings({
  * Creates a randomised string of characters from an input string
  */
 const createFromString = (stringToUse: string, len: number): string => {
-  const numArr = generateRandomArray({ len, min: 0, max: stringToUse.length - 1 })
-  const charArr = stringToUse.split("")
+  const numArr = generateRandomArray(len, 0, stringToUse.length - 1)
+  const stringArr: string[] = new Array(numArr.length)
 
-  const stringArr: string[] = []
-  numArr.forEach((_num, i) => {
-    return stringArr.push(charArr[numArr[i]])
-  })
+  for (let i = 0; i < numArr.length; i++) {
+    // biome-ignore lint/style/noNonNullAssertion: wtf it's a damn forloop!!
+    stringArr[i] = stringToUse[numArr[i]!]!
+  }
 
   return stringArr.join("")
 }
 
-const validateStringToBeValidNumber = ({
-  passLength,
-  min,
-  max,
-}: {
-  passLength: PassLength
-  min: number
-  max: number
-}): number => {
+const validateStringToBeValidNumber = (
+  passLength: PassLength,
+  min: number,
+  max: number,
+): number => {
   const errors = validationErrorMessages(min, max)
+
+  if (passLength === undefined || passLength === null) {
+    // Since there is a default value, this will probably never be hit
+    throw new Error(errors.nullOrUndefined)
+  }
 
   if (typeof passLength !== "string" && typeof passLength !== "number") {
     throw new Error(errors.notStringOrNumber)
   }
 
-  if (passLength == null) {
-    // Since there is a default value, this will probably never be hit
-    throw new Error(errors.nullOrUndefined)
-  }
-
   if (Number.isNaN(passLength)) {
     throw new Error(errors.notNumericStringOrNumber)
   }
-  const strAsNumber = typeof passLength === "string" ? parseInt(passLength, 10) : passLength
+  const strAsNumber = typeof passLength === "string" ? Number.parseInt(passLength, 10) : passLength
 
   if (Number.isNaN(strAsNumber)) {
     throw new Error(errors.notNumericStringOrNumber)
@@ -206,39 +193,37 @@ const validateStringToBeValidNumber = ({
   return Math.round(strAsNumber)
 }
 
+const someCharToUpper = (someStr: string): string => {
+  const len = someStr.length
+  const arr = generateRandomArray(len - 1, 0, len)
+
+  const strArr = someStr.split("")
+  for (let i = 0; i < arr.length; i++) {
+    if (i < len) {
+      // biome-ignore lint/style/noNonNullAssertion: It is literally there 🤞
+      strArr[i] = strArr[i]!.toUpperCase()
+    }
+  }
+
+  return strArr.join("")
+}
+
 /**
  * converts a single character from either a string or an array of strings to uppercase
  */
-const toUppercase = (stringToUpper: string[] | string): string | string[] => {
-  const someCharToUpper = (someStr: string): string => {
-    const len = someStr.length
-    // so that there is always at least ONE char left lowercase
-    // (of course not possible if contains nums or specials...) we do "len - 1" for the arrays length
-    const arr = generateRandomArray({ len: len - 1, min: 0, max: len })
-
-    const strArr = someStr.split("")
-    arr.forEach((i) => {
-      if (i < len) {
-        strArr[i] = strArr[i].toUpperCase()
-      }
-    })
-
-    return strArr.join("")
-  }
-
+function toUppercase(stringToUpper: string): string
+function toUppercase(stringToUpper: string[]): string[]
+function toUppercase(stringToUpper: string[] | string): string | string[] {
   if (typeof stringToUpper === "string") {
     return someCharToUpper(stringToUpper)
   }
 
-  const strArr: string[] = []
-  stringToUpper.map((stringArr) => {
-    return strArr.push(someCharToUpper(stringArr))
+  return stringToUpper.map((stringArr) => {
+    return someCharToUpper(stringArr)
   })
-
-  return strArr
 }
 
-const isNumberRangeValid = ({ min, max }: { min: number; max: number }) => min < max
+const isNumberRangeValid = (min: number, max: number) => min < max
 
 const calculateRequestBytes = (range: number): number => {
   return Math.ceil(Math.log2(range) / 8)
@@ -254,18 +239,24 @@ function generateRandomValueFromBytes(requestBytes: number): number {
     val = 0
 
     for (let i = 0; i < requestBytes; i++) {
-      val = (val << 8) + arr[i]
+      // biome-ignore lint/style/noNonNullAssertion: let's not check this
+      val = (val << 8) + arr[i]!
     }
   } while (val >= maxNum - (maxNum % requestBytes))
 
   return val
 }
 
-// Generate a random integer  with equal chance in min <= r < max. courtesy of https://stackoverflow.com/questions/41437492/how-to-use-window-crypto-getrandomvalues-to-get-random-values-in-a-specific-rang
-function generateRandomNumberInRange({ min, max }: { min: number; max: number }): number {
-  const { notValidRange } = validationErrorMessages(min, max)
-
-  if (!isNumberRangeValid({ min, max })) {
+/**
+ * Generate a random integer with equal chance in min <= r < max.
+ * @param min minimum value for the integer
+ * @param max maximum value for the integer
+ * @returns random integer
+ * @link https://stackoverflow.com/questions/41437492/how-to-use-window-crypto-getrandomvalues-to-get-random-values-in-a-specific-rang
+ */
+function generateRandomNumberInRange(min: number, max: number): number {
+  if (!isNumberRangeValid(min, max)) {
+    const { notValidRange } = validationErrorMessages(min, max)
     throw new Error(notValidRange)
   }
 
@@ -284,18 +275,10 @@ function generateRandomNumberInRange({ min, max }: { min: number; max: number })
 /**
  * generates an array of random numbers between min and max, with length 'len'
  */
-function generateRandomArray({
-  len,
-  min,
-  max,
-}: {
-  len: number
-  min: number
-  max: number
-}): number[] {
-  const arr = []
+function generateRandomArray(len: number, min: number, max: number): number[] {
+  const arr = new Array<number>(len)
   for (let i = 0; i < len; i++) {
-    arr.push(...[generateRandomNumberInRange({ min, max })])
+    arr[i] = generateRandomNumberInRange(min, max)
   }
   return arr
 }
@@ -304,7 +287,7 @@ function generateRandomArray({
  * from an string[], capitalize any strings first letter
  */
 function capitalizeFirstLetter(stringArrToConvert: string[] | undefined): string[] {
-  if (stringArrToConvert == null) {
+  if (!stringArrToConvert) {
     throw new Error(`Error capitalising string: ${stringArrToConvert}`)
   }
   const convertedArr = stringArrToConvert.map((word) => {
@@ -319,19 +302,15 @@ function capitalizeFirstLetter(stringArrToConvert: string[] | undefined): string
 function getRandomWordsFromDataset(length: number, stringDataset: string[]): string[] {
   const maxCount = stringDataset.length - 1 // the max word count in [language].json
 
-  const randomNumsArray = generateRandomArray({ len: length, min: 0, max: maxCount })
+  const randomNumsArray = generateRandomArray(length, 0, maxCount)
 
-  const sanaArray: string[] = []
+  const sanaArray: string[] = new Array(length)
 
-  for (const num of randomNumsArray) {
-    try {
-      sanaArray.push(stringDataset[num])
-    } catch (error) {
-      // sometimes capitalizeFirstLetter function returns undefined, so catch that here.
-      // Should really not propagate this far.
-      throw new Error("Error pushing dataset values")
-    }
+  for (let i = 0; i < length; i++) {
+    // biome-ignore lint/style/noNonNullAssertion: it's fine I'm sure
+    sanaArray[i] = stringDataset[randomNumsArray[i]!]!
   }
+
   return sanaArray
 }
 
@@ -339,12 +318,12 @@ function getRandomWordsFromDataset(length: number, stringDataset: string[]): str
  * adds a random number at the end of some string in an array
  */
 const addRandomNumberToString = (stringArr: string[] | undefined): string[] => {
-  if (stringArr == null) {
+  if (!stringArr) {
     throw new Error(generationErrors.noStringArrayForAddingNumber)
   }
 
-  const indexToSelect = generateRandomNumberInRange({ min: 0, max: stringArr.length })
-  const numToPadWith = generateRandomNumberInRange({ min: 0, max: 10 }).toString()
+  const indexToSelect = generateRandomNumberInRange(0, stringArr.length)
+  const numToPadWith = generateRandomNumberInRange(0, 10).toString()
 
   const updatedArray = stringArr.map((str, i) => {
     if (i === indexToSelect) {

@@ -1,11 +1,5 @@
 let version = 1
 
-export interface User {
-  id: string
-  name: string
-  email: string
-}
-
 export enum Stores {
   Languages = "languages",
 }
@@ -22,7 +16,6 @@ export const initDB = (): Promise<boolean> => {
 
       // if the data object store doesn't exist, create it
       if (!db.objectStoreNames.contains(Stores.Languages)) {
-        console.log("Creating languages store")
         db.createObjectStore(Stores.Languages)
       }
       // no need to resolve here
@@ -31,7 +24,6 @@ export const initDB = (): Promise<boolean> => {
     request.onsuccess = () => {
       const db = request.result
       version = db.version
-      console.log("request.onsuccess - initDB", version)
       resolve(true)
     }
 
@@ -46,7 +38,6 @@ export const setData = <T>(storeName: Stores, data: T, key: string): Promise<T |
     const request = indexedDB.open(dbName, version)
 
     request.onsuccess = () => {
-      console.log("request.onsuccess - addData")
       const db = request.result
       const tx = db.transaction(storeName, "readwrite")
       const store = tx.objectStore(storeName)
@@ -65,37 +56,34 @@ export const setData = <T>(storeName: Stores, data: T, key: string): Promise<T |
   })
 }
 
+export const deleteKey = (storeName: Stores, key: string): Promise<undefined | "failed"> => {
+  return new Promise((resolve) => {
+    const request = indexedDB.open(dbName, version)
+
+    request.onsuccess = () => {
+      const db = request.result
+      const tx = db.transaction(storeName, "readwrite")
+      const store = tx.objectStore(storeName)
+      const res = store.delete(key)
+      res.onerror = () => resolve("failed")
+      res.onsuccess = () => resolve(res.result)
+    }
+  })
+}
+
 export function getDataForKey<T = string[]>(
   storeName: Stores,
   key: string,
 ): Promise<T | undefined> {
   return new Promise((resolve) => {
     const request = indexedDB.open(dbName)
-    request.onsuccess = (event) => {
-      console.log("request.onsuccess - getDataForKey")
+    request.onsuccess = () => {
       const db = request.result
       const tx = db.transaction(storeName, "readonly")
       const store = tx.objectStore(storeName)
       const res = store.get(key) as IDBRequest<T | undefined>
 
       res.onsuccess = () => resolve(res.result)
-    }
-  })
-}
-
-export const getStoreData = <T>(storeName: Stores): Promise<T[]> => {
-  return new Promise((resolve) => {
-    const request = indexedDB.open(dbName)
-
-    request.onsuccess = () => {
-      console.log("request.onsuccess - getStoreData")
-      const db = request.result
-      const tx = db.transaction(storeName, "readonly")
-      const store = tx.objectStore(storeName)
-      const res = store.getAll()
-      res.onsuccess = () => {
-        resolve(res.result)
-      }
     }
   })
 }

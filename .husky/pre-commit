@@ -1,13 +1,1 @@
-if pnpm test -- --run --coverage; then
-  printf "\nTests ran successfully\n" 
-else
-  printf "\nTests FAILED...\n\n"
-fi;
-
-if pnpm lint; then
-  printf "\nLinting ran successfully\n"
-else
-  printf "\nLinting FAILED, running prettier:format...\n"
-  pnpm prettier:format && printf "\nRan prettier, try commiting again.\n\n"
-  exit 1
-fi
+pnpm run --parallel /^test:\|\lint$/

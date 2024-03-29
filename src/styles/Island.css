@@ -1,77 +1,91 @@
+.IslandAndButton {
+  --island-border-radius: 1.75rem;
+  --island-content-padding: 1rem;
+  --island-bg: oklch(17.3% 0 0);
+  --island-button-width: 2rem;
+  --island-button-icon-size: 1.65rem;
+  --island-button-gap: 0.5rem;
+  --island-safe-zone-button: calc(
+    100vw - var(--island-button-width) - var(--island-button-gap)
+  );
+  position: relative;
+  width: var(--island-container-width);
+
+  /* Move the island for visual balance */
+  margin-right: 1rem;
+}
+
+.IslandAndButton[data-variant="pill"] {
+  .SettingsButton {
+    border: 1px solid rgba(var(--callout-border-rgb), 0.1);
+  }
+
+  .IslandMain {
+    width: 55%;
+  }
+}
+
+.IslandAndButton[data-variant="full"] {
+  .SettingsButton {
+    border: 1px solid rgba(var(--callout-border-rgb), 0);
+    translate: 120% 30%;
+  }
+}
+
+.SettingsButton {
+  position: absolute;
+  top: 0;
+  margin-left: -20%;
+  z-index: 10;
+  left: 100%;
+  background-color: var(--island-bg);
+  color: oklch(100% 0 0);
+  height: var(--island-button-width);
+  width: var(--island-button-width);
+  border-radius: 99px;
+  transition: all 200ms ease-out;
+  cursor: pointer;
+
+  .Icon {
+    margin: auto;
+    width: var(--island-button-icon-size);
+    height: var(--island-button-icon-size);
+    transition: all 300ms ease-out;
+  }
+}
+
+.SettingsButton:focus-visible {
+  box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
+}
+
+.IslandMain {
+  margin: auto;
+  min-width: 0;
+  width: 100%;
+  color: oklch(100% 0 0 / 0.87);
+  /* overflow: clip; */
+  display: flex;
+}
+
 .IslandContainer {
   position: relative;
   display: flex;
   justify-content: center;
 }
 
-.IslandMain {
-  z-index: 2;
-  --island-border-radius: 1.75rem;
-  --island-content-padding: 1.125rem;
-  width: clamp(300px, 100dvw, 450px);
-}
-
-.WithButton {
-  gap: 1rem;
-}
-
 .IslandContent {
   position: relative;
   border-radius: var(--island-border-radius);
   padding: var(--island-content-padding);
-  color: #636363;
-  border: 1px solid rgba(var(--skeleton-glow), 1);
-  overflow: hidden;
+  overflow: clip;
   width: 100%;
   display: flex;
   align-items: center;
-  box-shadow: -10px 0px 15px 0px rgba(var(--skeleton-glow), 0.3);
-}
-
-.IslandBackground {
-  display: flex;
-  user-select: none;
-  -webkit-user-select: none;
-  width: 100%;
-  overflow: hidden;
-  justify-content: space-between;
-  border-radius: calc(var(--island-border-radius));
-  border: 1px solid rgba(var(--skeleton-glow), 1);
-  background-color: rgba(var(--form-bg-rgb), 0.5);
-  --back-blur: 10px;
-  backdrop-filter: blur(var(--back-blur));
-  -webkit-backdrop-filter: blur(var(--back-blur));
-  box-shadow: 1px 4px 14px 2px rgba(var(--skeleton-glow), 1);
-}
-
-.IslandBackground:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 2px rgba(var(--foreground-rgb), 0.75);
-}
-
-.IslandGenerateButton {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0rem 1rem;
+  transition: all 200ms ease-out;
 }
 
 .IslandPillButton {
   cursor: pointer;
-}
-
-.PillIsland {
-  max-height: 0;
-}
-
-.FullIsland {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.Refresh {
-  color: rgb(180, 180, 180);
 }
 
 .StrengthBar {
@@ -81,19 +95,25 @@
   border-radius: 32px;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .IslandGenerateButton:focus-visible {
-    border: 1px solid rgba(var(--skeleton-glow), 0.1);
-  }
-}
-
 @media (max-width: 700px) {
+  .IslandAndButton {
+    --island-button-width: 3.25rem;
+    --island-button-icon-size: 1.75rem;
+    margin-right: 0;
+  }
+
+  .SettingsButton {
+    margin-left: -3rem;
+
+    .Icon {
+      scale: 1.35;
+      top: 0.75rem;
+      left: 0.75rem;
+    }
+  }
+
   .IslandMobileBackground {
     border-radius: calc(var(--island-border-radius) + 0.5rem);
-  }
-
-  .IslandGenerateButton {
-    padding: 0.5rem 1.25rem;
   }
 
   .IslandContent {
@@ -101,24 +121,30 @@
     padding: calc(var(--island-content-padding) + 0.5rem);
   }
 
-  .PillIsland {
-    background-color: rgba(var(--form-bg-rgb), 0.5);
+  .IslandAndButton[data-variant="pill"] {
+    .SettingsButton {
+      border: 1px solid rgba(var(--callout-border-rgb), 0.1);
+    }
+
+    .IslandMain {
+      width: calc(100% - var(--island-button-width) * 1.1);
+    }
   }
 
-  .IslandPillButton {
-    user-select: none;
-    -webkit-user-select: none;
-    border-radius: 1rem;
-    padding: 1rem 1.5rem;
-    background-color: rgba(var(--form-bg-rgb), 0.9);
+  .IslandAndButton[data-variant="full"] {
+    .SettingsButton {
+      border: 1px solid rgba(var(--callout-border-rgb), 0);
+      background-color: transparent;
+      translate: -20% 20%;
+    }
+  }
+
+  .IslandMain {
+    margin: 0;
   }
 }
 
 @media (prefers-color-scheme: dark) {
-  .IslandContent {
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-
   .IslandBackground {
     box-shadow: none;
   }

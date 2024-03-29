@@ -1,4 +1,1 @@
-if ! pnpm build; then
-  printf "\nBuild FAILED... Aborting push\n\n"
-  exit 1
-fi
+pnpm build:prod

@@ -1,8 +1,7 @@
-import { Share } from "@/Components"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui"
+import { Share } from "@/Components/share"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui/tooltip"
 import { meta } from "@/assets/constants/meta"
-import { LogoIcon } from "@/assets/icons/logoIcon"
-import { useTranslation } from "@/common/utils/getLanguage"
+import { useTranslation } from "@/common/hooks/useLanguage"
 import "@/styles/Credits.css"
 import "@/styles/ui/Tooltip.css"
 
@@ -15,14 +14,11 @@ export const Credits = () => {
       <TooltipProvider delayDuration={300}>
         <Tooltip>
           <TooltipTrigger asChild>
-            <button type="button" className="credits">
-              <LogoIcon loading="lazy" width={20} height={20} className="interact" />
-              <a href={meta.dweUrl} target="_blank" rel="noreferrer">
-                {meta.dweDisplayText}
-              </a>
-            </button>
+            <a className="CreditsLink" href={meta.dweUrl} target="_blank" rel="noreferrer">
+              ©{meta.dweDisplayText}
+            </a>
           </TooltipTrigger>
-          <TooltipContent className="TooltipContent" sideOffset={0} asChild>
+          <TooltipContent className="TooltipContent" sideOffset={10} asChild>
             <span>{t("visitMySite")}</span>
           </TooltipContent>
         </Tooltip>
@@ -34,7 +30,7 @@ export const Credits = () => {
           target="_blank"
           rel="noreferrer"
         >
-          v{version}
+          {version}
         </a>
       ) : null}
       <TooltipProvider delayDuration={300}>

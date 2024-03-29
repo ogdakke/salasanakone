@@ -1,19 +1,15 @@
-import { useTranslation } from "@/common/utils/getLanguage"
-import "@/styles/ReloadPrompt.css"
-import { Refresh } from "iconoir-react"
-import { useState } from "react"
 import { useRegisterSW } from "virtual:pwa-register/react"
+import { useTranslation } from "@/common/hooks/useLanguage"
+import "@/styles/ReloadPrompt.css"
+import { Xmark } from "iconoir-react"
+import { useState } from "react"
 
 const refreshSW = (registration?: ServiceWorkerRegistration) => {
-  console.log(`Needs refresh, clearing localstorage...`)
-  window.localStorage.clear()
-  console.log("localStorage cleared successfully.")
   const error = new Error("No registation passed")
   return registration ? registration : error
 }
 
 const noRefreshNeeded = (registation?: ServiceWorkerRegistration) => {
-  console.log("No refresh needed.")
   return registation
 }
 
@@ -30,7 +26,6 @@ function ReloadPrompt() {
         refreshSW(r)
       }
       noRefreshNeeded(r)
-      console.log("Registered worker successfully.")
     },
     onRegisterError(error) {
       console.error(error, "Failed to register worker.")
@@ -56,27 +51,24 @@ function ReloadPrompt() {
           {needRefresh ? (
             <button
               type="button"
-              className="ToastButton inputButton"
+              className="ToastButton"
               onClick={() => {
-                console.log("Click: => updateServiceWorker()")
                 updateServiceWorker(true).catch(console.error)
               }}
             >
-              <Refresh width={20} height={20} />
               {t("update")}
             </button>
           ) : null}
           {offlineReady && !needRefresh ? (
             <button
               type="button"
-              className={"ToastButton inputButton"}
+              className="DismissToast"
               onClick={() => {
-                console.log("Click: => close()")
                 setIsTrue(true)
                 close()
               }}
             >
-              {t("ok")}
+              <Xmark className="Icon" width={20} height={20} />
             </button>
           ) : null}
         </div>

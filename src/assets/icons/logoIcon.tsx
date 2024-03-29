@@ -1,6 +1,7 @@
 export const LogoIcon = ({ ...props }, size: { width: number; height: number }) => {
   const { width, height } = size
   return (
+    // biome-ignore lint/a11y/noSvgWithoutTitle: what
     <svg
       id="svgProfileImage"
       width={width}

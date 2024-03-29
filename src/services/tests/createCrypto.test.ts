@@ -1,5 +1,5 @@
 import { getConfig, validationErrorMessages } from "@/config"
-import { InputType, PassCreationRules } from "@/models"
+import type { InputType, PassCreationRules } from "@/models"
 import { Language } from "@/models/translations"
 import { createPassphrase } from "@/services/createCrypto"
 import { describe, expect, it } from "vitest"
@@ -30,6 +30,7 @@ const config = getConfig(defaultConfig.language)
 const { minLengthForChars, maxLengthForChars, minLengthForWords, maxLengthForWords } = config
 let variableMinLength = minLengthForChars
 let variableMaxLength = maxLengthForChars
+
 const testData = (testConfig: TestConfig = {}): PassCreationRules => {
   const {
     word,
@@ -48,25 +49,21 @@ const testData = (testConfig: TestConfig = {}): PassCreationRules => {
   return {
     words: {
       inputType: "radio",
-      info: "useWordsInfo",
       selected: word || false, //If this is false, it will return a random string of characters
       value: "",
     },
     randomChars: {
       inputType: inputType || "input",
-      info: "useCharactersInfo",
       selected: randomCharactersInString || false,
       value: inputFieldValueFromUser, //this only should apply if word === true
     },
     uppercase: {
       inputType: "checkbox",
-      info: "useUppercaseInfo",
       selected: uppercaseCharacters || false,
       value: "",
     },
     numbers: {
       inputType: "checkbox",
-      info: "useNumbersInfo",
       selected: numbers || false,
       value: "",
     },
@@ -77,7 +74,12 @@ const errors = validationErrorMessages(variableMinLength, variableMaxLength)
 describe("createPassphrase() creates a random string with correct length", () => {
   it("should return a string with correct length", () => {
     expect(
-      createPassphrase({ dataset, language, passLength: 10, inputs: testData() }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: 10,
+        inputs: testData(),
+      }),
     ).toHaveLength(10)
     expect(
       createPassphrase({
@@ -98,7 +100,12 @@ describe("createPassphrase() creates a random string with correct length", () =>
 
     /**weird values, but they are number */
     expect(
-      createPassphrase({ dataset, language, passLength: "007A", inputs: testData() }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: "007A",
+        inputs: testData(),
+      }),
     ).toHaveLength(7)
     expect(
       createPassphrase({
@@ -109,7 +116,12 @@ describe("createPassphrase() creates a random string with correct length", () =>
       }),
     ).toHaveLength(12)
     expect(
-      createPassphrase({ dataset, language, passLength: "10.5", inputs: testData() }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: "10.5",
+        inputs: testData(),
+      }),
     ).toHaveLength(10)
   })
 
@@ -119,7 +131,29 @@ describe("createPassphrase() creates a random string with correct length", () =>
 
   it("should reject invalid values even if no dataset supplied", () => {
     expect(() =>
-      createPassphrase({ language, passLength: 400, inputs: testData({ word: false }) }),
+      createPassphrase({
+        language,
+        // @ts-expect-error testing
+        passLength: undefined,
+        inputs: testData({ word: false }),
+      }),
+    ).toThrow(errors.nullOrUndefined)
+
+    expect(() =>
+      createPassphrase({
+        language,
+        // @ts-expect-error testing
+        passLength: null,
+        inputs: testData({ word: false }),
+      }),
+    ).toThrow(errors.nullOrUndefined)
+
+    expect(() =>
+      createPassphrase({
+        language,
+        passLength: 400,
+        inputs: testData({ word: false }),
+      }),
     ).toThrow(errors.tooLong)
 
     expect(() =>
@@ -129,36 +163,76 @@ describe("createPassphrase() creates a random string with correct length", () =>
 
   it("should return a string with length maxLengthForChars", () => {
     expect(
-      createPassphrase({ dataset, language, passLength: maxLengthForChars, inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: maxLengthForChars,
+        inputs: testData({}),
+      }),
     ).toHaveLength(maxLengthForChars)
   })
 
   it("should throw errors on a string with weird values", () => {
     /** Testing parsing of strings */
     expect(() =>
-      createPassphrase({ dataset, language, passLength: "huh?", inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: "huh?",
+        inputs: testData({}),
+      }),
     ).toThrowError(errors.notNumericStringOrNumber)
 
     expect(() =>
-      createPassphrase({ dataset, language, passLength: "-1", inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: "-1",
+        inputs: testData({}),
+      }),
     ).toThrowError(errors.smallerThanOne)
     expect(() =>
-      createPassphrase({ dataset, language, passLength: "1200", inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: "1200",
+        inputs: testData({}),
+      }),
     ).toThrowError(errors.tooLong)
 
     expect(() =>
-      createPassphrase({ dataset, language, passLength: "3", inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: "2",
+        inputs: testData({}),
+      }),
     ).toThrowError(errors.tooShort)
 
     /** Testing Numbers */
     expect(() =>
-      createPassphrase({ dataset, language, passLength: -1, inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: -1,
+        inputs: testData({}),
+      }),
     ).toThrowError(errors.smallerThanOne)
     expect(() =>
-      createPassphrase({ dataset, language, passLength: Infinity, inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: Number.POSITIVE_INFINITY,
+        inputs: testData({}),
+      }),
     ).toThrowError(errors.tooLong)
     expect(() =>
-      createPassphrase({ dataset, language, passLength: NaN, inputs: testData({}) }),
+      createPassphrase({
+        dataset,
+        language,
+        passLength: Number.NaN,
+        inputs: testData({}),
+      }),
     ).toThrowError(errors.notNumericStringOrNumber)
   })
 })
@@ -171,9 +245,14 @@ describe("Generated string includes certain characters based on user input", () 
     expect(regExp.test("12jkasfäööä34")).toStrictEqual(false)
     expect(regExp.test("12jkasfä€öö.ä34_*")).toStrictEqual(false)
 
-    expect(createPassphrase({ dataset, language, passLength: "10", inputs: testData({}) })).toMatch(
-      regExp,
-    )
+    expect(
+      createPassphrase({
+        dataset,
+        language,
+        passLength: "10",
+        inputs: testData({}),
+      }),
+    ).toMatch(regExp)
   })
 
   it("Should include at least one uppercase character", () => {
@@ -269,7 +348,11 @@ describe("Generated string includes certain characters based on user input", () 
         dataset,
         language,
         passLength: "5",
-        inputs: testData({ word: true, randomCharactersInString: true, numbers: true }),
+        inputs: testData({
+          word: true,
+          randomCharactersInString: true,
+          numbers: true,
+        }),
       }),
     ).toMatch(regExp)
   })

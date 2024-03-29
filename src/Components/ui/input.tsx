@@ -2,7 +2,7 @@ import * as React from "react"
 
 import "@/styles/ui/Input.css"
 
-export type InputProps = React.InputHTMLAttributes<HTMLInputElement>
+type InputProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const InputComponent = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className = "", ...props }, ref) => {

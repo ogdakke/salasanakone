@@ -1,4 +1,4 @@
-import { Language, Translations } from "@/models/translations"
+import { Language, type Translations } from "@/models/translations"
 
 export const en: Translations = {
   salasanakone: "Passphrase Generator",
@@ -24,7 +24,7 @@ export const en: Translations = {
   strengthGood: "",
   strengthGreat: "",
   loadingStrength: "Calculating...",
-  timeToCrack: "Estimated time to crack",
+  timeToCrack: "Time to crack",
   lengthOfPassPhrase: "{passLength} words",
   lengthOfPassWord: "{passLength} characters",
   leaveFeedback: "",
@@ -37,7 +37,7 @@ export const en: Translations = {
   errorNoGeneration: "Something went wrong... No password was generated",
   tryToRefresh: "Try to refresh the site",
   updateToNewVersion: "A new version is available! Please click to refresh",
-  worksOffline: "The app now works offline",
+  worksOffline: "The app now also works offline.",
   somethingWentWrong: "Something went wrong",
   editResult: "Edit",
   editResultDesc: "Edit and check a custom passphrase",
@@ -59,6 +59,18 @@ export const en: Translations = {
   copied: "Copied to clipboard",
   [Language.en]: "English",
   [Language.fi]: "Suomi",
+  errorInFetchingDataset: "Error in fetching wordlist, try again later.",
+  fetchDatasetTooltip:
+    "You have deleted the wordlist for this language. Download it from the settings or change language",
+  settingsTitle: "Settings and strength",
+  storageUsed: "Storage",
+  storageUsedDesc: "Site's estimated storage usage is {storage} Megabytes",
+  megaByte: "MB",
+  guessesNeeded: "Guesses needed",
+  scoreDescription: "The password's strength on a scale of 0 to 4 is now {score}",
+  manageLanguages: "Manage languages",
+  deleteDataset: "Delete wordlist: {language}",
+  downloadDataset: "Download wordlist for {language}",
 }
 
 export const fi = {
@@ -68,7 +80,7 @@ export const fi = {
   new: "Uusi",
   tryAgain: "Yritä uudelleen",
   useWords: "Salalause",
-  useCharacters: "Normaali salasana",
+  useCharacters: "Salasana",
   useUppercase: "Isot kirjaimet",
   useNumbers: "Numerot",
   useSeparator: "Välimerkit",
@@ -121,4 +133,16 @@ export const fi = {
   copied: "Kopioitu leikepöydälle",
   [Language.en]: "English",
   [Language.fi]: "Suomi",
+  errorInFetchingDataset: "Virhe haettaessa sanalistaa, yritä myöhemmin uudelleen.",
+  fetchDatasetTooltip:
+    "Olet poistanut tämän kielen sanalistan, lataa se uudelleen asetuksista tai vaihda kieltä.",
+  settingsTitle: "Vahvuus ja asetukset",
+  storageUsed: "Tallennustila",
+  storageUsedDesc: "Sivuston arvioitu tallennustilan käyttö on {storage} Megatavua",
+  megaByte: "Mt",
+  guessesNeeded: "Arvauksia tarvitaan",
+  scoreDescription: "Salasanan vahvuus asteikolla 0-4 on nyt {score}",
+  manageLanguages: "Hallitse kieliä",
+  deleteDataset: "Poista sanalista kielelle {language}",
+  downloadDataset: "Lataa sanalista kielelle {language}",
 } as const

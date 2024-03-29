@@ -1,5 +1,9 @@
-import styles from "../../styles/modules/Divider.module.css"
+import type { FC, HTMLProps } from "react"
 
-export const Divider = (margin: { margin: string }, { ...props }) => {
-  return <hr className={styles.divider} style={{ margin: margin.margin }} {...props} />
+interface DividerProps extends HTMLProps<HTMLHRElement> {
+  margin?: string
+}
+
+export const Divider: FC<DividerProps> = ({ margin, ...props }) => {
+  return <hr className="divider" style={{ margin: margin, ...props.style }} {...props} />
 }

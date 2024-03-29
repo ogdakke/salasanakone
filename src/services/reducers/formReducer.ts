@@ -1,20 +1,9 @@
-import { defaultFormValues, defaultSliderValue } from "@/config"
-import { FormState, InputValue, PassCreationRules } from "@/models"
-import { Language } from "@/models/translations"
+import { initialFormState } from "@/config/form-config/form-state.config"
+import type { FormState, InputValue, PassCreationRules } from "@/models"
+import type { Language } from "@/models/translations"
 
-export const initialFormState: FormState = {
-  formValues: defaultFormValues,
-  sliderValue: defaultSliderValue,
-  language: Language.fi,
-  isDisabled: false,
-  isEditing: false,
-  dataset: {
-    hasDeletedDatasets: false,
-    noDatasetFetched: false,
-  },
-}
-
-export enum FormActionKind {
+enum FormActionKind {
+  SET_FORM_STATE = "setFormState",
   SET_FORM_VALUES = "setFormValues",
   SET_FORM_FIELD = "setFormField",
   SET_SLIDERVALUE = "setSlidervalue",
@@ -26,7 +15,10 @@ export enum FormActionKind {
 }
 
 /** Actions */
-export type SetSliderValueAction = { type: FormActionKind.SET_SLIDERVALUE; payload: number }
+type SetSliderValueAction = {
+  type: FormActionKind.SET_SLIDERVALUE
+  payload: number
+}
 type SetFormFieldAction = {
   type: FormActionKind.SET_FORM_FIELD
   payload: {
@@ -36,13 +28,16 @@ type SetFormFieldAction = {
     value?: InputValue["value"]
   }
 }
+
 type SetDatasetFieldsAction = {
   type: FormActionKind.SET_DATASET_FIELDS
   payload: FormState["dataset"]
 }
-type SetLanguageAction = { type: FormActionKind.SET_LANGUAGE; payload: Language }
 
+type SetLanguageAction = { type: FormActionKind.SET_LANGUAGE; payload: Language }
+type SetFormStateAction = { type: FormActionKind.SET_FORM_STATE; payload: FormState }
 export type FormActions =
+  | SetFormStateAction
   | { type: FormActionKind.SET_FORM_VALUES; payload: PassCreationRules }
   | SetFormFieldAction
   | SetSliderValueAction
@@ -54,6 +49,8 @@ export type FormActions =
 
 export default function reducer(state: FormState, action: FormActions): FormState {
   switch (action.type) {
+    case FormActionKind.SET_FORM_STATE:
+      return action.payload
     case FormActionKind.SET_FORM_VALUES:
       return { ...state, formValues: action.payload }
     case FormActionKind.SET_FORM_FIELD:
@@ -105,28 +102,12 @@ export default function reducer(state: FormState, action: FormActions): FormStat
       return state
   }
 }
-
-export const setSlidervalue = (value: number): SetSliderValueAction => ({
-  type: FormActionKind.SET_SLIDERVALUE,
-  payload: value,
-})
-
-export const setFormField = (payload: SetFormFieldAction["payload"]): SetFormFieldAction => ({
-  type: FormActionKind.SET_FORM_FIELD,
-  payload,
-})
-
-export const setEditing = (payload: boolean) => ({
-  type: FormActionKind.SET_EDITING,
-  payload,
-})
-
 export const setLanguage = (payload: Language): SetLanguageAction => ({
   type: FormActionKind.SET_LANGUAGE,
   payload,
 })
 
-export const setDatasetFields = (payload: FormState["dataset"]): SetDatasetFieldsAction => ({
-  type: FormActionKind.SET_DATASET_FIELDS,
-  payload,
+export const resetFormState = (): SetFormStateAction => ({
+  type: FormActionKind.SET_FORM_STATE,
+  payload: initialFormState,
 })
