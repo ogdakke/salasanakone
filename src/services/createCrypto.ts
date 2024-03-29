@@ -198,13 +198,12 @@ const someCharToUpper = (someStr: string): string => {
   const arr = generateRandomArray(len - 1, 0, len)
 
   const strArr = someStr.split("")
-  // biome-ignore lint/complexity/noForEach: <explanation>
-  arr.forEach((i) => {
+  for (let i = 0; i < arr.length; i++) {
     if (i < len) {
       // biome-ignore lint/style/noNonNullAssertion: It is literally there 🤞
       strArr[i] = strArr[i]!.toUpperCase()
     }
-  })
+  }
 
   return strArr.join("")
 }

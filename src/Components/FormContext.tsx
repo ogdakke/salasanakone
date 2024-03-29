@@ -13,7 +13,7 @@ import { Stores, getDataForKey, setData } from "@/services/database/db"
 import { setFormState } from "@/services/database/state"
 import reducer, { resetFormState, setLanguage } from "@/services/reducers/formReducer"
 import { del, get } from "idb-keyval"
-import { type ReactNode, useCallback, useState } from "react"
+import { type ReactNode, useCallback, useRef, useState } from "react"
 
 const isDev = import.meta.env.DEV
 const API_URL = isDev ? "http://localhost:8787" : import.meta.env.VITE_API_URL
@@ -124,7 +124,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
       }
       const dataset = await fetchDataset(state.language)
 
-      if (dataset && Array.isArray(dataset)) {
+      if (dataset) {
         temp_dataset = { language: state.language, dataset }
         return createPassphrase({
           passLength: validatedLength,
@@ -144,7 +144,16 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
     })
   }
 
+  const lastAbortController = useRef<AbortController>()
+
   const fetchDataset = async (lang: Language): Promise<string[] | undefined> => {
+    if (lastAbortController.current) {
+      lastAbortController.current.abort()
+    }
+
+    const currentAbortController = new AbortController()
+    lastAbortController.current = currentAbortController
+
     try {
       const datasetFromDB = await getDataForKey(Stores.Languages, lang)
       if (datasetFromDB) {
@@ -158,13 +167,14 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
         // Dataset has failed fetching before, so don't refetch it
         // TODO: some more logic to handle retries of fetching after some time
         handleFetchError(lang)
+        currentAbortController.abort()
         return undefined
       }
       // Set the password undefined to trigger loading state on fetch only - preventing a flash on DB lang change
       setFinalPassword({ isEdited: false, passwordValue: undefined })
 
       const url = `${API_URL}/dataset/${lang}`
-      const response = await fetch(url)
+      const response = await fetch(url, { signal: currentAbortController.signal })
 
       // TODO handle aborting the fetch when language changes or something idfk
       if (!response.ok) {

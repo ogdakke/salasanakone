@@ -1,3 +1,4 @@
+import type { HighlightCondition } from "@/Components/ui/utils/highlight"
 import type { Language } from "@/models/translations"
 import type { FormActions } from "@/services/reducers/formReducer"
 import type { Dispatch } from "react"
@@ -58,3 +59,34 @@ export type CheckerWorkerPostMessageData =
       strValue: string
     }
   | Language
+
+export type CopyConditions = {
+  isCopied: boolean
+  copyIconShouldAnimate: boolean
+  copyIconIsHidden: boolean
+}
+
+export type EditorProps = {
+  handleSave: (stringToSave?: string) => void
+}
+
+export type ResultNoEditProps = {
+  handleCopyClick: (finalPassword: string) => Promise<void>
+  finalPassword: string
+  highlightConditions: HighlightCondition[]
+  conditions: CopyConditions
+}
+
+export type CopiedButtonProps = {
+  conditions: CopyConditions
+  handleCopyClick: (finalPassword: string) => Promise<void>
+}
+
+export type EditButtonProps = {
+  handleEditClick: () => void
+}
+
+export type InputContextProps = {
+  inputValue?: string
+  setInputValue: React.Dispatch<React.SetStateAction<string | undefined>>
+}

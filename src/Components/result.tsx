@@ -2,16 +2,25 @@ import { InputComponent } from "@/Components/ui/input"
 import { Loading } from "@/Components/ui/loading"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui/tooltip"
 import { type HighlightCondition, Highlighter } from "@/Components/ui/utils/highlight"
+import { Features } from "@/assets/constants/features"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
 import { ResultContext } from "@/common/providers/ResultProvider"
 import { getConfig } from "@/config"
+import type {
+  CopiedButtonProps,
+  CopyConditions,
+  EditButtonProps,
+  EditorProps,
+  InputContextProps,
+  ResultNoEditProps,
+} from "@/models"
 import { Language } from "@/models/translations"
 import copyToClipboard from "@/services/copyToClipboard"
 import "@/styles/Result.css"
 import { type Transition, motion } from "framer-motion"
 import { Check, ClipboardCheck, EditPencil, OpenSelectHandGesture } from "iconoir-react"
-import { type ReactNode, createContext, useContext, useEffect, useState } from "react"
+import { type ReactNode, createContext, useContext, useEffect, useRef, useState } from "react"
 
 enum EditorState {
   EDITOR = "editor",
@@ -43,35 +52,9 @@ const highlightSpecials: HighlightCondition = {
   },
 }
 
-type CopyConditions = {
-  isCopied: boolean
-  copyIconShouldAnimate: boolean
-  copyIconIsHidden: boolean
-}
-
-type EditorProps = {
-  handleSave: (stringToSave?: string) => void
-}
-
-type ResultNoEditProps = {
-  handleCopyClick: (finalPassword: string) => Promise<void>
-  finalPassword: string
-  highlightConditions: HighlightCondition[]
-  conditions: CopyConditions
-}
-
-type CopiedButtonProps = {
-  conditions: CopyConditions
-  handleCopyClick: (finalPassword: string) => Promise<void>
-}
-
-type EditButtonProps = {
-  handleEditClick: () => void
-}
-
-type InputContextProps = {
-  inputValue?: string
-  setInputValue: React.Dispatch<React.SetStateAction<string | undefined>>
+function handleFeature(feature: Features) {
+  const prev = localStorage.getItem(feature) === "true"
+  localStorage.setItem(feature, String(!prev))
 }
 
 const InputContext = createContext<InputContextProps>({
@@ -157,6 +140,10 @@ const Result = () => {
     if (!value || value.trim().length < 1) {
       return
     }
+    if (value.substring(0, 3) === Features.Prefix) {
+      handleFeature(value.substring(3, value.length) as Features)
+    }
+
     setInputValue(value)
     changeToResult()
     setFinalPassword({ passwordValue: value, isEdited: true })
@@ -301,10 +288,10 @@ const Editor = ({ handleSave }: EditorProps) => {
   const { t } = useTranslation()
   const { setInputValue } = useContext(InputContext)
   const { passwordValue } = useContext(ResultContext).finalPassword
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const handleFocusingInput = () => {
-    document.getElementById("resultInput")?.focus()
-    return () => {}
+    inputRef.current?.focus()
   }
 
   return (
@@ -316,7 +303,7 @@ const Editor = ({ handleSave }: EditorProps) => {
       onClick={handleFocusingInput}
     >
       <InputComponent
-        id="resultInput"
+        ref={inputRef}
         className="ResultInput"
         placeholder={t("resultInputPlaceholder").toString()}
         defaultValue={passwordValue}

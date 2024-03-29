@@ -3,6 +3,7 @@ import { NumberListScrollWheel } from "@/Components/numberListScrollWheel"
 import { StrengthCircle } from "@/Components/strengthCircle"
 import { Loading } from "@/Components/ui/loading"
 import { StaggerWords } from "@/Components/ui/staggerWords"
+import { Features } from "@/assets/constants/features"
 import { useTranslation } from "@/common/hooks/useLanguage"
 import { FormContext } from "@/common/providers/FormProvider"
 import { debounce } from "@/common/utils/debounce"
@@ -64,7 +65,6 @@ export const FullIsland = ({ storage, result, fetchStorage }: SettingsIslandProp
       }
 
       fetchStorage()
-
       // If the current language is the one being deleted, dataset cache needs to be invalidated
       if (formState.language === lang) {
         // on deletion success, invalidate cache and generate
@@ -127,6 +127,7 @@ export const FullIsland = ({ storage, result, fetchStorage }: SettingsIslandProp
     isLanguageDeleted(lang) || isLanguageFailed(lang) || !isLanguageFetched(lang)
 
   const crackTimeIdentical = offlineSlowHashing1e4PerSecond === onlineNoThrottling10PerSecond
+  const isFeatureDl = localStorage.getItem(Features.DeleteLanguages) === "true"
 
   return (
     <motion.div
@@ -168,41 +169,43 @@ export const FullIsland = ({ storage, result, fetchStorage }: SettingsIslandProp
               <span className="SecondaryText opacity-75">{t("storageUsed")}</span>
               {storage ? <StorageIndicator storage={storage} /> : null}
             </div>
-            <div className="flex flex-column gap-025">
-              <span className="SecondaryText opacity-75">{t("manageLanguages")}</span>
-              <div className="flex gap-05">
-                {supportedLanguages.map((language) => {
-                  const isDeleted = langCanBeDownLoaded(language)
-                  return (
-                    <button
-                      key={language}
-                      className="LanguageSettingItem"
-                      type="button"
-                      onClick={() => debounceClick(language, isDeleted)}
-                      data-state={isDeleted ? "download" : "delete"}
-                      title={
-                        isDeleted
-                          ? t("downloadDataset", { language: t(language).toString() }).toString()
-                          : t("deleteDataset", { language: t(language).toString() }).toString()
-                      }
-                      value={language}
-                    >
-                      {isDeleted ? (
-                        <ArrowDown
-                          style={{ margin: "1px 2px" }}
-                          className="Icon"
-                          width={14}
-                          height={14}
-                        />
-                      ) : (
-                        <Xmark className="Icon" width={18} height={18} />
-                      )}
-                      <span>{t(language)}</span>{" "}
-                    </button>
-                  )
-                })}
+            {isFeatureDl ? (
+              <div className="flex flex-column gap-025">
+                <span className="SecondaryText opacity-75">{t("manageLanguages")}</span>
+                <div className="flex gap-05">
+                  {supportedLanguages.map((language) => {
+                    const isDeleted = langCanBeDownLoaded(language)
+                    return (
+                      <button
+                        key={language}
+                        className="LanguageSettingItem"
+                        type="button"
+                        onClick={() => debounceClick(language, isDeleted)}
+                        data-state={isDeleted ? "download" : "delete"}
+                        title={
+                          isDeleted
+                            ? t("downloadDataset", { language: t(language).toString() }).toString()
+                            : t("deleteDataset", { language: t(language).toString() }).toString()
+                        }
+                        value={language}
+                      >
+                        {isDeleted ? (
+                          <ArrowDown
+                            style={{ margin: "1px 2px" }}
+                            className="Icon"
+                            width={14}
+                            height={14}
+                          />
+                        ) : (
+                          <Xmark className="Icon" width={18} height={18} />
+                        )}
+                        <span>{t(language)}</span>{" "}
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
+            ) : null}
           </div>
         </div>
       </motion.div>
