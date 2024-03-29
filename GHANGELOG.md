@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [3.1.0](https://github.com/ogdakke/salasanakone/commits/3.1.0) - 29-03-2024
 
+- [#15](https://github.com/ogdakke/salasanakone/pull/16): feature toggle, improvements in creating password, better UI for island
 - [#15](https://github.com/ogdakke/salasanakone/pull/15): Add adjacency graphs and common pkg to zxcvbn, UI improvements, create state.ts, add fetchedDatasets field in state, update dependencies
 - [#14](https://github.com/ogdakke/salasanakone/pull/14): Allow removing datasets, remove state management from reducer, improve island by adding additional data in it, move zxcvbn to a web worker
 - [#13](https://github.com/ogdakke/salasanakone/pull/13): move linting and formatting to biomejs
