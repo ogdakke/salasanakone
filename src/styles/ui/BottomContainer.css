@@ -1,0 +1,14 @@
+.BottomContainer {
+  padding: 0;
+  margin: 0;
+  width: 0;
+  height: 0;
+  z-index: 10;
+}
+
+.BottomContent {
+  position: fixed;
+  bottom: 0;
+  height: fit-content;
+  width: 100%;
+}

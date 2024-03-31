@@ -1,0 +1,9 @@
+.ToolbarContainer {
+  height: 2.25rem;
+  width: 100%;
+  display: flex;
+  background-color: var(--toolbar-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid oklch(74.95% 0 228.8 / 0.1);
+}

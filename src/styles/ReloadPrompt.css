@@ -10,11 +10,9 @@
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  position: relative;
-
+  position: fixed;
   max-width: 360px;
   min-width: 280px;
-  position: fixed;
   right: 0;
   bottom: 0;
   margin: 1.5rem 1rem;

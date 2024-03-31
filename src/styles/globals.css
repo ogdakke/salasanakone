@@ -20,6 +20,7 @@
   --helperTextColor: oklch(28.5% 0 0);
   --form-bg-rgb: 254, 254, 254;
   --skeleton-glow: 240, 240, 240;
+  --toolbar-bg: oklch(0.23 0 0 / 0.7);
 
   --error: 255, 0, 0;
 
@@ -47,6 +48,7 @@
 
   --callout-rgb: 238, 240, 241;
   --callout-border-rgb: 172, 175, 176;
+  --callout-border: oklch(74.95% 0 228.8);
   --card-rgb: 180, 185, 188;
   --card-border-rgb: 131, 134, 135;
 

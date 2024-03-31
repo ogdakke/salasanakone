@@ -1,16 +1,16 @@
 import { Header } from "@/Components/Header"
+import Toolbar from "@/Components/Toolbar"
 import { Description } from "@/Components/description"
 import { ErrorComponent } from "@/Components/errorComponent"
+import FormComponent from "@/Components/form"
 import { ReloadPrompt } from "@/Components/reloadPrompt"
 import { Credits } from "@/Components/ui/credits"
 import { Loading } from "@/Components/ui/loading"
 import { initDB } from "@/services/database/db"
 import "@/styles/App.css"
 import "@/styles/globals.css"
-import React, { Suspense } from "react"
+import { Suspense } from "react"
 import { ErrorBoundary, type FallbackProps } from "react-error-boundary"
-
-const FormComponent = React.lazy(async () => await import("@/Components/form"))
 
 await initDB()
 
@@ -30,6 +30,7 @@ function App() {
         <Credits />
       </main>
       <ReloadPrompt />
+      <Toolbar />
     </>
   )
 }
