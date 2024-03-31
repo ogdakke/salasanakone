@@ -52,6 +52,8 @@ const highlightSpecials: HighlightCondition = {
   },
 }
 
+const highlightConditions = [highlightNumbers, highlightSpecials]
+
 function handleFeature(feature: Features) {
   const prev = localStorage.getItem(feature) === "true"
   localStorage.setItem(feature, String(!prev))
@@ -129,8 +131,6 @@ const Result = () => {
       copyIconIsHidden: true,
     })
   }, [passwordValue])
-
-  const highlightConditions = [highlightNumbers, highlightSpecials]
 
   const handleEditClick = () => {
     changeToEditor()
@@ -270,11 +270,7 @@ const ResultComponentNoEdit = ({
     >
       <span>
         <span className={isCopied ? "copiedSpanText" : "notCopiedSpan"}>
-          {finalPassword.length !== 0 ? (
-            <Highlighter text={finalPassword} highlightConditions={highlightConditions} />
-          ) : (
-            t("errorNoGeneration")
-          )}
+          <Highlighter text={finalPassword} highlightConditions={highlightConditions} />
         </span>
       </span>
     </motion.div>

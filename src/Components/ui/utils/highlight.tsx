@@ -13,6 +13,7 @@ interface HighlightProps {
 export const Highlighter = ({ text, highlightConditions }: HighlightProps) => {
   // Create an object to hold styles for each character in the text
   const stylesForCharacters: Record<string, CSSProperties> = {}
+  const textArr = text.split("")
 
   for (const { condition, style } of highlightConditions) {
     const conditionChars = condition.split("")
@@ -26,17 +27,13 @@ export const Highlighter = ({ text, highlightConditions }: HighlightProps) => {
 
   return (
     <span>
-      {characters.map((char, index) =>
+      {characters.map((char, index) => (
         // Apply the style if there is one for this character
-        stylesForCharacters[char] ? (
-          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-          <span key={index} style={stylesForCharacters[char]}>
-            {char}
-          </span>
-        ) : (
-          char
-        ),
-      )}
+        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+        <span key={char + index} style={stylesForCharacters[char]}>
+          {char}
+        </span>
+      ))}
     </span>
   )
 }
