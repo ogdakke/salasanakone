@@ -18,7 +18,6 @@ export function StrengthCircle({ score }: { score: number }) {
         d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
         fill="none"
         stroke="currentColor"
-        strokeDasharray="100, 100"
         strokeWidth="4"
       />
       <motion.path
