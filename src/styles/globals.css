@@ -17,9 +17,11 @@
   --background-start-rgb: 214, 219, 220;
   --background-hex: #ffffff;
   --background-rgb: 255, 255, 255;
+  --background: oklch(100% 0 0)
   --helperTextColor: oklch(28.5% 0 0);
   --form-bg-rgb: 254, 254, 254;
   --skeleton-glow: 240, 240, 240;
+  --island-bg: oklch(1% 0 0);
 
   --error: 255, 0, 0;
 
@@ -85,6 +87,7 @@
     --background-start-rgb: 0, 0, 0;
     --background-hex: #000000;
     --background-rgb: 10, 10, 10;
+    --background: oklch(14.87% 0.004 106.91);
     --helperTextColor: oklch(50% 0 0);
     --form-bg-rgb: 15, 15, 15;
     --skeleton-glow: 22, 22, 22;
@@ -134,7 +137,7 @@ body {
 
 body {
   color: rgba(var(--foreground-rgb), 0.87);
-  background: rgb(var(--background-rgb));
+  background: var(--background);
 
   /* this fixes the issue of iOS safari enlarging copyText upon copying, 
   presumably because it thinks it is too small for some reason. */

@@ -181,7 +181,7 @@ const SimpleIsland = ({ variant }: SimpleIslandProps) => {
         if (islandRef.current) {
           animate(
             islandRef.current,
-            { borderColor: `rgba(${borderRgb}, 0.12)` },
+            { borderColor: `rgba(${borderRgb}, 0.04)` },
             { duration: 1.25 },
           )
         }

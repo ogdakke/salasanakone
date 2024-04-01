@@ -1,7 +1,6 @@
 .IslandAndButton {
   --island-border-radius: 1.75rem;
   --island-content-padding: 1rem;
-  --island-bg: oklch(17.3% 0 0);
   --island-button-width: 2rem;
   --island-button-icon-size: 1.65rem;
   --island-button-gap: 0.5rem;
@@ -63,8 +62,6 @@
   min-width: 0;
   width: 100%;
   color: oklch(100% 0 0 / 0.87);
-  /* overflow: clip; */
-  display: flex;
 }
 
 .IslandContainer {
