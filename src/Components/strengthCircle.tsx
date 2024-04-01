@@ -12,9 +12,9 @@ export function StrengthCircle({ score }: { score: number }) {
   return (
     <motion.svg className="StrengthCircle" viewBox="0 0 36 36">
       <title>{t("scoreDescription", { score: score.toString() })}</title>
-      <path
-        style={{ color: "#000" }}
-        className=""
+      <motion.path
+        initial={{ opacity: 0.2 }}
+        animate={{ color: color }}
         d="M18 2 a 16 16 0 0 1 0 32 a 16 16 0 0 1 0 -32"
         fill="none"
         stroke="currentColor"
