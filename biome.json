@@ -16,7 +16,6 @@
   },
   "javascript": {
     "formatter": {
-      "trailingComma": "all",
       "quoteStyle": "double",
       "arrowParentheses": "always",
       "semicolons": "asNeeded"
@@ -38,9 +37,6 @@
       "correctness": {
         "noUnusedImports": "error",
         "noUnusedVariables": "warn"
-      },
-      "nursery": {
-        "noUselessTernary": "warn"
       }
     },
     "ignore": []

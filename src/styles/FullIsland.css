@@ -19,7 +19,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding-top: 0.3rem;
+  padding: 0.25rem;
 }
 
 .SettingsTitleContainer {
@@ -120,11 +120,11 @@
   width: 4rem;
   height: 4rem;
   transition: all 2000ms ease-in;
-  --transition: 300ms
+  --transition: 300ms;
 }
 
 .StrengthCircleBackground {
-  content: '';
+  content: "";
   position: absolute;
   top: 1px;
   left: 1px;
@@ -138,14 +138,22 @@
 
 .ScoreCircleContainer[data-score="4"] .StrengthCircleBackground {
   opacity: 1;
-  background: radial-gradient(circle, rgba(92, 205, 93, 0.77) 0%, rgba(7, 34, 13, 0.4) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(92, 205, 93, 0.77) 0%,
+    rgba(7, 34, 13, 0.4) 100%
+  );
   transition: all var(--transition) ease-in;
 }
 
 .ScoreCircleContainer[data-score="3"] .StrengthCircleBackground {
   opacity: 1;
   box-shadow: oklch(67.2% 0.11 146 / 0.2) 0px 0px 9px 3px;
-  background: radial-gradient(circle, rgba(92, 205, 93, 0.2) 0%, rgba(7, 34, 13, 0.4) 100%);
+  background: radial-gradient(
+    circle,
+    rgba(92, 205, 93, 0.2) 0%,
+    rgba(7, 34, 13, 0.4) 100%
+  );
   transition: all var(--transition) ease-in;
 }
 .ScoreCircleContainer[data-score="2"] .StrengthCircleBackground {
