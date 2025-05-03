@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1](https://github.com/ogdakke/salasanakone/commits/3.1.1) - 03-05-2025
+
+- Now you can manage your downloads from the settings island.
+
 ## [3.1.0](https://github.com/ogdakke/salasanakone/commits/3.1.0) - 29-03-2024
 
 - [#15](https://github.com/ogdakke/salasanakone/pull/16): feature toggle, improvements in creating password, better UI for island
