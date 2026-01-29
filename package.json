@@ -13,10 +13,10 @@
     "test:coverage": "vitest --run --coverage",
     "bp": "pnpm run build && pnpm run preview",
     "lint": "pnpm run --parallel /^lint:/",
-    "lint:check": "pnpm dlx @biomejs/biome check ./src",
+    "lint:check": "biome check ./src",
     "lint:type-check": "tsc",
-    "lint-fix-unsafe": "pnpm dlx @biomejs/biome lint --apply-unsafe ./src",
-    "format:write": "pnpm dlx @biomejs/biome format --write ./src",
+    "lint-fix-unsafe": "biome lint --apply-unsafe ./src",
+    "format:write": "biome format --write ./src",
     "prepare": "husky"
   },
   "dependencies": {
@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.6.3",
+    "@types/node": "^25.1.0",
     "@types/react": "18.2.72",
     "@types/react-dom": "18.2.22",
     "@vitejs/plugin-react": "4.2.1",
@@ -50,6 +51,7 @@
     "typescript": "5.4.3",
     "vite": "5.2.6",
     "vite-plugin-pwa": "0.19.7",
+    "vite-tsconfig-paths": "^6.0.5",
     "vitest": "1.4.0",
     "workbox-window": "7.0.0"
   }

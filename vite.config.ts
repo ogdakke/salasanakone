@@ -1,19 +1,27 @@
-import path from "node:path"
-import react from "@vitejs/plugin-react"
-import { type PluginVisualizerOptions, visualizer } from "rollup-plugin-visualizer"
-import type { PluginOption } from "vite"
-import { VitePWA, type VitePWAOptions } from "vite-plugin-pwa"
-import { defineConfig } from "vitest/config"
+import react from "@vitejs/plugin-react";
+import path, { resolve } from "path";
+import {
+  visualizer,
+  type PluginVisualizerOptions,
+} from "rollup-plugin-visualizer";
+import type { PluginOption } from "vite";
+import { VitePWA, type VitePWAOptions } from "vite-plugin-pwa";
+import { defineConfig } from "vitest/config";
 
 const pwaOptions: Partial<VitePWAOptions> = {
   mode: "production",
   base: "/",
   registerType: "prompt",
+  workbox: {
+    // Exclude HTML from precache so middleware can handle language routing
+    globIgnores: ["**/index.html", "**/en/index.html"],
+    navigateFallback: null,
+  },
   manifest: {
     start_url: "/",
     id: "/",
     lang: "fi",
-    name: "Salasanakone | Luo Salasana",
+    name: "Salasanakone | Passphrase Generator",
     short_name: "Salasanakone",
     icons: [
       {
@@ -45,14 +53,14 @@ const pwaOptions: Partial<VitePWAOptions> = {
     theme_color: "#0a0a0a",
     display: "standalone",
     description:
-      "Salasanakone - Luo vahva, muistettava ja hyvä salasana tällä salasanageneraattorilla helposti, nopeasti ja automaattisesti käyttämällä Suomen kielen sanoja.",
+      "Create strong passwords / Luo vahvoja salasanoja - Password generator using Finnish and English words.",
   },
   devOptions: {
     enabled: true,
     /* when using generateSW the PWA plugin will switch to classic */
     type: "module",
   },
-}
+};
 
 const visualizerOptions: PluginVisualizerOptions = {
   template: "sunburst",
@@ -60,7 +68,7 @@ const visualizerOptions: PluginVisualizerOptions = {
   gzipSize: true,
   brotliSize: true,
   filename: "bundle-analysis/analyse.html", // will be saved in project's root
-}
+};
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -69,6 +77,12 @@ export default defineConfig({
     outDir: "dist",
     minify: "esbuild",
     assetsDir: "./src/assets",
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        en: resolve(__dirname, "en/index.html"),
+      },
+    },
   },
   worker: {
     format: "es",
@@ -80,11 +94,15 @@ export default defineConfig({
       "@config": path.resolve(__dirname, "./config"),
     },
   },
-  plugins: [react(), VitePWA(pwaOptions), visualizer(visualizerOptions) as PluginOption],
+  plugins: [
+    react(),
+    VitePWA(pwaOptions),
+    visualizer(visualizerOptions) as PluginOption,
+  ],
   define: {
     __APP_VERSION__: JSON.stringify(process.env.npm_package_version),
   },
   test: {
     environment: "jsdom",
   },
-})
+});

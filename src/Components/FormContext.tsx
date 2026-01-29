@@ -12,6 +12,7 @@ import { createPassphrase } from "@/services/createCrypto"
 import { Stores, getDataForKey, setData } from "@/services/database/db"
 import { setFormState } from "@/services/database/state"
 import reducer, { resetFormState, setLanguage } from "@/services/reducers/formReducer"
+import { worker } from "@/services/initWorker"
 import { del, get } from "idb-keyval"
 import { type ReactNode, useCallback, useRef, useState } from "react"
 
@@ -31,6 +32,7 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
     reducer,
     initialFormState,
     FORM_STATE_KEY,
+    ["language"],
   )
   const [finalPassword, setFinalPassword] = useState<ResultState>({
     passwordValue: undefined,
@@ -162,11 +164,10 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
       }
 
       if (formState.dataset.failedToFetchDatasets.includes(lang)) {
-        isDev && console.log("dataset for language has failed before: ", lang)
-
-        // Dataset has failed fetching before, so don't refetch it
-        // TODO: some more logic to handle retries of fetching after some time
-        handleFetchError(lang)
+        isDev &&
+          // Dataset has failed fetching before, so don't refetch it
+          // TODO: some more logic to handle retries of fetching after some time
+          handleFetchError(lang)
         currentAbortController.abort()
         return undefined
       }
@@ -253,6 +254,8 @@ export const FormProvider = ({ children }: { children: ReactNode }): ReactNode =
   useEffectOnce(() => {
     if (!isInit) {
       isDev && console.debug("generating initial password with: ", formState)
+      // Notify worker of the correct language (derived from URL, not persisted state)
+      worker.postMessage(formState.language)
       generate(formState)
     }
   })

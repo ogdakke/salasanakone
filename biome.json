@@ -4,7 +4,7 @@
     "ignore": ["**/*.js", "*.mjs", "src/**/*.json"]
   },
   "organizeImports": {
-    "enabled": true
+    "enabled": false
   },
   "formatter": {
     "indentWidth": 2,

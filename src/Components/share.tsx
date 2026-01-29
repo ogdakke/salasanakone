@@ -1,34 +1,36 @@
 import { CheckCircle, ShareAndroid, ShareIos } from "iconoir-react"
 import { useState } from "react"
-
-import { meta } from "@/assets/constants/meta"
-import { useTranslation } from "@/common/hooks/useLanguage"
+import { useLanguage, useTranslation } from "@/common/hooks/useLanguage"
 import { isAndroid } from "@/common/utils/helpers"
 import copyToClipboard from "@/services/copyToClipboard"
+import { Language } from "@/models/translations"
 
 export const Share = () => {
-  const { t } = useTranslation()
+  const { t, tRaw } = useTranslation()
   const [isCopied, setCopied] = useState(false)
+  const { language } = useLanguage()
+
+  const baseUrl = "https://salasanakone.com"
+  const currentUrl = language === Language.en ? `${baseUrl}/en/` : `${baseUrl}/`
 
   const shareAction = async (): Promise<void> => {
     if (navigator.share !== undefined) {
       try {
         await navigator.share({
-          title: meta.title,
-          text: meta.description,
-          url: meta.url,
+          title: tRaw("seoTitle"),
+          url: currentUrl,
         })
       } catch (err) {
         console.error("error sharing", err)
         // Handle failure by copying and setting state
-        await copyToClipboard(meta.url)
+        await copyToClipboard(currentUrl)
         setCopied(true)
         setTimeout(() => {
           setCopied(false)
         }, 1500)
       }
     } else {
-      await copyToClipboard(meta.url)
+      await copyToClipboard(currentUrl)
       setCopied(true)
       setTimeout(() => {
         setCopied(false)
