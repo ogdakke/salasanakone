@@ -1,5 +1,5 @@
 import { FormContext, FormDispatchContext } from "@/common/providers/FormProvider"
-import { translate } from "@/common/utils/getLanguage"
+import { translate, translateRaw } from "@/common/utils/getLanguage"
 import type { Language, TranslationKey } from "@/models/translations"
 import { setLanguage } from "@/services/reducers/formReducer"
 import { useContext } from "react"
@@ -20,5 +20,11 @@ export const useTranslation = () => {
   const t = (key: TranslationKey, placeholders?: Record<PropertyKey, string>) => {
     return translate(language, key, placeholders)
   }
-  return { t }
+
+  /** Returns raw string translation (for meta tags, attributes, etc.) */
+  const tRaw = (key: TranslationKey, placeholders?: Record<PropertyKey, string>) => {
+    return translateRaw(language, key, placeholders)
+  }
+
+  return { t, tRaw }
 }

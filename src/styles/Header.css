@@ -19,6 +19,7 @@
   min-height: 0;
 }
 
+.LanguagePicker a,
 .LanguagePicker button {
   position: relative;
   display: flex;
@@ -29,8 +30,10 @@
   min-height: 0;
   justify-content: center;
   border-radius: 0.25rem;
+  text-decoration: none;
 }
 
+.LanguagePicker a:focus-visible,
 .LanguagePicker button:focus-visible {
   outline: 1px solid rgba(var(--foreground-rgb), 1);
 }

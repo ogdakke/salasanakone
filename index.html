@@ -7,10 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salasanakone</title>
     <meta name="description" content="Salasanakone - Luo ja tarkista vahvoja sekä muistettavia salasanoja tällä salasanageneraattorilla helposti, nopeasti ja automaattisesti käyttämällä Suomen kielen sanoja. Tarkista oman salasanan vahvuus kirjoittamalla se teksikenttään.">
-    
-    <link rel="canonical" href="https://salasanakone.com">
+
+    <link rel="stylesheet" href="/styles/index.css">
+
+    <link rel="canonical" href="https://salasanakone.com/">
+    <link rel="alternate" hreflang="fi" href="https://salasanakone.com/">
+    <link rel="alternate" hreflang="en" href="https://salasanakone.com/en/">
+    <link rel="alternate" hreflang="x-default" href="https://salasanakone.com/">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-    
+
     <!-- Facebook Meta Tags -->
     <meta property="fb:app-id">
     <meta property="og:url" content="https://www.salasanakone.com/">
@@ -21,7 +26,7 @@
     <meta property="og:image:height" content="1092">
     <meta property="og:image:alt" content="Kuva salasanakone.com sivustolle, jossa on teksti 'Vahva-Luotettava,Muistettava!Nopea+Turvallinen*Helppo!', sekä painikkeen kuva, jossa lukee 'Luo muistettava ja vahva salasana'.">
     <meta property="og:description" content="Salasanakone - Luo ja tarkista vahvoja ja muistettavia salasanoja tällä salasanageneraattorilla helposti, nopeasti sekä automaattisesti käyttämällä Suomen kielen sanoja.">
-    
+
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta property="twitter:domain" content="salasanakone.com">
@@ -30,12 +35,92 @@
     <meta name="twitter:description" content="Luo Turvallinen ja muistettava salasana helposti käyttämällä Suomen kielen sanoja.">
     <meta name="twitter:image" content="https://cdn.sanity.io/images/0wurvw2o/production/49e300011c2e36950b140f0dc6bb1e2985b7f07a-2080x1092.webp">
     <meta property="twitter:image:alt" content="Kuva salasanakone.com sivustolle, jossa on teksti 'Vahva-Luotettava,Muistettava!Nopea+Turvallinen*Helppo!', sekä painikkeen kuva, jossa lukee 'Luo muistettava ja vahva salasana'.">
-    
+
     <meta name="theme-color" media="(prefers-color-scheme: no-preference), (prefers-color-scheme: dark)" content="#0a0a0a"/>
     <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff">
   </head>
   <body>
-    <div id="root"></div>
+    <main class="main">
+      <div class="wrapper">
+        <div id="root"></div>
+        <article aria-label="description" class="description">
+          <h2>Salasanakone luo ja tarkistaa salasanoja</h2>
+          <section>
+            <h3 class="mt-05">Salasanageneraattori, jolla luot vahvan salasanan suomen kielen sanoista</h3>
+            <p>
+              Suomen kieli on monimutkainen, ja sen vuoksi meille otollinen tapa luoda vahva ja muistettava salasana tai salalause.
+              <br />
+              Hyvä salasana on riittävän pitkä (yli 10 kirjainta) ja sisältää numeroita, erikoismerkkejä sekä isoja ja pieniä kirjaimia.
+              <a class="flex-center inline" target="_blank" href="https://security.harvard.edu/use-strong-passwords">
+                Harvard
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 3h-6m6 0l-9 9m9-9v6"/>
+                  <path d="M21 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6"/>
+                </svg>
+              </a>
+              <strong> suosittelee salalauseiden käyttöä.</strong>
+            </p>
+            <ul>
+              <li>Tällä salasanageneraattorilla voit luoda automaattisesti vahvan ja muistettavissa olevan salalauseen, joka on lisäksi vielä helppo kirjoittaa. Voit myös tarkistaa oman salasanan vahvuuden.</li>
+            </ul>
+            <h3 class="mt-05">Onko salalause parempi kuin salasana?</h3>
+            <p>Yleistäen, on. Jos salalause on riittävän pitkä sekä sisältää välimerkkejä ja mieluusti numeroita, on sen murtaminen erittäin haastavaa.</p>
+          </section>
+          <h2 class="mt-1 mb-05">Miten salasana luodaan?</h2>
+          <details class="details">
+            <summary class="summary">Salasanakone luo satunnaisesti valituista sanoista tai merkeistä salasanan.</summary>
+            <div class="summaryDetails">
+              <p>Salasanakone valitsee sanat lähes 100 000:sta suomen kielen sanan joukosta satunnaisesti. Lisäksi kone lisää haluamasi välimerkit ja numerot sanojen väliin.</p>
+            </div>
+          </details>
+          <hr class="divider" style="margin: 0.5rem 0;" />
+          <details class="details">
+            <summary class="summary">Miten vahvuus arvioidaan?</summary>
+            <div class="summaryDetails">
+              <p id="miten-vahvuus-arvioidaan">
+                Vahvuuden arviointi tapahtuu samalla, Dropboxin avoimen lähdekoodin ohjelmalla, kuin
+                <a class="flex-center inline" target="_blank" href="https://yle.fi/aihe/artikkeli/2017/02/01/digitreenit-17-salasanakone-testaa-kuinka-nopeasti-salasana-murretaan">
+                  Ylen
+                  <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 3h-6m6 0l-9 9m9-9v6"/>
+                    <path d="M21 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6"/>
+                  </svg>
+                </a>
+                salasanan arviointikoneessa.
+                <strong>Tosin, tämä kone ottaa huomioon suomalaiset sanat, jotta arviointi on mahdollisimman tarkka.</strong>
+              </p>
+              <p>Kone arvioi salasanan vahvuuden mm. pituuden, satunnaisuuden, ja yleisyyden perusteella. Lisäksi kone vertaa salasanaa suomen kielen sanakirjaan, ja sitä kautta laskee realistisemman vahvuuden, mikäli sanat ilmenevät muuttamattomina sanakirjassa.</p>
+            </div>
+          </details>
+          <hr class="divider" style="margin: 0.5rem 0;" />
+          <h2>Turvallinen ja luotettava</h2>
+          <p>
+            Sivusto luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään muutakaan.
+            <br />
+            Sivu toimii myös ilman verkkoyhteyttä selaimen välimuistista
+            <a class="flex-center inline" target="_blank" href="https://www.evermade.fi/fi/artikkeli/mika-on-progressiivinen-verkkosovellus-pwa-edut/">
+              PWA-teknologialla
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 3h-6m6 0l-9 9m9-9v6"/>
+                <path d="M21 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6"/>
+              </svg>
+            </a>
+            <br />
+            Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta saat kaiken irti ominaisuuksista!
+            <br />
+            Katso sivuston lähdekoodi täältä:
+            <a class="flex-center inline" target="_blank" href="https://github.com/ogdakke/salasanakone">
+              GitHub
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 3h-6m6 0l-9 9m9-9v6"/>
+                <path d="M21 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h6"/>
+              </svg>
+            </a>
+          </p>
+        </article>
+      </div>
+      <div id="credits-root"></div>
+    </main>
     <script type="module" src="/src/main.tsx"></script>
     <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8adef824fa1841c9ad21de0355059ccc"}'></script><!-- End Cloudflare Web Analytics -->
   </body>

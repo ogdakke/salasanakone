@@ -2,6 +2,50 @@ import { Language, type Translations } from "@/models/translations"
 
 export const en: Translations = {
   salasanakone: "Passphrase Generator",
+
+  // Description section translations
+  descriptionMainTitle: "Create and check passwords",
+  descriptionSubtitle: "A password generator that creates strong passwords from English words",
+  descriptionIntro:
+    "The English language has a rich vocabulary, making it perfect for creating strong and memorable passwords or passphrases.",
+  descriptionGoodPassword:
+    "A good password is long enough (over 10 characters) and contains numbers, special characters, and both uppercase and lowercase letters.",
+  descriptionHarvardRecommends: "recommends using passphrases.",
+  descriptionGeneratorBenefits:
+    "With this password generator, you can automatically create a strong and memorable passphrase that is also easy to type. You can also check the strength of your own password.",
+  descriptionPassphraseVsPasswordTitle: "Is a passphrase better than a password?",
+  descriptionPassphraseVsPassword:
+    "Generally, yes. If a passphrase is long enough and contains separators and preferably numbers, it is extremely difficult to crack.",
+  descriptionHowCreatedTitle: "How is the password created?",
+  descriptionHowCreatedSummary:
+    "The generator creates a password from randomly selected words or characters.",
+  descriptionHowCreatedDetails:
+    "The generator selects words randomly from nearly 100,000 English words. It also adds your chosen separators and numbers between the words.",
+  descriptionStrengthTitle: "How is strength evaluated?",
+  descriptionStrengthSummary: "How is strength evaluated?",
+  descriptionStrengthDetails1:
+    "Strength evaluation is done using the same open-source program from Dropbox as used by",
+  descriptionStrengthDetails2:
+    "However, this generator takes English words into account for the most accurate evaluation.",
+  descriptionStrengthDetails3:
+    "The generator evaluates password strength based on length, randomness, and commonality. It also compares the password against a dictionary to calculate a more realistic strength if the words appear unchanged in the dictionary.",
+  descriptionSecureTitle: "Secure and reliable",
+  descriptionSecureDetails1:
+    "The site creates passwords entirely locally - no data collection, advertising, or anything else.",
+  descriptionSecureDetails2: "The site also works offline from browser cache using",
+  descriptionSecureDetails3:
+    "Add the site to your device's home screen as a bookmark to get the most out of its features!",
+  descriptionSourceCode: "View the site's source code here:",
+
+  // SEO translations
+  seoTitle: "Password Generator | Create Strong Passwords",
+  seoDescription:
+    "Create and check strong, memorable passwords with this password generator easily, quickly, and automatically using English words. Check your own password's strength by typing it in the text field.",
+  seoOgTitle: "Create Password | In English",
+  seoOgDescription:
+    "Create and check strong, memorable passwords with this password generator easily, quickly, and automatically using English words.",
+  seoOgImageAlt:
+    "Image of the passphrase generator website with the text 'Strong-Reliable,Memorable!Fast+Secure*Easy!' and a button that says 'Create a memorable and strong password'.",
   new: "new",
   clickToCopyOrEdit: "Copy or edit",
   hasCopiedPassword: "Password is copied",
@@ -75,6 +119,50 @@ export const en: Translations = {
 
 export const fi = {
   salasanakone: "Salasanakone",
+
+  // Description section translations
+  descriptionMainTitle: "Salasanakone luo ja tarkistaa salasanoja",
+  descriptionSubtitle: "Salasanageneraattori, jolla luot vahvan salasanan suomen kielen sanoista",
+  descriptionIntro:
+    "Suomen kieli on monimutkainen, ja sen vuoksi meille otollinen tapa luoda vahva ja muistettava salasana tai salalause.",
+  descriptionGoodPassword:
+    "Hyvä salasana on riittävän pitkä (yli 10 kirjainta) ja sisältää numeroita, erikoismerkkejä sekä isoja ja pieniä kirjaimia.",
+  descriptionHarvardRecommends: "suosittelee salalauseiden käyttöä.",
+  descriptionGeneratorBenefits:
+    "Tällä salasanageneraattorilla voit luoda automaattisesti vahvan ja muistettavissa olevan salalauseen, joka on lisäksi vielä helppo kirjoittaa. Voit myös tarkistaa oman salasanan vahvuuden.",
+  descriptionPassphraseVsPasswordTitle: "Onko salalause parempi kuin salasana?",
+  descriptionPassphraseVsPassword:
+    "Yleistäen, on. Jos salalause on riittävän pitkä sekä sisältää välimerkkejä ja mieluusti numeroita, on sen murtaminen erittäin haastavaa.",
+  descriptionHowCreatedTitle: "Miten salasana luodaan?",
+  descriptionHowCreatedSummary:
+    "Salasanakone luo satunnaisesti valituista sanoista tai merkeistä salasanan.",
+  descriptionHowCreatedDetails:
+    "Salasanakone valitsee sanat lähes 100 000:sta suomen kielen sanan joukosta satunnaisesti. Lisäksi kone lisää haluamasi välimerkit ja numerot sanojen väliin.",
+  descriptionStrengthTitle: "Miten vahvuus arvioidaan?",
+  descriptionStrengthSummary: "Miten vahvuus arvioidaan?",
+  descriptionStrengthDetails1:
+    "Vahvuuden arviointi tapahtuu samalla, Dropboxin avoimen lähdekoodin ohjelmalla, kuin",
+  descriptionStrengthDetails2:
+    "Tosin, tämä kone ottaa huomioon suomalaiset sanat, jotta arviointi on mahdollisimman tarkka.",
+  descriptionStrengthDetails3:
+    "Kone arvioi salasanan vahvuuden mm. pituuden, satunnaisuuden, ja yleisyyden perusteella. Lisäksi kone vertaa salasanaa suomen kielen sanakirjaan, ja sitä kautta laskee realistisemman vahvuuden, mikäli sanat ilmenevät muuttamattomina sanakirjassa.",
+  descriptionSecureTitle: "Turvallinen ja luotettava",
+  descriptionSecureDetails1:
+    "Sivusto luo salasanat täysin paikallisesti - ei tietojen keräystä, mainontaa tai mitään muutakaan.",
+  descriptionSecureDetails2: "Sivu toimii myös ilman verkkoyhteyttä selaimen välimuistista",
+  descriptionSecureDetails3:
+    "Lisää sivusto laitteenne kotinäytölle kirjanmerkiksi, jotta saat kaiken irti ominaisuuksista!",
+  descriptionSourceCode: "Katso sivuston lähdekoodi täältä:",
+
+  // SEO translations
+  seoTitle: "Salasanakone | Luo vahvoja salasanoja",
+  seoDescription:
+    "Salasanakone - Luo ja tarkista vahvoja sekä muistettavia salasanoja tällä salasanageneraattorilla helposti, nopeasti ja automaattisesti käyttämällä Suomen kielen sanoja. Tarkista oman salasanan vahvuus kirjoittamalla se teksikenttään.",
+  seoOgTitle: "Luo Salasana | Suomeksi",
+  seoOgDescription:
+    "Salasanakone - Luo ja tarkista vahvoja ja muistettavia salasanoja tällä salasanageneraattorilla helposti, nopeasti sekä automaattisesti käyttämällä Suomen kielen sanoja.",
+  seoOgImageAlt:
+    "Kuva salasanakone.com sivustolle, jossa on teksti 'Vahva-Luotettava,Muistettava!Nopea+Turvallinen*Helppo!', sekä painikkeen kuva, jossa lukee 'Luo muistettava ja vahva salasana'.",
   ok: "Ok",
   update: "Päivitä",
   new: "Uusi",
