@@ -21,15 +21,10 @@ type SettingsIslandProps = {
   fetchStorage: () => void
   result: ZxcvbnResult
 }
-export const FullIsland = ({
-  storage,
-  result,
-  fetchStorage,
-}: SettingsIslandProps) => {
+export const FullIsland = ({ storage, result, fetchStorage }: SettingsIslandProps) => {
   const { t } = useTranslation()
   const { score, crackTimesDisplay } = result
-  const { offlineSlowHashing1e4PerSecond, onlineNoThrottling10PerSecond } =
-    crackTimesDisplay
+  const { offlineSlowHashing1e4PerSecond, onlineNoThrottling10PerSecond } = crackTimesDisplay
   const { formState, generate } = useContext(FormContext)
 
   function isLanguageDeleted(lang: Language) {
@@ -80,8 +75,9 @@ export const FullIsland = ({
 
   const handleReDownLoadingDataset = async (lang: Language) => {
     if (formState.dataset.failedToFetchDatasets.includes(lang)) {
-      const updatedFailedDatasets =
-        formState.dataset.failedToFetchDatasets.filter((l) => l !== lang)
+      const updatedFailedDatasets = formState.dataset.failedToFetchDatasets.filter(
+        (l) => l !== lang,
+      )
       // Remove language from failed to fetch datasets to allow retrying fetching
       formState.dataset.failedToFetchDatasets = updatedFailedDatasets
       // set words to true and languge to the one being downloaded to trigger fetching dataset
@@ -95,7 +91,7 @@ export const FullIsland = ({
 
     if (formState.dataset.deletedDatasets.includes(lang)) {
       const updatedDeletedLanguges = formState.dataset.deletedDatasets.filter(
-        (language) => language !== lang
+        (language) => language !== lang,
       )
       formState.dataset.deletedDatasets = updatedDeletedLanguges
 
@@ -114,50 +110,45 @@ export const FullIsland = ({
         handleReDownLoadingDataset(lang)
       },
       600,
-      true
+      true,
     ),
-    []
+    [],
   )
 
   const debounceClick = useCallback(
     debounce(async (language: Language, isDeleted: boolean) => {
-      isDeleted
-        ? debounceDownloading(language)
-        : await handleDeletingDataset(language)
+      isDeleted ? debounceDownloading(language) : await handleDeletingDataset(language)
     }, 160),
-    []
+    [],
   )
 
   const langCanBeDownLoaded = (lang: Language) =>
-    isLanguageDeleted(lang) ||
-    isLanguageFailed(lang) ||
-    !isLanguageFetched(lang)
+    isLanguageDeleted(lang) || isLanguageFailed(lang) || !isLanguageFetched(lang)
 
-  const crackTimeIdentical =
-    offlineSlowHashing1e4PerSecond === onlineNoThrottling10PerSecond
+  const crackTimeIdentical = offlineSlowHashing1e4PerSecond === onlineNoThrottling10PerSecond
 
   return (
     <motion.div
-      className='IslandSettings flex flex-column blurFadeIn'
+      className="IslandSettings flex flex-column blurFadeIn"
       style={{ height: 160 }}
-      initial='initial'
-      animate='animate'
+      initial="initial"
+      animate="animate"
     >
       <motion.div
         style={{ filter: "blur(6px)" }}
         animate={{ filter: "blur(0px)" }}
         transition={{ duration: 0.6 }}
-        className='SettingsContent'
+        className="SettingsContent"
       >
-        <div className='flex gap-1'>
-          <div className='ScoreCircleContainer' data-score={score}>
-            <span className='StrengthCircleBackground' />
+        <div className="flex gap-1">
+          <div className="ScoreCircleContainer" data-score={score}>
+            <span className="StrengthCircleBackground" />
             <StrengthCircle score={score} />
-            <div className='NumberListOuterBox'>
+            <div className="NumberListOuterBox">
               <NumberListScrollWheel selectedNumber={score} />
             </div>
           </div>
-          <div className='SettingsTopRowElement'>
+          <div className="SettingsTopRowElement">
             <p>{t("timeToCrack")}</p>
             <p>
               <StaggerWords
@@ -171,25 +162,21 @@ export const FullIsland = ({
           </div>
         </div>
         <div>
-          <div className='SettingsFooter'>
-            <div className='flex flex-column gap-025'>
-              <span className='SecondaryText opacity-75'>
-                {t("storageUsed")}
-              </span>
+          <div className="SettingsFooter">
+            <div className="flex flex-column gap-025">
+              <span className="SecondaryText opacity-75">{t("storageUsed")}</span>
               {storage ? <StorageIndicator storage={storage} /> : null}
             </div>
-            <div className='flex flex-column gap-025'>
-              <span className='SecondaryText opacity-75'>
-                {t("manageLanguages")}
-              </span>
-              <div className='flex gap-05'>
+            <div className="flex flex-column gap-025">
+              <span className="SecondaryText opacity-75">{t("manageLanguages")}</span>
+              <div className="flex gap-05">
                 {supportedLanguages.map((language) => {
                   const isDeleted = langCanBeDownLoaded(language)
                   return (
                     <button
                       key={language}
-                      className='LanguageSettingItem'
-                      type='button'
+                      className="LanguageSettingItem"
+                      type="button"
                       onClick={() => debounceClick(language, isDeleted)}
                       data-state={isDeleted ? "download" : "delete"}
                       title={
@@ -206,12 +193,12 @@ export const FullIsland = ({
                       {isDeleted ? (
                         <ArrowDown
                           style={{ margin: "1px 2px" }}
-                          className='Icon'
+                          className="Icon"
                           width={14}
                           height={14}
                         />
                       ) : (
-                        <Xmark className='Icon' width={18} height={18} />
+                        <Xmark className="Icon" width={18} height={18} />
                       )}
                       <span>{t(language)}</span>{" "}
                     </button>
@@ -228,8 +215,8 @@ export const FullIsland = ({
 
 export const FullIslandLoading = () => {
   return (
-    <div className='IslandAndButton' style={{ marginRight: 0 }}>
-      <Loading className='' height='10rem' radius='40px' />
+    <div className="IslandAndButton" style={{ marginRight: 0 }}>
+      <Loading className="" height="10rem" radius="40px" />
     </div>
   )
 }
